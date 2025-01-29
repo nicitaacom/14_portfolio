@@ -10,7 +10,7 @@ export function NavbarProjects() {
 
   return (
     <div
-      className="hidden desktop:inline-flex overflow-x-hidden "
+      className="hidden desktop:inline-flex overflow-x-hidden"
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchDown}
       onMouseMove={handleMouseMove}

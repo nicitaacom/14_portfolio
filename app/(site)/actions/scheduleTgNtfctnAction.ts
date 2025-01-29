@@ -47,9 +47,10 @@ export async function scheduleTgNtfctnAction(
   ]
 
   for (const { suffix, time, msg } of scheduleTimes) {
+    const idName = `ScheduleTgNtfctn_${formatTime(time.toISOString()).replace(/[\s\/\.:]/g, "_")}${suffix}`
     try {
       const params = {
-        Name: `ScheduleTgNtfctn_${formatTime(time.toISOString()).replace(/[\s\/\.:]/g, "_")}${suffix}`,
+        Name: idName,
         ScheduleExpression: `at(${time.format("YYYY-MM-DDTHH:mm:ss")})`,
         ScheduleExpressionTimezone: "Europe/Moscow",
         Target: {
@@ -61,6 +62,7 @@ export async function scheduleTgNtfctnAction(
             channel,
             sendNotificationTo,
             inputNotificationTo,
+            idName,
           }),
         } as Target,
         FlexibleTimeWindow: { Mode: "OFF" as const },
@@ -68,9 +70,9 @@ export async function scheduleTgNtfctnAction(
       }
       const command = new CreateScheduleCommand(params)
       const response = await client.send(command)
-      console.log(`Scheduled (${suffix}):`, response)
+      console.log(73, `Scheduled (${suffix}):`, response)
     } catch (error) {
-      console.error(`Error scheduling (${suffix}):`, error)
+      console.error(75, `Error scheduling (${suffix}):`, error)
     }
   }
 }
