@@ -55,7 +55,7 @@ export async function scheduleTgNtfctnAction(
         ScheduleExpressionTimezone: "Europe/Moscow",
         Target: {
           Arn: `arn:aws:lambda:${process.env.NEXT_PUBLIC_AWS_REGION}:${process.env.AWS_ACCOUNT_ID}:function:${process.env.NEXT_PUBLIC_LAMBDA_FN_NAME}`,
-          RoleArn: `arn:aws:iam::${process.env.AWS_ACCOUNT_ID}:role/service-role/SendScheduledEmails-role-wk1opcl8`,
+          RoleArn: `arn:aws:iam::${process.env.AWS_ACCOUNT_ID}:role/14-portfolio`,
           Input: JSON.stringify({
             dateTime: formatTime(time.toISOString()),
             message: msg,
