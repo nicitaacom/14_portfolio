@@ -36,11 +36,11 @@ export default function Home() {
               Teamlead WEB developer
             </h1>
             <div className="text-md font-bold text-secondary-foreground">
-              <b>I&apos;m started</b> my career in 2018 and tried 4 different programming languages.
+              <b>I started</b> my career in 2018 and tried 4 different programming languages.
               <br />
               <b>My main stack</b> - Next + TypeScript + Tailwind
               <br />
-              <b>I&apos;m creating</b> websites with high&nbsp;
+              <b>I create</b> websites with a high&nbsp;
               <div className="relative inline-block">
                 <span data-text="conversion" className="text-tooltip tooltip">
                   <div className="tooltiptext">
@@ -54,7 +54,7 @@ export default function Home() {
               </div>
               &nbsp; rate and amazing UI/UX/CX
               <br />
-              Here is&nbsp;
+              Here is a&nbsp;
               <div className="relative inline-block">
                 <span data-text="message" className="text-tooltip tooltip">
                   <div className="tooltiptext">
@@ -75,7 +75,7 @@ export default function Home() {
                   </div>
                 </span>
               </div>
-              &nbsp; I want to say
+              &nbsp; I want to share
               <br />
               {/* <b>I dropped</b> my academy and want to say people in young age that knowlege that you get in&nbsp;
             <i>school/colledge/academy</i> don&apos;t help you to get success in your life - that&apos;s why you need
