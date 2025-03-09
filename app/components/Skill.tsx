@@ -67,6 +67,7 @@ export function Skill(skill: ISkill) {
           duration={5}
           delay={0.5}
           separator=""
+          suffix="h"
         />
       </div>
     </li>
