@@ -16,7 +16,8 @@ export default function Home() {
         <div
           className="flex flex-col desktop:flex-row justify-between items-center gap-lg w-full px-sm
       tablet:px-md desktop:max-w-[80%] desktop:h-[40rem]">
-          <ul className="flex flex-col gap-y-sm">
+          {/* Skills */}
+          <ul className="flex flex-col gap-y-sm bg-primary-foreground p-md border rounded">
             <Skill id={1} label="html&css" hours={hours.htmlcss} />
             <Skill id={2} label="React" hours={hours.next + hours.vite} tooltip tooltiptext={<TooltipReact />} />
             <Skill id={4} label="Next" hours={hours.next} />
@@ -29,6 +30,7 @@ export default function Home() {
               tooltiptext={<TooltipOther />}
             />
           </ul>
+          {/* Text */}
           <div className="text-center w-fit break-words max-w-[650px] desktop:px-[0] desktop:text-start">
             <h1 data-text="WEB Frontend developer" className="text-shadow text-lg before:text-secondary">
               Teamlead WEB developer

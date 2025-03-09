@@ -53,10 +53,7 @@ export function Skill(skill: ISkill) {
         {skill.tooltiptext}
         {skill.tooltip ? "" : skill.label}
       </h1>
-      <div
-        className={`relative w-full rounded-xl ${
-          skill.small ? "bg-primary" : "bg-primary-foreground"
-        } overflow-hidden`}>
+      <div className={`relative w-full rounded-xl ${skill.small ? "bg-primary" : "bg-primary"} overflow-hidden`}>
         <div
           className="w-[0px] h-full transition-all duration-[5000ms] shadow-[inset_0px_2px_2px_rgba(0,0,0,0.3)]"
           ref={progressRef}
