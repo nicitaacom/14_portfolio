@@ -48,6 +48,10 @@
     @apply content-[""] w-[48px] h-[48px] absolute rounded-[50%] -translate-x-1/2 shadow-[0px_4px_12px_var(--cta-tooltip),_inset_0px_4px_12px_var(--cta-tooltip)];
   }
 
+  .tooltip {
+    @apply relative inline-block;
+  }
+
   .tooltip:hover .tooltiptext {
     @apply opacity-100 visible transition-all duration-300
     translate-y-[-105%] 
@@ -59,7 +63,8 @@
     fixed top-[50%] translate-y-[110%]
     desktop:absolute desktop:top-[0px] left-[50%] translate-x-[-50%] desktop:translate-y-[-110%]
     text-sm bg-primary-foreground
-    text-center rounded-lg z-[99];
+    text-center rounded-lg z-[99]
+    pointer-events-none;
   }
 
   .tooltip-modal:hover .tooltiptext-modal {
