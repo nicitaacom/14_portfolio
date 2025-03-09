@@ -45,7 +45,7 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
       <NavbarProjects setScrollRef={setScrollRef} />
       {userId && (
         <>
-          <div className="hidden desktop:inline-flex h-[calc(72px-24px)] border-r-2 border-[#909090]"> </div>
+          <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-[#909090]"></div>
           <GMCheckbox isGMLive={is_live_call} />
         </>
       )}
