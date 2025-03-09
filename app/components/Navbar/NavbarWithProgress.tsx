@@ -31,7 +31,7 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
 
   return (
     <nav
-      className="w-full flex justify-between desktop:justify-stretch items-center transition-[height] gap-x-sm duration-[600ms] px-md
+      className="w-full flex justify-between transition-[height] gap-x-sm duration-[600ms] px-md
       text-secondary bg-primary-foreground"
       style={{
         borderBottom: `2px solid #c4c4c4`,

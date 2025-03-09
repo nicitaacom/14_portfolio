@@ -20,7 +20,7 @@ export function NavbarProjects({ setScrollRef }: { setScrollRef: (ref: React.Ref
       onTouchStart={handleTouchDown}
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}>
-      <ul className="hidden desktop:inline-flex items-center gap-md">
+      <ul className="hidden desktop:inline-flex gap-md">
         {repos.map(repo => (
           <li key={repo.id} className="flex flex-col items-center w-[10rem] select-none">
             <p className="flex justify-center">{repo.id}</p>
