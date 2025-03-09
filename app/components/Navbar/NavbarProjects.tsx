@@ -25,7 +25,8 @@ export function NavbarProjects({ setScrollRef }: { setScrollRef: (ref: React.Ref
           <li key={repo.id} className="flex flex-col items-center w-[10rem] select-none">
             <p className="flex justify-center">{repo.id}</p>
             <Link
-              className="transition-all duration-200 ease-in hover:brightness-75 whitespace-nowrap cursor-pointer"
+              className="transition-all duration-200 ease-in hover:brightness-75 whitespace-nowrap cursor-pointer select-none "
+              draggable={false}
               href={repo.url}
               target="_blank">
               {repo.description}
