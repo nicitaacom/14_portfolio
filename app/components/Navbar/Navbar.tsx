@@ -1,12 +1,16 @@
-import supabaseAdmin from "@/libs/supabaseAdmin"
 import supabaseServer from "@/libs/supabaseServer"
 import { NavbarWithProgress } from "./NavbarWithProgress"
+import { redis } from "@/libs/redis"
 
 export async function Navbar() {
-  const { data: is_live_call } = await supabaseAdmin.from("liveCall").select().eq("id", 1).single()
+  let isLiveCall = false
+  const isLiveCallStringResp = await redis.get("isGMLive")
+  if (!isLiveCallStringResp) await redis.set("isGMLive", "false")
+  else isLiveCall = JSON.parse(isLiveCallStringResp)
+
   const {
     data: { user },
   } = await supabaseServer().auth.getUser()
 
-  return <NavbarWithProgress userId={user?.id} is_live_call={!!is_live_call?.isGMLive} />
+  return <NavbarWithProgress userId={user?.id} is_live_call={isLiveCall} />
 }
