@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} hide-scrollbar`}>
         <noscript>
           {/* Fallback for browsers with disabled JavaScript */}
           <iframe

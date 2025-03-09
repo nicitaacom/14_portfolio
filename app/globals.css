@@ -80,10 +80,24 @@
   }
 }
 
-html,
 body {
-  background-color: hsl(var(--primary));
+  min-height: -webkit-fill-available;
+}
+
+#root {
+  display: flex;
+  flex-flow: column;
   min-height: 100vh;
+}
+
+html,
+body,
+:root {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: hsl(var(--primary));
+  min-height: -webkit-fill-available;
 }
 
 h1,
@@ -289,6 +303,18 @@ div {
 
 .react-calendar__month-view__weekdays__weekday abbr:where([title]) {
   text-decoration: none;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
 }
 
 /* ===== Scrollbar CSS ===== */

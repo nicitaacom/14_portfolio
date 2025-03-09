@@ -1,7 +1,5 @@
 "use client"
 
-import Link from "next/link"
-
 import { Skill } from "@/components/Skill"
 import { TooltipOther, TooltipReact } from "../components/Tooltips"
 import { ProjectsSwitcher } from "@/components/ProjectsSwitcher"
