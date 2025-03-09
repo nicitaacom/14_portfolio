@@ -4,17 +4,8 @@ import { Project } from "../Project/Project"
 export default function Project22() {
   return (
     <Project
-      title="24_dashboard-mui"
-      subTitle="Whole site"
-      leftInfo={
-        <>
-          React + Vite + TypeScript + MUI
-          <br />
-          No Responsive
-          <br />
-          07.2023 - 08.2023 (~30h)
-        </>
-      }
+      stack="React, Vite, TypeScript, MUI"
+      date="07.2023 - 08.2023 (~30h)"
       moreInfoButton={MoreInfoButton24}
       siteUrl="https://24-dashboard-mui.vercel.app"
       githubUrl="https://github.com/Nicitaa/24_dashboard-mui"

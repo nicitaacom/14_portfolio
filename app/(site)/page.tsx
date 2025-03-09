@@ -1,12 +1,12 @@
 "use client"
 
+import { GrSchedule } from "react-icons/gr"
 import { Skill } from "@/components/Skill"
 import { TooltipOther, TooltipReact } from "../components/Tooltips"
 import { ProjectsSwitcher } from "@/components/ProjectsSwitcher"
 import { Footer } from "@/components/Footer"
 import { hours } from "@/data/hours"
 import { Button } from "@/components/Button"
-import { GrSchedule } from "react-icons/gr"
 
 export default function Home() {
   return (

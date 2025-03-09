@@ -1,8 +1,6 @@
 import { FunctionComponent, ReactElement } from "react"
-import Image from "next/image"
 import Link from "next/link"
 
-import { AiFillGithub } from "react-icons/ai"
 import { FigmaUrlIcon } from "./FigmaUrlIcon"
 import { GithubUrlIcon } from "./GithubUrlIcon"
 import { YoutubeUrlIcon } from "./YouTubeUrlIcon"
@@ -11,11 +9,10 @@ interface ProjectProps {
   figmaUrl?: string
   youtubeUrl?: string
   githubUrl?: string
-  siteUrl?: string
   youTubeEmbedPreview?: string
-  title: string
-  subTitle: string
-  leftInfo: ReactElement
+  siteUrl: string
+  stack: string
+  date: string // this is string - not ISO
   moreInfoButton: FunctionComponent
 }
 
@@ -25,9 +22,8 @@ export function Project({
   githubUrl,
   siteUrl,
   youTubeEmbedPreview,
-  title,
-  subTitle,
-  leftInfo,
+  stack,
+  date,
   moreInfoButton: MoreInfoButton,
 }: ProjectProps) {
   return (
@@ -43,28 +39,31 @@ export function Project({
             width="100%"
             height="100%"
             src={youTubeEmbedPreview}
-            title={title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen></iframe>
         ) : (
-          <iframe className="w-full h-full" title={title} src={siteUrl} loading="lazy" />
+          <iframe className="w-full h-full" src={siteUrl} loading="lazy" />
         )}
       </div>
       {/* Footer */}
       <div
         className="relative flex justify-end desktop:justify-between items-center 
           border-r-[1px] border-l-[1px] border-b-[1px] border-solid border-secondary rounded-b-md px-md h-[80px]">
-        <h1 className="hidden desktop:flex desktop:text-sm font-bold">{leftInfo}</h1>
-        <div className="hidden tablet:flex flex-col text-center absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 ">
-          <a
-            className="text-md desktop:text-lg font-bold text-secondary hover:text-secondary-foreground
-          transition-all duration-300"
-            href={siteUrl}
-            target="_blank">
-            {title}
-          </a>
-          <p className="text-xs desktop:text-sm font-bold">{subTitle}</p>
+        <div className="flex flex-col">
+          <p>
+            Stack: <span>{stack}</span>
+          </p>
+          <p>
+            Date: <span>{date}</span>
+          </p>
+          <p>
+            Demo:&nbsp;
+            <Link className="text-sm text-info" href={siteUrl}>
+              {siteUrl.split("?")[0]}
+            </Link>
+          </p>
         </div>
+
         <MoreInfoButton />
       </div>
     </div>

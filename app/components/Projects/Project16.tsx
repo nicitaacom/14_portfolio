@@ -4,17 +4,8 @@ import { Project } from "../Project/Project"
 export default function Project16() {
   return (
     <Project
-      title="16_gericht-restaurant"
-      subTitle="Whole site"
-      leftInfo={
-        <>
-          React TS + Vite + tailwind + css
-          <br />
-          Responsive + Fluid
-          <br />
-          05.2023 - 31.07.2023 (~128h)
-        </>
-      }
+      stack="React, Vite, TypeScript, Tailwind, CSS"
+      date="05.2023 - 31.07.2023 (~128h)"
       moreInfoButton={MoreInfoButton16}
       siteUrl="https://16-gericht-restaurant.vercel.app"
       githubUrl="https://github.com/Nicitaa/16_gericht-restaurant"

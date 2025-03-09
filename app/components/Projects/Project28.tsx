@@ -4,17 +4,8 @@ import { Project } from "../Project/Project"
 export default function Project28() {
   return (
     <Project
-      title="28_jotion-clone"
-      subTitle="Whole site"
-      leftInfo={
-        <>
-          React + Next + TypeScript + Convex
-          <br />
-          Responsive
-          <br />
-          10.2023 - 10.2023 (~14h)
-        </>
-      }
+      stack="React, Next, TypeScript, Convex"
+      date="10.2023 - 10.2023 (~14h)"
       moreInfoButton={MoreInfoButton27}
       siteUrl="https://28-jotion-clone.vercel.app/"
       githubUrl="https://github.com/nicitaacom/28_notion-clone"

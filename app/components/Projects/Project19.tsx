@@ -4,17 +4,8 @@ import { Project } from "../Project/Project"
 export default function Project19() {
   return (
     <Project
-      title="19_spotify-clone"
-      subTitle="Whole site"
-      leftInfo={
-        <>
-          Next + TypeScript + Tailwind + stripe
-          <br />
-          Responsive
-          <br />
-          05.2023 - 05.2023 (~50h)
-        </>
-      }
+      stack="Next, TypeScript, Tailwind, Supabase, Zustand, Stripe"
+      date="05.2023 - 05.2023 (~50h)"
       moreInfoButton={MoreInfoButton19}
       siteUrl="https://19-spotify-clone.vercel.app/"
       githubUrl="https://github.com/nicitaacom/19_spotify-clone/tree/development/app"

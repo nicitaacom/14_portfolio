@@ -4,17 +4,8 @@ import { Project } from "../Project/Project"
 export default function Project15() {
   return (
     <Project
-      title="15_HooBank"
-      subTitle="Whole site"
-      leftInfo={
-        <>
-          React TS + Vite + tailwind
-          <br />
-          Responsive
-          <br />
-          05.2023 - 05.2023 (~50h)
-        </>
-      }
+      stack="React, Vite, TypeScript, Tailwind"
+      date="05.2023 - 05.2023 (~50h)"
       moreInfoButton={MoreInfoButton15}
       siteUrl="https://15-hoo-bank.vercel.app"
       githubUrl="https://github.com/Nicitaa/15_HooBank"
