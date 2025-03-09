@@ -1,9 +1,14 @@
 "use server"
 
-import supabaseAdmin from "@/libs/supabaseAdmin"
-import { revalidatePath } from "next/cache"
+import { redis } from "@/libs/redis"
 
-export async function toggleIsGMAction(isGMLive: boolean) {
-  await supabaseAdmin.from("liveCall").update({ isGMLive: !isGMLive }).eq("id", 1)
-  revalidatePath("/appointment") // next.js cache state - so to change state in DB and update UI I need to revalidate cache in path
+export async function toggleIsGMAction() {
+  let isLiveCall = false
+  const isLiveCallStringResp = await redis.get("isGMLive")
+  if (!isLiveCallStringResp) await redis.set("isGMLive", "false")
+  else isLiveCall = JSON.parse(isLiveCallStringResp)
+
+  // toggle state
+  const reversedState = !isLiveCall
+  await redis.set("isGMLive", JSON.stringify(reversedState))
 }

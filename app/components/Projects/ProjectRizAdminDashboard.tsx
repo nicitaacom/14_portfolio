@@ -4,7 +4,6 @@ import ButtonMoreInfoRizAdminDashboard from "./Buttons/ButtonMoreInfoRizAdminDas
 export default function ProjectRizAdminDashboard() {
   return (
     <Project
-      title="riz admin dashboard"
       stack="Next, TypeScript, Tailwind, MongoDB"
       date="04.2023 - 04.2023 (~40h)"
       moreInfoButton={ButtonMoreInfoRizAdminDashboard}

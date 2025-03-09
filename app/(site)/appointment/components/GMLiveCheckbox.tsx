@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { twMerge } from "tailwind-merge"
-
 import { toggleIsGMAction } from "@/(site)/actions/toggleIsGMAction"
 
 export function GMLiveCheckbox({ isGMLive }: { isGMLive: boolean }) {
@@ -13,9 +12,9 @@ export function GMLiveCheckbox({ isGMLive }: { isGMLive: boolean }) {
   async function toggleAcceptMessagesFn() {
     try {
       setIsLoading(true)
-      await toggleIsGMAction(isGMLive)
+      await toggleIsGMAction()
     } catch (error) {
-      console.log(error)
+      console.log(17, "error toggling isGMLive", error)
     } finally {
       setIsLoading(false)
       router.refresh()

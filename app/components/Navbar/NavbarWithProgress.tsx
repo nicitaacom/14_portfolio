@@ -4,6 +4,7 @@ import Link from "next/link"
 import { NavbarProjects } from "./NavbarProjects"
 import { GMCheckbox } from "@/(site)/appointment/components/GMCheckbox"
 import { useEffect, useState } from "react"
+import { useIsGMLive } from "@/store/useIsGMLive"
 
 interface NavbarWithProgressProps {
   userId: string | undefined
@@ -13,6 +14,12 @@ interface NavbarWithProgressProps {
 export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressProps) {
   const [scrollRef, setScrollRef] = useState<React.RefObject<HTMLDivElement> | null>(null)
   const [progress, setProgress] = useState(0)
+
+  const { setIsGMLive } = useIsGMLive()
+  useEffect(() => {
+    setIsGMLive(is_live_call)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const updateProgress = () => {
