@@ -17,9 +17,11 @@ import {
   Project29,
   ProjectRizAdminDashboard,
 } from "./Projects"
+import { useModalsStore } from "@/store/modalsStore"
 
 export function ProjectsSwitcher() {
   const [projectTab, setProjectTab] = useState<"work" | "projects" | "clones">("work")
+  const { openModal } = useModalsStore()
 
   return (
     <>
@@ -46,25 +48,25 @@ export function ProjectsSwitcher() {
 
       {projectTab === "work" ? (
         <>
-          <ProjectRizAdminDashboard />
+          <ProjectRizAdminDashboard openModal={() => openModal("rizAdminDashboard")} />
         </>
       ) : projectTab === "projects" ? (
         <>
-          <Project26 />
-          <Project23 />
-          <Project22 />
-          <Project24 />
-          <Project16 />
-          <Project15 />
+          <Project26 openModal={() => openModal("26MoreInfo")} />
+          <Project23 openModal={() => openModal("23MoreInfo")} />
+          <Project22 openModal={() => openModal("22MoreInfo")} />
+          <Project24 openModal={() => openModal("24MoreInfo")} />
+          <Project16 openModal={() => openModal("16MoreInfo")} />
+          <Project15 openModal={() => openModal("15MoreInfo")} />
         </>
       ) : (
         projectTab === "clones" && (
           <>
-            <Project28 />
-            <Project20 />
-            <Project19 />
-            <Project17 />
-            <Project29 />
+            <Project28 openModal={() => openModal("28MoreInfo")} />
+            <Project20 openModal={() => openModal("20MoreInfo")} />
+            <Project19 openModal={() => openModal("19MoreInfo")} />
+            <Project17 openModal={() => openModal("17MoreInfo")} />
+            <Project29 openModal={() => openModal("29MoreInfo")} />
           </>
         )
       )}

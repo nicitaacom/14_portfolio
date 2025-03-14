@@ -1,9 +1,9 @@
-import { FunctionComponent, ReactElement } from "react"
 import Link from "next/link"
 
 import { FigmaUrlIcon } from "./FigmaUrlIcon"
 import { GithubUrlIcon } from "./GithubUrlIcon"
 import { YoutubeUrlIcon } from "./YouTubeUrlIcon"
+import { Button } from "../Button"
 
 interface ProjectProps {
   figmaUrl?: string
@@ -13,7 +13,7 @@ interface ProjectProps {
   siteUrl: string
   stack: string
   date: string // this is string - not ISO
-  moreInfoButton: FunctionComponent
+  openMoreInfoModal: () => void
 }
 
 export function Project({
@@ -24,10 +24,10 @@ export function Project({
   youTubeEmbedPreview,
   stack,
   date,
-  moreInfoButton: MoreInfoButton,
+  openMoreInfoModal,
 }: ProjectProps) {
   return (
-    <div className="relative w-full h-[720px]">
+    <div className="relative w-full tablet:h-[720px] h-[784px]">
       <div className="absolute top-sm right-sm flex gap-x-md">
         {figmaUrl && <FigmaUrlIcon figmaUrl={figmaUrl} />}
         {githubUrl && <GithubUrlIcon githubUrl={githubUrl} />}
@@ -47,24 +47,26 @@ export function Project({
       </div>
       {/* Footer */}
       <div
-        className="relative flex justify-end desktop:justify-between items-center 
-          border-r-[1px] border-l-[1px] border-b-[1px] border-solid border-secondary rounded-b-md px-md h-[80px]">
-        <div className="flex flex-col">
-          <p>
+        className="w-full h-[144px] tablet:h-[80px] relative flex flex-col tablet:flex-row justify-between items-center 
+          border-r-[1px] border-l-[1px] border-b-[1px] border-solid border-secondary rounded-b-md px-md py-md">
+        <div className="w-full flex flex-col">
+          <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
             Stack: <span>{stack}</span>
           </p>
-          <p>
+          <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
             Date: <span>{date}</span>
           </p>
-          <p>
+          <p className="flex flex-row">
             Demo:&nbsp;
-            <Link className="text-sm text-info" href={siteUrl}>
+            <Link className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block" href={siteUrl}>
               {siteUrl.split("?")[0]}
             </Link>
           </p>
         </div>
 
-        <MoreInfoButton />
+        <Button className="w-full tablet:w-fit whitespace-nowrap" onClick={openMoreInfoModal}>
+          More info
+        </Button>
       </div>
     </div>
   )
