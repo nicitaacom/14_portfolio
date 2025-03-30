@@ -6,10 +6,13 @@ import moment from "moment"
 
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { Input } from "@/components/Input"
+import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
+import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 
 export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean }) {
   const [hover, setHover] = useState<string | null>(null)
   const { selectedTimezone, setSelectedTimezone } = useSelectedTimezoneStore()
+  const { setSelectedTime } = useSelectedTimeStore()
   const isHover = hover !== null
 
   function mouseHover(index: string) {
@@ -17,7 +20,11 @@ export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean })
   }
 
   function changeSelectedTimezone(index: string) {
-    return () => setSelectedTimezone(index) // TODO - I think that I need to keep name only
+    const mskTime = moment.tz(appointmentTimesMSK[0].time, "HH:mm", "Europe/Moscow")
+    const convertedTime = mskTime.clone().tz(index).format("HH:mm")
+
+    setSelectedTime(convertedTime) // Now it holds the converted time in the new timezone
+    setSelectedTimezone(index) // Keeping only the timezone name
   }
 
   const timezones = moment.tz.names()
@@ -69,7 +76,7 @@ export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean })
               isHover ? hover === timezone && "bg-cta" : selectedTimezone === timezone && "bg-cta",
             )}
             onMouseOver={mouseHover(timezone)}
-            onClick={changeSelectedTimezone(timezone)}
+            onClick={() => changeSelectedTimezone(timezone)}
             key={timezone}>
             {timezone}
           </li>
