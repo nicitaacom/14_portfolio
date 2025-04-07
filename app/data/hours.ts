@@ -1,12 +1,12 @@
 export const hours = {
-  htmlcss: 4043,
+  htmlcss: 4475, // if you see an email from waka time - update it and rest of skills
   vite: 1103,
-  next: 2511,
-  typescript: 3545,
+  next: 2943,
+  typescript: 3977,
   other: {
-    supabase: 190,
-    zustand: 183,
-    photoshop: 150,
+    supabase: 200,
+    zustand: 240,
+    photoshop: 155,
     figma: 140,
     devops: 133,
   },
