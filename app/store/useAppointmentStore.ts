@@ -35,7 +35,7 @@ export const useAppointmentStore = create<AppointmentStore>()((set, get) => ({
   appointmentNote: "",
   isShowUpOnACall: false,
   isSendNotification: false,
-  sendNotificationTo: "tg",
+  sendNotificationTo: "email",
   inputNotificationTo: "",
   isCustomNotification: false,
   setStep: (step: Step) => set(() => ({ step })),
