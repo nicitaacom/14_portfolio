@@ -58,7 +58,10 @@ export function Project({
           </p>
           <p className="flex flex-row">
             Demo:&nbsp;
-            <Link className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block" href={siteUrl}>
+            <Link
+              className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block"
+              href={siteUrl}
+              target="_blank">
               {siteUrl.split("?")[0]}
             </Link>
           </p>
