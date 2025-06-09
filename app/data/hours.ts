@@ -1,10 +1,10 @@
-// 2025-05-26 until 2025-06-01
+// 2025-06-02 until 2025-06-08
 
 export const hours = {
-  htmlcss: 4808, // if you see an email from waka time - update it and rest of skills
+  htmlcss: 4849, // if you see an email from waka time - update it and rest of skills
   vite: 1149,
-  next: 3276,
-  typescript: 4310,
+  next: 3317,
+  typescript: 4351,
   other: {
     supabase: 280,
     zustand: 290,
