@@ -1,4 +1,4 @@
-// 2025-06-09 until 2025-06-15
+// 2025-06-16 until 2025-06-22
 
 export const hours = {
   htmlcss: 4881, // if you see an email from waka time - update it and rest of skills
