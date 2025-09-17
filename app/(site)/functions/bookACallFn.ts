@@ -4,11 +4,17 @@ import { formatedDateTimeFn } from "./formatedDateTimeFn"
 import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
 import useToast from "@/store/useToast"
 import { scheduleTgNtfctnAction } from "../actions/scheduleTgNtfctnAction"
+import { useSelectedDateStore } from "@/store/useSelectedDateStore"
+import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
+import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 
 export async function bookACallFn() {
-  const { sendNotificationTo, inputNotificationTo, channel,selectedDate,selectedTime,selectedTimezone } = useAppointmentStore.getState()
+  const { sendNotificationTo, inputNotificationTo, channel } = useAppointmentStore.getState()
+  const { selectedDate } = useSelectedDateStore.getState()
+  const { selectedTime } = useSelectedTimeStore.getState()
+  const { selectedTimezone } = useSelectedTimezoneStore.getState()
   const { setNextStep, appointmentNote } = useAppointmentStore.getState()
-  
+
   const toast = useToast.getState()
 
   const atMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
