@@ -20,7 +20,7 @@ export function Footer() {
           LinkedIn <AiFillLinkedin />
         </Button>
         <Button
-          href="https://drive.google.com/file/d/1jkNQ9DzKlnj9oSu0Dy2b_iP56btWZgly/view?usp=sharing"
+          href="https://drive.google.com/file/d/1oGjYJEbqq4kUVSgq4P4D8J71r_tOHWMB/view?usp=sharing"
           target="_blank">
           Summary <BsFiletypePdf />
         </Button>
