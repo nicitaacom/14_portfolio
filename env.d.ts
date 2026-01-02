@@ -17,6 +17,8 @@ declare global {
       AWS_ACCESS_KEY_ID: string
       AWS_SECRET_ACCESS_KEY: string
       NEXT_PUBLIC_LAMBDA_FN_NAME: string
+      
+      WAKA_TIME_API_KEY: string
     }
   }
 }

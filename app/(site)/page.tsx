@@ -1,14 +1,17 @@
-"use client"
-
 import { GrSchedule } from "react-icons/gr"
+
 import { Skill } from "@/components/Skill"
 import { TooltipOther, TooltipReact } from "../components/Tooltips"
 import { ProjectsSwitcher } from "@/components/ProjectsSwitcher"
 import { Footer } from "@/components/Footer"
-import { hours } from "@/data/hours"
+import { getWakaHours } from "./functions/getWakaHours"
 import { Button } from "@/components/Button"
+import { syncWakaTime } from "./functions/syncWaka"
 
-export default function Home() {
+export default async function Home() {
+  await syncWakaTime()
+  const hours = await getWakaHours()
+
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-y-xl my-xl">
@@ -18,17 +21,9 @@ export default function Home() {
       tablet:px-md desktop:max-w-[80%] desktop:h-[40rem]">
           {/* Skills */}
           <ul className="flex flex-col gap-y-sm bg-primary-foreground p-md border rounded">
-            <Skill id={1} label="html&css" hours={hours.htmlcss} />
-            <Skill id={2} label="React" hours={hours.next + hours.vite} tooltip tooltiptext={<TooltipReact />} />
-            <Skill id={4} label="Next" hours={hours.next} />
-            <Skill id={3} label="TypeScript" hours={hours.typescript} />
-            <Skill
-              id={5}
-              label="other"
-              hours={Object.values(hours.other).reduce((a, b) => a + b, 0)}
-              tooltip
-              tooltiptext={<TooltipOther />}
-            />
+            <Skill id={1} label="React" hours={hours.react} tooltip tooltiptext={<TooltipReact />} />
+            <Skill id={2} label="TypeScript" hours={hours.typescript} />
+            <Skill id={3} label="Tailwind" hours={hours.tailwind} />
           </ul>
           {/* Text */}
           <div className="text-center w-fit break-words max-w-[650px] desktop:px-[0] desktop:text-start">
