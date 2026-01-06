@@ -1,16 +1,16 @@
-// 2025-11-24 until 2025-11-30
+// 2025-12-01 until 2025-12-31
 
 // if you see an email from waka time - update it and rest of skills
 export const hours = {
-  htmlcss: 5415,
+  htmlcss: 5503,
   vite: 1163,
-  next: 3865,
-  typescript: 4934,
+  next: 3953,
+  typescript: 5022,
   other: {
-    supabase: 344,
-    zustand: 335,
+    supabase: 346,
+    zustand: 336,
     photoshop: 172,
     figma: 153,
-    devops: 154,
+    devops: 155,
   },
 }
