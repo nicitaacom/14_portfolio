@@ -32,18 +32,20 @@ export function ScheduleAppointmentModal() {
   return (
     <ModalContainer
       className={twMerge(
-        "duration-300",
-        step === "step-1" && "w-[550px] h-[130px]",
-        step === "step-2" && "w-[675px] h-[274px]",
-        step === "step-3" && "w-[650px]",
+        "duration-300 w-[95vw] max-w-[550px]",
+        step === "step-1" && "h-auto min-h-[130px]",
+        step === "step-2" && "max-w-[675px] h-auto min-h-[274px]",
+        step === "step-3" && "max-w-[650px] h-auto",
       )}
       isOpen={isOpen["Appointment"]}
       onClose={() => closeModal<TModals>("Appointment")}>
-      <div className="flex flex-col items-center gap-y-[2rem] px-[2rem] py-[1.5rem] pt-[2rem] overflow-x-hidden">
+      <div
+        className="flex flex-col items-center gap-y-md tablet:gap-y-[2rem]
+        px-sm tablet:px-[2rem] py-md tablet:py-[1.5rem] tablet:pt-[2rem] overflow-x-hidden">
         <ScheduleAppointmentModalHeader />
         <AnimatePresence mode="wait">
           {step === "step-1" ? (
-            <motion.div key={step} {...getTransitionProps(direction, prevDirection)}>
+            <motion.div key={step} className="w-full" {...getTransitionProps(direction, prevDirection)}>
               <Step1 />
             </motion.div>
           ) : step === "step-2" ? (

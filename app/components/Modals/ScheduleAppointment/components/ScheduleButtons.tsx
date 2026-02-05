@@ -16,7 +16,7 @@ export function ScheduleButtons() {
   }
 
   return (
-    <div className="flex flex-row justify-around items-center gap-x-md">
+    <div className="flex flex-col justify-around items-center gap-y-md gap-x-md pt-xs">
       <Button className="font-bold" onClick={() => setStepFn("google-meets")}>
         <SiGooglemeet />
         Google meets

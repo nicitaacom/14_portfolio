@@ -71,12 +71,12 @@ export function TimePicker({ bookings }: Bookings) {
   return (
     <div
       className="relative flex items-center gap-[2px] px-sm border-l-[1px] border-[#777777] border-solid
-      h-[42px] laptop:w-[135px] w-full justify-center cursor-pointer"
+      h-[42px]  laptop:w-[145px] justify-center cursor-pointer"
       onClick={() => setShowDropdown(!showDropdown)}
       ref={dropdownContainerRef}>
       <BiTimeFive className="text-secondary-foreground mb-[2px]" />
       <div className="flex justify-center laptop:justify-center items-center gap-[2px] laptop:w-[7rem]">
-        <h1 className="text-xs text-secondary">Time: {selectedTime}</h1>
+        <h1 className="text-secondary whitespace-nowrap">Time: {selectedTime}</h1>
         <Image className="w-md h-md mb-[4px]" src="/tringle.png" alt="tringle" width={32} height={32} />
       </div>
 

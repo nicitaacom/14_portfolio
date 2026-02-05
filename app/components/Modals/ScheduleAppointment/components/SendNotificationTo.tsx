@@ -1,10 +1,10 @@
 "use client"
 
-import { Input } from "@/components/Input"
+import { twMerge } from "tailwind-merge"
+import { FieldErrors, FieldValues, UseFormRegister, UseFormSetError } from "react-hook-form"
+
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { SendNotificationToSwitcher } from "./SendNotificctionToDropdown/SendNotificationToSwitcher"
-import { FieldErrors, FieldValues, UseFormRegister, UseFormSetError } from "react-hook-form"
-import { twMerge } from "tailwind-merge"
 import { FormInput } from "@/(site)/appointment/components/FormInput"
 
 interface FormData {
@@ -22,8 +22,7 @@ export function SendNotificationTo({ errors, register }: SendNotificationToProps
 
   return (
     <div className="flex flex-row justify-center items-center gap-x-xs">
-      <p>Send notification & data to</p>
-      <div className="flex flex-row justify-center items-center">
+      <div className="flex flex-row justify-center">
         <SendNotificationToSwitcher />
         <FormInput
           className={twMerge(
@@ -36,7 +35,6 @@ export function SendNotificationTo({ errors, register }: SendNotificationToProps
           placeholder={sendNotificationTo === "tg" ? "Telegram" : sendNotificationTo === "dis" ? "Discord" : "Email"}
         />
       </div>
-      <p>or I create it on my own</p>
     </div>
   )
 }

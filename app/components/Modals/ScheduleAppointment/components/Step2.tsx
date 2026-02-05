@@ -9,6 +9,7 @@ import useToast from "@/store/useToast"
 import { useState } from "react"
 import { Input } from "@/components/Input"
 import { IoMdArrowRoundForward } from "react-icons/io"
+import { BsCheckLg } from "react-icons/bs"
 
 interface FormData {
   inputNotificationTo: string
@@ -33,6 +34,7 @@ export function Step2() {
     isShowUpOnACall,
     isSendNotification,
     appointmentNote,
+    step,
     setAppointmentNote,
     setInputNotificationTo,
     toggleIsShowUpOnACall,
@@ -64,19 +66,24 @@ export function Step2() {
   }
 
   return (
-    <form className="w-full flex flex-col justify-start gap-y-[1.5rem]" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={twMerge("w-full flex flex-col justify-start gap-y-[1.5rem]", step === "step-1" ? "" : "pt-lg")}
+      onSubmit={handleSubmit(onSubmit)}>
       <div className="font-bold flex flex-col gap-y-xs">
-        <div className="flex flex-col">
+        <div className="flex flex-col items-start gap-y-2">
           <Checkbox
             isChecked={isShowUpOnACall}
             onChange={toggleIsShowUpOnACall}
-            label="I affirm that 99% that I show up on a call"
+            label="I affirm 99% I'll show up on a call"
           />
-          <Checkbox
-            isChecked={isSendNotification}
-            onChange={toggleIsSendNotification}
-            label={<SendNotificationTo register={register} errors={errors} setError={setError} />}
-          />
+          <div className="flex flex-row items-start gap-x-2">
+            <Checkbox isChecked={isSendNotification} onChange={toggleIsSendNotification} label="" />
+            <div className="flex flex-col tablet:flex-row gap-xs -mt-2">
+              <span className="text-sm">Send notification & data to</span>
+              <SendNotificationTo register={register} errors={errors} setError={setError} />
+              <p>or I create it on my own</p>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col">
           <label htmlFor="appointmentNote">What motivates you book a call today?</label>
