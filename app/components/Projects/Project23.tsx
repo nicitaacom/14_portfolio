@@ -6,7 +6,7 @@ export default function Project23({ openModal }: { openModal: () => void }) {
       stack="Next, TypeScript, Tailwind, Zustand, Stripe, Telegram API"
       date="09.2023 - 11.2023 (~670h)"
       openMoreInfoModal={openModal}
-      siteUrl="https://23-store.vercel.app/?utm_source=nicitaa.com"
+      siteUrl="https://https://www.jokik.fi/?utm_source=nicitaa.com"
       githubUrl="https://github.com/nicitaacom/23_store"
       youtubeUrl="https://streamable.com/1zdhl7"
     />
