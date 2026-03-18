@@ -7,10 +7,15 @@ declare global {
       NEXT_PUBLIC_SUPABASE_URL: string
       NEXT_PUBLIC_SUPABASE_ANON_KEY: string
       SUPABASE_SERVICE_ROLE_KEY: string
+      ADMIN_USER_ID_ARR: string
+      ADMIN_PASSWORD: string
 
       UPSTASH_REDIS_REST_URL: string
       UPSTASH_REDIS_REST_TOKEN: string
       UPSTASH_REDIS_URL: string
+
+      ADMIN_USER_ID_ARR: string
+      ADMIN_PASSWORD: string
 
       NEXT_PUBLIC_AWS_REGION: string
       AWS_ACCOUNT_ID: string
