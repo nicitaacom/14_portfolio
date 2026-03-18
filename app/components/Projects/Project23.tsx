@@ -8,7 +8,7 @@ export default function Project23({ openModal }: { openModal: () => void }) {
       openMoreInfoModal={openModal}
       siteUrl="https://www.jokik.fi/?utm_source=nicitaa.com"
       githubUrl="https://github.com/nicitaacom/23_store"
-      youtubeUrl="https://streamable.com/1zdhl7"
+      youtubeUrl="https://www.youtube.com/watch?v=xZ1DOfFfpc8&feature=youtu.be"
     />
   )
 }
