@@ -1,3 +1,4 @@
+import { useId } from "react"
 import { twMerge } from "tailwind-merge"
 import { BsCheckLg } from "react-icons/bs"
 
@@ -6,37 +7,61 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange: () => void
   label: React.ReactNode
   labelClassName?: string
+  className?: string
   disabled?: boolean
 }
 
-export function Checkbox({ isChecked, onChange, label, labelClassName = "", disabled, ...props }: CheckboxProps) {
+export function Checkbox({
+  isChecked,
+  onChange,
+  label,
+  labelClassName = "",
+  className = "",
+  disabled,
+  ...props
+}: CheckboxProps) {
+  const checkboxId = useId()
+
   return (
-    <div
+    <label
+      htmlFor={checkboxId}
       className={twMerge(
-        `relative flex flex-row justify-start items-center gap-x-xs transition-all duration-300 justify-self-start`,
+        "group relative flex cursor-pointer items-start gap-xs rounded-[12px] border border-[#777777] px-sm py-xs",
+        "transition-colors duration-50 hover:bg-white/20",
+        isChecked && "border-cta/60",
         disabled && "opacity-50 cursor-default pointer-events-none",
-      )}>
-      <div className="h-fit w-fit relative inline-flex justify-center items-center cursor-default mt-2">
+        className,
+      )}
+    >
+      <div className="relative mt-[2px] inline-flex h-[22px] w-[22px] items-center justify-center">
         <input
-          className="w-[20px] h-[20px] appearance-none outline-none mr-2 ml-1 rounded-[2px] shadow-sm flex justify-center items-center
-          border
-          bg-transparent cursor-pointer checked:bg-cta/50 duration-300
-          before:content-[''] before:w-[8px] before:h-[8px] before:rounded-[2px] before:scale-90 before:absolute
-          before:top-2 before:left-2 before:duration-300 before:opacity-0
-          before:translate-x-[105%] before:translate-y-[80%] before:pointer-events-none before:bg-success/50"
+          className="peer sr-only"
           type="checkbox"
-          id="check"
+          id={checkboxId}
           checked={isChecked}
           onChange={onChange}
           {...props}
         />
+        <span
+          className={twMerge(
+            "flex h-[18px] w-[18px] items-center justify-center rounded-[5px] border border-[#777777] bg-primary",
+            "transition-colors duration-50",
+            isChecked && "border-cta bg-cta",
+          )}
+        >
+          <BsCheckLg
+            className={twMerge(
+              "text-primary transition-opacity duration-50",
+              isChecked ? "opacity-100" : "opacity-0",
+            )}
+            size={14}
+          />
+        </span>
       </div>
-      <label className={`${labelClassName} text-sm select-none cursor-pointer`} onClick={onChange}>
+
+      <span className={twMerge("flex-1 text-sm leading-relaxed text-secondary-foreground", labelClassName)}>
         {label}
-      </label>
-      {isChecked && (
-        <BsCheckLg className="absolute left-[0px] top-[2px] text-white pointer-events-none select-none" size={20} />
-      )}
-    </div>
+      </span>
+    </label>
   )
 }

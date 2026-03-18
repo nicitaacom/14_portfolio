@@ -26,12 +26,11 @@ export function TimeZonePicker() {
 
   return (
     <div
-      className="flex flex-row gap-x-2 justify-end desktop:justify-center items-center px-0 duration-300"
-      style={{ width: isShowDropdown ? "180px" : selectedTimezone.length * 10 + 18 }}>
+      className="flex w-full items-center justify-end tablet:w-[190px]">
       <div
         className={twMerge(
-          `relative w-full flex justify-between items-center gap-x-2 border border-[#777777] border-b-0 rounded-t
-           cursor-pointer px-2 mt-1 z-[111]`,
+          `relative flex h-[40px] w-full items-center rounded-[8px] border border-[#777777]
+           bg-primary/70 px-sm z-[111] cursor-pointer`,
         )}
         onClick={toggleDropdown}
         ref={dropdownContainerRef}>

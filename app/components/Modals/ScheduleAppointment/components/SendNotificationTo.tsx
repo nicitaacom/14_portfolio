@@ -21,18 +21,20 @@ export function SendNotificationTo({ errors, register }: SendNotificationToProps
   const { sendNotificationTo } = useAppointmentStore()
 
   return (
-    <div className="flex flex-row justify-center items-center gap-x-xs">
-      <div className="flex flex-row justify-center">
+    <div className="flex w-full flex-col gap-xs">
+      <div className="flex w-full flex-col gap-xs tablet:flex-row">
         <SendNotificationToSwitcher />
         <FormInput
           className={twMerge(
-            "h-[26px] w-[150px] rounded-none px-[2px] outline-none font-normal",
+            "h-[40px] rounded-[10px] bg-transparent px-sm py-xs font-normal text-secondary",
             errors["inputNotificationTo"] && "text-danger",
           )}
           id="inputNotificationTo"
           errors={errors}
           register={register}
-          placeholder={sendNotificationTo === "tg" ? "Telegram" : sendNotificationTo === "dis" ? "Discord" : "Email"}
+          placeholder={
+            sendNotificationTo === "tg" ? "Telegram username" : sendNotificationTo === "dis" ? "Discord username" : "Email address"
+          }
         />
       </div>
     </div>

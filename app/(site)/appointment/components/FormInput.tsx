@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 
 interface FormData {
   inputNotificationTo: string
+  contact: string
 }
 
 interface FormInputProps {
@@ -34,6 +35,13 @@ const validationRules: ValidationRules = {
       message: "Enter valid email address",
     },
   },
+  contact: {
+    required: "This field is required",
+    pattern: {
+      value: /.+/,
+      message: "This field is required",
+    },
+  },
 }
 
 export function FormInput({
@@ -53,8 +61,8 @@ export function FormInput({
       <div className="flex flex-col">
         <input
           className={twMerge(
-            `px-[2px] py-xs text-secondary bg-transparent border-[1px] border-[#909090] rounded outline-none`,
-            errors[id] && "focus:ring-rose-500 ",
+            "w-full rounded-[16px] border border-[#909090] bg-primary/70 px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-cta",
+            errors[id] && "border-danger text-danger",
             disabled && "opacity-50 cursor-default pointer-events-none",
             className,
           )}

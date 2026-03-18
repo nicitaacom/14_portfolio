@@ -9,7 +9,9 @@ export async function deleteDBAppointmentAction(
   bookedDate: string,
   bookedTimeMSK: string,
 ) {
-  await supabaseAdmin.from("bookings").delete().eq("id", bookedAppointmentId)
+  const { error } = await supabaseAdmin.from("bookings").delete().eq("id", bookedAppointmentId)
+  if (error) throw new Error(error.message)
   await sendTelegramMessageAction(`somebody canceled booking a call ${bookedDate} at ${bookedTimeMSK}`)
   revalidatePath("/appointment")
+  revalidatePath("/admin-dashboard")
 }

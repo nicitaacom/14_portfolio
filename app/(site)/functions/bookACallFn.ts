@@ -7,9 +7,11 @@ import { scheduleTgNtfctnAction } from "../actions/scheduleTgNtfctnAction"
 import { useSelectedDateStore } from "@/store/useSelectedDateStore"
 import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
+import { TAPIInsertBooking } from "@/app/api/insert/booking/route"
 
 export async function bookACallFn() {
-  const { sendNotificationTo, inputNotificationTo, channel } = useAppointmentStore.getState()
+  const { contactMethod, contact, isSendNotification, sendNotificationTo, inputNotificationTo, channel } =
+    useAppointmentStore.getState()
   const { selectedDate } = useSelectedDateStore.getState()
   const { selectedTime } = useSelectedTimeStore.getState()
   const { selectedTimezone } = useSelectedTimezoneStore.getState()
@@ -20,7 +22,8 @@ export async function bookACallFn() {
   const atMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
 
   let message = formatedDateTimeFn(true)
-  if (inputNotificationTo.length > 3) {
+  message += `Contact: ${contactMethod}: ${contact}\n`
+  if (isSendNotification && inputNotificationTo.length > 3) {
     message += `Send notifiaction to ${sendNotificationTo}: ${inputNotificationTo}\n`
   }
   if (appointmentNote.length > 3) {
@@ -29,11 +32,30 @@ export async function bookACallFn() {
   message += `Where: ${channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : channel}\n`
 
   try {
-    // in API route to keep error handling (in server action error handling in prod doesn't work)
-    // create a server action here
-    // TODO - make sure that everything works fine
-    await sendTelegramMessageAction(message) // this is already implemented
-    await scheduleTgNtfctnAction(message, selectedDate, atMSK, channel, sendNotificationTo, inputNotificationTo) // this is already implemented
+    const payload: TAPIInsertBooking = {
+      selectedDate,
+      atMSK,
+      channel,
+      contactType: contactMethod,
+      contact,
+    }
+
+    const response = await fetch("/api/insert/booking", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+
+    if (!response.ok) {
+      throw new Error(await response.text())
+    }
+
+    await sendTelegramMessageAction(message)
+
+    if (isSendNotification && inputNotificationTo.length > 3) {
+      await scheduleTgNtfctnAction(message, selectedDate, atMSK, channel, sendNotificationTo, inputNotificationTo)
+    }
+
     setNextStep()
   } catch (error) {
     if (error instanceof Error) {

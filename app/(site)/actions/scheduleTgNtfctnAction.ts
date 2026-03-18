@@ -39,14 +39,18 @@ export async function scheduleTgNtfctnAction(
 
   const scheduleTimes = [
     {
-      suffix: "_30minBefore",
-      time: baseTime.clone().subtract(30, "minutes"),
-      msg: `Reminder about meeting in 30 minutes:\n${message}`,
+      suffix: "_10minBefore",
+      time: baseTime.clone().subtract(10, "minutes"),
+      msg: `Reminder about meeting in 10 minutes:\n${message}`,
     },
-    { suffix: "_OnTime", time: baseTime, msg: message },
   ]
 
   for (const { suffix, time, msg } of scheduleTimes) {
+    if (time.isBefore(moment())) {
+      console.error(`Skipping schedule (${suffix}): target time is already in the past`)
+      continue
+    }
+
     const idName = `ScheduleTgNtfctn_${formatTime(time.toISOString()).replace(/[\s\/\.:]/g, "_")}${suffix}`
     try {
       const params = {

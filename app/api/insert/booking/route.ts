@@ -12,10 +12,12 @@ export type TAPIInsertBooking = {
   selectedDate: Value
   atMSK: string
   channel: Exclude<Channel, null>
+  contactType: string
+  contact: string
 }
 
 export async function POST(req: Request) {
-  const { selectedDate, atMSK, channel } = (await req.json()) as TAPIInsertBooking
+  const { selectedDate, atMSK, channel, contactType, contact } = (await req.json()) as TAPIInsertBooking
 
   const userCookieId = cookies().get("user_cookie_id")?.value || nanoid()
 
@@ -32,6 +34,9 @@ export async function POST(req: Request) {
 
   const date = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate
   if (!date) return new NextResponse(`No selectedDate`, { status: 400 })
+  if (!contactType || !contact || contact.trim().length < 3) {
+    return new NextResponse(`Contact details are required.`, { status: 400 })
+  }
   const bookingDate = moment(date).format("YYYY-MM-DD")
 
   // Check is booking with this time already exists
@@ -41,7 +46,7 @@ export async function POST(req: Request) {
     .eq("booking_time_MSK", atMSK)
     .eq("booking_date", bookingDate)
 
-  if (data && data?.length > 1) {
+  if (data && data.length > 0) {
     console.error(40, "Error inserting booking: booking with this date time already exists")
     return new NextResponse(`Error inserting booking: booking with this date time already exists.`, {
       status: 409,
@@ -53,6 +58,8 @@ export async function POST(req: Request) {
     booking_time_MSK: atMSK,
     channel: channel,
     user_cookie_id: userCookieId,
+    contact: `${contactType}: ${contact.trim()}`,
+    contact_type: contactType,
   })
 
   if (error) {

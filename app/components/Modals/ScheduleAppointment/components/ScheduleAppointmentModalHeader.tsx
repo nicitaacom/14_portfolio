@@ -4,31 +4,57 @@ import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { PrevStepButton } from "./PrevStepButton"
 import { SiGooglemeet } from "react-icons/si"
 import { FaDiscord, FaTelegramPlane } from "react-icons/fa"
-import { twMerge } from "tailwind-merge"
 
 export function ScheduleAppointmentModalHeader() {
   const { step, channel } = useAppointmentStore()
 
   const headerText =
-    step === "step-1" ? "Schedule appointment" : step === "step-2" ? `Schedule ${channel}` : `Appointment created`
+    step === "step-1" ? "Schedule appointment" : step === "step-2" ? "Your details" : "Confirmed"
+
+  const helperText =
+    step === "step-1"
+      ? "Choose the call channel."
+      : step === "step-2"
+        ? "Add a contact and optional reminder."
+        : "Your booking was created."
+
+  const channelBadge =
+    channel === "google-meets" ? (
+      <>
+        <SiGooglemeet />
+        Google Meets
+      </>
+    ) : channel === "discord" ? (
+      <>
+        <FaDiscord />
+        Discord
+      </>
+    ) : channel === "telegram" ? (
+      <>
+        <FaTelegramPlane />
+        Telegram
+      </>
+    ) : null
 
   return (
-    <div className={twMerge("relative w-full", step === "step-1" && "pt-md")}>
-      {step !== "step-1" && <PrevStepButton disabled={step === "step-3"} />}
+    <div className="flex w-full flex-col gap-xs border-b border-[#777777] pb-sm">
+      {step !== "step-1" ? (
+        <PrevStepButton disabled={step === "step-3"} />
+      ) : (
+        <span className="self-start whitespace-nowrap text-xs text-secondary-foreground">1 / 3</span>
+      )}
 
-      <h1
-        className={twMerge(
-          "w-full absolute left-[50%] top-[50%] translate-x-[-50%]",
-
-          step === "step-1" ? "translate-y-[-50%]" : "translate-y-[80%]",
-          "text-[1.25rem] text-center font-bold",
-        )}>
-        {headerText}
-        {/* TODO - UI/UX can be improved here - create it without absolute and with some section that shows channel and add small section that
-        shows current step */}
-        {/* {step === "step-3" &&
-          (channel === "google-meets" ? <SiGooglemeet /> : channel === "discord" ? <FaDiscord /> : <FaTelegramPlane />)} */}
-      </h1>
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-xs">
+          <h1 className="text-lg font-bold text-secondary">{headerText}</h1>
+          {channelBadge && (
+            <div className="flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-full border border-[#777777] px-xs py-[3px] text-xs text-secondary-foreground">
+              {channelBadge}
+            </div>
+          )}
+        </div>
+        <p className="mt-[2px] text-sm text-secondary-foreground">{helperText}</p>
+      </div>
     </div>
   )
 }

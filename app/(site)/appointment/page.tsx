@@ -21,12 +21,20 @@ export default async function AppointmentPage() {
     .eq("user_cookie_id", cookies().get("user_cookie_id")?.value ?? "undefined")
 
   return (
-    <div className="flex flex-col gap-y-md justify-start items-center px-md pt-[8rem]">
-      <IsGMLive />
-      <ScheduleAppointment bookings={bookings ?? []} />
-      <BookedAppointments booked_appointments={booked_appointments ?? []} />
-      <ScheduleAppointmentModal />
-      <ToastWrapper />
+    <div className="flex w-full justify-center overflow-x-hidden px-sm pt-[5.25rem] tablet:px-md tablet:pt-[6rem]">
+      <div className="mx-auto flex w-full max-w-[980px] flex-col gap-md">
+        <IsGMLive />
+        <div className="grid gap-md laptop:grid-cols-[minmax(0,1fr)_340px] laptop:items-start">
+          <div className="min-w-0">
+            <ScheduleAppointment bookings={bookings ?? []} />
+          </div>
+          <div className="min-w-0">
+            <BookedAppointments booked_appointments={booked_appointments ?? []} />
+          </div>
+        </div>
+        <ScheduleAppointmentModal />
+        <ToastWrapper />
+      </div>
     </div>
   )
 }

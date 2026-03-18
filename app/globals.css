@@ -227,6 +227,8 @@ div {
 
 /* react-calendar */
 .react-calendar {
+  width: 100%;
+  min-width: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -303,6 +305,11 @@ div {
 
 .react-calendar__month-view__weekdays__weekday abbr:where([title]) {
   text-decoration: none;
+}
+
+.react-calendar__month-view__weekdays,
+.react-calendar__month-view__days {
+  width: 100% !important;
 }
 
 /* Hide scrollbar */

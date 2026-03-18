@@ -1,16 +1,23 @@
 "use client"
 
-import { useMemo } from "react"
-import { FaDiscord, FaTelegramPlane } from "react-icons/fa"
-import { FcGoogle } from "react-icons/fc"
+import { useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
+import { FaDiscord, FaLinkedinIn, FaTelegramPlane } from "react-icons/fa"
+import { FiEdit3, FiMail, FiSave } from "react-icons/fi"
+import { MdOutlineCancel } from "react-icons/md"
+import { SiGooglemeet } from "react-icons/si"
+import { deleteDBAppointmentAction } from "@/(site)/actions/deleteDBAppointmentAction"
+import { updateDBAppointmentAction } from "@/(site)/actions/updateDBAppointmentAction"
+import { Input } from "@/components/Input"
 
 interface BookingRow {
   booking_date: string
   booking_time_MSK: string
   channel: string
+  contact: string | null
+  contact_type: string | null
   created_at: string
   id: string
-  user_cookie_id: string
 }
 
 interface CronScheduleRow {
@@ -63,7 +70,7 @@ function formatDate(value: string) {
 
 function OverviewStat({ label, value }: OverviewStatProps) {
   return (
-    <div className="rounded-[16px] border border-[#343434] bg-[#202020] px-sm py-xs">
+    <div className="rounded-[12px] border border-[#343434] bg-[#202020] px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
       <p className="mt-[2px] text-lg text-secondary">{value}</p>
     </div>
@@ -101,7 +108,7 @@ function StatusBadge({ label, tone }: { label: string; tone: "green" | "red" | "
 function BookingChannelBadge({ channel }: { channel: string }) {
   if (channel === "telegram") {
     return (
-      <span className="inline-flex items-center gap-[6px] rounded-full border border-[#2AABEE]/40 bg-[#2AABEE]/10 px-sm py-[2px] text-xs text-[#2AABEE]">
+      <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[12px] border border-[#2AABEE]/40 bg-[#102d3c] px-sm py-[2px] text-xs text-[#7fd3ff]">
         <FaTelegramPlane size={12} />
         telegram
       </span>
@@ -110,7 +117,7 @@ function BookingChannelBadge({ channel }: { channel: string }) {
 
   if (channel === "discord") {
     return (
-      <span className="inline-flex items-center gap-[6px] rounded-full border border-[#5865F2]/40 bg-[#1f255d] px-sm py-[2px] text-xs text-[#8ea2ff]">
+      <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[12px] border border-[#5865F2]/40 bg-[#1c214c] px-sm py-[2px] text-xs text-[#a9b8ff]">
         <FaDiscord size={12} />
         discord
       </span>
@@ -118,10 +125,55 @@ function BookingChannelBadge({ channel }: { channel: string }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-[6px] rounded-full border border-[#5f6368] bg-[#2a2d31] px-sm py-[2px] text-xs text-[#e8eaed]">
-      <FcGoogle size={12} />
+    <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[12px] border border-[#4b4f56] bg-[#2a2d31] px-sm py-[2px] text-xs text-[#f1f3f4]">
+      <SiGooglemeet className="text-[#34A853]" size={12} />
       google-meets
     </span>
+  )
+}
+
+function BookingContactRow({ contact, contactType }: { contact: string | null; contactType: string | null }) {
+  const contactValue = contact ?? "not provided"
+
+  const ContactIcon =
+    contactType === "telegram"
+      ? FaTelegramPlane
+      : contactType === "discord"
+        ? FaDiscord
+        : contactType === "linkedin"
+          ? FaLinkedinIn
+          : FiMail
+
+  const iconClassName =
+    contactType === "telegram"
+      ? "text-[#2AABEE]"
+      : contactType === "discord"
+        ? "text-[#8ea2ff]"
+        : contactType === "linkedin"
+          ? "text-[#0A66C2]"
+          : "text-[#d6d8db]"
+
+  return (
+    <div className="flex items-center gap-xs overflow-hidden text-xs">
+      <ContactIcon className={`shrink-0 ${iconClassName}`} size={13} />
+      <p className="truncate whitespace-nowrap text-secondary" title={`Contact: ${contactValue}`}>
+        Contact: {contactValue}
+      </p>
+    </div>
+  )
+}
+
+function BookingControlChip({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className={`flex h-[40px] shrink-0 items-center rounded-[10px] border border-[#343434] bg-[#232323] px-sm ${className}`}>
+      {children}
+    </div>
   )
 }
 
@@ -130,9 +182,9 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
   const descriptionText = job.description ? job.description : `Command: ${job.command}`
 
   return (
-    <article className="rounded-[14px] border border-[#343434] bg-[#202020] px-sm py-sm">
-      <div className="flex flex-col gap-xs">
-        <div className="flex flex-col gap-xs tablet:flex-row tablet:items-start tablet:justify-between">
+    <article className="rounded-[12px] border border-[#343434] bg-[#202020] px-sm py-sm">
+      <div className="flex flex-col gap-[2px]">
+        <div className="flex flex-col gap-[2px] tablet:flex-row tablet:items-start tablet:justify-between">
           <div className="min-w-0 flex items-center gap-xs">
             <p className="truncate whitespace-nowrap text-sm text-secondary" title={job.job_name}>
               {job.job_name}
@@ -141,7 +193,7 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
           </div>
 
           <div className="admin-dashboard-scrollbar -mx-[2px] overflow-x-auto">
-            <div className="flex min-w-max gap-xs px-[2px]">
+            <div className="flex min-w-max gap-[2px] px-[2px]">
               <MetaPill className="text-secondary">{job.schedule}</MetaPill>
               {hasRuns ? (
                 <>
@@ -177,24 +229,110 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
 }
 
 function BookingItem({ booking }: { booking: BookingRow }) {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [draftBookingDate, setDraftBookingDate] = useState(booking.booking_date)
+  const [draftBookingTime, setDraftBookingTime] = useState(booking.booking_time_MSK.slice(0, 5))
+
+  async function saveBookingChanges() {
+    try {
+      setIsLoading(true)
+      await updateDBAppointmentAction(
+        booking.id,
+        draftBookingDate,
+        draftBookingTime,
+        formatDate(booking.booking_date),
+        booking.booking_time_MSK,
+      )
+      setIsEditing(false)
+      router.refresh()
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function deleteBooking() {
+    try {
+      setIsLoading(true)
+      await deleteDBAppointmentAction(booking.id, formatDate(booking.booking_date), booking.booking_time_MSK)
+      router.refresh()
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <article className="rounded-[14px] border border-[#343434] bg-[#202020] p-sm">
-      <div className="flex flex-col gap-xs">
-        <div className="flex flex-col gap-xs tablet:flex-row tablet:items-start tablet:justify-between">
-          <div className="min-w-0">
-            <p className="truncate whitespace-nowrap text-sm text-secondary" title={`${formatDate(booking.booking_date)} at ${booking.booking_time_MSK}`}>
-              {formatDate(booking.booking_date)} at {booking.booking_time_MSK}
-            </p>
-            <p className="truncate whitespace-nowrap text-xs" title={formatDateTime(booking.created_at)}>
-              Created {formatDateTime(booking.created_at)}
-            </p>
+    <article className="rounded-[12px] border border-[#343434] bg-[#202020] px-sm py-sm">
+      <div className="flex flex-col gap-[2px]">
+        <div className="admin-dashboard-scrollbar overflow-x-auto pb-[2px]">
+          <div className="flex min-w-max items-center gap-[2px]">
+            <BookingControlChip className="w-[152px] justify-between">
+              {isEditing ? (
+                <Input type="date" value={draftBookingDate} onChange={event => setDraftBookingDate(event.target.value)} className="w-full border-none px-0 py-0" />
+              ) : (
+                <p className="truncate whitespace-nowrap text-sm text-secondary">{formatDate(booking.booking_date)}</p>
+              )}
+            </BookingControlChip>
+
+            <BookingControlChip className="w-[128px] justify-between">
+              {isEditing ? (
+                <Input type="time" value={draftBookingTime} onChange={event => setDraftBookingTime(event.target.value)} className="w-full border-none px-0 py-0" />
+              ) : (
+                <p className="truncate whitespace-nowrap text-sm text-secondary">{booking.booking_time_MSK.slice(0, 5)}</p>
+              )}
+            </BookingControlChip>
+
+            <div className="flex h-[40px] shrink-0 items-center px-[2px]">
+              <BookingChannelBadge channel={booking.channel} />
+            </div>
+
+            {isEditing ? (
+              <>
+                <button
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-success/40 bg-[#14281a] text-success transition-opacity disabled:opacity-50"
+                  disabled={isLoading || !draftBookingDate || !draftBookingTime}
+                  onClick={saveBookingChanges}
+                  type="button">
+                  <FiSave size={16} />
+                </button>
+                <button
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-secondary-foreground/30 bg-[#2b2b2b] text-secondary transition-opacity disabled:opacity-50"
+                  disabled={isLoading}
+                  onClick={() => setIsEditing(false)}
+                  type="button">
+                  <MdOutlineCancel size={16} />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-cta/40 bg-[#2f203d] text-cta transition-opacity disabled:opacity-50"
+                  disabled={isLoading}
+                  onClick={() => setIsEditing(true)}
+                  type="button">
+                  <FiEdit3 size={16} />
+                </button>
+                <button
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-danger/40 bg-[#321b1f] text-danger transition-opacity disabled:opacity-50"
+                  disabled={isLoading}
+                  onClick={deleteBooking}
+                  type="button">
+                  <MdOutlineCancel size={16} />
+                </button>
+              </>
+            )}
           </div>
-          <BookingChannelBadge channel={booking.channel} />
         </div>
 
-        <div className="grid gap-xs">
+        <div className="h-px w-full bg-[#2e2e2e]"></div>
+
+        <div className="flex flex-col gap-[2px] pt-[2px]">
+          <p className="truncate whitespace-nowrap text-xs" title={formatDateTime(booking.created_at)}>
+            Created {formatDateTime(booking.created_at)}
+          </p>
           <DetailRow label="Booking ID" value={booking.id} mono />
-          <DetailRow label="Cookie user" value={booking.user_cookie_id} mono />
+          <BookingContactRow contact={booking.contact} contactType={booking.contact_type} />
         </div>
       </div>
     </article>
@@ -213,8 +351,8 @@ function DashboardCard({
   title: string
 }) {
   return (
-    <section className={`rounded-[18px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] ${className}`}>
-      <div className="mb-sm flex flex-col gap-[4px]">
+    <section className={`rounded-[16px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] ${className}`}>
+      <div className="mb-[2px] flex flex-col gap-[2px]">
         <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{title}</h2>
         {subtitle && <p className="text-xs">{subtitle}</p>}
       </div>
@@ -240,9 +378,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
 
   return (
     <div className="min-h-[calc(100vh-72px)] bg-[#191919] px-sm py-sm tablet:px-md tablet:py-md">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-sm tablet:gap-md">
-        <section className="rounded-[20px] border border-[#323232] bg-[#242424] px-sm py-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)] tablet:px-md tablet:py-md">
-          <div className="flex flex-col gap-sm laptop:flex-row laptop:items-end laptop:justify-between">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-[2px]">
+        <section className="rounded-[16px] border border-[#323232] bg-[#242424] px-sm py-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)] tablet:px-md tablet:py-md">
+          <div className="flex flex-col gap-[2px] laptop:flex-row laptop:items-end laptop:justify-between">
             <div className="flex flex-col gap-[4px]">
               <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground">Admin dashboard</p>
               <h1 className="text-lg text-secondary">Cron jobs and booked appointments</h1>
@@ -251,7 +389,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
                 RPC and all rows from the <span className="text-secondary">bookings</span> table.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-xs tablet:gap-sm laptop:grid-cols-4">
+            <div className="grid grid-cols-2 gap-[2px] laptop:grid-cols-4">
               <OverviewStat label="Cron jobs" value={stats.totalCronJobs} />
               <OverviewStat label="Active jobs" value={stats.activeCronJobs} />
               <OverviewStat label="Failed last run" value={stats.failedCronJobs} />
@@ -260,9 +398,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </div>
         </section>
 
-        <div className="grid gap-sm tablet:gap-md desktop:grid-cols-[1.2fr_0.8fr]">
+        <div className="grid gap-[2px] desktop:grid-cols-[1.2fr_0.8fr]">
           <DashboardCard title="Cron schedules" subtitle="Compact live view of every pg_cron job configured for this project.">
-            <div className="flex flex-col gap-xs">
+            <div className="flex flex-col gap-[2px]">
               {cronSchedules.map(job => (
                 <CronScheduleItem key={job.id} job={job} />
               ))}
@@ -270,13 +408,13 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </DashboardCard>
 
           <DashboardCard title="Booked appointments" subtitle="Every booking row with channel badges and identifiers in a compact scrollable list.">
-            <div className="mb-sm grid grid-cols-2 gap-xs tablet:gap-sm">
+            <div className="mb-[2px] grid grid-cols-2 gap-[2px]">
               <OverviewStat label="Upcoming" value={stats.upcomingBookings} />
               <OverviewStat label="All rows" value={bookings.length} />
             </div>
 
             <div className="admin-dashboard-scrollbar max-h-[860px] overflow-auto pr-xs">
-              <div className="flex flex-col gap-xs">
+              <div className="flex flex-col gap-[2px]">
                 {bookings.map(booking => (
                   <BookingItem key={booking.id} booking={booking} />
                 ))}

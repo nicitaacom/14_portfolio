@@ -7,7 +7,7 @@ export function DropdownContainerContent() {
   const { sendNotificationTo, setNextSendNotificationTo } = useAppointmentStore()
   return (
     <button
-      className="w-full h-[24px] flex flex-row gap-x-2 justify-around items-center bg-cta/50"
+      className="flex h-full w-full items-center justify-center rounded-[10px] bg-transparent transition-colors duration-300 hover:bg-primary-foreground/20"
       onClick={setNextSendNotificationTo}
       type="button">
       {sendNotificationTo === "tg" ? (

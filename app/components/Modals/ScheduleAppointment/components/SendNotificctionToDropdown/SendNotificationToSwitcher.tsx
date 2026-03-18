@@ -24,11 +24,11 @@ export function SendNotificationToSwitcher() {
   return (
     <div
       className="flex flex-row gap-x-2 justify-end desktop:justify-center items-center px-0 duration-300"
-      style={{ width: "24px", height: "24px" }}>
+      style={{ width: "40px", height: "40px" }}>
       <div
         className={twMerge(
-          `relative w-full flex justify-between items-center gap-x-2 border border-[#777777] border-r-0
-           cursor-pointer px-2 mt-1 z-[111]`,
+          `relative flex h-full w-full items-center justify-center rounded-[10px] border border-[#777777]
+           cursor-pointer z-[111]`,
         )}
         onClick={toggleDropdown}
         ref={dropdownContainerRef}>
