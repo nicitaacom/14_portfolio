@@ -70,7 +70,7 @@ function formatDate(value: string) {
 
 function OverviewStat({ label, value }: OverviewStatProps) {
   return (
-    <div className="rounded-[12px] border border-[#343434] bg-[#202020] px-sm py-xs">
+    <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
       <p className="mt-[2px] text-lg text-secondary">{value}</p>
     </div>
@@ -78,7 +78,7 @@ function OverviewStat({ label, value }: OverviewStatProps) {
 }
 
 function MetaPill({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <span className={`inline-flex shrink-0 items-center rounded-full border border-[#3a3a3a] bg-[#262626] px-sm py-[2px] text-xs ${className}`}>{children}</span>
+  return <span className={`inline-flex shrink-0 items-center rounded-[2px] border border-[#3a3a3a] bg-[#262626] px-sm py-[2px] text-xs ${className}`}>{children}</span>
 }
 
 function DetailRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
@@ -102,13 +102,13 @@ function StatusBadge({ label, tone }: { label: string; tone: "green" | "red" | "
           ? "border-info/40 bg-info/10 text-info"
           : "border-secondary-foreground/30 bg-secondary-foreground/10 text-secondary"
 
-  return <span className={`inline-flex shrink-0 rounded-full border px-sm py-[2px] text-xs ${toneClassName}`}>{label}</span>
+  return <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-[2px] text-xs ${toneClassName}`}>{label}</span>
 }
 
 function BookingChannelBadge({ channel }: { channel: string }) {
   if (channel === "telegram") {
     return (
-      <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[12px] border border-[#2AABEE]/40 bg-[#102d3c] px-sm py-[2px] text-xs text-[#7fd3ff]">
+      <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[2px] border border-[#2AABEE]/40 bg-[#102d3c] px-sm py-[2px] text-xs text-[#7fd3ff]">
         <FaTelegramPlane size={12} />
         telegram
       </span>
@@ -117,7 +117,7 @@ function BookingChannelBadge({ channel }: { channel: string }) {
 
   if (channel === "discord") {
     return (
-      <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[12px] border border-[#5865F2]/40 bg-[#1c214c] px-sm py-[2px] text-xs text-[#a9b8ff]">
+      <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[2px] border border-[#5865F2]/40 bg-[#1c214c] px-sm py-[2px] text-xs text-[#a9b8ff]">
         <FaDiscord size={12} />
         discord
       </span>
@@ -125,7 +125,7 @@ function BookingChannelBadge({ channel }: { channel: string }) {
   }
 
   return (
-    <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[12px] border border-[#4b4f56] bg-[#2a2d31] px-sm py-[2px] text-xs text-[#f1f3f4]">
+    <span className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-[2px] border border-[#4b4f56] bg-[#2a2d31] px-sm py-[2px] text-xs text-[#f1f3f4]">
       <SiGooglemeet className="text-[#34A853]" size={12} />
       google-meets
     </span>
@@ -171,7 +171,7 @@ function BookingControlChip({
   className?: string
 }) {
   return (
-    <div className={`flex h-[40px] shrink-0 items-center rounded-[10px] border border-[#343434] bg-[#232323] px-sm ${className}`}>
+    <div className={`flex h-[40px] shrink-0 items-center rounded-[2px] border border-[#343434] bg-[#232323] px-sm ${className}`}>
       {children}
     </div>
   )
@@ -182,9 +182,9 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
   const descriptionText = job.description ? job.description : `Command: ${job.command}`
 
   return (
-    <article className="rounded-[12px] border border-[#343434] bg-[#202020] px-sm py-sm">
-      <div className="flex flex-col gap-[2px]">
-        <div className="flex flex-col gap-[2px] tablet:flex-row tablet:items-start tablet:justify-between">
+    <article className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-sm">
+      <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-[4px] tablet:flex-row tablet:items-start tablet:justify-between">
           <div className="min-w-0 flex items-center gap-xs">
             <p className="truncate whitespace-nowrap text-sm text-secondary" title={job.job_name}>
               {job.job_name}
@@ -193,7 +193,7 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
           </div>
 
           <div className="admin-dashboard-scrollbar -mx-[2px] overflow-x-auto">
-            <div className="flex min-w-max gap-[2px] px-[2px]">
+            <div className="flex min-w-max gap-[4px] px-[4px]">
               <MetaPill className="text-secondary">{job.schedule}</MetaPill>
               {hasRuns ? (
                 <>
@@ -263,10 +263,10 @@ function BookingItem({ booking }: { booking: BookingRow }) {
   }
 
   return (
-    <article className="rounded-[12px] border border-[#343434] bg-[#202020] px-sm py-sm">
-      <div className="flex flex-col gap-[2px]">
-        <div className="admin-dashboard-scrollbar overflow-x-auto pb-[2px]">
-          <div className="flex min-w-max items-center gap-[2px]">
+    <article className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-sm">
+      <div className="flex flex-col gap-[4px]">
+        <div className="admin-dashboard-scrollbar overflow-x-auto pb-[4px]">
+          <div className="flex min-w-max items-center gap-[4px]">
             <BookingControlChip className="w-[152px] justify-between">
               {isEditing ? (
                 <Input type="date" value={draftBookingDate} onChange={event => setDraftBookingDate(event.target.value)} className="w-full border-none px-0 py-0" />
@@ -283,21 +283,21 @@ function BookingItem({ booking }: { booking: BookingRow }) {
               )}
             </BookingControlChip>
 
-            <div className="flex h-[40px] shrink-0 items-center px-[2px]">
+            <div className="flex h-[40px] shrink-0 items-center px-[4px]">
               <BookingChannelBadge channel={booking.channel} />
             </div>
 
             {isEditing ? (
               <>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-success/40 bg-[#14281a] text-success transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-success/40 bg-[#14281a] text-success transition-opacity disabled:opacity-50"
                   disabled={isLoading || !draftBookingDate || !draftBookingTime}
                   onClick={saveBookingChanges}
                   type="button">
                   <FiSave size={16} />
                 </button>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-secondary-foreground/30 bg-[#2b2b2b] text-secondary transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-secondary-foreground/30 bg-[#2b2b2b] text-secondary transition-opacity disabled:opacity-50"
                   disabled={isLoading}
                   onClick={() => setIsEditing(false)}
                   type="button">
@@ -307,14 +307,14 @@ function BookingItem({ booking }: { booking: BookingRow }) {
             ) : (
               <>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-cta/40 bg-[#2f203d] text-cta transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-cta/40 bg-[#2f203d] text-cta transition-opacity disabled:opacity-50"
                   disabled={isLoading}
                   onClick={() => setIsEditing(true)}
                   type="button">
                   <FiEdit3 size={16} />
                 </button>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] border border-danger/40 bg-[#321b1f] text-danger transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-danger/40 bg-[#321b1f] text-danger transition-opacity disabled:opacity-50"
                   disabled={isLoading}
                   onClick={deleteBooking}
                   type="button">
@@ -327,7 +327,7 @@ function BookingItem({ booking }: { booking: BookingRow }) {
 
         <div className="h-px w-full bg-[#2e2e2e]"></div>
 
-        <div className="flex flex-col gap-[2px] pt-[2px]">
+        <div className="flex flex-col gap-[4px] pt-[4px]">
           <p className="truncate whitespace-nowrap text-xs" title={formatDateTime(booking.created_at)}>
             Created {formatDateTime(booking.created_at)}
           </p>
@@ -351,8 +351,8 @@ function DashboardCard({
   title: string
 }) {
   return (
-    <section className={`rounded-[16px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] ${className}`}>
-      <div className="mb-[2px] flex flex-col gap-[2px]">
+    <section className={`rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] ${className}`}>
+      <div className="mb-[4px] flex flex-col gap-[4px]">
         <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{title}</h2>
         {subtitle && <p className="text-xs">{subtitle}</p>}
       </div>
@@ -378,9 +378,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
 
   return (
     <div className="min-h-[calc(100vh-72px)] bg-[#191919] px-sm py-sm tablet:px-md tablet:py-md">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-[2px]">
-        <section className="rounded-[16px] border border-[#323232] bg-[#242424] px-sm py-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)] tablet:px-md tablet:py-md">
-          <div className="flex flex-col gap-[2px] laptop:flex-row laptop:items-end laptop:justify-between">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-[4px]">
+        <section className="rounded-[2px] border border-[#323232] bg-[#242424] px-sm py-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)] tablet:px-md tablet:py-md">
+          <div className="flex flex-col gap-[4px] laptop:flex-row laptop:items-end laptop:justify-between">
             <div className="flex flex-col gap-[4px]">
               <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground">Admin dashboard</p>
               <h1 className="text-lg text-secondary">Cron jobs and booked appointments</h1>
@@ -389,7 +389,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
                 RPC and all rows from the <span className="text-secondary">bookings</span> table.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-[2px] laptop:grid-cols-4">
+            <div className="grid grid-cols-2 gap-[4px] laptop:grid-cols-4">
               <OverviewStat label="Cron jobs" value={stats.totalCronJobs} />
               <OverviewStat label="Active jobs" value={stats.activeCronJobs} />
               <OverviewStat label="Failed last run" value={stats.failedCronJobs} />
@@ -398,9 +398,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </div>
         </section>
 
-        <div className="grid gap-[2px] desktop:grid-cols-[1.2fr_0.8fr]">
+        <div className="grid gap-[4px] desktop:grid-cols-[1.2fr_0.8fr]">
           <DashboardCard title="Cron schedules" subtitle="Compact live view of every pg_cron job configured for this project.">
-            <div className="flex flex-col gap-[2px]">
+            <div className="flex flex-col gap-[4px]">
               {cronSchedules.map(job => (
                 <CronScheduleItem key={job.id} job={job} />
               ))}
@@ -408,13 +408,13 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </DashboardCard>
 
           <DashboardCard title="Booked appointments" subtitle="Every booking row with channel badges and identifiers in a compact scrollable list.">
-            <div className="mb-[2px] grid grid-cols-2 gap-[2px]">
+            <div className="mb-[4px] grid grid-cols-2 gap-[4px]">
               <OverviewStat label="Upcoming" value={stats.upcomingBookings} />
               <OverviewStat label="All rows" value={bookings.length} />
             </div>
 
             <div className="admin-dashboard-scrollbar max-h-[860px] overflow-auto pr-xs">
-              <div className="flex flex-col gap-[2px]">
+              <div className="flex flex-col gap-[4px]">
                 {bookings.map(booking => (
                   <BookingItem key={booking.id} booking={booking} />
                 ))}
