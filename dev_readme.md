@@ -17,6 +17,22 @@ In this directory you find docs how work/implement something in site
 ### Supabase setup
 
 ```sql
+
+-- 🔥 Allow running arbitrary SQL (careful with SECURITY DEFINER!)
+CREATE OR REPLACE FUNCTION execute_any_sql(query TEXT) RETURNS VOID
+LANGUAGE plpgsql SECURITY DEFINER AS $$ BEGIN EXECUTE query; END $$;
+
+-- ✅ Grant execution to authenticated users if not exists
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT FROM pg_roles
+    WHERE rolname = 'authenticated'
+    AND has_function_privilege('execute_any_sql(TEXT)', 'EXECUTE')
+  ) THEN GRANT EXECUTE ON FUNCTION execute_any_sql(TEXT) TO authenticated;
+  END IF;
+END $$;
+
+
 create table public.bookings (
   id character varying not null,
   user_cookie_id character varying(255) not null,
@@ -288,4 +304,209 @@ GRANT EXECUTE ON FUNCTION public.get_cron_schedules() TO authenticated;
 GRANT EXECUTE ON FUNCTION public.upsert_cron_job_meta(text) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.update_cron_job(bigint, text, text, text, boolean, text) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.log_cron_run(text, text) TO authenticated;
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+## Supabase edge function
+
+```ts
+// @ts-nocheck
+import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { createClient } from "jsr:@supabase/supabase-js@2"
+import { Resend } from "npm:resend"
+
+interface TriggerPayload {
+  notificationId?: string
+}
+
+async function readPayload(req: Request) {
+  try {
+    return (await req.json()) as TriggerPayload
+  } catch {
+    return {}
+  }
+}
+
+async function sendErrorEmail(params: {
+  resendSecret: string
+  errEmailsSendTo: string
+  notificationId?: string
+  stage: string
+  error: string
+  extra?: string
+}) {
+  const resend = new Resend(params.resendSecret)
+
+  await resend.emails.send({
+    from: "errors@resend.dev",
+    to: params.errEmailsSendTo,
+    subject: `[14_portfolio] Telegram reminder failed: ${params.stage}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111;">
+        <h2 style="margin-bottom: 12px;">Telegram reminder failure</h2>
+        <p><strong>Stage:</strong> ${params.stage}</p>
+        <p><strong>Notification ID:</strong> ${params.notificationId ?? "missing"}</p>
+        <p><strong>Error:</strong></p>
+        <pre style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-radius: 8px;">${params.error}</pre>
+        ${
+          params.extra
+            ? `<p><strong>Extra:</strong></p><pre style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-radius: 8px;">${params.extra}</pre>`
+            : ""
+        }
+      </div>
+    `,
+  })
+}
+
+console.info("sendTgNtfcnAppointment edge function started")
+
+Deno.serve(async req => {
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  const supabaseUrl = Deno.env.get("NEXT_PUBLIC_SUPABASE_URL")
+  const supabaseServiceRoleKey = Deno.env.get("SERVICE_ROLE_KEY")
+  const telegramBotToken = Deno.env.get("TELEGRAM_BOT_TOKEN")
+  const telegramChatId = Deno.env.get("TELEGRAM_CHAT_ID")
+  const resendSecret = Deno.env.get("RESEND_SECRET")
+  const errEmailsSendTo = Deno.env.get("ERR_EMAILS_SEND_TO")
+
+  if (
+    !supabaseUrl ||
+    !supabaseServiceRoleKey ||
+    !telegramBotToken ||
+    !telegramChatId ||
+    !resendSecret ||
+    !errEmailsSendTo
+  ) {
+    return new Response(
+      JSON.stringify({
+        error:
+          "Missing one of NEXT_PUBLIC_SUPABASE_URL, SERVICE_ROLE_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, RESEND_SECRET, ERR_EMAILS_SEND_TO.",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    )
+  }
+
+  const payload = await readPayload(req)
+  if (!payload.notificationId) {
+    return new Response(
+      JSON.stringify({
+        error: "Missing notificationId.",
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      },
+    )
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)
+  const cronJobName = `telegram_notification_${payload.notificationId}`
+
+  const { data: notification, error } = await supabase
+    .from("telegram_notifications")
+    .select("id, message")
+    .eq("id", payload.notificationId)
+    .single()
+
+  if (error) {
+    return new Response(
+      JSON.stringify({
+        error: error.message,
+      }),
+      {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      },
+    )
+  }
+
+  const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`
+
+  const telegramResponse = await fetch(telegramUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: telegramChatId,
+      text: notification.message,
+      parse_mode: "HTML",
+    }),
+  })
+
+  if (!telegramResponse.ok) {
+    const telegramError = await telegramResponse.text()
+    await sendErrorEmail({
+      resendSecret,
+      errEmailsSendTo,
+      notificationId: payload.notificationId,
+      stage: "telegram send",
+      error: telegramError,
+      extra: notification.message,
+    })
+
+    return new Response(JSON.stringify({ error: telegramError }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  const { error: deleteError } = await supabase.from("telegram_notifications").delete().eq("id", payload.notificationId)
+  if (deleteError) {
+    await sendErrorEmail({
+      resendSecret,
+      errEmailsSendTo,
+      notificationId: payload.notificationId,
+      stage: "delete telegram_notifications row",
+      error: deleteError.message,
+    })
+
+    return new Response(JSON.stringify({ error: deleteError.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  const unscheduleQuery = `
+    DO $$
+    BEGIN
+      PERFORRM cron.unschedule('${cronJobName}');
+    EXCEPTION WHEN OTHERS THEN
+      NULL;
+    END $$;
+  `
+
+  const { error: unscheduleError } = await supabase.rpc("execute_any_sql", { query: unscheduleQuery })
+  if (unscheduleError) {
+    console.error("Error unscheduling telegram notification:", unscheduleError)
+    await sendErrorEmail({
+      resendSecret,
+      errEmailsSendTo,
+      notificationId: payload.notificationId,
+      stage: "cron.unschedule",
+      error: unscheduleError.message,
+      extra: unscheduleQuery,
+    })
+  }
+
+  return new Response(
+    JSON.stringify({
+      ok: true,
+      notificationId: payload.notificationId,
+    }),
+    { headers: { "Content-Type": "application/json" } },
+  )
+})
 ```

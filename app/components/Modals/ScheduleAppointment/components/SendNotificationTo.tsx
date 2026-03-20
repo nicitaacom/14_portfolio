@@ -1,20 +1,16 @@
 "use client"
 
 import { twMerge } from "tailwind-merge"
-import { FieldErrors, FieldValues, UseFormRegister, UseFormSetError } from "react-hook-form"
+import { FieldErrors, UseFormRegister, UseFormSetError } from "react-hook-form"
 
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { SendNotificationToSwitcher } from "./SendNotificctionToDropdown/SendNotificationToSwitcher"
-import { FormInput } from "@/(site)/appointment/components/FormInput"
-
-interface FormData {
-  inputNotificationTo: string
-}
+import { AppointmentFormData, FormInput } from "@/(site)/appointment/components/FormInput"
 
 interface SendNotificationToProps {
-  errors: FieldErrors<FieldValues>
-  register: UseFormRegister<FormData>
-  setError: UseFormSetError<FormData>
+  errors: FieldErrors<AppointmentFormData>
+  register: UseFormRegister<AppointmentFormData>
+  setError: UseFormSetError<AppointmentFormData>
 }
 
 export function SendNotificationTo({ errors, register }: SendNotificationToProps) {

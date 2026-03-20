@@ -1,13 +1,13 @@
+import { nanoid } from "nanoid"
+
 import { sendTelegramMessageAction } from "../actions/sendTelegramMessageAction"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { formatedDateTimeFn } from "./formatedDateTimeFn"
 import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
 import useToast from "@/store/useToast"
-import { scheduleTgNtfctnAction } from "../actions/scheduleTgNtfctnAction"
 import { useSelectedDateStore } from "@/store/useSelectedDateStore"
 import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
-import { TAPIInsertBooking } from "@/app/api/insert/booking/route"
 
 export async function bookACallFn() {
   const { contactMethod, contact, isSendNotification, sendNotificationTo, inputNotificationTo, channel } =
@@ -21,6 +21,11 @@ export async function bookACallFn() {
 
   const atMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
 
+  if (!channel) {
+    toast.show("error", "Error booking a call", "Choose a meeting channel first.", 8000)
+    return
+  }
+
   let message = formatedDateTimeFn(true)
   message += `Contact: ${contactMethod}: ${contact}\n`
   if (isSendNotification && inputNotificationTo.length > 3) {
@@ -32,12 +37,21 @@ export async function bookACallFn() {
   message += `Where: ${channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : channel}\n`
 
   try {
-    const payload: TAPIInsertBooking = {
-      selectedDate,
+    const bookingId = nanoid()
+    const serializedSelectedDate = Array.isArray(selectedDate)
+      ? ([selectedDate[0]?.toISOString() ?? null, selectedDate[1]?.toISOString() ?? null] as [string | null, string | null])
+      : selectedDate?.toISOString() ?? null
+
+    const payload: API.InsertBookingRequest = {
+      bookingId,
+      selectedDate: serializedSelectedDate,
       atMSK,
       channel,
       contactType: contactMethod,
       contact,
+      isSendNotification,
+      sendNotificationTo,
+      inputNotificationTo,
     }
 
     const response = await fetch("/api/insert/booking", {
@@ -46,15 +60,13 @@ export async function bookACallFn() {
       body: JSON.stringify(payload),
     })
 
-    if (!response.ok) {
-      throw new Error(await response.text())
+    const responseData = (await response.json()) as API.InsertBookingResponse
+
+    if (!response.ok || !responseData.ok) {
+      throw new Error(responseData.error ?? "Failed to insert booking")
     }
 
     await sendTelegramMessageAction(message)
-
-    if (isSendNotification && inputNotificationTo.length > 3) {
-      await scheduleTgNtfctnAction(message, selectedDate, atMSK, channel, sendNotificationTo, inputNotificationTo)
-    }
 
     setNextStep()
   } catch (error) {

@@ -1,24 +1,24 @@
 import { FieldErrors, RegisterOptions, UseFormRegister } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 
-interface FormData {
+export interface AppointmentFormData {
   inputNotificationTo: string
   contact: string
 }
 
 interface FormInputProps {
-  id: keyof FormData
+  id: keyof AppointmentFormData
   type?: string
   className?: string
   placeholder?: string
-  register: UseFormRegister<FormData>
-  validationRule?: RegisterOptions<FormData, keyof FormData>
+  register: UseFormRegister<AppointmentFormData>
+  validationRule?: RegisterOptions<AppointmentFormData, keyof AppointmentFormData>
   errors: FieldErrors
   disabled?: boolean
 }
 
 type ValidationRules = {
-  [key in keyof FormData]: {
+  [key in keyof AppointmentFormData]: {
     required: string
     pattern: {
       value: RegExp

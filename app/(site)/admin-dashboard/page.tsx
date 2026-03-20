@@ -20,7 +20,11 @@ export default async function AdminDashboardPage() {
 
   const [{ data: cronSchedules, error: cronError }, { data: bookings, error: bookingsError }] = await Promise.all([
     supabaseAdmin.rpc("get_cron_schedules"),
-    supabaseAdmin.from("bookings").select("*").order("booking_date", { ascending: true }).order("booking_time_MSK", { ascending: true }),
+    supabaseAdmin
+      .from("bookings")
+      .select("*")
+      .order("booking_date", { ascending: true })
+      .order("booking_time_MSK", { ascending: true }),
   ])
 
   if (cronError) {
@@ -31,11 +35,5 @@ export default async function AdminDashboardPage() {
     console.error("Failed to load bookings for admin dashboard:", bookingsError)
   }
 
-  return (
-    <AdminDashboardClient
-      bookings={bookings ?? []}
-      cronSchedules={cronSchedules ?? []}
-      userId={user.id}
-    />
-  )
+  return <AdminDashboardClient bookings={bookings ?? []} cronSchedules={cronSchedules ?? []} userId={user.id} />
 }

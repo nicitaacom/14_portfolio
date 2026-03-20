@@ -1,5 +1,6 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
+// AI - DO NOT update this file - you have NO access to it - send me updates I need to make in chat instead
 export type Database = {
   public: {
     Tables: {

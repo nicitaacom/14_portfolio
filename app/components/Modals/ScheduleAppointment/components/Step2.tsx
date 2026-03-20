@@ -7,17 +7,13 @@ import { FaDiscord, FaTelegramPlane } from "react-icons/fa"
 
 import { Button } from "@/components/Button"
 import { bookACallFn } from "@/(site)/functions/bookACallFn"
+import { AppointmentFormData } from "@/(site)/appointment/components/FormInput"
 import { formatedDateTimeFn } from "@/(site)/functions/formatedDateTimeFn"
 import useToast from "@/store/useToast"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { Checkbox } from "./Checkbox"
 import { ContactMethod } from "./ContactMethod"
 import { SendNotificationTo } from "./SendNotificationTo"
-
-interface FormData {
-  contact: string
-  inputNotificationTo: string
-}
 
 const validationRules = {
   email: {
@@ -60,7 +56,7 @@ export function Step2() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<FormData>()
+  } = useForm<AppointmentFormData>()
 
   const contactError = typeof errors.contact?.message === "string" ? errors.contact.message : null
   const notificationError =
@@ -78,7 +74,7 @@ export function Step2() {
       <FaTelegramPlane className="text-cta" size={16} />
     )
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: AppointmentFormData) => {
     if (!isShowUpOnACall) {
       setShowUpError(true)
       return

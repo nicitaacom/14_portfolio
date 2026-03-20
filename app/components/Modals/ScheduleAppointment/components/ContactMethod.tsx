@@ -1,20 +1,16 @@
 "use client"
 
 import { twMerge } from "tailwind-merge"
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form"
+import { FieldErrors, UseFormRegister } from "react-hook-form"
 import { FaDiscord, FaTelegramPlane, FaLinkedinIn } from "react-icons/fa"
 import { PiEnvelopeSimpleFill } from "react-icons/pi"
 
 import { useAppointmentStore } from "@/store/useAppointmentStore"
-import { FormInput } from "@/(site)/appointment/components/FormInput"
-
-interface FormData {
-  contact: string
-}
+import { AppointmentFormData, FormInput } from "@/(site)/appointment/components/FormInput"
 
 interface ContactMethodProps {
-  errors: FieldErrors<FieldValues>
-  register: UseFormRegister<FormData>
+  errors: FieldErrors<AppointmentFormData>
+  register: UseFormRegister<AppointmentFormData>
 }
 
 export function ContactMethod({ errors, register }: ContactMethodProps) {

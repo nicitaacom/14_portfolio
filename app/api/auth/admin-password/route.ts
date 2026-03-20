@@ -3,11 +3,11 @@ import { NextResponse } from "next/server"
 import { ADMIN_PASSWORD_COOKIE } from "@/libs/adminAuth"
 
 export async function POST(request: Request) {
-  const { password } = await request.json()
+  const { password } = (await request.json()) as API.AdminPasswordRequest
 
   if (!password || password !== process.env.ADMIN_PASSWORD) {
     cookies().delete(ADMIN_PASSWORD_COOKIE)
-    return NextResponse.json({ ok: false, error: "Invalid password" }, { status: 401 })
+    return NextResponse.json<API.AdminPasswordResponse>({ ok: false, error: "Invalid password" }, { status: 401 })
   }
 
   cookies().set(ADMIN_PASSWORD_COOKIE, "true", {
@@ -18,5 +18,5 @@ export async function POST(request: Request) {
     maxAge: 60 * 15,
   })
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json<API.AdminPasswordResponse>({ ok: true })
 }
