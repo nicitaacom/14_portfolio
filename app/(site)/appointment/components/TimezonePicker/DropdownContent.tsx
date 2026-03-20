@@ -51,7 +51,7 @@ export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean })
   return (
     <div
       className={twMerge(
-        "absolute w-full bg-primary top-[100%] left-0 border border-[#777777] border-t-0",
+        "absolute left-0 top-[calc(100%+6px)] w-full rounded-[8px] border border-[#777777] bg-primary",
         isShowDropdown
           ? "opacity-100 visible translate-y-[0px] transition-all duration-300"
           : "opacity-0 invisible translate-y-[-20px] transition-all duration-300",
@@ -59,8 +59,7 @@ export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean })
       onMouseLeave={() => setHover(null)}>
       {/* Search Input */}
       <Input
-        // If you change width here make sure to change it in TimeZonePicker.tsx as well
-        style={{ border: "none", width: isShowDropdown ? "180px" : "148px" }}
+        style={{ border: "none", width: "100%" }}
         placeholder="Search timezones..."
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}

@@ -5,4 +5,6 @@ export interface BookingsResponse {
   booking_date: string
   booking_time_MSK: string
   channel: string
+  contact?: string | null
+  contact_type?: string | null
 }

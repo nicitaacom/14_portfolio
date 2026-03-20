@@ -1,12 +1,12 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { ADMIN_PASSWORD_COOKIE, parseAdminUserIdArr } from "@/libs/adminAuth"
 
 // Named export for GET request handling
 export async function GET(request: Request) {
   // 1. Parse the request URL and extract the authorization code
   const requestUrl = new URL(request.url)
-  console.log(9, "requestUrl- ", requestUrl)
   const code = requestUrl.searchParams.get("code")
 
   // 2. Check if the code exists; if not, return an error response
@@ -38,7 +38,25 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Invalid session or user data" }, { status: 401 })
     }
 
+    const adminUserIds = parseAdminUserIdArr(process.env.ADMIN_USER_ID_ARR)
+
+    if (adminUserIds.length > 0 && !adminUserIds.includes(data.user.id)) {
+      await supabase.auth.signOut()
+      cookies().delete(ADMIN_PASSWORD_COOKIE)
+      const redirectUrl = new URL("/auth", requestUrl.origin)
+      redirectUrl.searchParams.set("error", "unauthorized")
+      redirectUrl.searchParams.set("reason", "admin_user_id_mismatch")
+      redirectUrl.searchParams.set("userId", data.user.id)
+      redirectUrl.searchParams.set("allowedIdsCount", String(adminUserIds.length))
+      console.error("Auth rejected: Supabase user id is not in ADMIN_USER_ID_ARR", {
+        userId: data.user.id,
+        adminUserIds,
+      })
+      return NextResponse.redirect(redirectUrl)
+    }
+
     // 7. Successfully authenticated; redirect to origin
+    cookies().delete(ADMIN_PASSWORD_COOKIE)
     return NextResponse.redirect(requestUrl.origin)
   } catch (error) {
     // 8. Catch unexpected errors (e.g., network issues)

@@ -1,15 +1,17 @@
+import { nanoid } from "nanoid"
+
 import { sendTelegramMessageAction } from "../actions/sendTelegramMessageAction"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { formatedDateTimeFn } from "./formatedDateTimeFn"
 import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
 import useToast from "@/store/useToast"
-import { scheduleTgNtfctnAction } from "../actions/scheduleTgNtfctnAction"
 import { useSelectedDateStore } from "@/store/useSelectedDateStore"
 import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 
 export async function bookACallFn() {
-  const { sendNotificationTo, inputNotificationTo, channel } = useAppointmentStore.getState()
+  const { contactMethod, contact, isSendNotification, sendNotificationTo, inputNotificationTo, channel } =
+    useAppointmentStore.getState()
   const { selectedDate } = useSelectedDateStore.getState()
   const { selectedTime } = useSelectedTimeStore.getState()
   const { selectedTimezone } = useSelectedTimezoneStore.getState()
@@ -19,8 +21,14 @@ export async function bookACallFn() {
 
   const atMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
 
+  if (!channel) {
+    toast.show("error", "Error booking a call", "Choose a meeting channel first.", 8000)
+    return
+  }
+
   let message = formatedDateTimeFn(true)
-  if (inputNotificationTo.length > 3) {
+  message += `Contact: ${contactMethod}: ${contact}\n`
+  if (isSendNotification && inputNotificationTo.length > 3) {
     message += `Send notifiaction to ${sendNotificationTo}: ${inputNotificationTo}\n`
   }
   if (appointmentNote.length > 3) {
@@ -29,11 +37,37 @@ export async function bookACallFn() {
   message += `Where: ${channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : channel}\n`
 
   try {
-    // in API route to keep error handling (in server action error handling in prod doesn't work)
-    // create a server action here
-    // TODO - make sure that everything works fine
-    await sendTelegramMessageAction(message) // this is already implemented
-    await scheduleTgNtfctnAction(message, selectedDate, atMSK, channel, sendNotificationTo, inputNotificationTo) // this is already implemented
+    const bookingId = nanoid()
+    const serializedSelectedDate = Array.isArray(selectedDate)
+      ? ([selectedDate[0]?.toISOString() ?? null, selectedDate[1]?.toISOString() ?? null] as [string | null, string | null])
+      : selectedDate?.toISOString() ?? null
+
+    const payload: API.InsertBookingRequest = {
+      bookingId,
+      selectedDate: serializedSelectedDate,
+      atMSK,
+      channel,
+      contactType: contactMethod,
+      contact,
+      isSendNotification,
+      sendNotificationTo,
+      inputNotificationTo,
+    }
+
+    const response = await fetch("/api/insert/booking", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+
+    const responseData = (await response.json()) as API.InsertBookingResponse
+
+    if (!response.ok || !responseData.ok) {
+      throw new Error(responseData.error ?? "Failed to insert booking")
+    }
+
+    await sendTelegramMessageAction(message)
+
     setNextStep()
   } catch (error) {
     if (error instanceof Error) {

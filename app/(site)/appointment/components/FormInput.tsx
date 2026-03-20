@@ -1,23 +1,24 @@
 import { FieldErrors, RegisterOptions, UseFormRegister } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 
-interface FormData {
+export interface AppointmentFormData {
   inputNotificationTo: string
+  contact: string
 }
 
 interface FormInputProps {
-  id: keyof FormData
+  id: keyof AppointmentFormData
   type?: string
   className?: string
   placeholder?: string
-  register: UseFormRegister<FormData>
-  validationRule?: RegisterOptions<FormData, keyof FormData>
+  register: UseFormRegister<AppointmentFormData>
+  validationRule?: RegisterOptions<AppointmentFormData, keyof AppointmentFormData>
   errors: FieldErrors
   disabled?: boolean
 }
 
 type ValidationRules = {
-  [key in keyof FormData]: {
+  [key in keyof AppointmentFormData]: {
     required: string
     pattern: {
       value: RegExp
@@ -32,6 +33,13 @@ const validationRules: ValidationRules = {
     pattern: {
       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
       message: "Enter valid email address",
+    },
+  },
+  contact: {
+    required: "This field is required",
+    pattern: {
+      value: /.+/,
+      message: "This field is required",
     },
   },
 }
@@ -53,8 +61,8 @@ export function FormInput({
       <div className="flex flex-col">
         <input
           className={twMerge(
-            `px-[2px] py-xs text-secondary bg-transparent border-[1px] border-[#909090] rounded outline-none`,
-            errors[id] && "focus:ring-rose-500 ",
+            "w-full rounded-[16px] border border-[#909090] bg-primary/70 px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-cta",
+            errors[id] && "border-danger text-danger",
             disabled && "opacity-50 cursor-default pointer-events-none",
             className,
           )}

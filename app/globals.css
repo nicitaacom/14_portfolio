@@ -227,6 +227,8 @@ div {
 
 /* react-calendar */
 .react-calendar {
+  width: 100%;
+  min-width: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -305,6 +307,11 @@ div {
   text-decoration: none;
 }
 
+.react-calendar__month-view__weekdays,
+.react-calendar__month-view__days {
+  width: 100% !important;
+}
+
 /* Hide scrollbar */
 .hide-scrollbar {
   overflow-y: scroll;
@@ -335,4 +342,23 @@ div {
 *::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary-foregorund));
   border-radius: 10px;
+}
+
+.admin-dashboard-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4a4a4a #1b1b1b;
+}
+
+.admin-dashboard-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.admin-dashboard-scrollbar::-webkit-scrollbar-track {
+  background: #1b1b1b;
+}
+
+.admin-dashboard-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4a4a4a;
+  border-radius: 8px;
+  border: 2px solid #1b1b1b;
 }

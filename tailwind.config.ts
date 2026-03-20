@@ -7,16 +7,18 @@ const config: Config = {
       primary: ["Inter", "sans-serif"],
     },
     fontSize: {
-      xs: "clamp(0.6rem, 0.4571rem + 0.7143vw, 0.8rem);",
-      sm: "1rem",
-      lg: "2rem",
+      xs: "clamp(0.72rem, 0.68rem + 0.18vw, 0.82rem)",
+      sm: "clamp(0.92rem, 0.88rem + 0.24vw, 1rem)",
+      base: "clamp(1rem, 0.97rem + 0.24vw, 1.08rem)",
+      lg: "clamp(1.3rem, 1.05rem + 0.95vw, 1.85rem)",
+      xl: "clamp(1.8rem, 1.35rem + 1.6vw, 2.8rem)",
     },
     spacing: {
       xs: "clamp(0.25rem, 0.1364rem + 0.5682vw, 0.5rem)", //320-1024px
       sm: "clamp(0.5rem, 0.3864rem + 0.5682vw, 0.75rem)", //320-1024px
       md: "1rem",
-      lg: "3rem;",
-      xl: "4rem",
+      lg: "clamp(1.5rem, 1.15rem + 1.2vw, 3rem)",
+      xl: "clamp(2rem, 1.45rem + 1.9vw, 4rem)",
     },
     screens: {
       tablet: "768px",

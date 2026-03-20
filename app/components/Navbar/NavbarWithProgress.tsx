@@ -2,9 +2,9 @@
 
 import Link from "next/link"
 import { NavbarProjects } from "./NavbarProjects"
-import { GMCheckbox } from "@/(site)/appointment/components/GMCheckbox"
 import { useEffect, useState } from "react"
 import { useIsGMLive } from "@/store/useIsGMLive"
+import { AdminDropdown } from "./AdminDropdown"
 
 interface NavbarWithProgressProps {
   userId: string | undefined
@@ -51,10 +51,10 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
       </div>
       <NavbarProjects setScrollRef={setScrollRef} />
       {userId && (
-        <>
+        <div className="h-full flex items-center gap-x-sm pl-xs">
           <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-[#909090]"></div>
-          <GMCheckbox isGMLive={is_live_call} />
-        </>
+          <AdminDropdown isGMLive={is_live_call} />
+        </div>
       )}
     </nav>
   )

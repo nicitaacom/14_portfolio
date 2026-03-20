@@ -1,6 +1,7 @@
 import supabaseServer from "@/libs/supabaseServer"
 import { NavbarWithProgress } from "./NavbarWithProgress"
 import { redis } from "@/libs/redis"
+import { parseAdminUserIdArr } from "@/libs/adminAuth"
 
 export async function Navbar() {
   let isLiveCall = false
@@ -12,5 +13,8 @@ export async function Navbar() {
     data: { user },
   } = await supabaseServer().auth.getUser()
 
-  return <NavbarWithProgress userId={user?.id} is_live_call={isLiveCall} />
+  const adminUserIds = parseAdminUserIdArr(process.env.ADMIN_USER_ID_ARR)
+  const adminUserId = user?.id && adminUserIds.includes(user.id) ? user.id : undefined
+
+  return <NavbarWithProgress userId={adminUserId} is_live_call={isLiveCall} />
 }

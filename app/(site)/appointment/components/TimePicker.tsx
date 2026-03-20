@@ -70,22 +70,20 @@ export function TimePicker({ bookings }: Bookings) {
 
   return (
     <div
-      className="relative flex items-center gap-[2px] px-sm border-l-[1px] border-[#777777] border-solid
-      h-[42px]  laptop:w-[145px] justify-center cursor-pointer"
+      className="relative flex h-[40px] w-full min-w-[150px] items-center justify-between gap-xs rounded-[8px] border border-[#777777] bg-primary/70 px-sm cursor-pointer tablet:w-[160px]"
       onClick={() => setShowDropdown(!showDropdown)}
       ref={dropdownContainerRef}>
-      <BiTimeFive className="text-secondary-foreground mb-[2px]" />
-      <div className="flex justify-center laptop:justify-center items-center gap-[2px] laptop:w-[7rem]">
-        <h1 className="text-secondary whitespace-nowrap">Time: {selectedTime}</h1>
-        <Image className="w-md h-md mb-[4px]" src="/tringle.png" alt="tringle" width={32} height={32} />
+      <div className="flex items-center gap-xs">
+        <BiTimeFive className="mb-[1px] text-secondary-foreground" />
+        <span className="whitespace-nowrap text-sm text-secondary">Time: {selectedTime}</span>
       </div>
+      <Image className="h-[16px] w-[16px]" src="/tringle.png" alt="tringle" width={16} height={16} />
 
       {/* Dropdown-content */}
       <div
         className={twMerge(
-          `absolute top-[100%] left-[-1px] right-[-1px]
-          border-x border-[#777777] z-10
-          flex flex-col text-md text-center text-secondary overflow-scroll max-h-[240px] hide-scrollbar`,
+          `absolute left-0 right-0 top-[calc(100%+6px)] z-10 flex max-h-[240px] flex-col overflow-scroll rounded-[8px]
+          border border-[#777777] bg-primary text-md text-center text-secondary hide-scrollbar`,
           showDropdown
             ? "opacity-100 visible translate-y-[0px] transition-all duration-300"
             : "opacity-0 invisible translate-y-[-20px] transition-all duration-300",
@@ -99,7 +97,7 @@ export function TimePicker({ bookings }: Bookings) {
           return (
             <button
               className={twMerge(
-                `border-b border-solid border-secondary bg-primary`,
+                `border-b border-solid border-secondary bg-primary py-[4px]`,
                 isTimeDisabled
                   ? "text-secondary/20 bg-primary-foreground"
                   : isHover

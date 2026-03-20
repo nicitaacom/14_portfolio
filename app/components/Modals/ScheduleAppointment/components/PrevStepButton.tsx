@@ -10,12 +10,12 @@ export function PrevStepButton({ disabled }: { disabled: boolean }) {
   return (
     <button
       className={twMerge(
-        "absolute left-[0%] top-[50%] translate-y-[-50%] text-cta flex flex-row justify-center items-center group cursor-pointer z-10",
+        "group flex w-fit items-center gap-[2px] rounded-[8px] border border-[#777777] px-xs py-[4px] text-xs text-secondary-foreground transition-colors duration-300 hover:border-cta hover:text-secondary",
         disabled && "opacity-50 cursor-default pointer-events-none",
       )}
       onClick={setPrevStep}>
-      <IoIosArrowRoundBack className="text-cta group-hover:-translate-x-[3px] duration-300" size={30} />
-      <p className="pb-[2px] text-cta">back</p>
+      <IoIosArrowRoundBack className="text-cta transition-transform duration-300 group-hover:-translate-x-[3px]" size={20} />
+      <span className="pb-[1px]">Back</span>
     </button>
   )
 }
