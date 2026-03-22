@@ -1,6 +1,9 @@
 // DO NOT import anything here
 
 declare module API {
+  type TrackedProjectGroup = "work" | "projects" | "clones"
+  type ProjectLinkClickType = "demo" | "github" | "figma" | "youtube"
+
   type AdminPasswordRequest = {
     password: string
   }
@@ -38,5 +41,45 @@ declare module API {
     remaining: number
     resetTime?: string
     error?: string
+  }
+
+  type ProjectClicksTimelineMode = "monthly" | "yearly"
+
+  type ProjectClicksOverviewRow = {
+    project_slug: string
+    project_name: string
+    project_group: "work" | "projects" | "clones"
+    total_clicks: number
+    demo_clicks: number
+    github_clicks: number
+    figma_clicks: number
+    youtube_clicks: number
+  }
+
+  type ProjectClicksTimelineRow = {
+    bucket_key: string
+    bucket_label: string
+    total_clicks: number
+  }
+
+  type AdminProjectClicksResponse = {
+    overview: ProjectClicksOverviewRow[]
+    timeline: ProjectClicksTimelineRow[]
+  }
+
+  type TrackProjectLinkClickRequest = {
+    projectSlug: string
+    projectName: string
+    projectGroup: TrackedProjectGroup
+    linkType: ProjectLinkClickType
+    destinationUrl: string
+    pagePath: string
+    userCookieId?: string
+    userTimezone: string
+    userLocalDate: string
+  }
+
+  type TrackProjectLinkClickResponse = {
+    ok: boolean
   }
 }

@@ -1,12 +1,23 @@
 import Image from "next/image"
-import Link from "next/link"
+import type { TTrackedProjectGroup } from "@/interfaces/TTrackedProject"
+import { TrackedProjectLink } from "./TrackedProjectLink"
 
-export function FigmaUrlIcon({ figmaUrl }: { figmaUrl: string }) {
+interface Props {
+  figmaUrl: string
+  projectGroup: TTrackedProjectGroup
+  projectName: string
+  projectSlug: string
+}
+
+export function FigmaUrlIcon({ figmaUrl, projectGroup, projectName, projectSlug }: Props) {
   return (
-    <Link
+    <TrackedProjectLink
       className=" w-[48px] h-[48px] rounded-[50%] bg-primary-foreground cursor-pointer hidden desktop:flex"
-      target="_blank"
-      href={figmaUrl}>
+      href={figmaUrl}
+      linkType="figma"
+      projectGroup={projectGroup}
+      projectName={projectName}
+      projectSlug={projectSlug}>
       <div className="relative w-[48px] h-[48px]">
         <Image
           className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[32px] h-[32px]"
@@ -16,6 +27,6 @@ export function FigmaUrlIcon({ figmaUrl }: { figmaUrl: string }) {
           height={32}
         />
       </div>
-    </Link>
+    </TrackedProjectLink>
   )
 }

@@ -1,7 +1,7 @@
-import Link from "next/link"
-
+import type { TTrackedProjectGroup } from "@/interfaces/TTrackedProject"
 import { FigmaUrlIcon } from "./FigmaUrlIcon"
 import { GithubUrlIcon } from "./GithubUrlIcon"
+import { TrackedProjectLink } from "./TrackedProjectLink"
 import { YoutubeUrlIcon } from "./YouTubeUrlIcon"
 import { Button } from "../Button"
 
@@ -14,6 +14,9 @@ interface ProjectProps {
   stack: string
   date: string // this is string - not ISO
   openMoreInfoModal: () => void
+  projectSlug: string
+  projectName: string
+  projectGroup: TTrackedProjectGroup
 }
 
 export function Project({
@@ -25,13 +28,16 @@ export function Project({
   stack,
   date,
   openMoreInfoModal,
+  projectSlug,
+  projectName,
+  projectGroup,
 }: ProjectProps) {
   return (
     <div className="relative w-full tablet:h-[720px] h-[784px]">
       <div className="absolute top-sm right-sm flex gap-x-md">
-        {figmaUrl && <FigmaUrlIcon figmaUrl={figmaUrl} />}
-        {githubUrl && <GithubUrlIcon githubUrl={githubUrl} />}
-        {youtubeUrl && <YoutubeUrlIcon youTubeUrl={youtubeUrl} />}
+        {figmaUrl && <FigmaUrlIcon figmaUrl={figmaUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
+        {githubUrl && <GithubUrlIcon githubUrl={githubUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
+        {youtubeUrl && <YoutubeUrlIcon youTubeUrl={youtubeUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
       </div>
       <div className="w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden">
         {youTubeEmbedPreview ? (
@@ -58,12 +64,15 @@ export function Project({
           </p>
           <p className="flex flex-row">
             Demo:&nbsp;
-            <Link
+            <TrackedProjectLink
               className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block"
               href={siteUrl}
-              target="_blank">
+              linkType="demo"
+              projectGroup={projectGroup}
+              projectName={projectName}
+              projectSlug={projectSlug}>
               {siteUrl.split("?")[0]}
-            </Link>
+            </TrackedProjectLink>
           </p>
         </div>
 

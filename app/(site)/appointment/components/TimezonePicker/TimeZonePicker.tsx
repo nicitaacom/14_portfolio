@@ -7,12 +7,10 @@ import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
 import { DropdownContainerContent } from "./DropdownContainerContent"
 import { DropdownContent } from "./DropdownContent"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 
 export function TimeZonePicker() {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
   const [isShowDropdown, setIsShowDropdown] = useState(false)
-  const { selectedTimezone } = useSelectedTimezoneStore()
 
   function closeDropdown() {
     setIsShowDropdown(false)
@@ -25,8 +23,7 @@ export function TimeZonePicker() {
   useCloseOnClickEsc(closeDropdown)
 
   return (
-    <div
-      className="flex w-full items-center justify-end tablet:w-[190px]">
+    <div className="flex w-full items-center justify-end tablet:w-[190px]">
       <div
         className={twMerge(
           `relative flex h-[40px] w-full items-center rounded-[8px] border border-[#777777]

@@ -1,6 +1,9 @@
 import { Project } from "../Project/Project"
+import { trackedProjectsMap } from "@/data/trackedProjects"
 
 export default function Project17({ openModal }: { openModal: () => void }) {
+  const project = trackedProjectsMap["project-17-messenger-clone"]
+
   return (
     <Project
       openMoreInfoModal={openModal}
@@ -9,6 +12,9 @@ export default function Project17({ openModal }: { openModal: () => void }) {
       siteUrl="https://17-messenger-clone.vercel.app/"
       githubUrl="https://github.com/nicitaacom/17_messenger-clone"
       youtubeUrl="https://www.youtube.com/watch?v=PGPGcKBpAk8"
+      projectSlug={project.slug}
+      projectName={project.name}
+      projectGroup={project.group}
     />
   )
 }

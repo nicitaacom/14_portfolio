@@ -9,6 +9,7 @@ import { SiGooglemeet } from "react-icons/si"
 import { deleteDBAppointmentAction } from "@/(site)/actions/deleteDBAppointmentAction"
 import { updateDBAppointmentAction } from "@/(site)/actions/updateDBAppointmentAction"
 import { Input } from "@/components/Input"
+import { ProjectClicksDashboardSection } from "./components/ProjectClicksDashboardSection"
 
 interface BookingRow {
   booking_date: string
@@ -383,7 +384,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           <div className="flex flex-col gap-[4px] laptop:flex-row laptop:items-end laptop:justify-between">
             <div className="flex flex-col gap-[4px]">
               <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground">Admin dashboard</p>
-              <h1 className="text-lg text-secondary">Cron jobs and booked appointments</h1>
+              <h1 className="text-lg text-secondary">Click analytics, cron jobs and booked appointments</h1>
               <p className="max-w-[720px] text-xs tablet:text-sm">
                 Fresh server auth check passed for admin user <span className="text-secondary">{userId}</span>. This page reads cron schedules from the
                 RPC and all rows from the <span className="text-secondary">bookings</span> table.
@@ -398,7 +399,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </div>
         </section>
 
-        <div className="grid gap-[4px] desktop:grid-cols-[1.2fr_0.8fr]">
+        <ProjectClicksDashboardSection />
+
+        <div className="mt-sm grid gap-[4px] desktop:grid-cols-[1.2fr_0.8fr]">
           <DashboardCard title="Cron schedules" subtitle="Compact live view of every pg_cron job configured for this project.">
             <div className="flex flex-col gap-[4px]">
               {cronSchedules.map(job => (

@@ -119,9 +119,9 @@ export function AuthPageClient() {
           placeholder="Admin password"
           className="w-full rounded-lg border border-secondary-foreground bg-transparent px-sm py-xs text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground focus:border-cta"
         />
-        <div className={`min-h-[20px] flex items-center gap-xs text-sm ${passwordStatusClassName}`}>
+        <div className="min-h-[20px] flex items-center gap-xs text-sm">
           {isCheckingPassword && <LoadingSpinner />}
-          <p>{passwordStatusText}</p>
+          <p className={passwordStatusClassName}>{passwordStatusText}</p>
         </div>
 
         <Button
