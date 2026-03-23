@@ -4,7 +4,7 @@ import { redis } from "@/libs/redis"
 
 export async function toggleIsGMAction() {
   let isLiveCall = false
-  const isLiveCallStringResp = await redis.get("isGMLive")
+  const isLiveCallStringResp = await redis.get<string>("isGMLive")
   if (!isLiveCallStringResp) await redis.set("isGMLive", "false")
   else isLiveCall = JSON.parse(isLiveCallStringResp)
 

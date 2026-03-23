@@ -2,6 +2,7 @@ import { nanoid } from "nanoid"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import supabaseAdmin from "@/libs/supabaseAdmin"
+import { consumeRateLimit, getRequestIp } from "@/libs/rateLimitServer"
 
 const PROJECT_GROUPS = new Set<API.TrackedProjectGroup>(["work", "projects", "clones"])
 const LINK_TYPES = new Set<API.ProjectLinkClickType>(["demo", "github", "figma", "youtube"])
@@ -24,6 +25,7 @@ export async function POST(request: Request) {
   const userLocalDate = body.userLocalDate?.trim()
   const existingCookieId = cookies().get("user_cookie_id")?.value
   const userCookieId = body.userCookieId?.trim() || existingCookieId || nanoid()
+  const ip = getRequestIp(new Headers(request.headers))
 
   if (!projectSlug || !projectName || !destinationUrl || !userTimezone || !userLocalDate) {
     return NextResponse.json({ error: "Missing required tracking fields" }, { status: 400 })
@@ -39,6 +41,16 @@ export async function POST(request: Request) {
 
   if (!LOCAL_DATE_REGEXP.test(userLocalDate)) {
     return NextResponse.json({ error: "Invalid user local date" }, { status: 400 })
+  }
+
+  const rateLimitResult = await consumeRateLimit({
+    limiterName: "projectLinkClick",
+    ip,
+    userCookieId,
+  })
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json<API.TrackProjectLinkClickResponse>({ ok: true })
   }
 
   const supabaseAdminClient = supabaseAdmin as any

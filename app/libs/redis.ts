@@ -1,8 +1,3 @@
-import { Redis } from "ioredis"
+import { Redis } from "@upstash/redis"
 
-const getRedisUrl = () => {
-  if (process.env.UPSTASH_REDIS_URL) return process.env.UPSTASH_REDIS_URL
-  throw Error("UPSTASH_REDIS_URL is not defined")
-}
-
-export const redis = new Redis(getRedisUrl())
+export const redis = Redis.fromEnv()

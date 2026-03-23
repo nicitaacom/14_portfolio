@@ -2,7 +2,7 @@ import moment from "moment-timezone"
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 
-import { consumeRateLimit, formatRateLimitReset, getRateLimitRemaining } from "@/libs/rateLimitServer"
+import { consumeRateLimit, getRateLimitHeaders, getRateLimitRemaining, getRequestIp, getRetryAfterSeconds } from "@/libs/rateLimitServer"
 
 export async function POST(req: Request) {
   const { limiterName, action, userTimezone, userCookieId } = (await req.json()) as API.RateLimitRequest
@@ -18,7 +18,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Invalid timezone: ${userTimezone}` }, { status: 400 })
   }
 
-  const ip = headers().get("x-real-ip") || headers().get("x-forwarded-for") || "127.0.0.1"
+  const requestHeaders = headers()
+  const ip = getRequestIp(requestHeaders)
+
+  const rateLimitApiResult = await consumeRateLimit({
+    limiterName: "rateLimitApi",
+    userCookieId,
+    ip,
+  })
+
+  if (!rateLimitApiResult.success) {
+    return NextResponse.json(
+      { error: "Too many rate limit checks. Please try again later." },
+      {
+        status: 429,
+        headers: getRateLimitHeaders(rateLimitApiResult),
+      },
+    )
+  }
+
+  if (limiterName !== "bookACall" && limiterName !== "adminPasswordAttempt") {
+    return NextResponse.json({ error: `Limiter ${limiterName} is not public` }, { status: 400 })
+  }
 
   try {
     if (action === "getRemaining") {
@@ -37,27 +58,32 @@ export async function POST(req: Request) {
     }
 
     if (action === "rateLimit") {
-      const { success, remaining, reset } = await consumeRateLimit({
+      const publicRateLimitResult = await consumeRateLimit({
         limiterName,
         userCookieId,
         ip,
       })
 
-      if (!success) {
-        const retryAfter = Math.max(1, Math.floor((reset * 1000 - Date.now()) / 1000))
+      if (!publicRateLimitResult.success) {
+        const retryAfter = getRetryAfterSeconds(publicRateLimitResult.reset)
         return NextResponse.json(
           { error: `Please try again in ${retryAfter} seconds` },
           {
             status: 429,
-            headers: { ["retry-after"]: `${retryAfter}` },
+            headers: {
+              ...getRateLimitHeaders(publicRateLimitResult),
+              ["retry-after"]: `${retryAfter}`,
+            },
           },
         )
       }
 
       return NextResponse.json(
         {
-          remaining,
-          resetTime: formatRateLimitReset(reset, userTimezone),
+          remaining: publicRateLimitResult.remaining,
+          resetTime: moment(publicRateLimitResult.reset)
+            .tz(userTimezone)
+            .format("YYYY-MM-DD HH:mm:ss"),
         } satisfies API.RateLimitResponse,
         { status: 200 },
       )

@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid"
 
 import { sendTelegramMessageAction } from "../actions/sendTelegramMessageAction"
+import { RateLimitSDK } from "@/classes/RateLimitSDK/RateLimitSDK"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { formatedDateTimeFn } from "./formatedDateTimeFn"
 import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
@@ -37,6 +38,14 @@ export async function bookACallFn() {
   message += `Where: ${channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : channel}\n`
 
   try {
+    const rateLimitSDK = new RateLimitSDK()
+    const rateLimitRemaining = await rateLimitSDK.getRemaining("bookACall")
+
+    if (rateLimitRemaining.remaining <= 0) {
+      toast.show("error", "Error booking a call", "You have already booked a call today. Please try again tomorrow.", 15000)
+      return
+    }
+
     const bookingId = nanoid()
     const serializedSelectedDate = Array.isArray(selectedDate)
       ? ([selectedDate[0]?.toISOString() ?? null, selectedDate[1]?.toISOString() ?? null] as [string | null, string | null])

@@ -5,7 +5,7 @@ import { cookies, headers } from "next/headers"
 
 import { deleteTgNtfctnAction } from "@/(site)/actions/deleteTgNtfctnAction"
 import { scheduleTgNtfctnAction } from "@/(site)/actions/scheduleTgNtfctnAction"
-import { consumeRateLimit } from "@/libs/rateLimitServer"
+import { consumeRateLimit, getRateLimitHeaders, getRequestIp } from "@/libs/rateLimitServer"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 
 export async function POST(req: Request) {
@@ -24,7 +24,23 @@ export async function POST(req: Request) {
 
   const userCookieId = cookies().get("user_cookie_id")?.value || nanoid()
 
-  const ip = headers().get("x-real-ip") || headers().get("x-forwarded-for") || "127.0.0.1"
+  const ip = getRequestIp(headers())
+
+  const burstRateLimit = await consumeRateLimit({
+    limiterName: "bookingSubmitBurst",
+    userCookieId,
+    ip,
+  })
+
+  if (!burstRateLimit.success) {
+    return NextResponse.json<API.InsertBookingResponse>(
+      { ok: false, error: "Too many booking attempts. Please try again later." },
+      {
+        status: 429,
+        headers: getRateLimitHeaders(burstRateLimit),
+      },
+    )
+  }
 
   const date = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate
   if (!date)
@@ -86,13 +102,13 @@ export async function POST(req: Request) {
   }
 
   // Only consume the daily booking limit after the whole booking flow succeeded.
-  const { success } = await consumeRateLimit({
+  const bookingQuotaRateLimit = await consumeRateLimit({
     limiterName: "bookACall",
     userCookieId,
     ip,
   })
 
-  if (!success) {
+  if (!bookingQuotaRateLimit.success) {
     if (isSendNotification && sendNotificationTo === "tg") {
       const deleteNotificationResp = await deleteTgNtfctnAction(bookingId)
       if (typeof deleteNotificationResp === "string") {
@@ -107,7 +123,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json<API.InsertBookingResponse>(
       { ok: false, error: "You have already booked a call today. Please try again tomorrow." },
-      { status: 429 },
+      {
+        status: 429,
+        headers: getRateLimitHeaders(bookingQuotaRateLimit),
+      },
     )
   }
 

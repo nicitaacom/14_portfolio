@@ -32,7 +32,7 @@ declare module API {
 
   type RateLimitRequest = {
     action: "rateLimit" | "getRemaining"
-    limiterName: "bookACall"
+    limiterName: "bookACall" | "adminPasswordAttempt"
     userTimezone: string
     userCookieId?: string
   }

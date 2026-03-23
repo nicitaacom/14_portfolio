@@ -9,6 +9,7 @@ import { AuthHeader } from "./AuthHeader"
 import supabaseClient from "@/libs/supabaseClient"
 import { useDebounce } from "@/hooks"
 import { Button } from "@/components/Button"
+import { RateLimitSDK } from "@/classes/RateLimitSDK/RateLimitSDK"
 
 export function AuthPageClient() {
   const searchParams = useSearchParams()
@@ -17,7 +18,7 @@ export function AuthPageClient() {
   const [isCheckingPassword, setIsCheckingPassword] = useState(false)
   const [isPasswordVerified, setIsPasswordVerified] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
-  const [passwordStatus, setPasswordStatus] = useState<"idle" | "checking" | "valid" | "invalid">("idle")
+  const [passwordStatus, setPasswordStatus] = useState<"idle" | "checking" | "valid" | "invalid" | "rate-limited">("idle")
 
   const debouncedPassword = useDebounce(password, 5000)
 
@@ -51,6 +52,15 @@ export function AuthPageClient() {
       setPasswordStatus("checking")
 
       try {
+        const rateLimitSDK = new RateLimitSDK()
+        const rateLimitRemaining = await rateLimitSDK.getRemaining("adminPasswordAttempt")
+
+        if (rateLimitRemaining.remaining <= 0) {
+          setIsPasswordVerified(false)
+          setPasswordStatus("rate-limited")
+          return
+        }
+
         const response = await fetch("/api/auth/admin-password", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -59,7 +69,7 @@ export function AuthPageClient() {
 
         if (!response.ok) {
           setIsPasswordVerified(false)
-          setPasswordStatus("invalid")
+          setPasswordStatus(response.status === 429 ? "rate-limited" : "invalid")
           return
         }
 
@@ -67,7 +77,7 @@ export function AuthPageClient() {
         setPasswordStatus("valid")
       } catch (error) {
         setIsPasswordVerified(false)
-        setPasswordStatus("invalid")
+        setPasswordStatus(error instanceof Error && error.message.toLowerCase().includes("too many") ? "rate-limited" : "invalid")
         console.error("Password verification error:", error)
       } finally {
         setIsCheckingPassword(false)
@@ -97,13 +107,14 @@ export function AuthPageClient() {
     if (!password) return "Enter the password. It will auto-check after 5 seconds."
     if (passwordStatus === "checking") return "Checking password..."
     if (passwordStatus === "valid") return "Password accepted. GitHub login is unlocked."
+    if (passwordStatus === "rate-limited") return "Too many attempts. Please wait before trying again."
     if (passwordStatus === "invalid") return "Password is not valid."
     return "Waiting 5 seconds before checking password."
   }, [password, passwordStatus])
 
   const passwordStatusClassName = useMemo(() => {
     if (passwordStatus === "valid") return "text-success"
-    if (passwordStatus === "invalid") return "text-danger"
+    if (passwordStatus === "invalid" || passwordStatus === "rate-limited") return "text-danger"
     return "text-secondary-foreground"
   }, [passwordStatus])
 
