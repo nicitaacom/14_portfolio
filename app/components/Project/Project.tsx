@@ -39,9 +39,17 @@ export function Project({
         {githubUrl && <GithubUrlIcon githubUrl={githubUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
         {youtubeUrl && <YoutubeUrlIcon youTubeUrl={youtubeUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
       </div>
-      <div className="w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden">
+      <TrackedProjectLink
+        className="group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
+        href={siteUrl}
+        linkType="demo"
+        projectGroup={projectGroup}
+        projectName={projectName}
+        projectSlug={projectSlug}
+        title={`Open ${projectName} demo`}>
         {youTubeEmbedPreview ? (
           <iframe
+            className="w-full h-full"
             width="100%"
             height="100%"
             src={youTubeEmbedPreview}
@@ -50,7 +58,8 @@ export function Project({
         ) : (
           <iframe className="w-full h-full" src={siteUrl} loading="lazy" />
         )}
-      </div>
+        <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+      </TrackedProjectLink>
       {/* Footer */}
       <div
         className="w-full h-[144px] tablet:h-[80px] relative flex flex-col tablet:flex-row justify-between items-center 
