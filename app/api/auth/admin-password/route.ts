@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import { ADMIN_PASSWORD_COOKIE } from "@/libs/adminAuth"
-import { consumeRateLimit, getRateLimitHeaders, getRequestIp } from "@/libs/rateLimitServer"
+import { consumeRateLimit, getRateLimitHeaders, getRequestIp, getRetryAfterSeconds } from "@/libs/rateLimitServer"
 
 export async function POST(request: Request) {
   const ip = getRequestIp(new Headers(request.headers))
@@ -11,8 +11,9 @@ export async function POST(request: Request) {
   })
 
   if (!rateLimitResult.success) {
+    const retryAfter = getRetryAfterSeconds(rateLimitResult.reset)
     return NextResponse.json<API.AdminPasswordResponse>(
-      { ok: false, error: "Too many admin password attempts. Please try again later." },
+      { ok: false, error: `Too many admin password attempts. Please try again in ${retryAfter} seconds.` },
       {
         status: 429,
         headers: getRateLimitHeaders(rateLimitResult),

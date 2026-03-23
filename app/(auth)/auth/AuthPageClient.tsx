@@ -9,7 +9,17 @@ import { AuthHeader } from "./AuthHeader"
 import supabaseClient from "@/libs/supabaseClient"
 import { useDebounce } from "@/hooks"
 import { Button } from "@/components/Button"
-import { RateLimitSDK } from "@/classes/RateLimitSDK/RateLimitSDK"
+
+function formatWaitTime(seconds: number) {
+  if (seconds <= 60) return `${seconds} second${seconds === 1 ? "" : "s"}`
+
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+
+  if (remainingSeconds === 0) return `${minutes} minute${minutes === 1 ? "" : "s"}`
+
+  return `${minutes} minute${minutes === 1 ? "" : "s"} ${remainingSeconds} second${remainingSeconds === 1 ? "" : "s"}`
+}
 
 export function AuthPageClient() {
   const searchParams = useSearchParams()
@@ -19,6 +29,7 @@ export function AuthPageClient() {
   const [isPasswordVerified, setIsPasswordVerified] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
   const [passwordStatus, setPasswordStatus] = useState<"idle" | "checking" | "valid" | "invalid" | "rate-limited">("idle")
+  const [rateLimitMessage, setRateLimitMessage] = useState("")
 
   const debouncedPassword = useDebounce(password, 5000)
 
@@ -41,6 +52,7 @@ export function AuthPageClient() {
     if (!password) {
       setIsPasswordVerified(false)
       setPasswordStatus("idle")
+      setRateLimitMessage("")
     }
   }, [password])
 
@@ -52,32 +64,48 @@ export function AuthPageClient() {
       setPasswordStatus("checking")
 
       try {
-        const rateLimitSDK = new RateLimitSDK()
-        const rateLimitRemaining = await rateLimitSDK.getRemaining("adminPasswordAttempt")
-
-        if (rateLimitRemaining.remaining <= 0) {
-          setIsPasswordVerified(false)
-          setPasswordStatus("rate-limited")
-          return
-        }
-
         const response = await fetch("/api/auth/admin-password", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ password: debouncedPassword }),
         })
+        const responseData = (await response.json().catch(() => null)) as API.AdminPasswordResponse | { error?: string } | null
 
         if (!response.ok) {
           setIsPasswordVerified(false)
-          setPasswordStatus(response.status === 429 ? "rate-limited" : "invalid")
+
+          if (response.status === 429) {
+            const retryAfter = Number(response.headers.get("retry-after") ?? "0")
+            setRateLimitMessage(
+              retryAfter > 0
+                ? `Too many attempts. Please wait ${formatWaitTime(retryAfter)} before trying again.`
+                : responseData && "error" in responseData && responseData.error
+                  ? responseData.error
+                  : "Too many attempts. Please wait before trying again.",
+            )
+            setPasswordStatus("rate-limited")
+            return
+          }
+
+          setRateLimitMessage("")
+          setPasswordStatus("invalid")
           return
         }
 
         setIsPasswordVerified(true)
+        setRateLimitMessage("")
         setPasswordStatus("valid")
       } catch (error) {
         setIsPasswordVerified(false)
-        setPasswordStatus(error instanceof Error && error.message.toLowerCase().includes("too many") ? "rate-limited" : "invalid")
+
+        if (error instanceof Error && error.message.toLowerCase().includes("too many")) {
+          setRateLimitMessage(error.message)
+          setPasswordStatus("rate-limited")
+        } else {
+          setRateLimitMessage("")
+          setPasswordStatus("invalid")
+        }
+
         console.error("Password verification error:", error)
       } finally {
         setIsCheckingPassword(false)
@@ -107,10 +135,10 @@ export function AuthPageClient() {
     if (!password) return "Enter the password. It will auto-check after 5 seconds."
     if (passwordStatus === "checking") return "Checking password..."
     if (passwordStatus === "valid") return "Password accepted. GitHub login is unlocked."
-    if (passwordStatus === "rate-limited") return "Too many attempts. Please wait before trying again."
+    if (passwordStatus === "rate-limited") return rateLimitMessage || "Too many attempts. Please wait before trying again."
     if (passwordStatus === "invalid") return "Password is not valid."
     return "Waiting 5 seconds before checking password."
-  }, [password, passwordStatus])
+  }, [password, passwordStatus, rateLimitMessage])
 
   const passwordStatusClassName = useMemo(() => {
     if (passwordStatus === "valid") return "text-success"
