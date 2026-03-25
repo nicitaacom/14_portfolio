@@ -2,11 +2,11 @@
 
 ## How it works
 
-`user clicks project link -> TrackedProjectLink uses ProjectClicksSDK -> API request sent -> API inserts row if this project was not tracked today for this user -> /admin-dashboard reads SQL data -> charts show clicks`
+`user clicks project link -> TrackedProjectLink sends analytics request -> API inserts one SQL row per click -> /admin-dashboard reads SQL data -> charts show clicks`
 
 - Track only project card links: `demo`, `github`, `figma`, `youtube`
 - Do not track `More info`
-- Same user + same project = only `1` tracked row per day
+- Every valid project link click should create one row
 - Day uses user timezone from `moment.tz.guess()`
 - Dashboard read flow: `Component -> hook -> ProjectClicksSDK -> API -> DB`
 - `Monthly` = last 30 days by day
@@ -49,8 +49,7 @@ CREATE INDEX IF NOT EXISTS idx_project_link_clicks_project_group_clicked_at
 CREATE INDEX IF NOT EXISTS idx_project_link_clicks_link_type_clicked_at
   ON public.project_link_clicks (link_type, clicked_at DESC);
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_project_link_clicks_unique_daily_project_user
-  ON public.project_link_clicks (project_slug, user_cookie_id, user_local_date);
+DROP INDEX IF EXISTS idx_project_link_clicks_unique_daily_project_user;
 
 -- 🔐 RLS Policies
 ALTER TABLE public.project_link_clicks ENABLE ROW LEVEL SECURITY;

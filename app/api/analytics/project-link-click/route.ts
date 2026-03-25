@@ -8,6 +8,21 @@ const PROJECT_GROUPS = new Set<API.TrackedProjectGroup>(["work", "projects", "cl
 const LINK_TYPES = new Set<API.ProjectLinkClickType>(["demo", "github", "figma", "youtube"])
 const LOCAL_DATE_REGEXP = /^\d{4}-\d{2}-\d{2}$/
 
+function createOkResponse(existingCookieId: string | undefined, userCookieId: string) {
+  const response = NextResponse.json<API.TrackProjectLinkClickResponse>({ ok: true })
+
+  if (existingCookieId !== userCookieId) {
+    response.cookies.set("user_cookie_id", userCookieId, {
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    })
+  }
+
+  return response
+}
+
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as API.TrackProjectLinkClickRequest | null
 
@@ -55,7 +70,7 @@ export async function POST(request: Request) {
 
   const supabaseAdminClient = supabaseAdmin as any
 
-  const { error } = await supabaseAdminClient.from("project_link_clicks").upsert(
+  const { error } = await supabaseAdminClient.from("project_link_clicks").insert(
     {
       project_slug: projectSlug,
       project_name: projectName,
@@ -67,26 +82,15 @@ export async function POST(request: Request) {
       user_timezone: userTimezone,
       user_local_date: userLocalDate,
     },
-    {
-      onConflict: "project_slug,user_cookie_id,user_local_date",
-      ignoreDuplicates: true,
-    },
   )
+
+  if (error?.code === "23505") {
+    return createOkResponse(existingCookieId, userCookieId)
+  }
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  const response = NextResponse.json<API.TrackProjectLinkClickResponse>({ ok: true })
-
-  if (existingCookieId !== userCookieId) {
-    response.cookies.set("user_cookie_id", userCookieId, {
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    })
-  }
-
-  return response
+  return createOkResponse(existingCookieId, userCookieId)
 }

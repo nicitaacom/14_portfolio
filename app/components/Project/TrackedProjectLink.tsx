@@ -1,7 +1,6 @@
 "use client"
 
 import type { MouseEvent, ReactNode } from "react"
-import { useMemo } from "react"
 import moment from "moment-timezone"
 import { nanoid } from "nanoid"
 import { ProjectClicksSDK } from "@/classes/ProjectClicksSDK/ProjectClicksSDK"
@@ -18,6 +17,8 @@ interface TrackedProjectLinkProps {
   projectSlug: string
   title?: string
 }
+
+const projectClicksSDK = new ProjectClicksSDK()
 
 function getUserCookieId() {
   const existingCookieId = getCookie("user_cookie_id")
@@ -42,30 +43,38 @@ export function TrackedProjectLink({
   projectSlug,
   title,
 }: TrackedProjectLinkProps) {
-  const projectClicksSDK = useMemo(() => new ProjectClicksSDK(), [])
+  function trackProjectClickFn(payload: API.TrackProjectLinkClickRequest) {
+    const requestBody = JSON.stringify(payload)
+    const isTrackedWithBeacon =
+      typeof navigator !== "undefined" &&
+      typeof navigator.sendBeacon === "function" &&
+      navigator.sendBeacon("/api/analytics/project-link-click", new Blob([requestBody], { type: "application/json" }))
+
+    if (isTrackedWithBeacon) return
+
+    projectClicksSDK.trackProjectClick(payload).catch(error => {
+      console.error("Failed to track project click:", error)
+    })
+  }
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
 
     const userTimezone = getUserTimezone()
     const userCookieId = getUserCookieId()
+    const payload: API.TrackProjectLinkClickRequest = {
+      projectSlug,
+      projectName,
+      projectGroup,
+      linkType,
+      destinationUrl: href,
+      pagePath: typeof window !== "undefined" ? window.location.pathname : "/",
+      userCookieId,
+      userTimezone,
+      userLocalDate: moment().tz(userTimezone).format("YYYY-MM-DD"),
+    }
 
-    projectClicksSDK
-      .trackProjectClick({
-        projectSlug,
-        projectName,
-        projectGroup,
-        linkType,
-        destinationUrl: href,
-        pagePath: typeof window !== "undefined" ? window.location.pathname : "/",
-        userCookieId,
-        userTimezone,
-        userLocalDate: moment().tz(userTimezone).format("YYYY-MM-DD"),
-      })
-      .catch(error => {
-        console.error("Failed to track project click:", error)
-      })
-
+    trackProjectClickFn(payload)
     window.open(href, "_blank", "noopener,noreferrer")
   }
 

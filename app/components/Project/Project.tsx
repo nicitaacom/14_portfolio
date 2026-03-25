@@ -49,14 +49,16 @@ export function Project({
         title={`Open ${projectName} demo`}>
         {youTubeEmbedPreview ? (
           <iframe
-            className="w-full h-full"
+            className="pointer-events-none h-full w-full"
             width="100%"
             height="100%"
             src={youTubeEmbedPreview}
+            tabIndex={-1}
+            title={`${projectName} preview`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen></iframe>
         ) : (
-          <iframe className="w-full h-full" src={siteUrl} loading="lazy" />
+          <iframe className="pointer-events-none h-full w-full" src={siteUrl} loading="lazy" tabIndex={-1} title={`${projectName} preview`} />
         )}
         <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
       </TrackedProjectLink>
