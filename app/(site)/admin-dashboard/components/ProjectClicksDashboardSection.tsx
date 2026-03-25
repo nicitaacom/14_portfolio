@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useCallback, type ReactNode, useMemo } from "react"
 import { FiRefreshCcw } from "react-icons/fi"
 import { Button } from "@/components/Button"
 import { trackedProjects } from "@/data/trackedProjects"
@@ -16,16 +16,23 @@ import {
   ProjectClicksLineChartSkeleton,
   ProjectClicksSummarySkeletonRow,
 } from "./ProjectClicksSkeletons"
+import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB"
 
-function DashboardCard({
-  children,
-  subtitle,
-  title,
-}: {
-  children: React.ReactNode
+interface DashboardCardProps {
+  children: ReactNode
   subtitle: string
   title: string
-}) {
+}
+
+const EMPTY_OVERVIEW_VALUES = {
+  total_clicks: 0,
+  demo_clicks: 0,
+  github_clicks: 0,
+  figma_clicks: 0,
+  youtube_clicks: 0,
+}
+
+function DashboardCard({ children, subtitle, title }: DashboardCardProps) {
   return (
     <section className="min-w-0 rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
       <div className="mb-[4px] flex flex-col gap-[4px]">
@@ -62,6 +69,15 @@ function getTopLinkTypeLabel({
   return `${topLinkType.label} (${topLinkType.value})`
 }
 
+function createEmptyOverviewItemFn(projectSlug: string, projectName: string, projectGroup: API.TrackedProjectGroup): TProjectClicksOverviewDB {
+  return {
+    project_slug: projectSlug,
+    project_name: projectName,
+    project_group: projectGroup,
+    ...EMPTY_OVERVIEW_VALUES,
+  }
+}
+
 export function ProjectClicksDashboardSection() {
   const { refetch, isOverviewSkeleton, isTimelineSkeleton } = useSetProjectClicksDashboard()
   const {
@@ -74,44 +90,54 @@ export function ProjectClicksDashboardSection() {
     timelineErrorMessage,
   } = useProjectClicksDashboard()
 
+  const handleRefetch = useCallback(() => {
+    refetch()
+  }, [refetch])
+
   const selectedProject = useMemo(
     () => trackedProjects.find(project => project.slug === selectedProjectSlug) ?? trackedProjects[0],
     [selectedProjectSlug],
   )
 
+  const overviewByProjectSlug = useMemo(
+    () =>
+      Object.fromEntries(
+        overview.map(item => [item.project_slug, item]),
+      ) as Record<string, TProjectClicksOverviewDB>,
+    [overview],
+  )
+
   const orderedOverview = useMemo(() => {
     return [...trackedProjects]
-      .map(project => {
-        const matchedOverview = overview.find(item => item.project_slug === project.slug)
-
-        return (
-          matchedOverview ?? {
-            project_slug: project.slug,
-            project_name: project.name,
-            project_group: project.group,
-            total_clicks: 0,
-            demo_clicks: 0,
-            github_clicks: 0,
-            figma_clicks: 0,
-            youtube_clicks: 0,
-          }
-        )
-      })
+      .map(project => overviewByProjectSlug[project.slug] ?? createEmptyOverviewItemFn(project.slug, project.name, project.group))
       .sort((a, b) => b.total_clicks - a.total_clicks)
-  }, [overview])
+  }, [overviewByProjectSlug])
 
   const summaryStats = useMemo(() => {
-    const totalClicks = overview.reduce((acc, item) => acc + item.total_clicks, 0)
-    const demoClicks = overview.reduce((acc, item) => acc + item.demo_clicks, 0)
-    const githubClicks = overview.reduce((acc, item) => acc + item.github_clicks, 0)
-    const figmaClicks = overview.reduce((acc, item) => acc + item.figma_clicks, 0)
-    const youtubeClicks = overview.reduce((acc, item) => acc + item.youtube_clicks, 0)
+    let totalClicks = 0
+    let demoClicks = 0
+    let githubClicks = 0
+    let figmaClicks = 0
+    let youtubeClicks = 0
+    let topProjectName = "No clicks yet"
+    let topProjectClicks = 0
 
-    const topProject = [...overview].sort((a, b) => b.total_clicks - a.total_clicks)[0]
+    for (const item of overview) {
+      totalClicks += item.total_clicks
+      demoClicks += item.demo_clicks
+      githubClicks += item.github_clicks
+      figmaClicks += item.figma_clicks
+      youtubeClicks += item.youtube_clicks
+
+      if (item.total_clicks > topProjectClicks) {
+        topProjectClicks = item.total_clicks
+        topProjectName = `${item.project_name} (${item.total_clicks})`
+      }
+    }
 
     return {
       totalClicks,
-      topProject: topProject ? `${topProject.project_name} (${topProject.total_clicks})` : "No clicks yet",
+      topProject: topProjectName,
       topLinkType: getTopLinkTypeLabel({
         demoClicks,
         githubClicks,
@@ -134,7 +160,7 @@ export function ProjectClicksDashboardSection() {
             </p>
           </div>
 
-          <Button className="w-full whitespace-nowrap tablet:w-fit" onClick={() => refetch()}>
+          <Button className="w-full whitespace-nowrap tablet:w-fit" onClick={handleRefetch}>
             <FiRefreshCcw size={14} />
             Refetch clicks
           </Button>

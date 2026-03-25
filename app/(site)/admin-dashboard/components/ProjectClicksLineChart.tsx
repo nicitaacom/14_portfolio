@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import type { TProjectClicksTimelineDB } from "../types/TProjectClicksTimelineDB"
 import type { TProjectClicksTimelineMode } from "../types/TProjectClicksTimelineMode"
 
-interface Props {
+interface ProjectClicksLineChartProps {
   projectName: string
   timeline: TProjectClicksTimelineDB[]
   timelineMode: TProjectClicksTimelineMode
@@ -16,8 +16,9 @@ const CHART_HEIGHT = 260
 const PADDING_X = 20
 const PADDING_TOP = 18
 const PADDING_BOTTOM = 40
+const GRID_LINE_INDEXES = [0, 1, 2, 3]
 
-export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: Props) {
+export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: ProjectClicksLineChartProps) {
   const maxClicks = useMemo(() => Math.max(...timeline.map(point => point.total_clicks), 1), [timeline])
 
   const points = useMemo(() => {
@@ -67,7 +68,7 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
 
       <div className="overflow-x-auto pb-[4px]">
         <svg className="min-w-[760px]" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} fill="none">
-          {[0, 1, 2, 3].map(index => {
+          {GRID_LINE_INDEXES.map(index => {
             const y = PADDING_TOP + ((CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM) / 3) * index
 
             return <line key={index} x1={PADDING_X} x2={CHART_WIDTH - PADDING_X} y1={y} y2={y} stroke="#343434" strokeDasharray="4 6" />

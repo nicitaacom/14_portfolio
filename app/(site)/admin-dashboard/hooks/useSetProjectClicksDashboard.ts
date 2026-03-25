@@ -4,6 +4,8 @@ import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB
 import type { TProjectClicksTimelineDB } from "../types/TProjectClicksTimelineDB"
 import { useProjectClicksDashboard } from "../store/useProjectClicksDashboard"
 
+const projectClicksSDK = new ProjectClicksSDK()
+
 const mapProjectClicksOverviewFn = (row: API.ProjectClicksOverviewRow): TProjectClicksOverviewDB => ({
   project_slug: row.project_slug ?? "",
   project_name: row.project_name ?? "Unnamed project",
@@ -31,7 +33,6 @@ export const useSetProjectClicksDashboard = () => {
     setOverviewErrorMessage,
     setTimelineErrorMessage,
   } = useProjectClicksDashboard()
-  const projectClicksSDK = useMemo(() => new ProjectClicksSDK(), [])
   const [isOverviewSkeleton, setIsOverviewSkeleton] = useState(false)
   const [isTimelineSkeleton, setIsTimelineSkeleton] = useState(false)
   const overviewRequestIdRef = useRef(0)
@@ -69,7 +70,7 @@ export const useSetProjectClicksDashboard = () => {
         setIsOverviewSkeleton(false)
       }
     }
-  }, [projectClicksSDK, setCurrentState, setOverview, setOverviewErrorMessage, timelineMode])
+  }, [setCurrentState, setOverview, setOverviewErrorMessage, timelineMode])
 
   const fetchTimelineFn = useCallback(async (): Promise<TProjectClicksTimelineDB[]> => {
     const requestId = timelineRequestIdRef.current + 1
@@ -104,7 +105,7 @@ export const useSetProjectClicksDashboard = () => {
         setIsTimelineSkeleton(false)
       }
     }
-  }, [projectClicksSDK, selectedProjectSlug, setCurrentState, setTimeline, setTimelineErrorMessage, timelineMode])
+  }, [selectedProjectSlug, setCurrentState, setTimeline, setTimelineErrorMessage, timelineMode])
 
   useEffect(() => {
     fetchOverviewFn()

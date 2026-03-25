@@ -6,13 +6,13 @@ import type { TTrackedProject } from "@/interfaces/TTrackedProject"
 import { Input } from "@/components/Input"
 import { useProjectClicksDashboard } from "../../store/useProjectClicksDashboard"
 
-interface Props {
+interface DropdownContentProps {
   isShowDropdown: boolean
   projects: TTrackedProject[]
   closeDropdown: () => void
 }
 
-export function DropdownContent({ isShowDropdown, projects, closeDropdown }: Props) {
+export function DropdownContent({ isShowDropdown, projects, closeDropdown }: DropdownContentProps) {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState("")
   const { selectedProjectSlug, setSelectedProjectSlug } = useProjectClicksDashboard()
@@ -46,11 +46,12 @@ export function DropdownContent({ isShowDropdown, projects, closeDropdown }: Pro
         style={{ border: "none", width: "100%" }}
         placeholder="Search project..."
         value={searchInput}
-        onChange={e => setSearchInput(e.target.value)}
-        onClick={e => e.stopPropagation()}
+        onChange={event => setSearchInput(event.target.value)}
+        onClick={event => event.stopPropagation()}
       />
 
       <div className="max-h-[240px] overflow-y-scroll hide-scrollbar">
+        {!filteredProjects.length ? <p className="px-sm py-sm text-sm text-secondary-foreground">No projects found.</p> : null}
         {filteredProjects.map((project, index) => {
           const isActive = hoveredSlug ? hoveredSlug === project.slug : selectedProjectSlug === project.slug
 

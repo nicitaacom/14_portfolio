@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo, useRef, useState } from "react"
-import { twMerge } from "tailwind-merge"
 import type { TTrackedProject } from "@/interfaces/TTrackedProject"
 import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
@@ -9,11 +8,11 @@ import { useProjectClicksDashboard } from "../../store/useProjectClicksDashboard
 import { DropdownContainerContent } from "./DropdownContainerContent"
 import { DropdownContent } from "./DropdownContent"
 
-interface Props {
+interface ProjectClicksPickerProps {
   projects: TTrackedProject[]
 }
 
-export function ProjectClicksPicker({ projects }: Props) {
+export function ProjectClicksPicker({ projects }: ProjectClicksPickerProps) {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
   const [isShowDropdown, setIsShowDropdown] = useState(false)
   const { selectedProjectSlug } = useProjectClicksDashboard()
@@ -37,10 +36,7 @@ export function ProjectClicksPicker({ projects }: Props) {
   return (
     <div className="flex w-full items-center justify-end tablet:w-[240px]">
       <div
-        className={twMerge(
-          `relative z-[111] flex h-[40px] w-full cursor-pointer items-center rounded-[8px] border border-[#4a4a4a]
-           bg-[#202020] px-sm`,
-        )}
+        className="relative z-[111] flex h-[40px] w-full cursor-pointer items-center rounded-[8px] border border-[#4a4a4a] bg-[#202020] px-sm"
         onClick={toggleDropdown}
         ref={dropdownContainerRef}>
         <DropdownContainerContent selectedProjectName={selectedProjectName} />

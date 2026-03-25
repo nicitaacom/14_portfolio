@@ -5,12 +5,12 @@ import { trackedProjectsMap } from "@/data/trackedProjects"
 import { ProjectClicksOverviewBarItem } from "./ProjectClicksOverviewBarItem"
 import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB"
 
-interface Props {
+interface AllProjectsClicksBarChartProps {
   overview: TProjectClicksOverviewDB[]
   selectedProjectSlug: string
 }
 
-export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: Props) {
+export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: AllProjectsClicksBarChartProps) {
   const maxClicks = useMemo(() => Math.max(...overview.map(item => item.total_clicks), 1), [overview])
 
   if (!overview.length) {
