@@ -13,12 +13,14 @@ const TIMELINE_OPTIONS: TProjectClicksTimelineMode[] = ["monthly", "yearly"]
 
 export const TimelineModeSwitcher = memo(function TimelineModeSwitcher({ timelineMode, onChange }: Props) {
   return (
-    <div className="grid h-[40px] grid-cols-2 rounded-[8px] border border-[#3f3f3f] bg-[#1f1f1f] p-[3px]">
+    <div className="grid h-[40px] grid-cols-2 rounded-[12px] border border-[#223049] bg-[#0f1728] p-[3px] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
       {TIMELINE_OPTIONS.map(option => (
         <button
           className={twMerge(
-            "rounded-[6px] px-sm text-xs uppercase tracking-[0.18em] transition-colors",
-            timelineMode === option ? "bg-[#2f203d] text-secondary" : "text-secondary-foreground hover:text-secondary",
+            "rounded-[10px] px-sm text-xs uppercase tracking-[0.18em] transition-colors",
+            timelineMode === option
+              ? "bg-[#16233a] text-[#eff5ff] shadow-[0_8px_18px_rgba(3,10,24,0.3)]"
+              : "text-[#8090ab] hover:text-[#eff5ff]",
           )}
           key={option}
           onClick={() => onChange(option)}
