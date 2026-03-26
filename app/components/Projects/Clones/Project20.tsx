@@ -1,4 +1,4 @@
-import { Project } from "../Project/Project"
+import { Project } from "../../Project/Project"
 import { trackedProjectsMap } from "@/data/trackedProjects"
 
 export default function Project20({ openModal }: { openModal: () => void }) {

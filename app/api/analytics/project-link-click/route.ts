@@ -6,7 +6,7 @@ import { redis } from "@/libs/redis"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 import { consumeRateLimit, getRequestIp } from "@/libs/rateLimitServer"
 
-const PROJECT_GROUPS = new Set<API.TrackedProjectGroup>(["work", "projects", "clones"])
+const PROJECT_GROUPS = new Set<API.TrackedProjectGroup>(["work", "projects"])
 const LINK_TYPES = new Set<API.ProjectLinkClickType>(["demo", "github", "figma", "youtube"])
 const LOCAL_DATE_REGEXP = /^\d{4}-\d{2}-\d{2}$/
 const DAILY_PROJECT_CLICK_DEDUP_TTL_SEC = 60 * 60 * 24 * 8

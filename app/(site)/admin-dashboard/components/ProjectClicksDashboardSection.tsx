@@ -108,6 +108,10 @@ export function ProjectClicksDashboardSection() {
     [overview],
   )
 
+  const filteredOverview = useMemo(() => {
+    return overview.filter(item => trackedProjects.some(project => project.slug === item.project_slug))
+  }, [overview])
+
   const orderedOverview = useMemo(() => {
     return [...trackedProjects]
       .map(project => overviewByProjectSlug[project.slug] ?? createEmptyOverviewItemFn(project.slug, project.name, project.group))
@@ -128,7 +132,7 @@ export function ProjectClicksDashboardSection() {
     let topProjectName = "No clicks yet"
     let topProjectClicks = 0
 
-    for (const item of overview) {
+    for (const item of filteredOverview) {
       totalClicks += item.total_clicks
       demoClicks += item.demo_clicks
       githubClicks += item.github_clicks
@@ -153,7 +157,7 @@ export function ProjectClicksDashboardSection() {
       topProject: topProjectName,
       totalClicks,
     }
-  }, [overview, selectedProjectOverview.total_clicks])
+  }, [filteredOverview, selectedProjectOverview.total_clicks])
 
   return (
     <div className="flex flex-col gap-sm">

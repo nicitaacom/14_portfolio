@@ -1,4 +1,4 @@
-export type TTrackedProjectGroup = "work" | "projects" | "clones"
+export type TTrackedProjectGroup = "work" | "projects"
 
 export interface TTrackedProject {
   slug: string

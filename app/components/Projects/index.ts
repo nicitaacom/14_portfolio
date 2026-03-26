@@ -1,14 +1,10 @@
 import Project15 from "./Project15"
 import Project16 from "./Project16"
-import Project17 from "./Project17"
-import Project19 from "./Project19"
-import Project20 from "./Project20"
 import Project22 from "./Project22"
 import Project23 from "./Project23"
 import Project24 from "./Project24"
 import Project26 from "./Project26"
-import Project28 from "./Project28"
-import Project29 from "./Project29"
+import { Project17, Project19, Project20, Project28, Project29 } from "./Clones"
 
 export {
   Project22,

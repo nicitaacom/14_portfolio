@@ -1,7 +1,7 @@
 // DO NOT import anything here
 
 declare module API {
-  type TrackedProjectGroup = "work" | "projects" | "clones"
+  type TrackedProjectGroup = "work" | "projects"
   type ProjectLinkClickType = "demo" | "github" | "figma" | "youtube"
 
   type AdminPasswordRequest = {
@@ -48,7 +48,7 @@ declare module API {
   type ProjectClicksOverviewRow = {
     project_slug: string
     project_name: string
-    project_group: "work" | "projects" | "clones"
+    project_group: "work" | "projects"
     total_clicks: number
     demo_clicks: number
     github_clicks: number

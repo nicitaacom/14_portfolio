@@ -6,26 +6,21 @@ import { RadioButton } from "./RadioButton"
 import {
   Project15,
   Project16,
-  Project17,
-  Project19,
-  Project20,
   Project22,
   Project23,
   Project24,
   Project26,
-  Project28,
-  Project29,
   ProjectRizAdminDashboard,
 } from "./Projects"
 import { useModalsStore } from "@/store/modalsStore"
 
 export function ProjectsSwitcher() {
-  const [projectTab, setProjectTab] = useState<"work" | "projects" | "clones">("work")
+  const [projectTab, setProjectTab] = useState<"work" | "projects">("work")
   const { openModal } = useModalsStore()
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-x-md">
+      <div className="grid grid-cols-2 gap-x-md">
         <RadioButton
           label="Work"
           inputName="input-name"
@@ -37,12 +32,6 @@ export function ProjectsSwitcher() {
           inputName="input-name"
           onChange={() => setProjectTab("projects")}
           isChecked={projectTab === "projects"}
-        />
-        <RadioButton
-          label="Clones"
-          inputName="input-name"
-          onChange={() => setProjectTab("clones")}
-          isChecked={projectTab === "clones"}
         />
       </div>
 
@@ -59,17 +48,7 @@ export function ProjectsSwitcher() {
           <Project16 openModal={() => openModal("16MoreInfo")} />
           <Project15 openModal={() => openModal("15MoreInfo")} />
         </>
-      ) : (
-        projectTab === "clones" && (
-          <>
-            <Project28 openModal={() => openModal("28MoreInfo")} />
-            <Project20 openModal={() => openModal("20MoreInfo")} />
-            <Project19 openModal={() => openModal("19MoreInfo")} />
-            <Project17 openModal={() => openModal("17MoreInfo")} />
-            <Project29 openModal={() => openModal("29MoreInfo")} />
-          </>
-        )
-      )}
+      ) : null}
     </>
   )
 }

@@ -43,36 +43,6 @@ export const trackedProjects: TTrackedProject[] = [
     shortName: "HooBank",
     group: "projects",
   },
-  {
-    slug: "project-28-notion-clone",
-    name: "Notion Clone",
-    shortName: "Notion",
-    group: "clones",
-  },
-  {
-    slug: "project-20-flowmazon-clone",
-    name: "Flowmazon Clone",
-    shortName: "Flowmazon",
-    group: "clones",
-  },
-  {
-    slug: "project-19-spotify-clone",
-    name: "Spotify Clone",
-    shortName: "Spotify",
-    group: "clones",
-  },
-  {
-    slug: "project-17-messenger-clone",
-    name: "Messenger Clone",
-    shortName: "Messenger",
-    group: "clones",
-  },
-  {
-    slug: "project-29-ai-companion",
-    name: "AI Companion",
-    shortName: "AI",
-    group: "clones",
-  },
 ]
 
 export const trackedProjectsMap = trackedProjects.reduce<Record<string, TTrackedProject>>((acc, item) => {
