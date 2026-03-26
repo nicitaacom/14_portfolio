@@ -1,12 +1,13 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { twMerge } from "tailwind-merge"
 
 import { useModalsStore } from "@/store/modalsStore"
 import { ModalContainer } from "../ModalContainer"
 import { TModals } from "@/interfaces/TModals"
 import { Step1 } from "./components/Step1"
-import { useAppointmentStore } from "@/store/useAppointmentStore"
+import { Step, useAppointmentStore } from "@/store/useAppointmentStore"
 import { Step2 } from "./components/Step2"
 import { AnimatePresence, motion } from "framer-motion"
 import { ScheduleAppointmentModalHeader } from "./components/ScheduleAppointmentModalHeader"
@@ -15,18 +16,34 @@ import { Step3 } from "./components/Step3/Step3"
 export function ScheduleAppointmentModal() {
   const { isOpen, closeModal } = useModalsStore()
 
-  const { step, direction, prevDirection } = useAppointmentStore()
+  const { step } = useAppointmentStore()
 
-  const getTransitionProps = (direction: "next" | "prev", prevDirection: "next" | "prev") => {
-    // console.log(44, "direction - ", direction)
-    // console.log(45, "prevDirection - ", prevDirection)
-    // TODO - it doesn't work in way I expect it to work - think why - I think its something to do around frist and last step
-    return {
-      initial: { x: direction === "next" ? "100%" : "-100%" },
-      animate: { x: "0%" },
-      exit: { x: prevDirection === "prev" ? "-100%" : "100%" },
-      transition: { duration: 0.25 },
-    }
+  // this is proper rtl animation that is actually works as expected
+  const previousStepRef = useRef(step)
+  const stepOrder: Record<Step, number> = {
+    "step-1": 0,
+    "step-2": 1,
+    "step-3": 2,
+  }
+  const direction = stepOrder[step] >= stepOrder[previousStepRef.current] ? "next" : "prev"
+
+  useEffect(() => {
+    previousStepRef.current = step
+  }, [step])
+
+  const transitionVariants = {
+    initial: (direction: "next" | "prev") => ({
+      x: direction === "next" ? "100%" : "-100%",
+      opacity: 0,
+    }),
+    animate: {
+      x: "0%",
+      opacity: 1,
+    },
+    exit: (direction: "next" | "prev") => ({
+      x: direction === "next" ? "-100%" : "100%",
+      opacity: 0,
+    }),
   }
 
   return (
@@ -39,20 +56,43 @@ export function ScheduleAppointmentModal() {
       )}
       isOpen={isOpen["Appointment"]}
       onClose={() => closeModal<TModals>("Appointment")}>
-      <div
-        className="flex max-h-[88vh] flex-col gap-md overflow-x-hidden overflow-y-auto px-md pb-md pt-[3.25rem] tablet:px-[1.25rem] tablet:pb-[1.25rem] tablet:pt-[3.5rem]">
+      <div className="flex max-h-[88vh] flex-col gap-md overflow-x-hidden overflow-y-auto px-md pb-md pt-[3.25rem] tablet:px-[1.25rem] tablet:pb-[1.25rem] tablet:pt-[3.5rem]">
         <ScheduleAppointmentModalHeader />
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false} mode="popLayout" custom={direction}>
           {step === "step-1" ? (
-            <motion.div key={step} className="w-full" {...getTransitionProps(direction, prevDirection)}>
+            <motion.div
+              key={step}
+              className="w-full"
+              custom={direction}
+              variants={transitionVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
               <Step1 />
             </motion.div>
           ) : step === "step-2" ? (
-            <motion.div key={step} className="w-full" {...getTransitionProps(direction, prevDirection)}>
+            <motion.div
+              key={step}
+              className="w-full"
+              custom={direction}
+              variants={transitionVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
               <Step2 />
             </motion.div>
           ) : (
-            <motion.div key={step} className="w-full" {...getTransitionProps(direction, prevDirection)}>
+            <motion.div
+              key={step}
+              className="w-full"
+              custom={direction}
+              variants={transitionVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
               <Step3 />
             </motion.div>
           )}
