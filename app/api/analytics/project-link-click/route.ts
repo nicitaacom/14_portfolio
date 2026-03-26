@@ -1,12 +1,15 @@
 import { nanoid } from "nanoid"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
+import { redisKey } from "@/classes/RedisKey/RedisKey"
+import { redis } from "@/libs/redis"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 import { consumeRateLimit, getRequestIp } from "@/libs/rateLimitServer"
 
 const PROJECT_GROUPS = new Set<API.TrackedProjectGroup>(["work", "projects", "clones"])
 const LINK_TYPES = new Set<API.ProjectLinkClickType>(["demo", "github", "figma", "youtube"])
 const LOCAL_DATE_REGEXP = /^\d{4}-\d{2}-\d{2}$/
+const DAILY_PROJECT_CLICK_DEDUP_TTL_SEC = 60 * 60 * 24 * 8
 
 function createOkResponse(existingCookieId: string | undefined, userCookieId: string) {
   const response = NextResponse.json<API.TrackProjectLinkClickResponse>({ ok: true })
@@ -41,7 +44,7 @@ export async function POST(request: Request) {
   const userCookieId = body.userCookieId?.trim() || existingCookieId || nanoid()
   const ip = getRequestIp(new Headers(request.headers))
 
-  if (!projectSlug || !projectName || !destinationUrl) {
+  if (!projectSlug || !projectName || !destinationUrl || !userLocalDate) {
     return NextResponse.json({ error: "Missing required tracking fields" }, { status: 400 })
   }
 
@@ -53,7 +56,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid link type" }, { status: 400 })
   }
 
-  if (userLocalDate && !LOCAL_DATE_REGEXP.test(userLocalDate)) {
+  if (!LOCAL_DATE_REGEXP.test(userLocalDate)) {
     return NextResponse.json({ error: "Invalid user local date" }, { status: 400 })
   }
 
@@ -65,6 +68,16 @@ export async function POST(request: Request) {
 
   if (!rateLimitResult.success) {
     return NextResponse.json<API.TrackProjectLinkClickResponse>({ ok: true })
+  }
+
+  const dailyProjectClickDedupKey = redisKey.getProjectLinkDailyDedupKey(userCookieId, projectSlug, userLocalDate)
+  const isFirstTrackedClickToday = await redis.set(dailyProjectClickDedupKey, "1", {
+    ex: DAILY_PROJECT_CLICK_DEDUP_TTL_SEC,
+    nx: true,
+  })
+
+  if (!isFirstTrackedClickToday) {
+    return createOkResponse(existingCookieId, userCookieId)
   }
 
   const supabaseAdminClient = supabaseAdmin as any

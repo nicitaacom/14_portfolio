@@ -1,12 +1,14 @@
+import { redisKey } from "@/classes/RedisKey/RedisKey"
+import { parseAdminUserIdArr } from "@/libs/adminAuth"
+import { redis } from "@/libs/redis"
 import supabaseServer from "@/libs/supabaseServer"
 import { NavbarWithProgress } from "./NavbarWithProgress"
-import { redis } from "@/libs/redis"
-import { parseAdminUserIdArr } from "@/libs/adminAuth"
 
 export async function Navbar() {
   let isLiveCall = false
-  const isLiveCallStringResp = await redis.get<string>("isGMLive")
-  if (!isLiveCallStringResp) await redis.set("isGMLive", "false")
+  const isGMLiveKey = redisKey.getIsGMLiveKey()
+  const isLiveCallStringResp = await redis.get<string>(isGMLiveKey)
+  if (!isLiveCallStringResp) await redis.set(isGMLiveKey, "false")
   else isLiveCall = JSON.parse(isLiveCallStringResp)
 
   const {
