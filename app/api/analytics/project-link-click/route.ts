@@ -36,13 +36,12 @@ export async function POST(request: Request) {
   const linkType = body.linkType
   const destinationUrl = body.destinationUrl?.trim()
   const pagePath = body.pagePath?.trim() || "/"
-  const userTimezone = body.userTimezone?.trim()
   const userLocalDate = body.userLocalDate?.trim()
   const existingCookieId = cookies().get("user_cookie_id")?.value
   const userCookieId = body.userCookieId?.trim() || existingCookieId || nanoid()
   const ip = getRequestIp(new Headers(request.headers))
 
-  if (!projectSlug || !projectName || !destinationUrl || !userTimezone || !userLocalDate) {
+  if (!projectSlug || !projectName || !destinationUrl) {
     return NextResponse.json({ error: "Missing required tracking fields" }, { status: 400 })
   }
 
@@ -54,7 +53,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid link type" }, { status: 400 })
   }
 
-  if (!LOCAL_DATE_REGEXP.test(userLocalDate)) {
+  if (userLocalDate && !LOCAL_DATE_REGEXP.test(userLocalDate)) {
     return NextResponse.json({ error: "Invalid user local date" }, { status: 400 })
   }
 
@@ -70,19 +69,15 @@ export async function POST(request: Request) {
 
   const supabaseAdminClient = supabaseAdmin as any
 
-  const { error } = await supabaseAdminClient.from("project_link_clicks").insert(
-    {
-      project_slug: projectSlug,
-      project_name: projectName,
-      project_group: projectGroup,
-      link_type: linkType,
-      destination_url: destinationUrl,
-      page_path: pagePath,
-      user_cookie_id: userCookieId,
-      user_timezone: userTimezone,
-      user_local_date: userLocalDate,
-    },
-  )
+  const { error } = await supabaseAdminClient.from("project_link_clicks").insert({
+    project_slug: projectSlug,
+    project_name: projectName,
+    project_group: projectGroup,
+    link_type: linkType,
+    destination_url: destinationUrl,
+    page_path: pagePath,
+    user_cookie_id: userCookieId,
+  })
 
   if (error?.code === "23505") {
     return createOkResponse(existingCookieId, userCookieId)

@@ -32,6 +32,8 @@ export function Project({
   projectName,
   projectGroup,
 }: ProjectProps) {
+  const previewClassName = "group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
+
   return (
     <div className="relative w-full tablet:h-[720px] h-[784px]">
       <div className="absolute top-sm right-sm flex gap-x-md">
@@ -39,29 +41,33 @@ export function Project({
         {githubUrl && <GithubUrlIcon githubUrl={githubUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
         {youtubeUrl && <YoutubeUrlIcon youTubeUrl={youtubeUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
       </div>
-      <TrackedProjectLink
-        className="group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
-        href={siteUrl}
-        linkType="demo"
-        projectGroup={projectGroup}
-        projectName={projectName}
-        projectSlug={projectSlug}
-        title={`Open ${projectName} demo`}>
-        {youTubeEmbedPreview ? (
+      {youTubeEmbedPreview ? (
+        <div className={previewClassName}>
           <iframe
-            className="pointer-events-none h-full w-full"
+            className="h-full w-full"
             width="100%"
             height="100%"
             src={youTubeEmbedPreview}
+            loading="lazy"
             tabIndex={-1}
             title={`${projectName} preview`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen></iframe>
-        ) : (
+          <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+        </div>
+      ) : (
+        <TrackedProjectLink
+          className={previewClassName}
+          href={siteUrl}
+          linkType="demo"
+          projectGroup={projectGroup}
+          projectName={projectName}
+          projectSlug={projectSlug}
+          title={`Open ${projectName} demo`}>
           <iframe className="pointer-events-none h-full w-full" src={siteUrl} loading="lazy" tabIndex={-1} title={`${projectName} preview`} />
-        )}
-        <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
-      </TrackedProjectLink>
+          <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+        </TrackedProjectLink>
+      )}
       {/* Footer */}
       <div
         className="w-full h-[144px] tablet:h-[80px] relative flex flex-col tablet:flex-row justify-between items-center 
