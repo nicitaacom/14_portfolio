@@ -3,10 +3,35 @@ import { NextResponse } from "next/server"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { ADMIN_PASSWORD_COOKIE, parseAdminUserIdArr } from "@/libs/adminAuth"
 
+function getFirstHeaderValue(headerValue: string | null) {
+  return headerValue?.split(",")[0]?.trim()
+}
+
+function getPublicOrigin(request: Request) {
+  const requestUrl = new URL(request.url)
+  const forwardedHost = getFirstHeaderValue(request.headers.get("x-forwarded-host"))
+  const forwardedProto = getFirstHeaderValue(request.headers.get("x-forwarded-proto"))
+
+  if (forwardedHost) {
+    const protocol = forwardedProto || requestUrl.protocol.replace(":", "") || "https"
+    return `${protocol}://${forwardedHost}`
+  }
+
+  const host = request.headers.get("host")
+
+  if (host) {
+    const protocol = requestUrl.protocol.replace(":", "") || "https"
+    return `${protocol}://${host}`
+  }
+
+  return requestUrl.origin
+}
+
 // Named export for GET request handling
 export async function GET(request: Request) {
   // 1. Parse the request URL and extract the authorization code
   const requestUrl = new URL(request.url)
+  const publicOrigin = getPublicOrigin(request)
   const code = requestUrl.searchParams.get("code")
 
   // 2. Check if the code exists; if not, return an error response
@@ -43,7 +68,7 @@ export async function GET(request: Request) {
     if (adminUserIds.length > 0 && !adminUserIds.includes(data.user.id)) {
       await supabase.auth.signOut()
       cookies().delete(ADMIN_PASSWORD_COOKIE)
-      const redirectUrl = new URL("/auth", requestUrl.origin)
+      const redirectUrl = new URL("/auth", publicOrigin)
       redirectUrl.searchParams.set("error", "unauthorized")
       redirectUrl.searchParams.set("reason", "admin_user_id_mismatch")
       redirectUrl.searchParams.set("userId", data.user.id)
@@ -57,7 +82,7 @@ export async function GET(request: Request) {
 
     // 7. Successfully authenticated; redirect to origin
     cookies().delete(ADMIN_PASSWORD_COOKIE)
-    return NextResponse.redirect(requestUrl.origin)
+    return NextResponse.redirect(new URL("/", publicOrigin))
   } catch (error) {
     // 8. Catch unexpected errors (e.g., network issues)
     console.error("Unexpected error in auth route:", error)
