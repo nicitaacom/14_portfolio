@@ -11,7 +11,7 @@ export default function LoginPageClient() {
     async function authUser() {
       const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: "github",
-        options: { redirectTo: `${location.origin}/auth/callback/` },
+        options: { redirectTo: `${location.origin}/auth/callback` },
       })
 
       if (error) {
