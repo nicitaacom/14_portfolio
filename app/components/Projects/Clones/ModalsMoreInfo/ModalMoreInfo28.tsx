@@ -14,7 +14,6 @@ export default function ModalMoreInfo15() {
       siteUrl="https://github.com/nicitaacom/28_notion-clone"
       taskLabel="Develop skill to change something on click"
       deadline="No deadline"
-      price="0$"
       collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
     />
   )

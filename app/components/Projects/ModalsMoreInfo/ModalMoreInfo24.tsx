@@ -14,7 +14,6 @@ export default function ModalMoreInfo24() {
       siteUrl="https://24-dashboard-mui.vercel.app"
       taskLabel="Create dashboard using MUI"
       deadline="2 weeks"
-      price="400-2500$"
       collaborationChildren={
         <>
           <CollaborationIcon

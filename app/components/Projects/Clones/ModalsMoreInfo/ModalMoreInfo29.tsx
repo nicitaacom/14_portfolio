@@ -13,7 +13,6 @@ export default function ModalMoreInfo29() {
       siteUrl="https://29-ai-companion.vercel.app/"
       taskLabel="Develop a skill of creating SaaS and get experience with shadcn and cypress"
       deadline="2 weeks"
-      price="0$"
       collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
     />
   )

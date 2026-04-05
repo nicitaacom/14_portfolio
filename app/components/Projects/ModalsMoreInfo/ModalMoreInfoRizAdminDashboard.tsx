@@ -14,7 +14,6 @@ export default function ModalMoreInfoRizAdminDashboard() {
       siteUrl="https://admin.waka.cool/not-deployed"
       taskLabel="Add way to create/update/delete person with UI through admin dashboard"
       deadline="no deadline"
-      price="0$"
       collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site + UI/UX design</>} />}
     />
   )

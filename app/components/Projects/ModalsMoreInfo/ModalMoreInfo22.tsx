@@ -14,7 +14,6 @@ export default function ModalMoreInfo22() {
       siteUrl="https://22-aer-nicitaa.vercel.app/"
       taskLabel="Create web site which will sell begs"
       deadline="1 month"
-      price="500-2900$"
       collaborationChildren={
         <>
           <CollaborationIcon

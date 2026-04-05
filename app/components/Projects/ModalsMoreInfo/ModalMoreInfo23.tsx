@@ -14,7 +14,6 @@ export default function ModalMoreInfo23() {
       siteUrl="https://github.com/nicitaacom/23_store"
       taskLabel="Create site to buy and sell something"
       deadline="1 month"
-      price="3000$-12000$"
       collaborationChildren={
         <CollaborationIcon
           tooltiptext={

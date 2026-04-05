@@ -14,7 +14,6 @@ export default function ModalMoreInfo15() {
       siteUrl="https://github.com/nicitaacom/17_messenger-clone"
       taskLabel="Build some clone to improve skills"
       deadline="no deadline"
-      price="0$"
       collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
     />
   )

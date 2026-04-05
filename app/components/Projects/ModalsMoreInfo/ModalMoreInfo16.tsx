@@ -13,7 +13,6 @@ export default function ModalMoreInfo22() {
       siteUrl="https://16-gericht-restaurant.vercel.app"
       taskLabel="Create site with high conversion rate for restaurant with booking system and delivery option"
       deadline="1 month"
-      price="100$-2000$"
       collaborationChildren={
         <>
           <CollaborationIcon

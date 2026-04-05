@@ -14,7 +14,6 @@ export default function ModalMoreInfo26() {
       siteUrl="https://hot-delivery.vercel.app/"
       taskLabel="Created FullStack website for restaurant"
       deadline="2 weeks"
-      price="2500$-19000$"
       collaborationChildren={
         <CollaborationIcon
           tooltiptext={

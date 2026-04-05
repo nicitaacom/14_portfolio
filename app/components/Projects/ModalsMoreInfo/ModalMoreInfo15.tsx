@@ -13,7 +13,6 @@ export default function ModalMoreInfo15() {
       siteUrl="https://15-hoo-bank.vercel.app/"
       taskLabel="Create frontend part for bank"
       deadline="2 weeks"
-      price="60$-100$"
       collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
     />
   )

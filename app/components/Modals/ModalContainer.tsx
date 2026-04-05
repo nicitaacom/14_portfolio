@@ -56,17 +56,20 @@ export function ModalContainer({ isOpen, onClose, children, className }: ModalCo
           transition={{ duration: 0.25 }}
           {...modalBgHandler}>
           <motion.div
-            className={`relative z-[100] w-full overflow-hidden rounded-[28px] border border-secondary-foreground/70 bg-primary shadow-[0_32px_90px_rgba(0,0,0,0.45)] ${className}`}
+            className={`relative z-[100] w-full overflow-hidden rounded-md border border-secondary-foreground/70 bg-primary shadow-[0_32px_90px_rgba(0,0,0,0.45)] ${className}`}
             initial={{ scale: 0.75, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.25 }}
             {...modalHandler}>
-            <IoMdClose
-              className="absolute right-sm top-sm z-20 rounded-full border border-[#777777] bg-primary/80 p-[6px] text-secondary-foreground transition-colors duration-300 hover:border-cta hover:text-secondary"
-              size={34}
-              onClick={closeModal}
-            />
+            <button
+              type="button"
+              aria-label="Close modal"
+              className="absolute z-20 flex h-10 w-10 items-center justify-center text-secondary-foreground/70 transition-colors duration-300 hover:text-secondary"
+              style={{ top: 0, right: 0, left: "auto", bottom: "auto" }}
+              onClick={closeModal}>
+              <IoMdClose size={34} />
+            </button>
             {children}
           </motion.div>
         </motion.div>
