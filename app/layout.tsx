@@ -2,10 +2,12 @@ import "./globals.css"
 
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { nanoid } from "nanoid"
 
 import Layout from "./components/Layout"
 import { Navbar } from "./components/Navbar/Navbar"
 import Script from "next/script"
+import { UTMTracker } from "./utm-stats/UTMTracker"
 
 const inter = Inter({ subsets: ["latin"], preload: true })
 
@@ -43,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             style={{ display: "none", visibility: "hidden" }}></iframe>
         </noscript>
         <Navbar />
+        <UTMTracker userId={`14-${nanoid()}`} />
         <Layout>{children}</Layout>
       </body>
     </html>

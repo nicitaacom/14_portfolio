@@ -18,26 +18,29 @@ export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: All
     () => overview.find(item => item.project_slug === selectedProjectSlug) ?? overview[0],
     [overview, selectedProjectSlug],
   )
-  const selectedProjectShare = totalClicks && selectedProject ? Math.round((selectedProject.total_clicks / totalClicks) * 100) : 0
+  const selectedProjectShare =
+    totalClicks && selectedProject ? Math.round((selectedProject.total_clicks / totalClicks) * 100) : 0
 
   if (!overview.length) {
-    return <p className="py-10 text-center text-sm text-[#8090ab]">No click data yet for the selected window.</p>
+    return (
+      <p className="py-10 text-center text-sm text-secondary-foreground">No click data yet for the selected window.</p>
+    )
   }
 
   return (
     <div className="flex min-w-0 flex-col gap-sm">
       <div className="grid gap-xs tablet:grid-cols-3">
-        <div className="rounded-[14px] border border-[#1d2738] bg-[#0f1728] px-sm py-sm">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[#7d8ca6]">Window total</p>
-          <p className="mt-[6px] text-lg text-[#eff5ff]">{totalClicks}</p>
+        <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
+          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">Window total</p>
+          <p className="mt-[6px] text-lg text-secondary">{totalClicks}</p>
         </div>
-        <div className="rounded-[14px] border border-[#1d2738] bg-[#0f1728] px-sm py-sm">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[#7d8ca6]">Active projects</p>
-          <p className="mt-[6px] text-lg text-[#eff5ff]">{activeProjects}</p>
+        <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
+          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">Active projects</p>
+          <p className="mt-[6px] text-lg text-secondary">{activeProjects}</p>
         </div>
-        <div className="rounded-[14px] border border-[#1d2738] bg-[#0f1728] px-sm py-sm">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[#7d8ca6]">Selected share</p>
-          <p className="mt-[6px] text-lg text-[#eff5ff]">{selectedProjectShare}%</p>
+        <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
+          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">Selected share</p>
+          <p className="mt-[6px] text-lg text-secondary">{selectedProjectShare}%</p>
         </div>
       </div>
 

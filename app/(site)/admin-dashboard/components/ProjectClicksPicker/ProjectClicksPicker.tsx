@@ -37,7 +37,7 @@ export function ProjectClicksPicker({ projects }: ProjectClicksPickerProps) {
     <div className="flex w-full items-center justify-end tablet:w-[252px]">
       <div className="relative z-[111] w-full" ref={dropdownContainerRef}>
         <button
-          className="flex h-[40px] w-full items-center rounded-[12px] border border-[#223049] bg-[#0f1728] px-sm text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
+          className="flex h-[40px] w-full items-center rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
           onClick={toggleDropdown}
           type="button">
           <DropdownContainerContent isShowDropdown={isShowDropdown} selectedProjectName={selectedProjectName} />

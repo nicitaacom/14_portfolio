@@ -6,30 +6,25 @@ interface ProjectClicksSummaryStatProps {
 }
 
 const toneStyles = {
-  neutral: "bg-[#6f7f99]",
-  blue: "bg-[#5da8ff]",
-  emerald: "bg-[#2ec27e]",
-  amber: "bg-[#f6c560]",
+  neutral: "bg-[#5a5a5a]",
+  blue: "bg-[#5a5a5a]",
+  emerald: "bg-[#5a5a5a]",
+  amber: "bg-[#5a5a5a]",
 }
 
 const numberFormatter = new Intl.NumberFormat("en-US")
 
-export function ProjectClicksSummaryStat({
-  caption,
-  label,
-  tone = "neutral",
-  value,
-}: ProjectClicksSummaryStatProps) {
+export function ProjectClicksSummaryStat({ caption, label, tone = "neutral", value }: ProjectClicksSummaryStatProps) {
   const formattedValue = typeof value === "number" ? numberFormatter.format(value) : value
 
   return (
-    <div className="rounded-[16px] border border-[#1d2738] bg-[#0f1728] px-sm py-sm shadow-[0_18px_40px_rgba(2,8,20,0.32)]">
+    <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
       <div className="flex items-center gap-[8px]">
         <span className={`h-[8px] w-[8px] rounded-full ${toneStyles[tone]}`} />
-        <p className="text-[11px] uppercase tracking-[0.22em] text-[#8090ab]">{label}</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">{label}</p>
       </div>
-      <p className="mt-[10px] truncate text-lg leading-tight text-[#eff5ff]">{formattedValue}</p>
-      {caption ? <p className="mt-[6px] text-xs text-[#8c9ab3]">{caption}</p> : null}
+      <p className="mt-[10px] truncate text-lg leading-tight text-secondary">{formattedValue}</p>
+      {caption ? <p className="mt-[6px] text-xs text-secondary-foreground">{caption}</p> : null}
     </div>
   )
 }

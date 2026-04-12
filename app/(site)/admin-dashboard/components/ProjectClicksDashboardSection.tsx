@@ -34,11 +34,10 @@ const EMPTY_OVERVIEW_VALUES = {
 
 function DashboardCard({ children, subtitle, title }: DashboardCardProps) {
   return (
-    <section className="relative min-w-0 overflow-hidden rounded-[18px] border border-[#1d2738] bg-[#0b1120] p-sm shadow-[0_24px_60px_rgba(2,8,20,0.4)]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[120px] bg-[radial-gradient(circle_at_top_left,rgba(93,168,255,0.16),transparent_58%)]" />
-      <div className="relative mb-sm flex flex-col gap-[4px]">
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[#73819c]">{title}</h2>
-        <p className="max-w-[760px] text-xs text-[#90a0bb]">{subtitle}</p>
+    <section className="rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
+      <div className="mb-sm flex flex-col gap-[4px]">
+        <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{title}</h2>
+        <p className="max-w-[760px] text-xs text-secondary-foreground">{subtitle}</p>
       </div>
       <div className="relative">{children}</div>
     </section>
@@ -70,7 +69,11 @@ function getTopLinkTypeLabel({
   return `${topLinkType.label} (${topLinkType.value})`
 }
 
-function createEmptyOverviewItemFn(projectSlug: string, projectName: string, projectGroup: API.TrackedProjectGroup): TProjectClicksOverviewDB {
+function createEmptyOverviewItemFn(
+  projectSlug: string,
+  projectName: string,
+  projectGroup: API.TrackedProjectGroup,
+): TProjectClicksOverviewDB {
   return {
     project_slug: projectSlug,
     project_name: projectName,
@@ -102,9 +105,7 @@ export function ProjectClicksDashboardSection() {
 
   const overviewByProjectSlug = useMemo(
     () =>
-      Object.fromEntries(
-        overview.map(item => [item.project_slug, item]),
-      ) as Record<string, TProjectClicksOverviewDB>,
+      Object.fromEntries(overview.map(item => [item.project_slug, item])) as Record<string, TProjectClicksOverviewDB>,
     [overview],
   )
 
@@ -114,12 +115,17 @@ export function ProjectClicksDashboardSection() {
 
   const orderedOverview = useMemo(() => {
     return [...trackedProjects]
-      .map(project => overviewByProjectSlug[project.slug] ?? createEmptyOverviewItemFn(project.slug, project.name, project.group))
+      .map(
+        project =>
+          overviewByProjectSlug[project.slug] ?? createEmptyOverviewItemFn(project.slug, project.name, project.group),
+      )
       .sort((a, b) => b.total_clicks - a.total_clicks)
   }, [overviewByProjectSlug])
 
   const selectedProjectOverview = useMemo(
-    () => overviewByProjectSlug[selectedProject.slug] ?? createEmptyOverviewItemFn(selectedProject.slug, selectedProject.name, selectedProject.group),
+    () =>
+      overviewByProjectSlug[selectedProject.slug] ??
+      createEmptyOverviewItemFn(selectedProject.slug, selectedProject.name, selectedProject.group),
     [overviewByProjectSlug, selectedProject],
   )
 
@@ -161,27 +167,31 @@ export function ProjectClicksDashboardSection() {
 
   return (
     <div className="flex flex-col gap-sm">
-      <section className="relative overflow-hidden rounded-[18px] border border-[#1d2738] bg-[#0b1120] px-sm py-sm shadow-[0_24px_60px_rgba(2,8,20,0.4)]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[140px] bg-[radial-gradient(circle_at_top_left,rgba(93,168,255,0.18),transparent_62%)]" />
-        <div className="flex flex-col gap-[10px] laptop:flex-row laptop:items-end laptop:justify-between">
-          <div className="relative flex flex-col gap-[4px]">
-            <p className="text-[11px] uppercase tracking-[0.24em] text-[#73819c]">Click analytics</p>
-            <h2 className="text-lg text-[#eff5ff]">Project link tracking overview</h2>
-            <p className="max-w-[760px] text-xs text-[#90a0bb] tablet:text-sm">
-              Clean overview of total project clicks, selected-project momentum, and cross-project ranking for the active timeframe.
+      <section className="rounded-[2px] border border-[#323232] bg-[#242424] px-sm py-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
+        <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[4px]">
+            <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">Project link tracking overview</h2>
+            <p className="max-w-[760px] text-xs text-secondary-foreground">
+              Clean overview of total project clicks and cross-project ranking for the active timeframe.
             </p>
           </div>
 
-          <Button
-            className="w-full whitespace-nowrap rounded-[12px] border-[#23314b] bg-[#101829] px-sm py-xs text-[#eff5ff] hover:bg-[#15233a] tablet:w-fit"
+          <button
+            className="inline-flex w-fit items-center justify-center gap-[8px] rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-xs text-secondary hover:bg-[#2f2f2f] transition"
             onClick={handleRefetch}>
             <FiRefreshCcw size={14} />
-            Refetch clicks
-          </Button>
+            Refetch
+          </button>
         </div>
 
-        {overviewErrorMessage ? <p className="relative mt-[8px] text-xs text-danger">Failed to load comparison data: {overviewErrorMessage}</p> : null}
-        {timelineErrorMessage ? <p className="relative mt-[4px] text-xs text-danger">Failed to load timeline data: {timelineErrorMessage}</p> : null}
+        {overviewErrorMessage ? (
+          <p className="relative mt-[8px] text-xs text-danger">
+            Failed to load comparison data: {overviewErrorMessage}
+          </p>
+        ) : null}
+        {timelineErrorMessage ? (
+          <p className="relative mt-[4px] text-xs text-danger">Failed to load timeline data: {timelineErrorMessage}</p>
+        ) : null}
       </section>
 
       {isOverviewSkeleton ? (

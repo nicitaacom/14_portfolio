@@ -10,6 +10,7 @@ import { deleteDBAppointmentAction } from "@/(site)/actions/deleteDBAppointmentA
 import { updateDBAppointmentAction } from "@/(site)/actions/updateDBAppointmentAction"
 import { Input } from "@/components/Input"
 import { ProjectClicksDashboardSection } from "./components/ProjectClicksDashboardSection"
+import { UTMStatsDashboardSection } from "./components/UTMStatsDashboardSection"
 
 interface BookingRow {
   booking_date: string
@@ -79,7 +80,12 @@ function OverviewStat({ label, value }: OverviewStatProps) {
 }
 
 function MetaPill({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <span className={`inline-flex shrink-0 items-center rounded-[2px] border border-[#3a3a3a] bg-[#262626] px-sm py-[2px] text-xs ${className}`}>{children}</span>
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-[2px] border border-[#3a3a3a] bg-[#262626] px-sm py-[2px] text-xs ${className}`}>
+      {children}
+    </span>
+  )
 }
 
 function DetailRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
@@ -103,7 +109,9 @@ function StatusBadge({ label, tone }: { label: string; tone: "green" | "red" | "
           ? "border-info/40 bg-info/10 text-info"
           : "border-secondary-foreground/30 bg-secondary-foreground/10 text-secondary"
 
-  return <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-[2px] text-xs ${toneClassName}`}>{label}</span>
+  return (
+    <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-[2px] text-xs ${toneClassName}`}>{label}</span>
+  )
 }
 
 function BookingChannelBadge({ channel }: { channel: string }) {
@@ -164,15 +172,10 @@ function BookingContactRow({ contact, contactType }: { contact: string | null; c
   )
 }
 
-function BookingControlChip({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
+function BookingControlChip({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`flex h-[40px] shrink-0 items-center rounded-[2px] border border-[#343434] bg-[#232323] px-sm ${className}`}>
+    <div
+      className={`flex h-[40px] shrink-0 items-center rounded-[2px] border border-[#343434] bg-[#232323] px-sm ${className}`}>
       {children}
     </div>
   )
@@ -202,11 +205,7 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
                   <StatusBadge
                     label={job.last_run_status ?? "unknown"}
                     tone={
-                      job.last_run_status === "success"
-                        ? "green"
-                        : job.last_run_status === "failed"
-                          ? "red"
-                          : "gray"
+                      job.last_run_status === "success" ? "green" : job.last_run_status === "failed" ? "red" : "gray"
                     }
                   />
                   <MetaPill className="text-secondary">{job.total_runs} runs</MetaPill>
@@ -270,7 +269,12 @@ function BookingItem({ booking }: { booking: BookingRow }) {
           <div className="flex min-w-max items-center gap-[4px]">
             <BookingControlChip className="w-[152px] justify-between">
               {isEditing ? (
-                <Input type="date" value={draftBookingDate} onChange={event => setDraftBookingDate(event.target.value)} className="w-full border-none px-0 py-0" />
+                <Input
+                  type="date"
+                  value={draftBookingDate}
+                  onChange={event => setDraftBookingDate(event.target.value)}
+                  className="w-full border-none px-0 py-0"
+                />
               ) : (
                 <p className="truncate whitespace-nowrap text-sm text-secondary">{formatDate(booking.booking_date)}</p>
               )}
@@ -278,9 +282,16 @@ function BookingItem({ booking }: { booking: BookingRow }) {
 
             <BookingControlChip className="w-[128px] justify-between">
               {isEditing ? (
-                <Input type="time" value={draftBookingTime} onChange={event => setDraftBookingTime(event.target.value)} className="w-full border-none px-0 py-0" />
+                <Input
+                  type="time"
+                  value={draftBookingTime}
+                  onChange={event => setDraftBookingTime(event.target.value)}
+                  className="w-full border-none px-0 py-0"
+                />
               ) : (
-                <p className="truncate whitespace-nowrap text-sm text-secondary">{booking.booking_time_MSK.slice(0, 5)}</p>
+                <p className="truncate whitespace-nowrap text-sm text-secondary">
+                  {booking.booking_time_MSK.slice(0, 5)}
+                </p>
               )}
             </BookingControlChip>
 
@@ -352,7 +363,8 @@ function DashboardCard({
   title: string
 }) {
   return (
-    <section className={`rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] ${className}`}>
+    <section
+      className={`rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] ${className}`}>
       <div className="mb-[4px] flex flex-col gap-[4px]">
         <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{title}</h2>
         {subtitle && <p className="text-xs">{subtitle}</p>}
@@ -363,10 +375,13 @@ function DashboardCard({
 }
 
 export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminDashboardClientProps) {
+  const [activeTab, setActiveTab] = useState<"utm" | "projectClick">("utm")
   const stats = useMemo(() => {
     const activeCronJobs = cronSchedules.filter(job => job.is_active).length
     const failedCronJobs = cronSchedules.filter(job => job.last_run_status === "failed").length
-    const upcomingBookings = bookings.filter(booking => new Date(`${booking.booking_date}T${booking.booking_time_MSK}`) >= new Date()).length
+    const upcomingBookings = bookings.filter(
+      booking => new Date(`${booking.booking_date}T${booking.booking_time_MSK}`) >= new Date(),
+    ).length
 
     return {
       activeCronJobs,
@@ -384,10 +399,13 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           <div className="flex flex-col gap-[4px] laptop:flex-row laptop:items-end laptop:justify-between">
             <div className="flex flex-col gap-[4px]">
               <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground">Admin dashboard</p>
-              <h1 className="text-lg text-secondary">Click analytics, cron jobs and booked appointments</h1>
+              <h1 className="text-lg text-secondary">
+                UTM and project click analytics, cron jobs and booked appointments
+              </h1>
               <p className="max-w-[720px] text-xs tablet:text-sm">
-                Fresh server auth check passed for admin user <span className="text-secondary">{userId}</span>. This page reads cron schedules from the
-                RPC and all rows from the <span className="text-secondary">bookings</span> table.
+                Fresh server auth check passed for admin user <span className="text-secondary">{userId}</span>. Use the
+                tabs below to switch between UTM tracking and project click analytics. This page also reads cron
+                schedules from the RPC and all rows from the <span className="text-secondary">bookings</span> table.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-[4px] laptop:grid-cols-4">
@@ -399,10 +417,44 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </div>
         </section>
 
-        <ProjectClicksDashboardSection />
+        <section className="mt-sm rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
+          <div className="flex flex-col gap-[4px] laptop:flex-row laptop:items-center laptop:justify-between">
+            <div className="flex flex-wrap gap-[4px]">
+              <button
+                type="button"
+                className={`rounded-[2px] border px-[10px] py-[8px] text-sm transition ${
+                  activeTab === "utm"
+                    ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
+                    : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                }`}
+                onClick={() => setActiveTab("utm")}>
+                UTM
+              </button>
+              <button
+                type="button"
+                className={`rounded-[2px] border px-[10px] py-[8px] text-sm transition ${
+                  activeTab === "projectClick"
+                    ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
+                    : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                }`}
+                onClick={() => setActiveTab("projectClick")}>
+                Project click
+              </button>
+            </div>
+            <p className="text-xs text-secondary-foreground">
+              Toggle between UTM tracking overview and project click analytics.
+            </p>
+          </div>
+        </section>
+
+        <div className="mt-sm">
+          {activeTab === "utm" ? <UTMStatsDashboardSection /> : <ProjectClicksDashboardSection />}
+        </div>
 
         <div className="mt-sm grid gap-[4px] desktop:grid-cols-[1.2fr_0.8fr]">
-          <DashboardCard title="Cron schedules" subtitle="Compact live view of every pg_cron job configured for this project.">
+          <DashboardCard
+            title="Cron schedules"
+            subtitle="Compact live view of every pg_cron job configured for this project.">
             <div className="flex flex-col gap-[4px]">
               {cronSchedules.map(job => (
                 <CronScheduleItem key={job.id} job={job} />
@@ -410,7 +462,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
             </div>
           </DashboardCard>
 
-          <DashboardCard title="Booked appointments" subtitle="Every booking row with channel badges and identifiers in a compact scrollable list.">
+          <DashboardCard
+            title="Booked appointments"
+            subtitle="Every booking row with channel badges and identifiers in a compact scrollable list.">
             <div className="mb-[4px] grid grid-cols-2 gap-[4px]">
               <OverviewStat label="Upcoming" value={stats.upcomingBookings} />
               <OverviewStat label="All rows" value={bookings.length} />

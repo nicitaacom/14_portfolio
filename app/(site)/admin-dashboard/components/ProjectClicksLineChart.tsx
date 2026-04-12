@@ -29,9 +29,16 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
   const chartGradientId = useId().replace(/:/g, "")
   const maxClicks = useMemo(() => Math.max(...timeline.map(point => point.total_clicks), 1), [timeline])
   const totalClicks = useMemo(() => timeline.reduce((sum, point) => sum + point.total_clicks, 0), [timeline])
-  const averageClicks = useMemo(() => (timeline.length ? totalClicks / timeline.length : 0), [timeline.length, totalClicks])
+  const averageClicks = useMemo(
+    () => (timeline.length ? totalClicks / timeline.length : 0),
+    [timeline.length, totalClicks],
+  )
   const peakPoint = useMemo(
-    () => timeline.reduce<TProjectClicksTimelineDB | null>((topPoint, point) => (!topPoint || point.total_clicks > topPoint.total_clicks ? point : topPoint), null),
+    () =>
+      timeline.reduce<TProjectClicksTimelineDB | null>(
+        (topPoint, point) => (!topPoint || point.total_clicks > topPoint.total_clicks ? point : topPoint),
+        null,
+      ),
     [timeline],
   )
   const latestPoint = timeline[timeline.length - 1]
@@ -77,52 +84,62 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
   const visibleLabels = useMemo(() => {
     if (points.length <= 6) return points
 
-    return points.filter((_, index) => index === 0 || index === points.length - 1 || index % Math.ceil(points.length / 5) === 0)
+    return points.filter(
+      (_, index) => index === 0 || index === points.length - 1 || index % Math.ceil(points.length / 5) === 0,
+    )
   }, [points])
 
   if (!timeline.length) {
-    return <p className="py-10 text-center text-sm text-[#8090ab]">No click data yet for this project in the selected window.</p>
+    return (
+      <p className="py-10 text-center text-sm text-secondary-foreground">
+        No click data yet for this project in the selected window.
+      </p>
+    )
   }
 
   return (
     <div className="min-w-0 flex flex-col gap-sm">
-      <div className="grid gap-xs rounded-[16px] border border-[#1d2738] bg-[#0f1728] p-sm shadow-[0_18px_40px_rgba(2,8,20,0.28)] tablet:grid-cols-[minmax(0,1fr)_auto]">
+      <div className="grid gap-xs rounded-[2px] border border-[#343434] bg-[#2a2a2a] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] tablet:grid-cols-[minmax(0,1fr)_auto]">
         <div className="min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#7d8ca6]">
+          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">
             {timelineMode === "monthly" ? "Last 30 days" : "Last 12 months"}
           </p>
           <div className="mt-[8px] flex flex-wrap items-end gap-sm">
-            <p className="truncate text-lg text-[#eff5ff]">{projectName}</p>
-            <p className="text-[30px] leading-none text-[#eff5ff]">{numberFormatter.format(totalClicks)}</p>
-            <p className="pb-[3px] text-xs uppercase tracking-[0.18em] text-[#7d8ca6]">total clicks</p>
+            <p className="truncate text-lg text-secondary">{projectName}</p>
+            <p className="text-[30px] leading-none text-secondary">{numberFormatter.format(totalClicks)}</p>
+            <p className="pb-[3px] text-xs uppercase tracking-[0.18em] text-secondary-foreground">total clicks</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-xs">
-          <div className="rounded-[12px] border border-[#1c2940] bg-[#101829] px-sm py-[10px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-[#71809b]">Average</p>
-            <p className="mt-[4px] text-sm text-[#eff5ff]">{formatMetricValueFn(averageClicks)}</p>
+          <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">Average</p>
+            <p className="mt-[4px] text-sm text-secondary">{formatMetricValueFn(averageClicks)}</p>
           </div>
-          <div className="rounded-[12px] border border-[#1c2940] bg-[#101829] px-sm py-[10px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-[#71809b]">Peak</p>
-            <p className="mt-[4px] text-sm text-[#eff5ff]">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
-            <p className="text-[10px] uppercase tracking-[0.16em] text-[#71809b]">{peakPoint?.bucket_label ?? "-"}</p>
+          <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">Peak</p>
+            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
+            <p className="text-[10px] uppercase tracking-[0.16em] text-secondary-foreground">
+              {peakPoint?.bucket_label ?? "-"}
+            </p>
           </div>
-          <div className="rounded-[12px] border border-[#1c2940] bg-[#101829] px-sm py-[10px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-[#71809b]">Latest</p>
-            <p className="mt-[4px] text-sm text-[#eff5ff]">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
-            <p className="text-[10px] uppercase tracking-[0.16em] text-[#71809b]">{latestPoint?.bucket_label ?? "-"}</p>
+          <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">Latest</p>
+            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
+            <p className="text-[10px] uppercase tracking-[0.16em] text-secondary-foreground">
+              {latestPoint?.bucket_label ?? "-"}
+            </p>
           </div>
         </div>
       </div>
 
       <div className="overflow-x-auto pb-[4px]">
-        <div className="min-w-[920px] rounded-[18px] border border-[#1d2738] bg-[#0b1120] p-sm shadow-[0_24px_60px_rgba(2,8,20,0.34)]">
+        <div className="min-w-[920px] rounded-[2px] border border-[#343434] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
           <svg viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} fill="none">
             <defs>
               <linearGradient id={`${chartGradientId}-area`} x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="#5da8ff" stopOpacity="0.38" />
-                <stop offset="100%" stopColor="#5da8ff" stopOpacity="0" />
+                <stop offset="0%" stopColor="#5a5a5a" stopOpacity="0.38" />
+                <stop offset="100%" stopColor="#5a5a5a" stopOpacity="0" />
               </linearGradient>
             </defs>
 
@@ -133,10 +150,10 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
                   x2={CHART_WIDTH - PADDING_RIGHT}
                   y1={line.y}
                   y2={line.y}
-                  stroke="#23304a"
+                  stroke="#343434"
                   strokeDasharray="5 8"
                 />
-                <text fill="#66758f" fontSize="10" textAnchor="end" x={CHART_WIDTH - 6} y={line.y + 4}>
+                <text fill="#8a8a8a" fontSize="10" textAnchor="end" x={CHART_WIDTH - 6} y={line.y + 4}>
                   {numberFormatter.format(line.value)}
                 </text>
               </g>
@@ -154,7 +171,7 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
               animate={{ pathLength: 1, opacity: 1 }}
               d={pathDefinition}
               initial={{ pathLength: 0, opacity: 0.5 }}
-              stroke="#5da8ff"
+              stroke="#5a5a5a"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="3"
@@ -166,11 +183,11 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
                 animate={{ opacity: 1, scale: 1 }}
                 cx={point.x}
                 cy={point.y}
-                fill="#0b1120"
+                fill="#242424"
                 initial={{ opacity: 0, scale: 0.7 }}
                 key={point.bucket_key}
                 r={point.bucket_key === latestPoint?.bucket_key ? "6" : "3.5"}
-                stroke={point.bucket_key === latestPoint?.bucket_key ? "#b8dcff" : "#5da8ff"}
+                stroke={point.bucket_key === latestPoint?.bucket_key ? "#7a7a7a" : "#5a5a5a"}
                 strokeWidth={point.bucket_key === latestPoint?.bucket_key ? "4" : "2"}
                 transition={{ delay: index * 0.015, duration: 0.22 }}
               />
@@ -178,7 +195,7 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
 
             {visibleLabels.map(point => (
               <text
-                fill="#7b8aa5"
+                fill="#8a8a8a"
                 fontSize="10"
                 key={point.bucket_key}
                 textAnchor="middle"

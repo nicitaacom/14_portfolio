@@ -9,7 +9,7 @@ interface DropdownContainerContentProps {
 export function DropdownContainerContent({ isShowDropdown, selectedProjectName }: DropdownContainerContentProps) {
   return (
     <div className="flex w-full items-center justify-between gap-xs">
-      <span className="truncate text-sm text-[#eff5ff]">{selectedProjectName}</span>
+      <span className="truncate text-sm text-secondary">{selectedProjectName}</span>
       <Image
         className={twMerge("h-[16px] w-[16px] transition-transform duration-200", isShowDropdown && "rotate-180")}
         src="/tringle.png"
