@@ -20,9 +20,14 @@ export function Footer() {
           LinkedIn <AiFillLinkedin />
         </Button>
         <Button
-          href="https://drive.google.com/file/d/1tj4iJQ7JNK08nUyyLLuu0kmvTRhUJoif/view?usp=sharing"
+          href="https://drive.google.com/file/d/1xDyC6_0KuG-0AL__2fZmlZd_K0zselSr/view?usp=sharing"
           target="_blank">
-          Summary <BsFiletypePdf />
+          Summary EN <BsFiletypePdf />
+        </Button>
+        <Button
+          href="https://drive.google.com/file/d/1Hq5UMX-UiNTuPBxt_U0PYYdkP5x7aTRj/view?usp=sharing"
+          target="_blank">
+          Summary DE <BsFiletypePdf />
         </Button>
         <Button className="text-center col-span-2" href="/appointment">
           Book appointment <GrSchedule />
