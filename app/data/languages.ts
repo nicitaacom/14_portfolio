@@ -1,27 +1,9 @@
-export const languages = [
-  {
-    id: 1,
-    label: "Русский",
-    url: "/ru",
-  },
-  {
-    id: 2,
-    label: "English",
-    url: "/",
-  },
-  {
-    id: 3,
-    label: "Deutsch",
-    url: "/de",
-  },
-  {
-    id: 4,
-    label: "Polski",
-    url: "/pl",
-  },
-  {
-    id: 5,
-    label: "Українська",
-    url: "/ua",
-  },
+import { TLocale } from "@/locales/config"
+
+export const languages: { code: TLocale; label: string }[] = [
+  { code: "en", label: "English" },
+  { code: "ru", label: "Русский" },
+  { code: "ua", label: "Українська" },
+  { code: "de", label: "Deutsch" },
+  { code: "pl", label: "Polski" },
 ]

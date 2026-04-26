@@ -6,7 +6,8 @@ import { FaDiscord, FaTelegramPlane, FaLinkedinIn } from "react-icons/fa"
 import { PiEnvelopeSimpleFill } from "react-icons/pi"
 
 import { useAppointmentStore } from "@/store/useAppointmentStore"
-import { AppointmentFormData, FormInput } from "@/(site)/appointment/components/FormInput"
+import { AppointmentFormData, FormInput } from "../../../../[locale]/(site)/appointment/components/FormInput"
+import { useScopedI18n } from "@/locales/client"
 
 interface ContactMethodProps {
   errors: FieldErrors<AppointmentFormData>
@@ -15,15 +16,16 @@ interface ContactMethodProps {
 
 export function ContactMethod({ errors, register }: ContactMethodProps) {
   const { contactMethod, setNextContactMethod } = useAppointmentStore()
+  const t = useScopedI18n("appointment.modal")
 
   const placeholder =
     contactMethod === "telegram"
-      ? "Telegram username"
+      ? t("contactPlaceholderTelegram")
       : contactMethod === "discord"
-        ? "Discord username"
+        ? t("contactPlaceholderDiscord")
         : contactMethod === "linkedin"
-        ? "LinkedIn profile or username"
-        : "Email"
+          ? t("contactPlaceholderLinkedIn")
+          : t("contactPlaceholderEmail")
 
   const icon =
     contactMethod === "telegram" ? (

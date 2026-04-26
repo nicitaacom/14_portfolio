@@ -1,15 +1,7 @@
 import "./globals.css"
 
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { nanoid } from "nanoid"
-
-import Layout from "./components/Layout"
-import { Navbar } from "./components/Navbar/Navbar"
 import Script from "next/script"
-import { UTMTracker } from "./utm-stats/UTMTracker"
-
-const inter = Inter({ subsets: ["latin"], preload: true })
 
 export const metadata: Metadata = {
   title: "Portfolio t.me/nicitaacom",
@@ -35,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={`${inter.className} hide-scrollbar`}>
+      <body className="hide-scrollbar font-sans">
         <noscript>
           {/* Fallback for browsers with disabled JavaScript */}
           <iframe
@@ -44,9 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             width="0"
             style={{ display: "none", visibility: "hidden" }}></iframe>
         </noscript>
-        <Navbar />
-        <UTMTracker userId={`14-${nanoid()}`} />
-        <Layout>{children}</Layout>
+        {children}
       </body>
     </html>
   )

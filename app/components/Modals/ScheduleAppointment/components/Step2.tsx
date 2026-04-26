@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
@@ -6,14 +8,15 @@ import { SiGooglemeet } from "react-icons/si"
 import { FaDiscord, FaTelegramPlane } from "react-icons/fa"
 
 import { Button } from "@/components/Button"
-import { bookACallFn } from "@/(site)/functions/bookACallFn"
-import { AppointmentFormData } from "@/(site)/appointment/components/FormInput"
-import { formatedDateTimeFn } from "@/(site)/functions/formatedDateTimeFn"
+import { bookACallFn } from "../../../../[locale]/(site)/functions/bookACallFn"
+import { AppointmentFormData } from "../../../../[locale]/(site)/appointment/components/FormInput"
+import { formatedDateTimeFn } from "../../../../[locale]/(site)/functions/formatedDateTimeFn"
 import useToast from "@/store/useToast"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { Checkbox } from "./Checkbox"
 import { ContactMethod } from "./ContactMethod"
 import { SendNotificationTo } from "./SendNotificationTo"
+import { useScopedI18n } from "@/locales/client"
 
 const validationRules = {
   email: {
@@ -33,6 +36,10 @@ const validationRules = {
 
 export function Step2() {
   const toast = useToast()
+  const t = useScopedI18n("appointment.modal")
+  const formT = useScopedI18n("appointment.form")
+  const pageT = useScopedI18n("appointment.page")
+  const toastT = useScopedI18n("toast")
   const [isLoading, setIsLoading] = useState(false)
   const [showUpError, setShowUpError] = useState(false)
 
@@ -63,7 +70,13 @@ export function Step2() {
     typeof errors.inputNotificationTo?.message === "string" ? errors.inputNotificationTo.message : null
 
   const channelLabel =
-    channel === "google-meets" ? "Google Meets" : channel === "discord" ? "Discord" : channel === "telegram" ? "Telegram" : ""
+    channel === "google-meets"
+      ? "Google Meets"
+      : channel === "discord"
+        ? "Discord"
+        : channel === "telegram"
+          ? "Telegram"
+          : ""
 
   const channelIcon =
     channel === "google-meets" ? (
@@ -81,28 +94,28 @@ export function Step2() {
     }
 
     if (!data.contact || data.contact.trim().length < 3) {
-      setError("contact", { type: "manual", message: "This field is required" })
+      setError("contact", { type: "manual", message: formT("required") })
       return
     }
 
     if (contactMethod === "email" && !validationRules.email.pattern.value.test(data.contact)) {
-      setError("contact", { type: "manual", message: validationRules.email.pattern.message })
+      setError("contact", { type: "manual", message: formT("emailInvalid") })
       return
     }
 
     if (contactMethod === "linkedin" && !validationRules.linkedin.pattern.value.test(data.contact)) {
-      setError("contact", { type: "manual", message: validationRules.linkedin.pattern.message })
+      setError("contact", { type: "manual", message: formT("linkedinInvalid") })
       return
     }
 
     if (isSendNotification) {
       if (!data.inputNotificationTo || data.inputNotificationTo.trim().length < 3) {
-        setError("inputNotificationTo", { type: "manual", message: "This field is required" })
+        setError("inputNotificationTo", { type: "manual", message: formT("required") })
         return
       }
 
       if (sendNotificationTo === "email" && !validationRules.email.pattern.value.test(data.inputNotificationTo)) {
-        setError("inputNotificationTo", { type: "manual", message: validationRules.email.pattern.message })
+        setError("inputNotificationTo", { type: "manual", message: formT("emailInvalid") })
         return
       }
     }
@@ -112,10 +125,14 @@ export function Step2() {
 
     try {
       setIsLoading(true)
-      await bookACallFn()
+      await bookACallFn({
+        chooseChannelFirst: t("chooseChannelFirst"),
+        dailyLimitReached: () => t("dailyLimitReached", { message: pageT("dailyLimit", { count: 2 }) }),
+        errorTitle: toastT("defaultErrorTitle"),
+      })
     } catch (error) {
       if (error instanceof Error) {
-        toast.show("error", "Error", error.message)
+        toast.show("error", toastT("defaultErrorTitle"), error.message)
       }
     } finally {
       setIsLoading(false)
@@ -123,7 +140,9 @@ export function Step2() {
   }
 
   return (
-    <form className={twMerge("flex w-full flex-col gap-sm", step === "step-1" ? "" : "pt-xs")} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={twMerge("flex w-full flex-col gap-sm", step === "step-1" ? "" : "pt-xs")}
+      onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center gap-xs rounded-[12px] border border-[#777777] px-sm py-xs">
         <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full border border-cta/40 bg-cta/10">
           {channelIcon}
@@ -136,7 +155,7 @@ export function Step2() {
 
       <div className="flex flex-col gap-xs">
         <label className="text-sm text-secondary" htmlFor="contact">
-          Contact <span className="text-danger">*</span>
+          {t("contactLabel")} <span className="text-danger">*</span>
         </label>
         <ContactMethod register={register} errors={errors} />
         {contactError && <p className="text-sm text-danger">{contactError}</p>}
@@ -149,12 +168,12 @@ export function Step2() {
           setShowUpError(false)
           toggleIsShowUpOnACall()
         }}
-        label="I will show up for the call."
+        label={t("showUpLabel")}
       />
-      {showUpError && !isShowUpOnACall && <p className="text-sm text-danger">Please confirm that you will show up.</p>}
+      {showUpError && !isShowUpOnACall && <p className="text-sm text-danger">{t("showUpError")}</p>}
 
       <div className="flex flex-col gap-xs">
-        <Checkbox isChecked={isSendNotification} onChange={toggleIsSendNotification} label="Send a reminder 10 minutes before." />
+        <Checkbox isChecked={isSendNotification} onChange={toggleIsSendNotification} label={t("sendReminderLabel")} />
 
         {isSendNotification && (
           <div className="flex flex-col gap-xs pl-[10px]">
@@ -166,19 +185,19 @@ export function Step2() {
 
       <div className="flex flex-col gap-xs">
         <label className="text-sm text-secondary-foreground" htmlFor="appointmentNote">
-          Note
+          {t("noteLabel")}
         </label>
         <textarea
           id="appointmentNote"
           className="min-h-[104px] rounded-[10px] border border-secondary-foreground/40 bg-primary-foreground/15 px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-secondary-foreground"
           value={appointmentNote}
           onChange={e => setAppointmentNote(e.target.value)}
-          placeholder="Give me more context what this conversation is going to be about"
+          placeholder={t("notePlaceholder")}
         />
       </div>
 
       <div className="flex flex-col gap-xs pt-xs tablet:flex-row tablet:items-center tablet:justify-between">
-        <p className="text-xs text-secondary-foreground">Step 2 / 3</p>
+        <p className="text-xs text-secondary-foreground">{t("stepLabel", { current: 2, total: 3 })}</p>
         <Button
           className={twMerge(
             "group flex w-full flex-row gap-x-xs rounded-[12px] border-cta px-md py-xs font-bold tablet:w-fit",
@@ -186,7 +205,7 @@ export function Step2() {
           )}
           disabled={!isShowUpOnACall || isLoading}
           type="submit">
-          {isLoading ? "Booking..." : "Book call"}
+          {isLoading ? t("booking") : t("bookCall")}
           <IoMdArrowRoundForward className="duration-300 group-hover:-translate-x-0.5" />
         </Button>
       </div>

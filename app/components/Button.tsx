@@ -1,5 +1,10 @@
+"use client"
+
 import Link from "next/link"
 import { twMerge } from "tailwind-merge"
+
+import { useCurrentLocale } from "@/locales/client"
+import { localizeHref } from "@/locales/helpers"
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: () => void
@@ -11,6 +16,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function Button({ onClick, children, href, target, isDisabled, className = "", ...props }: ButtonProps) {
+  const locale = useCurrentLocale()
   const buttonCSS = twMerge(
     "px-sm py-xs border-[1px] border-solid border-cta rounded flex justify-center items-center gap-x-xs",
     "hover:bg-primary-foreground transition-colors duration-300 text-secondary",
@@ -20,7 +26,7 @@ export function Button({ onClick, children, href, target, isDisabled, className 
 
   if (href) {
     return (
-      <Link className={buttonCSS} href={href} target={target}>
+      <Link className={buttonCSS} href={localizeHref(href, locale)} target={target}>
         {children}
       </Link>
     )

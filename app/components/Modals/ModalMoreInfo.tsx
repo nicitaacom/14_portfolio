@@ -6,6 +6,7 @@ import { ModalContainer } from "./ModalContainer"
 import { PiTelegramLogoBold } from "react-icons/pi"
 import { RiDiscordLine } from "react-icons/ri"
 import { FiCalendar, FiUsers, FiFileText } from "react-icons/fi"
+import { useScopedI18n } from "@/locales/client"
 
 interface ModalInfoProps {
   isOpen: boolean
@@ -26,6 +27,8 @@ export function ModalMoreInfo({
   collaborationChildren,
   siteUrl,
 }: ModalInfoProps) {
+  const t = useScopedI18n("projectModal")
+
   return (
     <ModalContainer
       className="max-w-[calc(100vw-2rem)] tablet:max-w-[700px] laptop:max-w-[850px] aspect-video flex flex-col"
@@ -53,7 +56,7 @@ export function ModalMoreInfo({
             <div className="group flex items-center gap-x-md">
               <div className="flex items-center gap-x-sm w-[140px] text-secondary-foreground/40 font-medium">
                 <FiUsers className="shrink-0" size={16} />
-                <span>Collaboration</span>
+                <span>{t("collaboration")}</span>
               </div>
               <div className="flex-1 text-secondary-foreground/80">{collaborationChildren}</div>
             </div>
@@ -63,7 +66,7 @@ export function ModalMoreInfo({
               <div className="group flex items-center gap-x-md">
                 <div className="flex items-center gap-x-sm w-[140px] text-secondary-foreground/40 font-medium">
                   <FiCalendar className="shrink-0" size={16} />
-                  <span>Deadline</span>
+                  <span>{t("deadline")}</span>
                 </div>
                 <div className="flex-1 font-medium text-secondary-foreground/80">{deadline}</div>
               </div>
@@ -75,7 +78,7 @@ export function ModalMoreInfo({
             <section className="space-y-sm">
               <div className="flex items-center gap-x-sm text-xs font-bold uppercase tracking-widest text-secondary-foreground/30">
                 <FiFileText size={14} />
-                <span>Project Task</span>
+                <span>{t("projectTask")}</span>
               </div>
               <p className="text-base leading-relaxed text-secondary-foreground/70 whitespace-pre-wrap">
                 {taskLabel}
@@ -87,7 +90,7 @@ export function ModalMoreInfo({
         {/* CTA Footer */}
         <footer className="mt-auto p-md bg-secondary-foreground/[0.02] border-t border-secondary-foreground/5 flex flex-col items-end gap-y-sm shrink-0">
           <p className="text-sm font-medium text-secondary-foreground/40 italic">
-            Want similar site? Message me:
+            {t("similarSite")}
           </p>
           <div className="flex items-center gap-x-sm">
             <Button

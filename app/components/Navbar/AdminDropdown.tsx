@@ -8,6 +8,8 @@ import { twMerge } from "tailwind-merge"
 import { GMCheckbox } from "@/(site)/appointment/components/GMCheckbox"
 import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
+import { useCurrentLocale, useScopedI18n } from "@/locales/client"
+import { localizePath } from "@/locales/helpers"
 import { useNavbarAdminDropdown } from "@/store/useNavbarAdminDropdown"
 
 interface AdminDropdownProps {
@@ -17,6 +19,8 @@ interface AdminDropdownProps {
 export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
   const { isShowDropdown, setIsShowDropdown } = useNavbarAdminDropdown()
+  const locale = useCurrentLocale()
+  const t = useScopedI18n("navbar")
 
   function closeDropdown() {
     setIsShowDropdown(false)
@@ -38,7 +42,7 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
         )}
         onClick={toggleDropdown}
         type="button">
-        <span className="text-sm text-secondary">panel</span>
+        <span className="text-sm text-secondary">{t("panel")}</span>
         <BiSolidDownArrow
           className={twMerge(
             "absolute right-sm text-secondary-foreground transition-transform duration-300",
@@ -60,9 +64,9 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
           </div>
 
           <Link
-            href="/admin-dashboard"
+            href={localizePath("/admin-dashboard", locale)}
             className="flex h-[36px] items-center justify-center whitespace-nowrap rounded-[10px] border border-[#3b3b3b] bg-[#1f1f1f] px-sm text-sm text-secondary transition-colors duration-300 hover:border-cta hover:bg-[#292929]">
-            Open admin dashboard
+            {t("openAdminDashboard")}
           </Link>
         </div>
       </div>

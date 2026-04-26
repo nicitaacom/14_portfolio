@@ -3,8 +3,8 @@ import { nanoid } from "nanoid"
 import { NextResponse } from "next/server"
 import { cookies, headers } from "next/headers"
 
-import { deleteTgNtfctnAction } from "@/(site)/actions/deleteTgNtfctnAction"
-import { scheduleTgNtfctnAction } from "@/(site)/actions/scheduleTgNtfctnAction"
+import { deleteTgNtfctnAction } from "../../../[locale]/(site)/actions/deleteTgNtfctnAction"
+import { scheduleTgNtfctnAction } from "../../../[locale]/(site)/actions/scheduleTgNtfctnAction"
 import { consumeRateLimit, getRateLimitHeaders, getRequestIp } from "@/libs/rateLimitServer"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 

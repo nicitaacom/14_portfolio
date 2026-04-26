@@ -5,7 +5,8 @@ import { FieldErrors, UseFormRegister, UseFormSetError } from "react-hook-form"
 
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { SendNotificationToSwitcher } from "./SendNotificctionToDropdown/SendNotificationToSwitcher"
-import { AppointmentFormData, FormInput } from "@/(site)/appointment/components/FormInput"
+import { AppointmentFormData, FormInput } from "../../../../[locale]/(site)/appointment/components/FormInput"
+import { useScopedI18n } from "@/locales/client"
 
 interface SendNotificationToProps {
   errors: FieldErrors<AppointmentFormData>
@@ -15,6 +16,7 @@ interface SendNotificationToProps {
 
 export function SendNotificationTo({ errors, register }: SendNotificationToProps) {
   const { sendNotificationTo } = useAppointmentStore()
+  const t = useScopedI18n("appointment.modal")
 
   return (
     <div className="flex w-full flex-col gap-xs">
@@ -29,7 +31,11 @@ export function SendNotificationTo({ errors, register }: SendNotificationToProps
           errors={errors}
           register={register}
           placeholder={
-            sendNotificationTo === "tg" ? "Telegram username" : sendNotificationTo === "dis" ? "Discord username" : "Email address"
+            sendNotificationTo === "tg"
+              ? t("reminderPlaceholderTelegram")
+              : sendNotificationTo === "dis"
+                ? t("reminderPlaceholderDiscord")
+                : t("reminderPlaceholderEmail")
           }
         />
       </div>

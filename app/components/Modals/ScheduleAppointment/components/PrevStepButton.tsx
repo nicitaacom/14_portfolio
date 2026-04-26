@@ -3,9 +3,11 @@
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { IoIosArrowRoundBack } from "react-icons/io"
 import { twMerge } from "tailwind-merge"
+import { useScopedI18n } from "@/locales/client"
 
 export function PrevStepButton({ disabled }: { disabled: boolean }) {
   const { setPrevStep } = useAppointmentStore()
+  const t = useScopedI18n("common")
 
   return (
     <button
@@ -15,7 +17,7 @@ export function PrevStepButton({ disabled }: { disabled: boolean }) {
       )}
       onClick={setPrevStep}>
       <IoIosArrowRoundBack className="text-cta transition-transform duration-300 group-hover:-translate-x-[3px]" size={20} />
-      <span className="pb-[1px]">Back</span>
+      <span className="pb-[1px]">{t("back")}</span>
     </button>
   )
 }

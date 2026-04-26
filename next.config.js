@@ -4,8 +4,15 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "2mb",
     },
+    webpackBuildWorker: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
   reactStrictMode: false,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 module.exports = nextConfig

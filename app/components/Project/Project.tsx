@@ -1,9 +1,12 @@
+"use client"
+
 import type { TTrackedProjectGroup } from "@/interfaces/TTrackedProject"
 import { FigmaUrlIcon } from "./FigmaUrlIcon"
 import { GithubUrlIcon } from "./GithubUrlIcon"
 import { TrackedProjectLink } from "./TrackedProjectLink"
 import { YoutubeUrlIcon } from "./YouTubeUrlIcon"
 import { Button } from "../Button"
+import { useScopedI18n } from "@/locales/client"
 
 interface ProjectProps {
   figmaUrl?: string
@@ -32,6 +35,7 @@ export function Project({
   projectName,
   projectGroup,
 }: ProjectProps) {
+  const t = useScopedI18n("common")
   const previewClassName = "group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
 
   return (
@@ -67,13 +71,13 @@ export function Project({
           border-r-[1px] border-l-[1px] border-b-[1px] border-solid border-secondary rounded-b-md px-md py-md">
         <div className="w-full flex flex-col">
           <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
-            Stack: <span>{stack}</span>
+            {t("stack")}: <span>{stack}</span>
           </p>
           <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
-            Date: <span>{date}</span>
+            {t("date")}: <span>{date}</span>
           </p>
           <p className="flex flex-row">
-            Demo:&nbsp;
+            {t("demo")}:&nbsp;
             <TrackedProjectLink
               className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block"
               href={siteUrl}
@@ -87,7 +91,7 @@ export function Project({
         </div>
 
         <Button className="w-full tablet:w-fit whitespace-nowrap" onClick={openMoreInfoModal}>
-          More info
+          {t("moreInfo")}
         </Button>
       </div>
     </div>

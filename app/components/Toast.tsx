@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { AiOutlineCheckCircle } from "react-icons/ai"
 import { BiErrorCircle } from "react-icons/bi"
@@ -7,9 +9,11 @@ import { twMerge } from "tailwind-merge"
 import { motion } from "framer-motion"
 
 import useToast from "@/store/useToast"
+import { useScopedI18n } from "@/locales/client"
 
 export function Toast() {
   const { status, subTitle, title } = useToast()
+  const t = useScopedI18n("toast")
 
   return (
     <motion.div
@@ -34,24 +38,34 @@ export function Toast() {
       </div>
       <div className="flex flex-col w-full">
         <div className={`text-title font-bold`}>
-          <h1 className="whitespace-pre-line">{title ? title : status}</h1>
+          <h1 className="whitespace-pre-line">
+            {title
+              ? title
+              : status === "error"
+                ? t("defaultErrorTitle")
+                : status === "success"
+                  ? t("defaultSuccessTitle")
+                  : status === "warning"
+                    ? t("defaultWarningTitle")
+                    : t("defaultInfoTitle")}
+          </h1>
         </div>
         <div className="text-subTitle whitespace-pre-line">
           {subTitle ? (
             subTitle
           ) : status === "error" ? (
             <p className="flex flex-wrap">
-              Unknown error please contact -&nbsp;
+              {t("unknownError")} -&nbsp;
               <Link className="inline-block text-info" href="t.me/nicitaacom">
-                Admin
+                {t("admin")}
               </Link>
             </p>
           ) : status === "success" ? (
-            <p>Just success</p>
+            <p>{t("successFallback")}</p>
           ) : status === "info" ? (
-            <p>Warning!</p>
+            <p>{t("warningFallback")}</p>
           ) : (
-            <p>Info</p>
+            <p>{t("infoFallback")}</p>
           )}
         </div>
       </div>

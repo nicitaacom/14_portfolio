@@ -1,14 +1,15 @@
+"use client"
+
 import { hours } from "@/data/hours"
 import { Skill } from "../Skill"
+import { useScopedI18n } from "@/locales/client"
 
 function TooltipGithub() {
+  const t = useScopedI18n("skills")
+
   return (
     <div className="tooltiptext top-[6%] left-[40%] desktop:top-[0px] desktop:left-[50%]">
-      <h1 className="text-secondary text-xs">
-        I don&apos;t calculate this skill in hours
-        <br />
-        just know that I can work with github
-      </h1>
+      <h1 className="whitespace-pre-line text-secondary text-xs">{t("githubTooltip")}</h1>
     </div>
   )
 }

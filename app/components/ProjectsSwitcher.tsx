@@ -13,22 +13,24 @@ import {
   ProjectRizAdminDashboard,
 } from "./Projects"
 import { useModalsStore } from "@/store/modalsStore"
+import { useScopedI18n } from "@/locales/client"
 
 export function ProjectsSwitcher() {
   const [projectTab, setProjectTab] = useState<"work" | "projects">("work")
   const { openModal } = useModalsStore()
+  const t = useScopedI18n("common")
 
   return (
     <>
       <div className="grid grid-cols-2 gap-x-md">
         <RadioButton
-          label="Work"
+          label={t("work")}
           inputName="input-name"
           onChange={() => setProjectTab("work")}
           isChecked={projectTab === "work"}
         />
         <RadioButton
-          label="Projects"
+          label={t("projects")}
           inputName="input-name"
           onChange={() => setProjectTab("projects")}
           isChecked={projectTab === "projects"}

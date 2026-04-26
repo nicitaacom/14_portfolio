@@ -1,3 +1,5 @@
+"use client"
+
 import { PiTelegramLogoBold } from "react-icons/pi"
 import { RiDiscordLine } from "react-icons/ri"
 import { AiFillLinkedin } from "react-icons/ai"
@@ -5,8 +7,11 @@ import { BsFiletypePdf } from "react-icons/bs"
 import { GrSchedule } from "react-icons/gr"
 
 import { Button } from "./Button"
+import { useScopedI18n } from "@/locales/client"
 
 export function Footer() {
+  const t = useScopedI18n("common")
+
   return (
     <footer className="mb-lg mt-auto">
       <div className="relative grid grid-cols-2 min-[882px]:flex gap-y-md max-w-[80vw] mx-auto justify-center gap-x-md">
@@ -22,15 +27,15 @@ export function Footer() {
         <Button
           href="https://drive.google.com/file/d/1xDyC6_0KuG-0AL__2fZmlZd_K0zselSr/view?usp=sharing"
           target="_blank">
-          Summary EN <BsFiletypePdf />
+          {t("summaryEn")} <BsFiletypePdf />
         </Button>
         <Button
           href="https://drive.google.com/file/d/1Hq5UMX-UiNTuPBxt_U0PYYdkP5x7aTRj/view?usp=sharing"
           target="_blank">
-          Summary DE <BsFiletypePdf />
+          {t("summaryDe")} <BsFiletypePdf />
         </Button>
         <Button className="text-center col-span-2" href="/appointment">
-          Book appointment <GrSchedule />
+          {t("bookAppointment")} <GrSchedule />
         </Button>
       </div>
     </footer>

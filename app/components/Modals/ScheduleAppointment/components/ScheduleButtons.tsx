@@ -5,9 +5,11 @@ import { FaTelegramPlane } from "react-icons/fa"
 import { FaDiscord } from "react-icons/fa"
 import { SiGooglemeet } from "react-icons/si"
 import { twMerge } from "tailwind-merge"
+import { useScopedI18n } from "@/locales/client"
 
 export function ScheduleButtons() {
   const { setNextStep, setChannel, setNextSendNotificationTo } = useAppointmentStore()
+  const commonT = useScopedI18n("common")
 
   function setStepFn(channel: Channel) {
     setNextStep()
@@ -50,7 +52,7 @@ export function ScheduleButtons() {
 
           <div className="flex min-w-0 flex-1 items-center justify-between gap-sm">
             <span className="whitespace-nowrap text-sm font-bold text-secondary">{option.title}</span>
-            <span className="shrink-0 whitespace-nowrap text-xs text-secondary-foreground">Continue</span>
+            <span className="shrink-0 whitespace-nowrap text-xs text-secondary-foreground">{commonT("continue")}</span>
           </div>
         </button>
       ))}

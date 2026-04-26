@@ -1,11 +1,23 @@
 import { Database } from "@/interfaces/types_db"
+import { createI18nMiddleware } from "next-international/middleware"
 import { consumeRateLimit, getRateLimitHeaders, getRequestIp } from "@/libs/rateLimitServer"
+import { DEFAULT_LOCALE, LOCALES, TLocale } from "@/locales/config"
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 import { NextResponse } from "next/server"
 
 import type { NextRequest } from "next/server"
 
+const I18nMiddleware = createI18nMiddleware({
+  locales: [...LOCALES] as TLocale[],
+  defaultLocale: DEFAULT_LOCALE,
+  urlMappingStrategy: "rewriteDefault",
+  resolveLocaleFromRequest: () => DEFAULT_LOCALE,
+})
+
 export async function middleware(req: NextRequest) {
+  const i18nResult = I18nMiddleware(req)
+  if (i18nResult instanceof Response) return i18nResult
+
   if (req.method === "GET" || req.method === "HEAD") {
     const ip = getRequestIp(req.headers)
     const rateLimitResult = await consumeRateLimit({

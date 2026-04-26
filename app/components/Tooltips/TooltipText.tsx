@@ -7,7 +7,7 @@ interface TooltipTextProps {
 export function TooltipText({ label, tooltip, className }: TooltipTextProps) {
   return (
     <div className="relative inline-block">
-      <span data-text={label} className="text-tooltip tooltip">{label}
+      <span data-text={label} className="text-tooltip-inline tooltip">{label}
         <div className={`tooltiptext ${className}`}>
           {tooltip}
         </div>

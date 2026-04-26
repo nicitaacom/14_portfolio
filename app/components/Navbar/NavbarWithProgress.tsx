@@ -5,6 +5,9 @@ import { NavbarProjects } from "./NavbarProjects"
 import { useEffect, useState } from "react"
 import { useIsGMLive } from "@/store/useIsGMLive"
 import { AdminDropdown } from "./AdminDropdown"
+import { LanguageDropdown } from "./LanguageDropdown"
+import { useCurrentLocale, useScopedI18n } from "@/locales/client"
+import { localizePath } from "@/locales/helpers"
 
 interface NavbarWithProgressProps {
   userId: string | undefined
@@ -14,6 +17,8 @@ interface NavbarWithProgressProps {
 export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressProps) {
   const [scrollRef, setScrollRef] = useState<React.RefObject<HTMLDivElement> | null>(null)
   const [progress, setProgress] = useState(0)
+  const locale = useCurrentLocale()
+  const t = useScopedI18n("common")
 
   const { setIsGMLive } = useIsGMLive()
   useEffect(() => {
@@ -43,19 +48,26 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
       style={{
         borderBottom: `2px solid #c4c4c4`,
         borderImage: `linear-gradient(to right, hsl(var(--cta)) ${progress}%, #c4c4c4 ${progress}%) 1`,
+        overflow: "visible",
       }}>
       <div className="flex items-center pr-md line">
-        <Link data-text="Portfolio" href="/" className="text-shadow text-lg text-secondary before:text-secondary">
-          Portfolio
+        <Link
+          data-text="Portfolio"
+          href={localizePath("/", locale)}
+          className="text-shadow text-lg text-secondary before:text-secondary">
+          {t("portfolio")}
         </Link>
       </div>
       <NavbarProjects setScrollRef={setScrollRef} />
-      {userId && (
-        <div className="h-full flex items-center gap-x-sm pl-xs">
-          <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-[#909090]"></div>
-          <AdminDropdown isGMLive={is_live_call} />
-        </div>
-      )}
+      <div className="flex items-center gap-x-sm pl-xs overflow-visible shrink-0 navbar-right-shadow">
+        <LanguageDropdown />
+        {userId && (
+          <>
+            <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-[#909090]"></div>
+            <AdminDropdown isGMLive={is_live_call} />
+          </>
+        )}
+      </div>
     </nav>
   )
 }

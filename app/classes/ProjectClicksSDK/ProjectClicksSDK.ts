@@ -1,4 +1,4 @@
-import type { TProjectClicksTimelineMode } from "@/(site)/admin-dashboard/types/TProjectClicksTimelineMode"
+import type { TProjectClicksTimelineMode } from "../../[locale]/(site)/admin-dashboard/types/TProjectClicksTimelineMode"
 
 const ADMIN_PROJECT_CLICKS_API_URL = "/api/admin/project-clicks"
 const PROJECT_LINK_CLICK_API_URL = "/api/analytics/project-link-click"
@@ -28,7 +28,7 @@ export class ProjectClicksSDK {
       throw new Error(this.getErrorMessageFn(responseData, "Failed to fetch project clicks overview"))
     }
 
-    return responseData && "overview" in responseData ? responseData.overview ?? [] : []
+    return responseData && "overview" in responseData ? (responseData.overview ?? []) : []
   }
 
   async selectProjectClicksTimeline(
@@ -51,7 +51,7 @@ export class ProjectClicksSDK {
       throw new Error(this.getErrorMessageFn(responseData, "Failed to fetch project clicks timeline"))
     }
 
-    return responseData && "timeline" in responseData ? responseData.timeline ?? [] : []
+    return responseData && "timeline" in responseData ? (responseData.timeline ?? []) : []
   }
 
   async trackProjectClick(payload: API.TrackProjectLinkClickRequest): Promise<API.TrackProjectLinkClickResponse> {
