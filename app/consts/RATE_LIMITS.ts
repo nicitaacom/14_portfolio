@@ -10,6 +10,8 @@ type RateLimitSpec = {
   key: (params: RateLimitKeyParams) => string
 }
 
+const getCurrentUtcDateKey = () => new Date().toISOString().slice(0, 10)
+
 const requireIp = (ip: string | undefined, limiterName: string) => {
   if (!ip) throw Error(`ip is required for ${limiterName}`)
   return ip
@@ -22,11 +24,14 @@ const requireUserCookieId = (userCookieId: string | undefined, limiterName: stri
 
 export const PUBLIC_RATE_LIMITS = {
   bookACall: {
-    windowSec: 72000,
-    maxAllowed: 1,
+    windowSec: 86400,
+    maxAllowed: 2,
     mode: "fixedWindow",
     key: ({ ip, userCookieId }) => {
-      return `appointment:new:${requireIp(ip, "bookACall")}:${requireUserCookieId(userCookieId, "bookACall")}`
+      return `appointment:new:${getCurrentUtcDateKey()}:${requireIp(ip, "bookACall")}:${requireUserCookieId(
+        userCookieId,
+        "bookACall",
+      )}`
     },
   },
   adminPasswordAttempt: {
@@ -46,7 +51,7 @@ export const INTERNAL_RATE_LIMITS = {
   },
   bookingSubmitBurst: {
     windowSec: 600,
-    maxAllowed: 1,
+    maxAllowed: 5,
     mode: "slidingWindow",
     key: ({ ip }) => `booking:submit:${requireIp(ip, "bookingSubmitBurst")}`,
   },

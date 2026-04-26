@@ -10,6 +10,9 @@ import { useSelectedDateStore } from "@/store/useSelectedDateStore"
 import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 
+const DAILY_BOOKING_LIMIT = 2
+const DAILY_BOOKING_LIMIT_MESSAGE = `You can book up to ${DAILY_BOOKING_LIMIT} appointments per day. This limit resets at 00:00 UTC.`
+
 export async function bookACallFn() {
   const { contactMethod, contact, isSendNotification, sendNotificationTo, inputNotificationTo, channel } =
     useAppointmentStore.getState()
@@ -42,7 +45,7 @@ export async function bookACallFn() {
     const rateLimitRemaining = await rateLimitSDK.getRemaining("bookACall")
 
     if (rateLimitRemaining.remaining <= 0) {
-      toast.show("error", "Error booking a call", "You have already booked a call today. Please try again tomorrow.", 15000)
+      toast.show("error", "Error booking a call", `Daily booking limit reached. ${DAILY_BOOKING_LIMIT_MESSAGE}`, 15000)
       return
     }
 

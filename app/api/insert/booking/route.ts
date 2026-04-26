@@ -8,6 +8,8 @@ import { scheduleTgNtfctnAction } from "@/(site)/actions/scheduleTgNtfctnAction"
 import { consumeRateLimit, getRateLimitHeaders, getRequestIp } from "@/libs/rateLimitServer"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 
+const BOOKING_LIMIT_DESCRIPTION = "You can book up to 2 appointments per day. This limit resets at 00:00 UTC."
+
 export async function POST(req: Request) {
   const {
     bookingId,
@@ -34,7 +36,10 @@ export async function POST(req: Request) {
 
   if (!burstRateLimit.success) {
     return NextResponse.json<API.InsertBookingResponse>(
-      { ok: false, error: "Too many booking attempts. Please try again later." },
+      {
+        ok: false,
+        error: `Too many booking attempts in a short time. Please wait a few minutes and try again. ${BOOKING_LIMIT_DESCRIPTION}`,
+      },
       {
         status: 429,
         headers: getRateLimitHeaders(burstRateLimit),
@@ -120,7 +125,10 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json<API.InsertBookingResponse>(
-      { ok: false, error: "You have already booked a call today. Please try again tomorrow." },
+      {
+        ok: false,
+        error: `Daily booking limit reached. ${BOOKING_LIMIT_DESCRIPTION}`,
+      },
       {
         status: 429,
         headers: getRateLimitHeaders(bookingQuotaRateLimit),

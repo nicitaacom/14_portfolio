@@ -55,6 +55,9 @@ export function ScheduleAppointment({ bookings }: Bookings) {
                     <span className="tablet:hidden">{selectedDateOnly}</span>
                     <span className="hidden tablet:inline">{formatedDateTimeFn().trim()}</span>
                   </div>
+                  <p className="mt-[10px] text-xs leading-relaxed text-secondary-foreground">
+                    You can book up to 2 appointments per day. The daily booking limit resets at 00:00 UTC.
+                  </p>
                 </div>
                 <TimePicker bookings={bookings} />
               </div>
