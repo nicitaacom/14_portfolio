@@ -141,7 +141,13 @@ function BookingChannelBadge({ channel }: { channel: string }) {
   )
 }
 
-function BookingContactRow({ contact, contactType }: { contact: string | null; contactType: string | null }) {
+function BookingContactRow({
+  contact,
+  contactType,
+}: {
+  contact: string | null | undefined
+  contactType: string | null | undefined
+}) {
   const contactValue = contact ?? "not provided"
 
   const ContactIcon =
