@@ -47,7 +47,8 @@ export default {
       business: {
         label: "Für Geschäftsinhaber",
         item1: "Mehr Kunden durch eine Website oder du zahlst nicht.",
-        item2: "Ein Entwickler, der deine Website, SaaS oder Microservices schnell baut.",
+        item2Prefix: "Ein Entwickler, der deine Website, SaaS oder Microservices",
+        item2FastLabel: "schnell baut.",
         item3: "AI auf Abruf integrieren.",
       },
       agency: {

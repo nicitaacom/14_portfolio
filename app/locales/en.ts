@@ -47,7 +47,8 @@ export default {
       business: {
         label: "For business owners",
         item1: "More clients with a website or you do not pay.",
-        item2: "A developer who builds your website, SaaS, or microservices fast.",
+        item2Prefix: "A developer who builds your website, SaaS, or microservices",
+        item2FastLabel: "fast.",
         item3: "Implement AI on demand.",
       },
       agency: {

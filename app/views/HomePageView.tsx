@@ -29,7 +29,8 @@ export function HomePageView() {
     {
       key: "business",
       label: t("audiences.business.label"),
-      items: [t("audiences.business.item1"), t("audiences.business.item2"), t("audiences.business.item3")],
+      items: [t("audiences.business.item1"), "", t("audiences.business.item3")],
+
     },
     {
       key: "agency",
@@ -143,11 +144,16 @@ export function HomePageView() {
                             transition={{ duration: 0.15, ease: "easeInOut" }}
                             style={{ overflow: "hidden" }}>
                             <ul className="flex list-disc flex-col gap-xs pb-sm pl-xl pr-md text-sm font-bold">
-                              {items.map(item => (
+                              {items.map((item, i) => (
                                 <li
-                                  key={item}
+                                  key={i}
                                   className={item === t("audiences.developers.item2") ? "font-normal opacity-60" : ""}>
-                                  {item}
+                                  {key === "business" && i === 1 ? (
+                                    <>
+                                      {t("audiences.business.item2Prefix")}&nbsp;
+                                      <span className="underline underline-offset-2">{t("audiences.business.item2FastLabel")}</span>
+                                    </>
+                                  ) : item}
                                 </li>
                               ))}
                             </ul>
