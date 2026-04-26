@@ -34,7 +34,7 @@ export async function updateDBAppointmentAction(
 
   const { data: currentBooking, error: currentBookingError } = await supabaseAdmin
     .from("bookings")
-    .select("id, channel, contact")
+    .select("id, channel")
     .eq("id", bookedAppointmentId)
     .single()
 
@@ -70,7 +70,6 @@ export async function updateDBAppointmentAction(
     const reminderMessage = [
       `Date: ${moment(normalizedDate).format("DD.MM.YYYY")}`,
       `Time MSK: ${normalizedTime}`,
-      `Contact: ${currentBooking.contact ?? "not provided"}`,
       `Where: ${currentBooking.channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : currentBooking.channel}`,
     ].join("\n")
 

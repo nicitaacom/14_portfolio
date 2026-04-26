@@ -42,7 +42,10 @@ create table public.bookings (
   constraint bookings_pkey primary key (id)
 ) TABLESPACE pg_default;
 
--- no need RLS - I will use supabaseAdmin
+alter table public.bookings enable row level security;
+
+-- no policies needed here because all reads/writes for bookings go through
+-- supabaseAdmin with the service role key, which bypasses RLS.
 
 
 -- =================================== 📈 utm_stats table (SHARED across 14, 23, 28, 29) ===================================

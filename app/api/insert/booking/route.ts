@@ -75,8 +75,6 @@ export async function POST(req: Request) {
     booking_time_MSK: atMSK,
     channel: channel,
     user_cookie_id: userCookieId,
-    contact: `${contactType}: ${normalizedContact}`,
-    contact_type: contactType,
   })
 
   if (error) {
