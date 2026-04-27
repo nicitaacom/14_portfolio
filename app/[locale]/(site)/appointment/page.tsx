@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation"
+import { AppointmentPageView } from "@/views/AppointmentPageView"
 
-export default function AppointmentPage() {
-  redirect("/en/appointment")
+export default async function AppointmentPage() {
+  return <AppointmentPageView />
 }
