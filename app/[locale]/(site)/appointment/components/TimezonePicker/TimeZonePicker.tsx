@@ -23,16 +23,14 @@ export function TimeZonePicker() {
   useCloseOnClickEsc(closeDropdown)
 
   return (
-    <div className="flex w-full items-center justify-end tablet:w-[190px]">
+    <div className="w-full">
       <div
         className={twMerge(
-          `relative flex h-[40px] w-full items-center rounded-[8px] border border-[#777777]
-           bg-primary/70 px-sm z-[111] cursor-pointer`,
+          "relative z-[25] w-full",
         )}
-        onClick={toggleDropdown}
         ref={dropdownContainerRef}>
-        <DropdownContainerContent />
-        <DropdownContent isShowDropdown={isShowDropdown} />
+        <DropdownContainerContent isShowDropdown={isShowDropdown} toggleDropdown={toggleDropdown} />
+        <DropdownContent closeDropdown={closeDropdown} isShowDropdown={isShowDropdown} />
       </div>
     </div>
   )

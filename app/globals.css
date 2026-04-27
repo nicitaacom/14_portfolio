@@ -236,35 +236,38 @@ div {
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  gap: 8px;
+  gap: 10px;
   border-top: 1px solid #777777;
 }
 
 .react-calendar__navigation {
   width: 100%;
-  height: 42px;
+  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
   border-bottom: 1px solid #777777;
-  padding: 4px;
+  padding: 6px 4px;
 }
 
 .react-calendar__navigation__label {
-  height: 32px;
+  height: 36px;
   cursor: default;
   pointer-events: none;
+  font-size: 1.125rem;
+  color: hsl(var(--secondary));
 }
 
 .react-calendar__navigation__arrow {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 22px;
+  color: hsl(var(--secondary));
 }
 
 .react-calendar__navigation__arrow:hover {
@@ -274,7 +277,7 @@ div {
 
 .react-calendar__tile--active {
   background-color: hsla(var(--cta) / 0.4);
-  border-radius: 2px;
+  border-radius: 8px;
 }
 .react-calendar__tile--active:hover {
   background-color: hsla(var(--cta) / 0.5) !important;
@@ -285,9 +288,12 @@ div {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 36px;
 }
 
 .react-calendar__month-view__days__day {
+  min-height: 40px;
+  border-radius: 8px;
   transition: all 150ms;
 }
 

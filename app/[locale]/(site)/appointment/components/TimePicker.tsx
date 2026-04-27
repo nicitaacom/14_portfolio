@@ -52,7 +52,10 @@ export function TimePicker({ bookings }: Bookings) {
   }
 
   function changeSelectedTime(index: string) {
-    return () => setSelectedTime(index)
+    return () => {
+      setSelectedTime(index)
+      setShowDropdown(false)
+    }
   }
 
   const convertedTimePicker = appointmentTimesMSK.map(time => ({
@@ -71,49 +74,76 @@ export function TimePicker({ bookings }: Bookings) {
   }
 
   return (
-    <div
-      className="relative flex h-[40px] w-full min-w-[150px] items-center justify-between gap-xs rounded-[8px] border border-[#777777] bg-primary/70 px-sm cursor-pointer tablet:w-[160px]"
-      onClick={() => setShowDropdown(!showDropdown)}
-      ref={dropdownContainerRef}>
-      <div className="flex items-center gap-xs">
-        <BiTimeFive className="mb-[1px] text-secondary-foreground" />
-        <span className="whitespace-nowrap text-sm text-secondary">{t("timeLabel", { time: selectedTime })}</span>
-      </div>
-      <Image className="h-[16px] w-[16px]" src="/tringle.png" alt="tringle" width={16} height={16} />
+    <div className="relative w-full" ref={dropdownContainerRef}>
+      <button
+        type="button"
+        className={twMerge(
+          "flex h-[46px] w-full items-center justify-between gap-sm rounded-[12px] border border-[#777777] bg-[#202020]/90 px-md text-left shadow-[0_10px_30px_rgba(0,0,0,0.18)] transition-colors duration-200",
+          showDropdown && "border-cta/70 bg-[#262626]",
+        )}
+        onClick={() => setShowDropdown(!showDropdown)}>
+        <div className="flex min-w-0 items-center gap-xs">
+          <span className="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-full border border-[#5a5a5a] bg-[#2b2b2b]">
+            <BiTimeFive className="text-secondary-foreground" />
+          </span>
+          <span className="truncate text-sm text-secondary">{t("timeLabel", { time: selectedTime })}</span>
+        </div>
+        <Image
+          className={twMerge(
+            "h-[16px] w-[16px] shrink-0 transition-transform duration-200",
+            showDropdown && "rotate-180",
+          )}
+          src="/tringle.png"
+          alt="Dropdown arrow"
+          width={16}
+          height={16}
+        />
+      </button>
 
-      {/* Dropdown-content */}
       <div
         className={twMerge(
-          `absolute left-0 right-0 top-[calc(100%+6px)] z-10 flex max-h-[240px] flex-col overflow-scroll rounded-[8px]
-          border border-[#777777] bg-primary text-md text-center text-secondary hide-scrollbar`,
+          "absolute left-0 top-[calc(100%+8px)] z-20 w-full rounded-[14px] border border-[#777777] bg-[#1b1b1b] p-[6px] shadow-[0_20px_44px_rgba(0,0,0,0.28)]",
           showDropdown
-            ? "opacity-100 visible translate-y-[0px] transition-all duration-300"
-            : "opacity-0 invisible translate-y-[-20px] transition-all duration-300",
+            ? "visible translate-y-0 opacity-100 transition-all duration-200"
+            : "invisible translate-y-[-12px] opacity-0 transition-all duration-200",
         )}
+        onClick={event => event.stopPropagation()}
         onMouseLeave={() => setHover(null)}>
-        {convertedTimePicker.map(time => {
-          const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
-          const isTimeDisabled =
-            isDisabledFn(time.time, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate) || // disable time before now
-            isBookedTime(time.time, targetDate) // disable booked time
-          return (
-            <button
-              className={twMerge(
-                `border-b border-solid border-secondary bg-primary py-[4px]`,
-                isTimeDisabled
-                  ? "text-secondary/20 bg-primary-foreground"
-                  : isHover
-                    ? hover === time.time && "bg-cta"
-                    : selectedTime === time.time && "bg-cta",
-              )}
-              onMouseOver={isTimeDisabled ? undefined : mouseHover(time.time)}
-              onClick={isTimeDisabled ? undefined : changeSelectedTime(time.time)}
-              disabled={isTimeDisabled}
-              key={time.time}>
-              {time.time}
-            </button>
-          )
-        })}
+        <div className="max-h-[240px] overflow-y-scroll hide-scrollbar">
+          {convertedTimePicker.map(time => {
+            const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
+            const isTimeDisabled =
+              isDisabledFn(time.time, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate) ||
+              isBookedTime(time.time, targetDate)
+            const isActive = isHover ? hover === time.time : selectedTime === time.time
+
+            return (
+              <button
+                type="button"
+                className={twMerge(
+                  "flex w-full items-center justify-between rounded-[10px] px-md py-sm text-left text-sm transition-colors duration-150",
+                  time.time !== convertedTimePicker[0].time && "mt-[2px]",
+                  isTimeDisabled
+                    ? "cursor-not-allowed bg-[#222222] text-secondary/25"
+                    : isActive
+                      ? "bg-cta/85 text-primary"
+                      : "text-secondary hover:bg-[#2a2a2a]",
+                )}
+                onMouseOver={isTimeDisabled ? undefined : mouseHover(time.time)}
+                onClick={isTimeDisabled ? undefined : changeSelectedTime(time.time)}
+                disabled={isTimeDisabled}
+                key={time.time}>
+                <span>{time.time}</span>
+                <span
+                  className={twMerge(
+                    "h-[8px] w-[8px] shrink-0 rounded-full",
+                    isTimeDisabled ? "bg-secondary-foreground/25" : isActive ? "bg-primary/70" : "bg-cta/70",
+                  )}
+                />
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

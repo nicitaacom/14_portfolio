@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import moment from "moment"
 
@@ -10,8 +10,15 @@ import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 import { useScopedI18n } from "@/locales/client"
 
-export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean }) {
+export function DropdownContent({
+  closeDropdown,
+  isShowDropdown,
+}: {
+  closeDropdown: () => void
+  isShowDropdown: boolean
+}) {
   const [hover, setHover] = useState<string | null>(null)
+  const [searchInput, setSearchInput] = useState("")
   const { selectedTimezone, setSelectedTimezone } = useSelectedTimezoneStore()
   const { setSelectedTime } = useSelectedTimeStore()
   const t = useScopedI18n("appointment.page")
@@ -25,62 +32,67 @@ export function DropdownContent({ isShowDropdown }: { isShowDropdown: boolean })
     const mskTime = moment.tz(appointmentTimesMSK[0].time, "HH:mm", "Europe/Moscow")
     const convertedTime = mskTime.clone().tz(index).format("HH:mm")
 
-    setSelectedTime(convertedTime) // Now it holds the converted time in the new timezone
-    setSelectedTimezone(index) // Keeping only the timezone name
+    setSelectedTime(convertedTime)
+    setSelectedTimezone(index)
+    closeDropdown()
   }
 
-  const timezones = moment.tz.names()
-
-  const [searchInput, setSearchInput] = useState("")
-  const filteredTimezones = filterTimezones(searchInput)
-
-  function filterTimezones(input: string) {
-    // Filter timezones based on the search input
+  const filteredTimezones = useMemo(() => {
+    const normalizedValue = searchInput.toLowerCase().trim()
+    const timezones = moment.tz.names()
     const filtered = timezones.filter(
-      timezone => timezone.length <= 18 && timezone.toLowerCase().includes(input.toLowerCase()),
+      timezone => timezone.length <= 22 && timezone.toLowerCase().includes(normalizedValue),
     )
 
-    // Sort the filtered timezones by relevance
     filtered.sort((a, b) => {
-      const indexA = a.toLowerCase().indexOf(input.toLowerCase())
-      const indexB = b.toLowerCase().indexOf(input.toLowerCase())
+      const indexA = a.toLowerCase().indexOf(normalizedValue)
+      const indexB = b.toLowerCase().indexOf(normalizedValue)
       return indexA - indexB
     })
 
     return filtered
-  }
+  }, [searchInput])
 
   return (
     <div
       className={twMerge(
-        "absolute left-0 top-[calc(100%+6px)] w-full rounded-[8px] border border-[#777777] bg-primary",
+        "absolute left-0 top-[calc(100%+8px)] w-full rounded-[14px] border border-[#777777] bg-[#1b1b1b] p-[6px] shadow-[0_20px_44px_rgba(0,0,0,0.28)]",
         isShowDropdown
-          ? "opacity-100 visible translate-y-[0px] transition-all duration-300"
-          : "opacity-0 invisible translate-y-[-20px] transition-all duration-300",
+          ? "visible translate-y-0 opacity-100 transition-all duration-200"
+          : "invisible translate-y-[-12px] opacity-0 transition-all duration-200",
       )}
+      onClick={event => event.stopPropagation()}
       onMouseLeave={() => setHover(null)}>
-      {/* Search Input */}
       <Input
-        style={{ border: "none", width: "100%" }}
+        className="w-full rounded-[10px] border-[#3f3f3f] bg-[#222222] text-sm text-secondary placeholder:text-secondary-foreground/70 focus:border-[#5e5e5e]"
         placeholder={t("searchTimezones")}
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}
         onClick={e => e.stopPropagation()}
       />
-      <div className="max-h-[200px] overflow-y-scroll hide-scrollbar">
+      <div className="max-h-[240px] overflow-y-scroll hide-scrollbar pt-[6px]">
         {filteredTimezones.map((timezone, index) => (
-          <li
+          <button
+            type="button"
             className={twMerge(
-              "hover:bg-hover-color duration-150 text-center flex flex-row gap-x-2 justify-center items-center border-b border-[#777777]",
-              index === 0 && "border-t",
-              // if hover on border set border green (its some UI issue - just keep it as is)
-              isHover ? hover === timezone && "bg-cta" : selectedTimezone === timezone && "bg-cta",
+              "flex w-full items-center justify-between gap-sm rounded-[10px] px-md py-sm text-left text-sm transition-colors duration-150",
+              index > 0 && "mt-[2px]",
+              isHover ? hover === timezone && "bg-[#303030]" : selectedTimezone === timezone && "bg-[#303030]",
             )}
             onMouseOver={mouseHover(timezone)}
             onClick={() => changeSelectedTimezone(timezone)}
             key={timezone}>
-            {timezone}
-          </li>
+            <span className="truncate text-secondary">{timezone}</span>
+            <span
+              className={twMerge(
+                "shrink-0 rounded-full border px-[8px] py-[3px] text-[10px] uppercase tracking-[0.18em]",
+                selectedTimezone === timezone
+                  ? "border-cta/40 bg-cta/15 text-cta"
+                  : "border-[#4a4a4a] bg-[#232323] text-secondary-foreground/70",
+              )}>
+              UTC{moment.tz(timezone).format("Z")}
+            </span>
+          </button>
         ))}
       </div>
     </div>

@@ -83,86 +83,110 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
 
   return (
     <div className="w-full laptop:sticky laptop:top-[6rem]">
-      <div className="rounded-[16px] border border-[#777777] bg-primary-foreground/30 p-md shadow-[0_24px_80px_rgba(0,0,0,0.16)]">
+      <div className="rounded-[20px] border border-[#777777] bg-[linear-gradient(180deg,rgba(45,45,45,0.92),rgba(28,28,28,0.9))] p-md shadow-[0_24px_80px_rgba(0,0,0,0.18)]">
         <div className="mb-sm">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary">{t("scheduledAppointments")}</p>
-          <p className="mt-[4px] text-sm text-secondary-foreground">{t("scheduledAppointmentsSubtitle")}</p>
+          <p className="mt-[6px] max-w-[22rem] text-sm leading-relaxed text-secondary-foreground">
+            {t("scheduledAppointmentsSubtitle")}
+          </p>
         </div>
 
         <ul className="flex flex-col gap-sm">
-        {!booked_appointments.length && (
-          <li className="rounded-[10px] border border-secondary-foreground px-sm py-sm text-sm text-secondary-foreground">
-            {t("noAppointments")}
-          </li>
-        )}
-        {booked_appointments.map(booked_appointment => (
-          <li
-            className="flex min-w-0 flex-col gap-sm rounded-[10px] border border-secondary-foreground px-sm py-sm"
-            key={booked_appointment.id}>
-            <div className="flex flex-col gap-xs">
-              {editingAppointmentId === booked_appointment.id ? (
-                <div className="flex flex-col gap-y-xs">
-                  <div className="flex flex-col tablet:flex-row gap-xs">
-                    <Input type="date" value={draftBookingDate} onChange={e => setDraftBookingDate(e.target.value)} />
-                    <Input type="time" value={draftBookingTime} onChange={e => setDraftBookingTime(e.target.value)} />
+          {!booked_appointments.length && (
+            <li className="rounded-[14px] border border-[#888888] bg-[#232323]/70 px-sm py-md text-sm leading-relaxed text-secondary-foreground">
+              {t("noAppointments")}
+            </li>
+          )}
+          {booked_appointments.map(booked_appointment => (
+            <li
+              className="flex min-w-0 flex-col gap-sm rounded-[14px] border border-[#5d5d5d] bg-[#232323]/75 px-sm py-sm shadow-[0_12px_28px_rgba(0,0,0,0.14)]"
+              key={booked_appointment.id}>
+              <div className="flex flex-col gap-xs">
+                {editingAppointmentId === booked_appointment.id ? (
+                  <div className="flex flex-col gap-y-xs">
+                    <div className="flex flex-col gap-xs tablet:flex-row">
+                      <Input
+                        className="rounded-[10px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        type="date"
+                        value={draftBookingDate}
+                        onChange={e => setDraftBookingDate(e.target.value)}
+                      />
+                      <Input
+                        className="rounded-[10px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        type="time"
+                        value={draftBookingTime}
+                        onChange={e => setDraftBookingTime(e.target.value)}
+                      />
+                    </div>
+                    <p className="text-xs text-secondary-foreground">
+                      {t("timeEditedIn", { timezone: selectedTimezone })}
+                    </p>
                   </div>
-                  <p className="text-xs">{t("timeEditedIn", { timezone: selectedTimezone })}</p>
-                </div>
-              ) : (
-                <p className="leading-relaxed">
-                  {t("bookedDateAt", {
-                    date: moment(booked_appointment.booking_date).format("DD.MM.YYYY"),
-                    time: convertCurrentToTargetTimezone(booked_appointment.booking_time_MSK, "Europe/Moscow", selectedTimezone),
-                    timezone: selectedTimezone,
-                  })}
-                </p>
-              )}
-              <p className="flex flex-row items-center gap-[4px] leading-relaxed">
-                {commonT("channel")}: {booked_appointment.channel}&nbsp;
-                {booked_appointment.channel === "google-meets" ? (
-                  <SiGooglemeet />
-                ) : booked_appointment.channel === "discord" ? (
-                  <FaDiscord />
                 ) : (
-                  <FaTelegramPlane />
-                )}
-              </p>
-            </div>
-            <div className="flex flex-row justify-end gap-x-xs">
-              {editingAppointmentId === booked_appointment.id ? (
-                <>
-                  <Button
-                    className="border-success"
-                    isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
-                    onClick={() => updateDBAppointmentFn(booked_appointment)}>
-                    <FiSave className="text-success" />
-                  </Button>
-                  <Button className="border-secondary-foreground" isDisabled={isLoading} onClick={stopEditing}>
-                    <MdOutlineCancel />
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button className="border-cta" isDisabled={isLoading} onClick={() => startEditing(booked_appointment)}>
-                    <FiEdit3 className="text-cta" />
-                  </Button>
-                  <Button
-                    className="border-danger"
-                    isDisabled={isLoading}
-                    onClick={() =>
-                      deleteDBAppointmentFn(
-                        booked_appointment.id,
-                        booked_appointment.booking_date,
+                  <p className="text-sm leading-relaxed text-secondary">
+                    {t("bookedDateAt", {
+                      date: moment(booked_appointment.booking_date).format("DD.MM.YYYY"),
+                      time: convertCurrentToTargetTimezone(
                         booked_appointment.booking_time_MSK,
-                      )
-                    }>
-                    <MdOutlineCancel className="text-danger" />
-                  </Button>
-                </>
-              )}
-            </div>
-          </li>
-        ))}
+                        "Europe/Moscow",
+                        selectedTimezone,
+                      ),
+                      timezone: selectedTimezone,
+                    })}
+                  </p>
+                )}
+                <p className="flex flex-row items-center gap-[6px] text-sm leading-relaxed text-secondary-foreground">
+                  {commonT("channel")}: {booked_appointment.channel}
+                  {booked_appointment.channel === "google-meets" ? (
+                    <SiGooglemeet />
+                  ) : booked_appointment.channel === "discord" ? (
+                    <FaDiscord />
+                  ) : (
+                    <FaTelegramPlane />
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-row justify-end gap-x-xs">
+                {editingAppointmentId === booked_appointment.id ? (
+                  <>
+                    <Button
+                      className="rounded-[10px] border-success bg-[#1e2b21]"
+                      isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
+                      onClick={() => updateDBAppointmentFn(booked_appointment)}>
+                      <FiSave className="text-success" />
+                    </Button>
+                    <Button
+                      className="rounded-[10px] border-secondary-foreground bg-[#232323]"
+                      isDisabled={isLoading}
+                      onClick={stopEditing}>
+                      <MdOutlineCancel />
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      className="rounded-[10px] border-cta bg-[#261f2f]"
+                      isDisabled={isLoading}
+                      onClick={() => startEditing(booked_appointment)}>
+                      <FiEdit3 className="text-cta" />
+                    </Button>
+                    <Button
+                      className="rounded-[10px] border-danger bg-[#2a1f21]"
+                      isDisabled={isLoading}
+                      onClick={() =>
+                        deleteDBAppointmentFn(
+                          booked_appointment.id,
+                          booked_appointment.booking_date,
+                          booked_appointment.booking_time_MSK,
+                        )
+                      }>
+                      <MdOutlineCancel className="text-danger" />
+                    </Button>
+                  </>
+                )}
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

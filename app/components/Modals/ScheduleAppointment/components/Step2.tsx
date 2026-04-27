@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 import { IoMdArrowRoundForward } from "react-icons/io"
@@ -35,6 +36,7 @@ const validationRules = {
 }
 
 export function Step2() {
+  const router = useRouter()
   const toast = useToast()
   const t = useScopedI18n("appointment.modal")
   const formT = useScopedI18n("appointment.form")
@@ -125,11 +127,15 @@ export function Step2() {
 
     try {
       setIsLoading(true)
+      const stepBefore = useAppointmentStore.getState().step
       await bookACallFn({
         chooseChannelFirst: t("chooseChannelFirst"),
         dailyLimitReached: () => t("dailyLimitReached", { message: pageT("dailyLimit", { count: 2 }) }),
         errorTitle: toastT("defaultErrorTitle"),
       })
+      if (useAppointmentStore.getState().step !== stepBefore) {
+        router.refresh()
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.show("error", toastT("defaultErrorTitle"), error.message)
