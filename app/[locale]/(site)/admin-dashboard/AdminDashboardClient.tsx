@@ -304,14 +304,14 @@ function BookingItem({ booking }: { booking: BookingRow }) {
                 />
               ) : (
                 <p className="truncate whitespace-nowrap text-sm text-secondary">
-                  {booking.booking_time_MSK.slice(0, 5)}
+                  {booking.booking_time_MSK.slice(0, 5)} MSK
                 </p>
               )}
             </BookingControlChip>
 
-            <div className="flex h-[40px] shrink-0 items-center px-[4px]">
+            <BookingControlChip>
               <BookingChannelBadge channel={booking.channel} />
-            </div>
+            </BookingControlChip>
 
             {isEditing ? (
               <>
