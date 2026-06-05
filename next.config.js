@@ -6,9 +6,6 @@ const nextConfig = {
     },
     webpackBuildWorker: false,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   reactStrictMode: false,
   typescript: {
     ignoreBuildErrors: true,
