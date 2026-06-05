@@ -41,7 +41,7 @@ export async function trackVisitAction(
         campaign: undefined,
       }
 
-  const userAgent = headers().get("user-agent") ?? "unknown"
+  const userAgent = (await headers()).get("user-agent") ?? "unknown"
   const insertDBUTMVisitResponse = await insertDBUTMVisitAction(userId, finalParams, userAgent, currentUrl)
   if (typeof insertDBUTMVisitResponse === "string") console.log(52, "insert failed - ", insertDBUTMVisitResponse)
 }

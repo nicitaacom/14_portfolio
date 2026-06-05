@@ -24,11 +24,11 @@ export async function POST(request: Request) {
   const { password } = (await request.json()) as API.AdminPasswordRequest
 
   if (!password || password !== process.env.ADMIN_PASSWORD) {
-    cookies().delete(ADMIN_PASSWORD_COOKIE)
+    (await cookies()).delete(ADMIN_PASSWORD_COOKIE)
     return NextResponse.json<API.AdminPasswordResponse>({ ok: false, error: "Invalid password" }, { status: 401 })
   }
 
-  cookies().set(ADMIN_PASSWORD_COOKIE, "true", {
+  (await cookies()).set(ADMIN_PASSWORD_COOKIE, "true", {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",

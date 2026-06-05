@@ -82,37 +82,39 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
   }
 
   return (
-    <div className="w-full laptop:sticky laptop:top-[6rem]">
-      <div className="rounded-[20px] border border-[#777777] bg-[linear-gradient(180deg,rgba(45,45,45,0.92),rgba(28,28,28,0.9))] p-md shadow-[0_24px_80px_rgba(0,0,0,0.18)]">
-        <div className="mb-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary">{t("scheduledAppointments")}</p>
-          <p className="mt-[6px] max-w-[22rem] text-sm leading-relaxed text-secondary-foreground">
+    <div className="mx-auto w-full max-w-[680px] laptop:sticky laptop:top-[6rem] laptop:max-w-none">
+      <div className="rounded-[16px] border border-[#555555] bg-[#202020] p-sm shadow-[0_18px_54px_rgba(0,0,0,0.18)]">
+        <div className="mb-xs">
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-secondary">
+            {t("scheduledAppointments")}
+          </p>
+          <p className="mt-[4px] max-w-[22rem] text-sm leading-relaxed text-secondary-foreground/75">
             {t("scheduledAppointmentsSubtitle")}
           </p>
         </div>
 
-        <ul className="flex flex-col gap-sm">
+        <ul className="flex flex-col gap-xs">
           {!booked_appointments.length && (
-            <li className="rounded-[14px] border border-[#888888] bg-[#232323]/70 px-sm py-md text-sm leading-relaxed text-secondary-foreground">
+            <li className="rounded-[10px] border border-[#4c4c4c] bg-[#1c1c1c] px-sm py-sm text-sm leading-relaxed text-secondary-foreground">
               {t("noAppointments")}
             </li>
           )}
           {booked_appointments.map(booked_appointment => (
             <li
-              className="flex min-w-0 flex-col gap-sm rounded-[14px] border border-[#5d5d5d] bg-[#232323]/75 px-sm py-sm shadow-[0_12px_28px_rgba(0,0,0,0.14)]"
+              className="flex min-w-0 flex-col gap-xs rounded-[10px] border border-[#4c4c4c] bg-[#1c1c1c] px-sm py-sm"
               key={booked_appointment.id}>
               <div className="flex flex-col gap-xs">
                 {editingAppointmentId === booked_appointment.id ? (
                   <div className="flex flex-col gap-y-xs">
                     <div className="flex flex-col gap-xs tablet:flex-row">
                       <Input
-                        className="rounded-[10px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        className="rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
                         type="date"
                         value={draftBookingDate}
                         onChange={e => setDraftBookingDate(e.target.value)}
                       />
                       <Input
-                        className="rounded-[10px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        className="rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
                         type="time"
                         value={draftBookingTime}
                         onChange={e => setDraftBookingTime(e.target.value)}
@@ -150,13 +152,13 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                 {editingAppointmentId === booked_appointment.id ? (
                   <>
                     <Button
-                      className="rounded-[10px] border-success bg-[#1e2b21]"
+                      className="h-[34px] w-[34px] rounded-[9px] border-success bg-[#1e2b21] p-0"
                       isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
                       onClick={() => updateDBAppointmentFn(booked_appointment)}>
                       <FiSave className="text-success" />
                     </Button>
                     <Button
-                      className="rounded-[10px] border-secondary-foreground bg-[#232323]"
+                      className="h-[34px] w-[34px] rounded-[9px] border-secondary-foreground bg-[#232323] p-0"
                       isDisabled={isLoading}
                       onClick={stopEditing}>
                       <MdOutlineCancel />
@@ -165,13 +167,13 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                 ) : (
                   <>
                     <Button
-                      className="rounded-[10px] border-cta bg-[#261f2f]"
+                      className="h-[34px] w-[34px] rounded-[9px] border-cta bg-[#261f2f] p-0"
                       isDisabled={isLoading}
                       onClick={() => startEditing(booked_appointment)}>
                       <FiEdit3 className="text-cta" />
                     </Button>
                     <Button
-                      className="rounded-[10px] border-danger bg-[#2a1f21]"
+                      className="h-[34px] w-[34px] rounded-[9px] border-danger bg-[#2a1f21] p-0"
                       isDisabled={isLoading}
                       onClick={() =>
                         deleteDBAppointmentFn(

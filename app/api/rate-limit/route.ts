@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Invalid timezone: ${userTimezone}` }, { status: 400 })
   }
 
-  const requestHeaders = headers()
+  const requestHeaders = await headers()
   const ip = getRequestIp(requestHeaders)
 
   const rateLimitApiResult = await consumeRateLimit({

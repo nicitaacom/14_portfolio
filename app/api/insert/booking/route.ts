@@ -24,9 +24,9 @@ export async function POST(req: Request) {
   } = (await req.json()) as API.InsertBookingRequest
   const normalizedContact = contact.trim()
 
-  const userCookieId = cookies().get("user_cookie_id")?.value || nanoid()
+  const userCookieId = (await cookies()).get("user_cookie_id")?.value || nanoid()
 
-  const ip = getRequestIp(headers())
+  const ip = getRequestIp(await headers())
 
   const burstRateLimit = await consumeRateLimit({
     limiterName: "bookingSubmitBurst",

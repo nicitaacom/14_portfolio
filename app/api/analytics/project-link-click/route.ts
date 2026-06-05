@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   const destinationUrl = body.destinationUrl?.trim()
   const pagePath = body.pagePath?.trim() || "/"
   const userLocalDate = body.userLocalDate?.trim()
-  const existingCookieId = cookies().get("user_cookie_id")?.value
+  const existingCookieId = (await cookies()).get("user_cookie_id")?.value
   const userCookieId = body.userCookieId?.trim() || existingCookieId || nanoid()
   const ip = getRequestIp(new Headers(request.headers))
 

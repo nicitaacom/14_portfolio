@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from "react"
 
-export const useCloseOnClickOutside = (divRef: RefObject<HTMLDivElement>, closeFn: () => void) => {
+export const useCloseOnClickOutside = (divRef: RefObject<HTMLDivElement | null>, closeFn: () => void) => {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (e.target instanceof Element) {

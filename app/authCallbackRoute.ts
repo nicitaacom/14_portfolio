@@ -63,7 +63,7 @@ export async function GET(request: Request) {
 
     if (adminUserIds.length > 0 && !adminUserIds.includes(data.user.id)) {
       await supabase.auth.signOut()
-      cookies().delete(ADMIN_PASSWORD_COOKIE)
+      (await cookies()).delete(ADMIN_PASSWORD_COOKIE)
       const redirectUrl = new URL(localizePath("/auth", locale), publicOrigin)
       redirectUrl.searchParams.set("error", "unauthorized")
       redirectUrl.searchParams.set("reason", "admin_user_id_mismatch")
@@ -76,7 +76,7 @@ export async function GET(request: Request) {
       return NextResponse.redirect(redirectUrl)
     }
 
-    cookies().delete(ADMIN_PASSWORD_COOKIE)
+    (await cookies()).delete(ADMIN_PASSWORD_COOKIE)
     return NextResponse.redirect(new URL(localizePath("/", locale), publicOrigin))
   } catch (error) {
     console.error("Unexpected error in auth route:", error)

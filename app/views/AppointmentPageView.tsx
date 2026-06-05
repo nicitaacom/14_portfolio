@@ -18,13 +18,13 @@ export async function AppointmentPageView() {
     .from("bookings")
     .select()
     .gte("booking_date", today)
-    .eq("user_cookie_id", cookies().get("user_cookie_id")?.value ?? "undefined")
+    .eq("user_cookie_id", (await cookies()).get("user_cookie_id")?.value ?? "undefined")
 
   return (
-    <div className="flex w-full justify-center overflow-x-hidden px-sm pt-[5.25rem] tablet:px-md tablet:pt-[6rem]">
-      <div className="mx-auto flex w-full max-w-[980px] flex-col gap-md">
+    <div className="flex w-full justify-center overflow-x-hidden px-sm pt-[4.75rem] tablet:px-md tablet:pt-[5.5rem]">
+      <div className="mx-auto flex w-full max-w-[680px] flex-col gap-sm laptop:max-w-[920px]">
         <IsGMLive />
-        <div className="grid gap-md laptop:grid-cols-[minmax(0,1fr)_340px] laptop:items-start">
+        <div className="grid gap-sm laptop:grid-cols-[minmax(0,1fr)_300px] laptop:items-start">
           <div className="min-w-0">
             <ScheduleAppointment bookings={bookings ?? []} />
           </div>

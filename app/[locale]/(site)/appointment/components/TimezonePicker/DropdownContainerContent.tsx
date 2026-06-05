@@ -14,17 +14,20 @@ export function DropdownContainerContent({
     <button
       type="button"
       className={twMerge(
-        "flex h-[46px] w-full items-center justify-between gap-sm rounded-[12px] border border-[#777777] bg-[#202020]/90 px-md text-left shadow-[0_10px_30px_rgba(0,0,0,0.18)] transition-colors duration-200",
-        isShowDropdown && "border-cta/70 bg-[#262626]",
+        "flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-[#555555] bg-[#242424] px-sm text-left transition-colors duration-200",
+        isShowDropdown && "border-cta/60 bg-[#28222e]",
       )}
       onClick={toggleDropdown}>
-      <span className="truncate text-sm text-secondary">{selectedTimezone}</span>
+      <span className="truncate text-sm font-medium text-secondary">{selectedTimezone}</span>
       <Image
-        className={twMerge("h-[16px] w-[16px] shrink-0 transition-transform duration-200", isShowDropdown && "rotate-180")}
+        className={twMerge(
+          "h-[14px] w-[14px] shrink-0 transition-transform duration-200",
+          isShowDropdown && "rotate-180",
+        )}
         src="/tringle.png"
         alt="Dropdown arrow"
-        width={16}
-        height={16}
+        width={18}
+        height={18}
       />
     </button>
   )

@@ -78,38 +78,38 @@ export function TimePicker({ bookings }: Bookings) {
       <button
         type="button"
         className={twMerge(
-          "flex h-[46px] w-full items-center justify-between gap-sm rounded-[12px] border border-[#777777] bg-[#202020]/90 px-md text-left shadow-[0_10px_30px_rgba(0,0,0,0.18)] transition-colors duration-200",
-          showDropdown && "border-cta/70 bg-[#262626]",
+          "flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-[#555555] bg-[#242424] px-sm text-left transition-colors duration-200",
+          showDropdown && "border-cta/60 bg-[#28222e]",
         )}
         onClick={() => setShowDropdown(!showDropdown)}>
         <div className="flex min-w-0 items-center gap-xs">
-          <span className="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-full border border-[#5a5a5a] bg-[#2b2b2b]">
-            <BiTimeFive className="text-secondary-foreground" />
+          <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[7px] border border-[#555555] bg-[#1d1d1d]">
+            <BiTimeFive className="text-cta" size={15} />
           </span>
-          <span className="truncate text-sm text-secondary">{t("timeLabel", { time: selectedTime })}</span>
+          <span className="truncate text-sm font-medium text-secondary">{t("timeLabel", { time: selectedTime })}</span>
         </div>
         <Image
           className={twMerge(
-            "h-[16px] w-[16px] shrink-0 transition-transform duration-200",
+            "h-[14px] w-[14px] shrink-0 transition-transform duration-200",
             showDropdown && "rotate-180",
           )}
           src="/tringle.png"
           alt="Dropdown arrow"
-          width={16}
-          height={16}
+          width={18}
+          height={18}
         />
       </button>
 
       <div
         className={twMerge(
-          "absolute left-0 top-[calc(100%+8px)] z-20 w-full rounded-[14px] border border-[#777777] bg-[#1b1b1b] p-[6px] shadow-[0_20px_44px_rgba(0,0,0,0.28)]",
+          "absolute left-0 top-[calc(100%+6px)] z-20 w-full rounded-[12px] border border-[#555555] bg-[#181818] p-xs shadow-[0_18px_36px_rgba(0,0,0,0.34)]",
           showDropdown
             ? "visible translate-y-0 opacity-100 transition-all duration-200"
-            : "invisible translate-y-[-12px] opacity-0 transition-all duration-200",
+            : "invisible translate-y-[-8px] opacity-0 transition-all duration-200",
         )}
         onClick={event => event.stopPropagation()}
         onMouseLeave={() => setHover(null)}>
-        <div className="max-h-[240px] overflow-y-scroll hide-scrollbar">
+        <div className="max-h-[196px] overflow-y-scroll hide-scrollbar">
           {convertedTimePicker.map(time => {
             const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
             const isTimeDisabled =
@@ -121,13 +121,13 @@ export function TimePicker({ bookings }: Bookings) {
               <button
                 type="button"
                 className={twMerge(
-                  "flex w-full items-center justify-between rounded-[10px] px-md py-sm text-left text-sm transition-colors duration-150",
+                  "flex w-full items-center justify-between rounded-[11px] px-md py-sm text-left text-sm font-medium transition-all duration-200",
                   time.time !== convertedTimePicker[0].time && "mt-[2px]",
                   isTimeDisabled
-                    ? "cursor-not-allowed bg-[#222222] text-secondary/25"
+                    ? "cursor-not-allowed bg-[#1f1f1f] text-secondary/30"
                     : isActive
-                      ? "bg-cta/85 text-primary"
-                      : "text-secondary hover:bg-[#2a2a2a]",
+                      ? "bg-cta/80 text-primary"
+                      : "text-secondary hover:bg-[#262626] hover:text-secondary-foreground",
                 )}
                 onMouseOver={isTimeDisabled ? undefined : mouseHover(time.time)}
                 onClick={isTimeDisabled ? undefined : changeSelectedTime(time.time)}
@@ -136,8 +136,8 @@ export function TimePicker({ bookings }: Bookings) {
                 <span>{time.time}</span>
                 <span
                   className={twMerge(
-                    "h-[8px] w-[8px] shrink-0 rounded-full",
-                    isTimeDisabled ? "bg-secondary-foreground/25" : isActive ? "bg-primary/70" : "bg-cta/70",
+                    "h-[10px] w-[10px] shrink-0 rounded-full transition-all duration-200",
+                    isTimeDisabled ? "bg-secondary-foreground/20" : isActive ? "bg-primary" : "bg-cta/60",
                   )}
                 />
               </button>
