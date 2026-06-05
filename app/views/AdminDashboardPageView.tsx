@@ -15,7 +15,7 @@ export async function AdminDashboardPageView({ locale }: { locale: TLocale }) {
 
   const {
     data: { user },
-  } = await supabaseServer().auth.getUser()
+  } = await (await supabaseServer()).auth.getUser()
 
   const adminUserIds = parseAdminUserIdArr(process.env.ADMIN_USER_ID_ARR)
 
