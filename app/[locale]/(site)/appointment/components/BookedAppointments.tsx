@@ -153,31 +153,31 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                   <>
                     <Button
                       title={t("saveChanges")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-success bg-[#1e2b21] p-0"
+                      className="h-[34px] w-[34px] rounded-[9px] border-success bg-[#1e2b21] !p-[0px]"
                       isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
                       onClick={() => updateDBAppointmentFn(booked_appointment)}>
-                      <FiSave className="text-success" />
+                      <FiSave className="text-success" size={16} />
                     </Button>
                     <Button
                       title={t("cancelEdit")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-secondary-foreground bg-[#232323] p-0"
+                      className="h-[34px] w-[34px] rounded-[9px] border-secondary-foreground bg-[#232323] !p-[0px]"
                       isDisabled={isLoading}
                       onClick={stopEditing}>
-                      <MdOutlineCancel />
+                      <MdOutlineCancel size={16} />
                     </Button>
                   </>
                 ) : (
                   <>
                     <Button
                       title={t("editAppointment")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-cta bg-[#261f2f] p-0"
+                      className="h-[34px] w-[34px] rounded-[9px] border-cta bg-[#261f2f] !p-[0px]"
                       isDisabled={isLoading}
                       onClick={() => startEditing(booked_appointment)}>
-                      <FiEdit3 className="text-cta" />
+                      <FiEdit3 className="text-cta" size={16} />
                     </Button>
                     <Button
                       title={t("deleteAppointment")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-danger bg-[#2a1f21] p-0"
+                      className="h-[34px] w-[34px] rounded-[9px] border-danger bg-[#2a1f21] !p-[0px]"
                       isDisabled={isLoading}
                       onClick={() =>
                         deleteDBAppointmentFn(
@@ -186,7 +186,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                           booked_appointment.booking_time_MSK,
                         )
                       }>
-                      <MdOutlineCancel className="text-danger" />
+                      <MdOutlineCancel className="text-danger" size={16} />
                     </Button>
                   </>
                 )}
