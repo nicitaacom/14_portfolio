@@ -1,7 +1,16 @@
 "use client"
 
-import { useId, useMemo } from "react"
-import { motion } from "framer-motion"
+import { useMemo } from "react"
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts"
 import type { TProjectClicksTimelineDB } from "../types/TProjectClicksTimelineDB"
 import type { TProjectClicksTimelineMode } from "../types/TProjectClicksTimelineMode"
 import { useScopedI18n } from "@/locales/client"
@@ -13,201 +22,200 @@ interface ProjectClicksLineChartProps {
 }
 
 const numberFormatter = new Intl.NumberFormat("en-US")
-const CHART_WIDTH = 920
-const CHART_HEIGHT = 320
-const PADDING_LEFT = 20
-const PADDING_RIGHT = 52
-const PADDING_TOP = 24
-const PADDING_BOTTOM = 40
-const GRID_LINE_INDEXES = [0, 1, 2, 3]
 
-function formatMetricValueFn(value: number) {
+function formatMetricValue(value: number) {
   if (value >= 10 || Number.isInteger(value)) return numberFormatter.format(Math.round(value))
   return value.toFixed(1)
 }
 
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean
+  payload?: { value: number }[]
+  label?: string
+}) {
+  if (!active || !payload?.length) return null
+
+  return (
+    <div className="rounded-[4px] border border-[#3a3a3a] bg-[#1a1a1a] px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-[#6a6a6a]">{label}</p>
+      <p className="text-sm font-medium text-[#e8e8e8]">
+        {numberFormatter.format(payload[0].value)}{" "}
+        <span className="text-[10px] uppercase tracking-[0.12em] text-[#5a5a5a]">clicks</span>
+      </p>
+    </div>
+  )
+}
+
+function CustomDot({
+  cx,
+  cy,
+  payload,
+  isLatest,
+  isPeak,
+}: {
+  cx?: number
+  cy?: number
+  payload?: TProjectClicksTimelineDB
+  isLatest?: boolean
+  isPeak?: boolean
+}) {
+  if (cx === undefined || cy === undefined) return null
+  if (!isLatest && !isPeak) return null
+
+  const r = isLatest ? 5 : 4
+  const strokeColor = isLatest ? "#9b9b9b" : "#6b8cff"
+  const strokeWidth = isLatest ? 3 : 2
+
+  return (
+    <circle
+      cx={cx}
+      cy={cy}
+      r={r}
+      fill="#1c1c1c"
+      stroke={strokeColor}
+      strokeWidth={strokeWidth}
+    />
+  )
+}
+
 export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: ProjectClicksLineChartProps) {
   const t = useScopedI18n("admin")
-  const chartGradientId = useId().replace(/:/g, "")
-  const maxClicks = useMemo(() => Math.max(...timeline.map(point => point.total_clicks), 1), [timeline])
-  const totalClicks = useMemo(() => timeline.reduce((sum, point) => sum + point.total_clicks, 0), [timeline])
-  const averageClicks = useMemo(
-    () => (timeline.length ? totalClicks / timeline.length : 0),
-    [timeline.length, totalClicks],
-  )
+
+  const maxClicks = useMemo(() => Math.max(...timeline.map(p => p.total_clicks), 1), [timeline])
+  const totalClicks = useMemo(() => timeline.reduce((sum, p) => sum + p.total_clicks, 0), [timeline])
+  const averageClicks = useMemo(() => (timeline.length ? totalClicks / timeline.length : 0), [timeline, totalClicks])
   const peakPoint = useMemo(
-    () =>
-      timeline.reduce<TProjectClicksTimelineDB | null>(
-        (topPoint, point) => (!topPoint || point.total_clicks > topPoint.total_clicks ? point : topPoint),
-        null,
-      ),
+    () => timeline.reduce<TProjectClicksTimelineDB | null>((top, p) => (!top || p.total_clicks > top.total_clicks ? p : top), null),
     [timeline],
   )
   const latestPoint = timeline[timeline.length - 1]
 
-  const points = useMemo(() => {
-    if (!timeline.length) return []
+  const tickCount = Math.min(timeline.length, 6)
+  const tickIndexes = useMemo(() => {
+    if (timeline.length <= tickCount) return timeline.map((_, i) => i)
+    const step = Math.floor((timeline.length - 1) / (tickCount - 1))
+    return Array.from({ length: tickCount }, (_, i) => i * step)
+  }, [timeline, tickCount])
 
-    const usableWidth = CHART_WIDTH - PADDING_LEFT - PADDING_RIGHT
-    const usableHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM
+  const tickLabels = useMemo(
+    () => new Set(tickIndexes.map(i => timeline[i]?.bucket_label)),
+    [tickIndexes, timeline],
+  )
 
-    return timeline.map((point, index) => {
-      const x = PADDING_LEFT + (timeline.length === 1 ? usableWidth / 2 : (index / (timeline.length - 1)) * usableWidth)
-      const y = PADDING_TOP + usableHeight - (point.total_clicks / maxClicks) * usableHeight
-
-      return { ...point, x, y }
-    })
-  }, [maxClicks, timeline])
-
-  const pathDefinition = useMemo(() => {
-    if (!points.length) return ""
-
-    return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ")
-  }, [points])
-
-  const areaPathDefinition = useMemo(() => {
-    if (!points.length) return ""
-
-    const baselineY = CHART_HEIGHT - PADDING_BOTTOM
-    return `${pathDefinition} L ${points[points.length - 1].x} ${baselineY} L ${points[0].x} ${baselineY} Z`
-  }, [pathDefinition, points])
-
-  const gridLines = useMemo(() => {
-    const usableHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM
-
-    return GRID_LINE_INDEXES.map(index => {
-      const y = PADDING_TOP + (usableHeight / (GRID_LINE_INDEXES.length - 1)) * index
-      const value = Math.round(maxClicks * (1 - index / (GRID_LINE_INDEXES.length - 1)))
-
-      return { index, value, y }
-    })
-  }, [maxClicks])
-
-  const visibleLabels = useMemo(() => {
-    if (points.length <= 6) return points
-
-    return points.filter(
-      (_, index) => index === 0 || index === points.length - 1 || index % Math.ceil(points.length / 5) === 0,
-    )
-  }, [points])
+  const yMax = Math.ceil(maxClicks * 1.15)
 
   if (!timeline.length) {
     return (
-      <p className="py-10 text-center text-sm text-secondary-foreground">
-        {t("noProjectClickData")}
-      </p>
+      <p className="py-10 text-center text-sm text-secondary-foreground">{t("noProjectClickData")}</p>
     )
   }
 
   return (
-    <div className="min-w-0 flex flex-col gap-sm">
-      <div className="grid gap-xs rounded-[2px] border border-[#343434] bg-[#2a2a2a] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)] tablet:grid-cols-[minmax(0,1fr)_auto]">
+    <div className="flex min-w-0 flex-col gap-sm">
+      {/* Header stats */}
+      <div className="grid gap-xs rounded-[2px] border border-[#343434] bg-[#1e1e1e] p-sm tablet:grid-cols-[minmax(0,1fr)_auto]">
         <div className="min-w-0">
-          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-[#5a5a5a]">
             {timelineMode === "monthly" ? t("last30Days") : t("last12Months")}
           </p>
           <div className="mt-[8px] flex flex-wrap items-end gap-sm">
-            <p className="truncate text-lg text-secondary">{projectName}</p>
-            <p className="text-[30px] leading-none text-secondary">{numberFormatter.format(totalClicks)}</p>
-            <p className="pb-[3px] text-xs uppercase tracking-[0.18em] text-secondary-foreground">{t("totalClicks")}</p>
+            <p className="truncate text-base text-[#c8c8c8]">{projectName}</p>
+            <p className="text-[28px] leading-none text-[#e8e8e8]">{numberFormatter.format(totalClicks)}</p>
+            <p className="pb-[3px] text-[10px] uppercase tracking-[0.18em] text-[#5a5a5a]">{t("totalClicks")}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-xs">
-          <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">{t("average")}</p>
-            <p className="mt-[4px] text-sm text-secondary">{formatMetricValueFn(averageClicks)}</p>
+          <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] px-sm py-[10px]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-[#555]">{t("average")}</p>
+            <p className="mt-[4px] text-sm text-[#c8c8c8]">{formatMetricValue(averageClicks)}</p>
           </div>
-          <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">{t("peak")}</p>
-            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
-            <p className="text-[10px] uppercase tracking-[0.16em] text-secondary-foreground">
-              {peakPoint?.bucket_label ?? "-"}
-            </p>
+          <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] px-sm py-[10px]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-[#555]">{t("peak")}</p>
+            <p className="mt-[4px] text-sm text-[#c8c8c8]">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
+            <p className="text-[9px] uppercase tracking-[0.16em] text-[#4a4a4a]">{peakPoint?.bucket_label ?? "-"}</p>
           </div>
-          <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">{t("latest")}</p>
-            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
-            <p className="text-[10px] uppercase tracking-[0.16em] text-secondary-foreground">
-              {latestPoint?.bucket_label ?? "-"}
-            </p>
+          <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] px-sm py-[10px]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-[#555]">{t("latest")}</p>
+            <p className="mt-[4px] text-sm text-[#c8c8c8]">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
+            <p className="text-[9px] uppercase tracking-[0.16em] text-[#4a4a4a]">{latestPoint?.bucket_label ?? "-"}</p>
           </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto pb-[4px]">
-        <div className="min-w-[920px] rounded-[2px] border border-[#343434] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
-          <svg viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} fill="none">
+      {/* Chart */}
+      <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] p-sm">
+        <ResponsiveContainer width="100%" height={280}>
+          <AreaChart data={timeline} margin={{ top: 16, right: 12, bottom: 0, left: -8 }}>
             <defs>
-              <linearGradient id={`${chartGradientId}-area`} x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="#5a5a5a" stopOpacity="0.38" />
-                <stop offset="100%" stopColor="#5a5a5a" stopOpacity="0" />
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#6b8cff" stopOpacity={0.22} />
+                <stop offset="60%" stopColor="#6b8cff" stopOpacity={0.06} />
+                <stop offset="100%" stopColor="#6b8cff" stopOpacity={0} />
               </linearGradient>
             </defs>
 
-            {gridLines.map(line => (
-              <g key={`${line.index}-${line.value}`}>
-                <line
-                  x1={PADDING_LEFT}
-                  x2={CHART_WIDTH - PADDING_RIGHT}
-                  y1={line.y}
-                  y2={line.y}
-                  stroke="#343434"
-                  strokeDasharray="5 8"
-                />
-                <text fill="#8a8a8a" fontSize="10" textAnchor="end" x={CHART_WIDTH - 6} y={line.y + 4}>
-                  {numberFormatter.format(line.value)}
-                </text>
-              </g>
-            ))}
-
-            <motion.path
-              animate={{ opacity: 1 }}
-              d={areaPathDefinition}
-              fill={`url(#${chartGradientId}-area)`}
-              initial={{ opacity: 0 }}
-              transition={{ duration: 0.55, ease: "easeOut" }}
+            <CartesianGrid
+              strokeDasharray="2 6"
+              stroke="#252525"
+              vertical={false}
             />
 
-            <motion.path
-              animate={{ pathLength: 1, opacity: 1 }}
-              d={pathDefinition}
-              initial={{ pathLength: 0, opacity: 0.5 }}
-              stroke="#5a5a5a"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="3"
-              transition={{ duration: 0.8, ease: "easeOut" }}
+            <XAxis
+              dataKey="bucket_label"
+              tick={{ fill: "#555", fontSize: 10, fontFamily: "inherit" }}
+              tickLine={false}
+              axisLine={false}
+              interval="preserveStartEnd"
+              tickFormatter={label => (tickLabels.has(label) ? label : "")}
             />
 
-            {points.map((point, index) => (
-              <motion.circle
-                animate={{ opacity: 1, scale: 1 }}
-                cx={point.x}
-                cy={point.y}
-                fill="#242424"
-                initial={{ opacity: 0, scale: 0.7 }}
-                key={point.bucket_key}
-                r={point.bucket_key === latestPoint?.bucket_key ? "6" : "3.5"}
-                stroke={point.bucket_key === latestPoint?.bucket_key ? "#7a7a7a" : "#5a5a5a"}
-                strokeWidth={point.bucket_key === latestPoint?.bucket_key ? "4" : "2"}
-                transition={{ delay: index * 0.015, duration: 0.22 }}
+            <YAxis
+              domain={[0, yMax]}
+              tick={{ fill: "#555", fontSize: 10, fontFamily: "inherit" }}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={v => (v === 0 ? "0" : v >= 1000 ? `${(v / 1000).toFixed(1)}k` : String(v))}
+              width={36}
+            />
+
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{ stroke: "#3a3a3a", strokeWidth: 1, strokeDasharray: "4 4" }}
+            />
+
+            {peakPoint && (
+              <ReferenceLine
+                x={peakPoint.bucket_label}
+                stroke="#3a3a3a"
+                strokeDasharray="3 5"
+                label={{ value: "↑ peak", position: "insideTopRight", fill: "#4a4a4a", fontSize: 9 }}
               />
-            ))}
+            )}
 
-            {visibleLabels.map(point => (
-              <text
-                fill="#8a8a8a"
-                fontSize="10"
-                key={point.bucket_key}
-                textAnchor="middle"
-                x={point.x}
-                y={CHART_HEIGHT - 10}>
-                {point.bucket_label}
-              </text>
-            ))}
-          </svg>
-        </div>
+            <Area
+              type="monotone"
+              dataKey="total_clicks"
+              stroke="#6b8cff"
+              strokeWidth={2}
+              fill="url(#areaGrad)"
+              dot={(props) => (
+                <CustomDot
+                  {...props}
+                  isLatest={props.payload?.bucket_key === latestPoint?.bucket_key}
+                  isPeak={props.payload?.bucket_key === peakPoint?.bucket_key}
+                />
+              )}
+              activeDot={{ r: 5, fill: "#1c1c1c", stroke: "#6b8cff", strokeWidth: 2 }}
+              animationDuration={700}
+              animationEasing="ease-out"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
   )
