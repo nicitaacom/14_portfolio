@@ -8,9 +8,9 @@ export function GMCheckbox({ isGMLive }: { isGMLive: boolean }) {
 
   return (
     <div className="flex flex-row justify-center items-center gap-x-xs">
-      <div className="relative tooltip">
+      <div className="tooltip-b">
         <p className="font-bold">{t("gmLive")}</p>
-        <p className="tooltiptext w-[219px] top-[450%] left-[10%]">{t("gmLiveTooltip")}</p>
+        <p className="tooltiptext-b w-[219px]">{t("gmLiveTooltip")}</p>
       </div>
       <GMLiveCheckbox isGMLive={!!isGMLive} />
     </div>

@@ -54,7 +54,7 @@
 
   .tooltip:hover .tooltiptext {
     @apply opacity-100 visible transition-all duration-300
-    translate-y-[-105%] 
+    translate-y-[-105%]
     whitespace-nowrap w-auto h-auto p-sm text-secondary z-[99];
   }
 
@@ -65,6 +65,84 @@
     text-sm bg-primary-foreground
     text-center rounded-lg z-[99]
     pointer-events-none;
+  }
+
+  /* Directional tooltip variants */
+  .tooltip-t,
+  .tooltip-b,
+  .tooltip-l,
+  .tooltip-r {
+    @apply relative inline-block;
+  }
+
+  .tooltip-t .tooltiptext-t,
+  .tooltip-b .tooltiptext-b,
+  .tooltip-l .tooltiptext-l,
+  .tooltip-r .tooltiptext-r {
+    @apply absolute z-[99] pointer-events-none
+    w-max max-w-[220px] px-sm py-xs
+    text-xs text-secondary text-center leading-snug
+    bg-[#1e1e1e] border border-[#3a3a3a]
+    rounded-[6px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]
+    opacity-0 invisible
+    scale-95
+    transition-all duration-200 ease-out;
+  }
+
+  /* Top */
+  .tooltiptext-t {
+    @apply bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2;
+  }
+  .tooltip-t:hover .tooltiptext-t {
+    @apply opacity-100 visible scale-100;
+  }
+  .tooltiptext-t::after {
+    content: "";
+    @apply absolute top-full left-1/2 -translate-x-1/2;
+    border: 5px solid transparent;
+    border-top-color: #3a3a3a;
+  }
+
+  /* Bottom */
+  .tooltiptext-b {
+    @apply top-[calc(100%+8px)] left-1/2 -translate-x-1/2;
+  }
+  .tooltip-b:hover .tooltiptext-b {
+    @apply opacity-100 visible scale-100;
+  }
+  .tooltiptext-b::after {
+    content: "";
+    @apply absolute bottom-full left-1/2 -translate-x-1/2;
+    border: 5px solid transparent;
+    border-bottom-color: #3a3a3a;
+  }
+
+  /* Left */
+  .tooltiptext-l {
+    @apply right-[calc(100%+8px)] top-1/2 -translate-y-1/2;
+  }
+  .tooltip-l:hover .tooltiptext-l {
+    @apply opacity-100 visible scale-100;
+  }
+  .tooltiptext-l::after {
+    content: "";
+    @apply absolute left-full top-1/2 -translate-y-1/2;
+    border: 5px solid transparent;
+    border-left-color: #3a3a3a;
+  }
+
+  /* Right */
+  .tooltiptext-r {
+    @apply left-[calc(100%+8px)] top-1/2 -translate-y-1/2;
+  }
+  .tooltip-r:hover .tooltiptext-r {
+    @apply opacity-100 visible scale-100;
+  }
+  .tooltiptext-r::after {
+    content: "";
+    @apply absolute right-full top-1/2 -translate-y-1/2;
+    border: 5px solid transparent;
+    border-right-color: #3a3a3a;
   }
 
   .tooltip-modal:hover .tooltiptext-modal {
