@@ -15,5 +15,5 @@ export async function GET(request: Request) {
     .select("booking_time_MSK")
     .eq("booking_date", date)
 
-  return NextResponse.json({ slots: (data ?? []).map(b => b.booking_time_MSK) })
+  return NextResponse.json({ slots: (data ?? []).map(b => b.booking_time_MSK.slice(0, 5)) })
 }
