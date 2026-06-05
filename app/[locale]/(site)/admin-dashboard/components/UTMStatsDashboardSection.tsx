@@ -104,7 +104,7 @@ export function UTMStatsDashboardSection() {
           {loading ? (
             <div className="space-y-[8px]">
               {[1, 2, 3, 4].map(index => (
-                <div key={index} className="h-[34px] animate-pulse rounded-[4px] bg-[#1f1f1f]" />
+                <div key={index} className="h-[34px] animate-pulse rounded-[2px] bg-[#1f1f1f]" />
               ))}
             </div>
           ) : topSources.length ? (
@@ -123,7 +123,7 @@ export function UTMStatsDashboardSection() {
           {loading ? (
             <div className="space-y-[8px]">
               {[1, 2, 3].map(index => (
-                <div key={index} className="h-[34px] animate-pulse rounded-[4px] bg-[#1f1f1f]" />
+                <div key={index} className="h-[34px] animate-pulse rounded-[2px] bg-[#1f1f1f]" />
               ))}
             </div>
           ) : topCampaigns.length ? (
