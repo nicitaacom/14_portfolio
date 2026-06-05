@@ -24,10 +24,10 @@ export default {
     summaryDe: "CV DE",
   },
   languages: {
-    en: "Angielski",
-    ru: "Rosyjski",
-    ua: "Ukraiński",
-    de: "Niemiecki",
+    en: "English",
+    ru: "Русский",
+    ua: "Українська",
+    de: "Deutsch",
     pl: "Polski",
   },
   navbar: {
@@ -86,7 +86,8 @@ export default {
       note: "Nawet jeśli nie chcesz nic kupować, możesz umówić rozmowę i dostać świeże spojrzenie oraz przydatne informacje.",
     },
     notMaintainedTitle: "Nieutrzymywane",
-    notMaintainedText: "Te projekty są stare i nie są już utrzymywane, więc nie oczekuj, że wszystko będzie tam działać.",
+    notMaintainedText:
+      "Te projekty są stare i nie są już utrzymywane, więc nie oczekuj, że wszystko będzie tam działać.",
   },
   skills: {
     other: "inne",
@@ -127,7 +128,8 @@ export default {
       dailyLimit: "Możesz zarezerwować maksymalnie {count} spotkania dziennie. Limit dzienny resetuje się o 00:00 UTC.",
       continueToBooking: "Przejdź do rezerwacji",
       scheduledAppointments: "Zaplanowane spotkania",
-      scheduledAppointmentsSubtitle: "Nadchodzącymi rezerwacjami łatwo zarządzać zarówno na desktopie, jak i na telefonie.",
+      scheduledAppointmentsSubtitle:
+        "Nadchodzącymi rezerwacjami łatwo zarządzać zarówno na desktopie, jak i na telefonie.",
       bookedDateAt: "Data rezerwacji: {date} o {time} {timezone}",
       timeEditedIn: "Czas jest edytowany w {timezone}, a zapisywany w czasie moskiewskim.",
       joinGoogleMeetsNow: "Dołącz do Google Meets teraz",
@@ -228,7 +230,8 @@ export default {
     cronSchedules: "Cron schedules",
     cronSchedulesSubtitle: "Kompaktowy live view wszystkich pg_cron jobs skonfigurowanych dla tego projektu.",
     bookedAppointments: "Zarezerwowane spotkania",
-    bookedAppointmentsSubtitle: "Wszystkie rezerwacje z badge'ami kanałów i identyfikatorami w kompaktowej przewijanej liście.",
+    bookedAppointmentsSubtitle:
+      "Wszystkie rezerwacje z badge'ami kanałów i identyfikatorami w kompaktowej przewijanej liście.",
     upcoming: "Nadchodzące",
     allRows: "Wszystkie wiersze",
     created: "Utworzono",

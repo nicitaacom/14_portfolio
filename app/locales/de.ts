@@ -24,11 +24,11 @@ export default {
     summaryDe: "Lebenslauf DE",
   },
   languages: {
-    en: "Englisch",
-    ru: "Russisch",
-    ua: "Ukrainisch",
+    en: "English",
+    ru: "Русский",
+    ua: "Українська",
     de: "Deutsch",
-    pl: "Polnisch",
+    pl: "Polski",
   },
   navbar: {
     panel: "Panel",
@@ -86,11 +86,13 @@ export default {
       note: "Auch wenn du nichts kaufen willst, kannst du einen Call buchen und eine frische Perspektive sowie nützliche Infos bekommen.",
     },
     notMaintainedTitle: "Nicht gepflegt",
-    notMaintainedText: "Diese Projekte sind alt und werden nicht mehr gepflegt, daher solltest du nicht erwarten, dass dort alles funktioniert.",
+    notMaintainedText:
+      "Diese Projekte sind alt und werden nicht mehr gepflegt, daher solltest du nicht erwarten, dass dort alles funktioniert.",
   },
   skills: {
     other: "andere",
-    githubTooltip: "Ich rechne diese Fähigkeit nicht in Stunden,\naber du solltest wissen, dass ich mit GitHub arbeiten kann.",
+    githubTooltip:
+      "Ich rechne diese Fähigkeit nicht in Stunden,\naber du solltest wissen, dass ich mit GitHub arbeiten kann.",
   },
   projectModal: {
     collaboration: "Zusammenarbeit",
@@ -252,7 +254,8 @@ export default {
     noSourceData: "Noch keine Quelldaten.",
     noCampaignData: "Bisher keine Kampagnen erfasst.",
     projectOverviewTitle: "Übersicht zum Tracking von Projektlinks",
-    projectOverviewSubtitle: "Saubere Übersicht aller Projektklicks und projektübergreifender Rankings im aktiven Zeitraum.",
+    projectOverviewSubtitle:
+      "Saubere Übersicht aller Projektklicks und projektübergreifender Rankings im aktiven Zeitraum.",
     comparisonLoadError: "Vergleichsdaten konnten nicht geladen werden: {message}",
     timelineLoadError: "Timeline-Daten konnten nicht geladen werden: {message}",
     windowClicks: "Klicks im Zeitraum",

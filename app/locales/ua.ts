@@ -24,11 +24,11 @@ export default {
     summaryDe: "Резюме DE",
   },
   languages: {
-    en: "Англійська",
-    ru: "Російська",
+    en: "English",
+    ru: "Русский",
     ua: "Українська",
-    de: "Німецька",
-    pl: "Польська",
+    de: "Deutsch",
+    pl: "Polski",
   },
   navbar: {
     panel: "Панель",
@@ -70,8 +70,7 @@ export default {
       createLabel: "Я створюю",
       createTextPrefix: "сайти з високою",
       conversionLabel: "конверсією",
-      conversionTooltip:
-        "Коли 100 людей заходять на сайт,\nа купує лише 1,\nце означає, що конверсія дорівнює 1%.",
+      conversionTooltip: "Коли 100 людей заходять на сайт,\nа купує лише 1,\nце означає, що конверсія дорівнює 1%.",
       createTextSuffix: "і сильним UI / UX / CX.",
       messagePrefix: "Ось",
       messageLabel: "повідомлення",
@@ -228,7 +227,8 @@ export default {
     cronSchedules: "Cron schedules",
     cronSchedulesSubtitle: "Компактний live-view усіх pg_cron jobs, налаштованих для цього проєкту.",
     bookedAppointments: "Заброньовані зустрічі",
-    bookedAppointmentsSubtitle: "Усі записи з бейджами каналів та ідентифікаторами в компактному прокручуваному списку.",
+    bookedAppointmentsSubtitle:
+      "Усі записи з бейджами каналів та ідентифікаторами в компактному прокручуваному списку.",
     upcoming: "Майбутні",
     allRows: "Усі рядки",
     created: "Створено",

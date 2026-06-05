@@ -25,10 +25,10 @@ export default {
   },
   languages: {
     en: "English",
-    ru: "Russian",
-    ua: "Ukrainian",
-    de: "German",
-    pl: "Polish",
+    ru: "Русский",
+    ua: "Українська",
+    de: "Deutsch",
+    pl: "Polski",
   },
   navbar: {
     panel: "Panel",
@@ -252,7 +252,8 @@ export default {
     noSourceData: "No source data yet.",
     noCampaignData: "No campaigns tracked yet.",
     projectOverviewTitle: "Project link tracking overview",
-    projectOverviewSubtitle: "Clean overview of total project clicks and cross-project ranking for the active timeframe.",
+    projectOverviewSubtitle:
+      "Clean overview of total project clicks and cross-project ranking for the active timeframe.",
     comparisonLoadError: "Failed to load comparison data: {message}",
     timelineLoadError: "Failed to load timeline data: {message}",
     windowClicks: "Window clicks",
