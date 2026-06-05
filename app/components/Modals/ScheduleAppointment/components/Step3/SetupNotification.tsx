@@ -15,16 +15,16 @@ export function SetupNotification() {
   return (
     <div className="w-full rounded-[12px] border border-[#777777] px-sm py-xs">
       {isSendNotification && inputNotificationTo.length > 3 ? (
-        <div className="flex items-start gap-xs">
-          <FiBell className="mt-[2px] text-cta" size={16} />
+        <div className="flex items-center gap-xs">
+          <FiBell className="shrink-0 text-cta" size={18} />
           <div>
             <p className="text-sm text-secondary">{t("reminderEnabled")}</p>
             <p className="text-sm text-secondary-foreground">{t("reminderEnabledText", { destination })}</p>
           </div>
         </div>
       ) : (
-        <div className="flex items-start gap-xs">
-          <FiBellOff className="mt-[2px] text-secondary-foreground" size={16} />
+        <div className="flex items-center gap-xs">
+          <FiBellOff className="shrink-0 text-secondary-foreground" size={18} />
           <div>
             <p className="text-sm text-secondary">{t("noReminder")}</p>
             <p className="text-sm text-secondary-foreground">{t("noReminderText")}</p>
