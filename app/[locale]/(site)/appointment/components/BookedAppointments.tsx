@@ -140,11 +140,11 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                 <p className="flex flex-row items-center gap-[6px] text-sm leading-relaxed text-secondary-foreground">
                   {commonT("channel")}: {booked_appointment.channel}
                   {booked_appointment.channel === "google-meets" ? (
-                    <SiGooglemeet />
+                    <SiGooglemeet className="text-[#00ac47]" />
                   ) : booked_appointment.channel === "discord" ? (
-                    <FaDiscord />
+                    <FaDiscord className="text-[#5865f2]" />
                   ) : (
-                    <FaTelegramPlane />
+                    <FaTelegramPlane className="text-[#229ed9]" />
                   )}
                 </p>
               </div>
