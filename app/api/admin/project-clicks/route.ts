@@ -20,8 +20,9 @@ export async function GET(request: Request) {
   const scopeParam = requestUrl.searchParams.get("scope") ?? "all"
   const scope = isScope(scopeParam) ? scopeParam : "all"
 
+  const cookieStore = await cookies()
   const supabase = createRouteHandlerClient(
-    { cookies },
+    { cookies: () => cookieStore as unknown as ReturnType<typeof cookies> },
     {
       supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
       supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
