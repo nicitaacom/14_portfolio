@@ -10,11 +10,14 @@ import { IsGMLive } from "../[locale]/(site)/appointment/components/IsGMLive"
 
 export async function AppointmentPageView() {
   const today = moment().format("YYYY-MM-DD")
-  const { data: bookedAppointments } = await supabaseAdmin
-    .from("bookings")
-    .select()
-    .gte("booking_date", today)
-    .eq("user_cookie_id", (await cookies()).get("user_cookie_id")?.value ?? "undefined")
+  const userCookieId = (await cookies()).get("user_cookie_id")?.value
+  const { data: bookedAppointments } = userCookieId
+    ? await supabaseAdmin
+        .from("bookings")
+        .select()
+        .gte("booking_date", today)
+        .eq("user_cookie_id", userCookieId)
+    : { data: [] }
 
   return (
     <div className="flex w-full justify-center overflow-x-hidden px-sm pt-[4.75rem] tablet:px-md tablet:pt-[5.5rem]">
