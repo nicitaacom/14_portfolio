@@ -108,13 +108,13 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                   <div className="flex flex-col gap-y-xs">
                     <div className="flex flex-col gap-xs tablet:flex-row">
                       <Input
-                        className="rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        className="min-w-0 w-full rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
                         type="date"
                         value={draftBookingDate}
                         onChange={e => setDraftBookingDate(e.target.value)}
                       />
                       <Input
-                        className="rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        className="min-w-0 w-full rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
                         type="time"
                         value={draftBookingTime}
                         onChange={e => setDraftBookingTime(e.target.value)}
