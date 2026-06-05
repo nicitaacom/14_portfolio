@@ -152,12 +152,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                 {editingAppointmentId === booked_appointment.id ? (
                   <>
                     <Button
+                      title={t("saveChanges")}
                       className="h-[34px] w-[34px] rounded-[9px] border-success bg-[#1e2b21] p-0"
                       isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
                       onClick={() => updateDBAppointmentFn(booked_appointment)}>
                       <FiSave className="text-success" />
                     </Button>
                     <Button
+                      title={t("cancelEdit")}
                       className="h-[34px] w-[34px] rounded-[9px] border-secondary-foreground bg-[#232323] p-0"
                       isDisabled={isLoading}
                       onClick={stopEditing}>
@@ -167,12 +169,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                 ) : (
                   <>
                     <Button
+                      title={t("editAppointment")}
                       className="h-[34px] w-[34px] rounded-[9px] border-cta bg-[#261f2f] p-0"
                       isDisabled={isLoading}
                       onClick={() => startEditing(booked_appointment)}>
                       <FiEdit3 className="text-cta" />
                     </Button>
                     <Button
+                      title={t("deleteAppointment")}
                       className="h-[34px] w-[34px] rounded-[9px] border-danger bg-[#2a1f21] p-0"
                       isDisabled={isLoading}
                       onClick={() =>
