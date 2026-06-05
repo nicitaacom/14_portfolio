@@ -16,9 +16,9 @@ function SummaryCard({ label, value }: { label: string; value: string | number }
 
 function StatPill({ label, count }: { label: string; count: number }) {
   return (
-    <div className="rounded-[2px] border border-[#3a3a3a] bg-[#262626] px-[10px] py-[6px] text-xs text-secondary">
+    <div className="flex items-center justify-between rounded-[2px] border border-[#3a3a3a] bg-[#262626] px-[10px] py-[6px] text-xs text-secondary">
       <span className="font-medium text-[#f5f7fb]">{label}</span>
-      <span className="ml-2 text-[#a8b1c7]">{count}</span>
+      <span className="text-[#a8b1c7]">{count}</span>
     </div>
   )
 }
