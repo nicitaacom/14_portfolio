@@ -15,14 +15,7 @@ import { formatedDateTimeFn } from "../../functions/formatedDateTimeFn"
 import { getCookie, setCookie } from "@/utils/helpersCSR"
 import { useScopedI18n } from "@/locales/client"
 
-export type Bookings = {
-  bookings: {
-    booking_date: string
-    booking_time_MSK: string
-  }[]
-}
-
-export function ScheduleAppointment({ bookings }: Bookings) {
+export function ScheduleAppointment() {
   const { selectedDate, setSelectedDate } = useSelectedDateStore()
   const { openModal } = useModalsStore()
   const t = useScopedI18n("appointment.page")
@@ -59,7 +52,7 @@ export function ScheduleAppointment({ bookings }: Bookings) {
 
             <div className="grid w-full grid-cols-1 gap-xs min-[520px]:grid-cols-2 min-[900px]:flex min-[900px]:flex-col">
               <TimeZonePicker />
-              <TimePicker bookings={bookings} />
+              <TimePicker />
             </div>
           </div>
 

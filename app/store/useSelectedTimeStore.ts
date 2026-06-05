@@ -1,5 +1,6 @@
 import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 import { create } from "zustand"
+import moment from "moment-timezone"
 
 /**
  * @selectedTime - e.g 10:00 or 23:59
@@ -10,8 +11,9 @@ interface SelectedTimeStore {
   setSelectedTime: (time: string) => void
 }
 
-const currentHour = new Date().getHours()
-const currentMinute = new Date().getMinutes()
+const nowMSK = moment.tz("Europe/Moscow")
+const currentHour = nowMSK.hours()
+const currentMinute = nowMSK.minutes()
 const nextAvailableTime = appointmentTimesMSK.find(({ time }) => {
   const [hour, minute] = time.split(":").map(Number)
 

@@ -10,10 +10,6 @@ import { IsGMLive } from "../[locale]/(site)/appointment/components/IsGMLive"
 
 export async function AppointmentPageView() {
   const today = moment().format("YYYY-MM-DD")
-  const { data: bookings } = await supabaseAdmin
-    .from("bookings")
-    .select("booking_date,booking_time_MSK")
-    .gte("booking_date", today)
   const { data: bookedAppointments } = await supabaseAdmin
     .from("bookings")
     .select()
@@ -26,7 +22,7 @@ export async function AppointmentPageView() {
         <IsGMLive />
         <div className="grid gap-sm laptop:grid-cols-[minmax(0,1fr)_300px] laptop:items-start">
           <div className="min-w-0">
-            <ScheduleAppointment bookings={bookings ?? []} />
+            <ScheduleAppointment />
           </div>
           <div className="min-w-0">
             <BookedAppointments booked_appointments={bookedAppointments ?? []} />

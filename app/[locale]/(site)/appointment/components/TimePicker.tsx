@@ -15,10 +15,9 @@ import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 import { isDateBeforeTodayOrTime } from "@/utils/isDateBeforeTodayOrTime"
 import { convertCurrentToTargetTimezone } from "../../functions/convertCurrentToTargetTimezone"
 import { isDisabledFn } from "../../functions/isDisabledFn"
-import { Bookings } from "./ScheduleAppointment"
 import { useScopedI18n } from "@/locales/client"
 
-export function TimePicker({ bookings }: Bookings) {
+export function TimePicker() {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
 
   const { selectedTimezone } = useSelectedTimezoneStore()
@@ -27,6 +26,7 @@ export function TimePicker({ bookings }: Bookings) {
   const t = useScopedI18n("appointment.page")
   const [showDropdown, setShowDropdown] = useState(false)
   const [hover, setHover] = useState<string | null>(null)
+  const [takenSlotsMSK, setTakenSlotsMSK] = useState<string[]>([])
 
   const isHover = hover !== null
 
@@ -47,6 +47,31 @@ export function TimePicker({ bookings }: Bookings) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disableAllToday, selectedTimezone])
 
+  useEffect(() => {
+    const targetDate =
+      selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
+    const dateKey = moment(targetDate).format("YYYY-MM-DD")
+
+    fetch(`/api/bookings/taken-slots?date=${dateKey}`)
+      .then(r => r.json())
+      .then(data => {
+        const slots: string[] = data.slots ?? []
+        setTakenSlotsMSK(slots)
+
+        // If the currently selected time is taken, advance to the next free slot
+        const currentTimeMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
+        if (slots.includes(currentTimeMSK)) {
+          const nextFree = convertedTimePicker.find(t => {
+            const tMSK = convertCurrentToTargetTimezone(t.time, selectedTimezone, "Europe/Moscow")
+            return !slots.includes(tMSK) && !isDisabledFn(t.time, targetDate)
+          })
+          if (nextFree) setSelectedTime(nextFree.time)
+        }
+      })
+      .catch(() => setTakenSlotsMSK([]))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate])
+
   function mouseHover(index: string) {
     return () => setHover(index)
   }
@@ -63,14 +88,9 @@ export function TimePicker({ bookings }: Bookings) {
     time: convertCurrentToTargetTimezone(time.time, "Europe/Moscow", selectedTimezone),
   }))
 
-  function isBookedTime(time: string, targetDate: Date): boolean {
-    const date = moment(targetDate).format("YYYY-MM-DD")
+  function isBookedTime(time: string): boolean {
     const timeMSK = convertCurrentToTargetTimezone(time, selectedTimezone, "Europe/Moscow")
-
-    return bookings.some(booking => {
-      const bookingDate = moment(booking.booking_date).format("YYYY-MM-DD")
-      return bookingDate === date && booking.booking_time_MSK === timeMSK
-    })
+    return takenSlotsMSK.includes(timeMSK)
   }
 
   return (
@@ -114,7 +134,7 @@ export function TimePicker({ bookings }: Bookings) {
             const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
             const isTimeDisabled =
               isDisabledFn(time.time, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate) ||
-              isBookedTime(time.time, targetDate)
+              isBookedTime(time.time)
             const isActive = isHover ? hover === time.time : selectedTime === time.time
 
             return (
