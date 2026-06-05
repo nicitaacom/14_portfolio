@@ -25,12 +25,12 @@ export function Footer() {
           LinkedIn <AiFillLinkedin />
         </Button>
         <Button
-          href="https://drive.google.com/file/d/1yNypEwkQRQ2162opZdjeuRvzNsLw1RVC/view?usp=sharing"
+          href="https://drive.google.com/file/d/1FmubKhYXUM8TmdqXHe5cxRBWKdPObxQN/view?usp=sharing"
           target="_blank">
           {t("summaryEn")} <BsFiletypePdf />
         </Button>
         <Button
-          href="https://drive.google.com/file/d/1RFFOO8AQxvKnqUfriRmf_cMwopZptJNV/view?usp=sharing"
+          href="https://drive.google.com/file/d/1VUT58x-nLDb2-zmfWLvi7RiFiqESJcx3/view?usp=sharing"
           target="_blank">
           {t("summaryDe")} <BsFiletypePdf />
         </Button>
