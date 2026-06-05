@@ -136,6 +136,11 @@ export default {
       noAppointments: "Nie masz jeszcze żadnych zarezerwowanych spotkań.",
       searchTimezones: "Szukaj stref czasowych...",
       timeLabel: "Czas: {time}",
+      slotBooked: "Zajęte",
+      saveChanges: "Zapisz zmiany",
+      cancelEdit: "Anuluj edycję",
+      editAppointment: "Edytuj spotkanie",
+      deleteAppointment: "Usuń spotkanie",
     },
     modal: {
       pickOneOption: "Wybierz jedną opcję, aby kontynuować.",

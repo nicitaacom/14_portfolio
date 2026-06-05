@@ -136,6 +136,11 @@ export default {
       noAppointments: "Du hast noch keine gebuchten Termine.",
       searchTimezones: "Zeitzonen suchen...",
       timeLabel: "Zeit: {time}",
+      slotBooked: "Gebucht",
+      saveChanges: "Änderungen speichern",
+      cancelEdit: "Bearbeitung abbrechen",
+      editAppointment: "Termin bearbeiten",
+      deleteAppointment: "Termin löschen",
     },
     modal: {
       pickOneOption: "Wähle eine Option, um fortzufahren.",

@@ -134,6 +134,11 @@ export default {
       noAppointments: "You do not have any booked appointments yet.",
       searchTimezones: "Search timezones...",
       timeLabel: "Time: {time}",
+      slotBooked: "Booked",
+      saveChanges: "Save changes",
+      cancelEdit: "Cancel edit",
+      editAppointment: "Edit appointment",
+      deleteAppointment: "Delete appointment",
     },
     modal: {
       pickOneOption: "Pick one option to continue.",

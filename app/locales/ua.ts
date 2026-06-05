@@ -133,6 +133,11 @@ export default {
       noAppointments: "У вас поки немає заброньованих зустрічей.",
       searchTimezones: "Пошук таймзони...",
       timeLabel: "Час: {time}",
+      slotBooked: "Зайнято",
+      saveChanges: "Зберегти зміни",
+      cancelEdit: "Скасувати редагування",
+      editAppointment: "Редагувати зустріч",
+      deleteAppointment: "Видалити зустріч",
     },
     modal: {
       pickOneOption: "Оберіть один варіант, щоб продовжити.",

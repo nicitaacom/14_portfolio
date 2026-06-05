@@ -132,9 +132,9 @@ export function TimePicker() {
         <div className="max-h-[196px] overflow-y-scroll hide-scrollbar">
           {convertedTimePicker.map(time => {
             const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
-            const isTimeDisabled =
-              isDisabledFn(time.time, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate) ||
-              isBookedTime(time.time)
+            const isPast = isDisabledFn(time.time, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate)
+            const isBooked = isBookedTime(time.time)
+            const isTimeDisabled = isPast || isBooked
             const isActive = isHover ? hover === time.time : selectedTime === time.time
 
             return (
@@ -154,12 +154,18 @@ export function TimePicker() {
                 disabled={isTimeDisabled}
                 key={time.time}>
                 <span>{time.time}</span>
-                <span
-                  className={twMerge(
-                    "h-[10px] w-[10px] shrink-0 rounded-full transition-all duration-200",
-                    isTimeDisabled ? "bg-secondary-foreground/20" : isActive ? "bg-primary" : "bg-cta/60",
-                  )}
-                />
+                {isBooked ? (
+                  <span className="rounded-[4px] border border-danger/30 bg-danger/10 px-[6px] py-[2px] text-xs text-danger/70">
+                    {t("slotBooked")}
+                  </span>
+                ) : (
+                  <span
+                    className={twMerge(
+                      "h-[10px] w-[10px] shrink-0 rounded-full transition-all duration-200",
+                      isPast ? "bg-secondary-foreground/20" : isActive ? "bg-primary" : "bg-cta/60",
+                    )}
+                  />
+                )}
               </button>
             )
           })}

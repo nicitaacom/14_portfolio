@@ -135,6 +135,11 @@ export default {
       noAppointments: "У вас пока нет забронированных встреч.",
       searchTimezones: "Поиск таймзоны...",
       timeLabel: "Время: {time}",
+      slotBooked: "Занято",
+      saveChanges: "Сохранить изменения",
+      cancelEdit: "Отменить редактирование",
+      editAppointment: "Редактировать встречу",
+      deleteAppointment: "Удалить встречу",
     },
     modal: {
       pickOneOption: "Выберите один вариант, чтобы продолжить.",
