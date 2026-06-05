@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { FiGithub } from "react-icons/fi"
 
@@ -12,10 +12,7 @@ import { Button } from "@/components/Button"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { localizePath } from "@/locales/helpers"
 
-function formatWaitTime(
-  seconds: number,
-  t: ReturnType<typeof useScopedI18n>,
-) {
+function formatWaitTime(seconds: number, t: ReturnType<typeof useScopedI18n>) {
   if (seconds <= 60) return `${seconds} ${seconds === 1 ? t("second") : t("seconds")}`
 
   const minutes = Math.floor(seconds / 60)
@@ -35,8 +32,12 @@ export function AuthPageClient() {
   const [isCheckingPassword, setIsCheckingPassword] = useState(false)
   const [isPasswordVerified, setIsPasswordVerified] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
-  const [passwordStatus, setPasswordStatus] = useState<"idle" | "checking" | "valid" | "invalid" | "rate-limited">("idle")
+  const [passwordStatus, setPasswordStatus] = useState<"idle" | "checking" | "valid" | "invalid" | "rate-limited">(
+    "idle",
+  )
   const [rateLimitMessage, setRateLimitMessage] = useState("")
+  const latestPasswordRef = useRef(password)
+  const hasAutoStartedSignInRef = useRef(false)
 
   const debouncedPassword = useDebounce(password, 5000)
 
@@ -61,12 +62,31 @@ export function AuthPageClient() {
   }, [searchParams, t])
 
   useEffect(() => {
+    latestPasswordRef.current = password
+
     if (!password) {
+      hasAutoStartedSignInRef.current = false
       setIsPasswordVerified(false)
       setPasswordStatus("idle")
       setRateLimitMessage("")
     }
   }, [password])
+
+  const signInWithGithub = useCallback(async () => {
+    if (!isPasswordVerified || isSigningIn) return
+
+    setIsSigningIn(true)
+
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "github",
+      options: { redirectTo: `${location.origin}${localizePath("/auth/callback", locale)}` },
+    })
+
+    if (error) {
+      setIsSigningIn(false)
+      console.error("Auth error:", error)
+    }
+  }, [isPasswordVerified, isSigningIn, locale])
 
   useEffect(() => {
     async function verifyPassword() {
@@ -81,7 +101,12 @@ export function AuthPageClient() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ password: debouncedPassword }),
         })
-        const responseData = (await response.json().catch(() => null)) as API.AdminPasswordResponse | { error?: string } | null
+        const responseData = (await response.json().catch(() => null)) as
+          | API.AdminPasswordResponse
+          | { error?: string }
+          | null
+
+        if (latestPasswordRef.current !== debouncedPassword) return
 
         if (!response.ok) {
           setIsPasswordVerified(false)
@@ -108,6 +133,8 @@ export function AuthPageClient() {
         setRateLimitMessage("")
         setPasswordStatus("valid")
       } catch (error) {
+        if (latestPasswordRef.current !== debouncedPassword) return
+
         setIsPasswordVerified(false)
 
         if (error instanceof Error && error.message.toLowerCase().includes("too many")) {
@@ -127,30 +154,30 @@ export function AuthPageClient() {
     verifyPassword()
   }, [debouncedPassword, t])
 
-  async function signInWithGithub() {
-    if (!isPasswordVerified) return
+  useEffect(() => {
+    if (!isPasswordVerified || isCheckingPassword || hasAutoStartedSignInRef.current) return
 
-    setIsSigningIn(true)
+    hasAutoStartedSignInRef.current = true
+    signInWithGithub()
+  }, [isCheckingPassword, isPasswordVerified, signInWithGithub])
 
-    const { error } = await supabaseClient.auth.signInWithOAuth({
-      provider: "github",
-      options: { redirectTo: `${location.origin}${localizePath("/auth/callback", locale)}` },
-    })
-
-    if (error) {
-      setIsSigningIn(false)
-      console.error("Auth error:", error)
-    }
+  function changePassword(nextPassword: string) {
+    hasAutoStartedSignInRef.current = false
+    setPassword(nextPassword)
+    setIsPasswordVerified(false)
+    setRateLimitMessage("")
+    setPasswordStatus("idle")
   }
 
   const passwordStatusText = useMemo(() => {
+    if (isSigningIn) return t("redirectingToGithub")
     if (!password) return t("enterPassword")
     if (passwordStatus === "checking") return t("checkingPassword")
     if (passwordStatus === "valid") return t("passwordAccepted")
     if (passwordStatus === "rate-limited") return rateLimitMessage || t("tooManyAttempts")
     if (passwordStatus === "invalid") return t("passwordInvalid")
     return t("waitingBeforeCheck")
-  }, [password, passwordStatus, rateLimitMessage, t])
+  }, [isSigningIn, password, passwordStatus, rateLimitMessage, t])
 
   const passwordStatusClassName = useMemo(() => {
     if (passwordStatus === "valid") return "text-success"
@@ -166,7 +193,7 @@ export function AuthPageClient() {
         <input
           type="password"
           value={password}
-          onChange={event => setPassword(event.target.value)}
+          onChange={event => changePassword(event.target.value)}
           placeholder={t("passwordPlaceholder")}
           className="w-full rounded-lg border border-secondary-foreground bg-transparent px-sm py-xs text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground focus:border-cta"
         />

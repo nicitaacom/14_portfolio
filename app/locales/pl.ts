@@ -193,7 +193,7 @@ export default {
   },
   auth: {
     title: "Autoryzacja admina",
-    subtitle1: "Najpierw wpisz hasło. Logowanie przez GitHub pozostanie zablokowane, dopóki hasło się nie zgodzi.",
+    subtitle1: "Najpierw wpisz hasło. Logowanie przez GitHub uruchomi się automatycznie, gdy hasło się zgodzi.",
     subtitle2: "Sprawdzenie hasła uruchamia się automatycznie 5 sekund po zakończeniu pisania.",
     passwordPlaceholder: "Hasło administratora",
     signInWithGithub: "Zaloguj się przez GitHub",
@@ -201,7 +201,7 @@ export default {
     redirectingToGithub: "Przekierowanie do logowania GitHub...",
     enterPassword: "Wpisz hasło. Zostanie automatycznie sprawdzone po 5 sekundach.",
     checkingPassword: "Sprawdzam hasło...",
-    passwordAccepted: "Hasło zaakceptowane. Logowanie przez GitHub jest odblokowane.",
+    passwordAccepted: "Hasło zaakceptowane. Uruchamiam logowanie przez GitHub...",
     tooManyAttempts: "Za dużo prób. Poczekaj i spróbuj ponownie.",
     tooManyAttemptsWait: "Za dużo prób. Poczekaj {duration}, zanim spróbujesz ponownie.",
     passwordInvalid: "Hasło jest nieprawidłowe.",

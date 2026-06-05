@@ -193,7 +193,7 @@ export default {
   },
   auth: {
     title: "Admin-Auth",
-    subtitle1: "Gib zuerst das Passwort ein. Der GitHub-Login bleibt deaktiviert, bis es übereinstimmt.",
+    subtitle1: "Gib zuerst das Passwort ein. Der GitHub-Login startet automatisch, sobald es übereinstimmt.",
     subtitle2: "Die Passwortprüfung startet automatisch 5 Sekunden nach dem letzten Tippen.",
     passwordPlaceholder: "Admin-Passwort",
     signInWithGithub: "Mit GitHub anmelden",
@@ -201,7 +201,7 @@ export default {
     redirectingToGithub: "Weiterleitung zum GitHub-Login...",
     enterPassword: "Gib das Passwort ein. Es wird nach 5 Sekunden automatisch geprüft.",
     checkingPassword: "Passwort wird geprüft...",
-    passwordAccepted: "Passwort akzeptiert. GitHub-Login ist freigeschaltet.",
+    passwordAccepted: "Passwort akzeptiert. GitHub-Login wird gestartet...",
     tooManyAttempts: "Zu viele Versuche. Bitte warte und versuche es erneut.",
     tooManyAttemptsWait: "Zu viele Versuche. Bitte warte {duration}, bevor du es erneut versuchst.",
     passwordInvalid: "Das Passwort ist ungültig.",

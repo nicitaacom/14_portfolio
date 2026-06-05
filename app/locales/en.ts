@@ -191,7 +191,7 @@ export default {
   },
   auth: {
     title: "Admin auth",
-    subtitle1: "Enter the password first. GitHub login stays disabled until it matches.",
+    subtitle1: "Enter the password first. GitHub login starts automatically when it matches.",
     subtitle2: "Password check runs automatically every 5 seconds after typing stops.",
     passwordPlaceholder: "Admin password",
     signInWithGithub: "Sign in with GitHub",
@@ -199,7 +199,7 @@ export default {
     redirectingToGithub: "Redirecting to GitHub login...",
     enterPassword: "Enter the password. It will auto-check after 5 seconds.",
     checkingPassword: "Checking password...",
-    passwordAccepted: "Password accepted. GitHub login is unlocked.",
+    passwordAccepted: "Password accepted. Starting GitHub login...",
     tooManyAttempts: "Too many attempts. Please wait before trying again.",
     tooManyAttemptsWait: "Too many attempts. Please wait {duration} before trying again.",
     passwordInvalid: "Password is not valid.",
