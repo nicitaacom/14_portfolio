@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div
       className="bg-background text-title
-      min-h-[calc(100vh-72px)] overflow-x-hidden transition-colors duration-300 pt-[62px]">
+      min-h-[calc(100vh-72px)] overflow-x-hidden overflow-y-auto transition-colors duration-300 pt-[62px]">
       {children}
       <ModalMoreInfo15 />
       <ModalMoreInfo16 />
