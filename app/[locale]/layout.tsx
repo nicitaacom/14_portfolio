@@ -9,13 +9,15 @@ import { isLocale } from "@/locales/helpers"
 
 export const dynamic = "force-dynamic"
 
-export default function LocaleLayout({
-  params: { locale },
+export default async function LocaleLayout({
+  params,
   children,
 }: {
-  params: { locale: string }
+  params: Promise<{ locale: string }>
   children: React.ReactNode
 }) {
+  const { locale } = await params
+
   if (!isLocale(locale)) notFound()
 
   return (
