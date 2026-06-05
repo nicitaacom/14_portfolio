@@ -82,7 +82,7 @@ export const ProjectClicksOverviewBarItem = memo(function ProjectClicksOverviewB
       <div className="mt-[10px] flex flex-wrap gap-[6px] pl-[44px]">
         {linkTypes.map(linkType => (
           <span
-            className="inline-flex items-center gap-[6px] rounded-full border border-[#3a3a3a] bg-[#242424] px-[8px] py-[3px] text-xs uppercase tracking-[0.14em] text-secondary-foreground"
+            className="inline-flex items-center gap-[6px] rounded-[2px] border border-[#3a3a3a] bg-[#242424] px-[8px] py-[3px] text-xs uppercase tracking-[0.14em] text-secondary-foreground"
             key={linkType.label}>
             <span className={`h-[6px] w-[6px] rounded-full ${linkType.color}`} />
             {linkType.label} {linkType.value}
