@@ -29,23 +29,24 @@ export function UTMStatsDashboardSection() {
   const [error, setError] = useState<string | null>(null)
   const t = useScopedI18n("admin")
 
-  useEffect(() => {
-    const loadStats = async () => {
-      setLoading(true)
-      setError(null)
+  const loadStats = async () => {
+    setLoading(true)
+    setError(null)
 
-      const result = await selectDBUTMStatsAction()
-      if (typeof result === "string") {
-        setError(result)
-        setUtmStats(null)
-      } else {
-        setUtmStats(result)
-      }
-
-      setLoading(false)
+    const result = await selectDBUTMStatsAction()
+    if (typeof result === "string") {
+      setError(result)
+      setUtmStats(null)
+    } else {
+      setUtmStats(result)
     }
 
+    setLoading(false)
+  }
+
+  useEffect(() => {
     void loadStats()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const topSources = useMemo(() => utmStats?.sourceStats.slice(0, 4) ?? [], [utmStats])
@@ -61,18 +62,7 @@ export function UTMStatsDashboardSection() {
       <div className="flex justify-end">
         <button
           className="inline-flex items-center justify-center gap-[8px] rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-xs text-secondary hover:bg-[#2f2f2f] transition"
-          onClick={async () => {
-            setLoading(true)
-            const result = await selectDBUTMStatsAction()
-            if (typeof result === "string") {
-              setError(result)
-              setUtmStats(null)
-            } else {
-              setUtmStats(result)
-              setError(null)
-            }
-            setLoading(false)
-          }}>
+          onClick={() => void loadStats()}>
           <FiRefreshCcw size={14} />
           {t("refresh")}
         </button>
