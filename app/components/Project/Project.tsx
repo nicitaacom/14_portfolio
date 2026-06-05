@@ -13,7 +13,7 @@ interface ProjectProps {
   youtubeUrl?: string
   githubUrl?: string
   youTubeEmbedPreview?: string
-  siteUrl: string
+  siteUrl?: string
   stack: string
   date: string // this is string - not ISO
   openMoreInfoModal: () => void
@@ -36,14 +36,36 @@ export function Project({
   projectGroup,
 }: ProjectProps) {
   const t = useScopedI18n("common")
-  const previewClassName = "group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
+  const previewClassName =
+    "group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
 
   return (
     <div className="relative w-full tablet:h-[720px] h-[784px]">
       <div className="absolute top-sm right-sm flex gap-x-md">
-        {figmaUrl && <FigmaUrlIcon figmaUrl={figmaUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
-        {githubUrl && <GithubUrlIcon githubUrl={githubUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
-        {youtubeUrl && <YoutubeUrlIcon youTubeUrl={youtubeUrl} projectGroup={projectGroup} projectName={projectName} projectSlug={projectSlug} />}
+        {figmaUrl && (
+          <FigmaUrlIcon
+            figmaUrl={figmaUrl}
+            projectGroup={projectGroup}
+            projectName={projectName}
+            projectSlug={projectSlug}
+          />
+        )}
+        {githubUrl && (
+          <GithubUrlIcon
+            githubUrl={githubUrl}
+            projectGroup={projectGroup}
+            projectName={projectName}
+            projectSlug={projectSlug}
+          />
+        )}
+        {youtubeUrl && (
+          <YoutubeUrlIcon
+            youTubeUrl={youtubeUrl}
+            projectGroup={projectGroup}
+            projectName={projectName}
+            projectSlug={projectSlug}
+          />
+        )}
       </div>
       {youTubeEmbedPreview ? (
         <div className={previewClassName}>
@@ -61,7 +83,13 @@ export function Project({
         </div>
       ) : (
         <div className={previewClassName}>
-          <iframe className="h-full w-full" src={siteUrl} loading="lazy" tabIndex={-1} title={`${projectName} preview`} />
+          <iframe
+            className="h-full w-full"
+            src={siteUrl}
+            loading="lazy"
+            tabIndex={-1}
+            title={`${projectName} preview`}
+          />
           <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
         </div>
       )}
@@ -76,18 +104,20 @@ export function Project({
           <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
             {t("date")}: <span>{date}</span>
           </p>
-          <p className="flex flex-row">
-            {t("demo")}:&nbsp;
-            <TrackedProjectLink
-              className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block"
-              href={siteUrl}
-              linkType="demo"
-              projectGroup={projectGroup}
-              projectName={projectName}
-              projectSlug={projectSlug}>
-              {siteUrl.split("?")[0]}
-            </TrackedProjectLink>
-          </p>
+          {siteUrl && (
+            <p className="flex flex-row">
+              {t("demo")}:&nbsp;
+              <TrackedProjectLink
+                className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block"
+                href={siteUrl}
+                linkType="demo"
+                projectGroup={projectGroup}
+                projectName={projectName}
+                projectSlug={projectSlug}>
+                {siteUrl.split("?")[0]}
+              </TrackedProjectLink>
+            </p>
+          )}
         </div>
 
         <Button className="w-full tablet:w-fit whitespace-nowrap" onClick={openMoreInfoModal}>
