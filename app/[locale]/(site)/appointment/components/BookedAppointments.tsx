@@ -10,12 +10,11 @@ import { useState } from "react"
 import { BookingsResponse } from "@/interfaces/BookingsResponse"
 import { convertCurrentToTargetTimezone } from "../../functions/convertCurrentToTargetTimezone"
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
-import { deleteDBAppointmentAction } from "../../actions/deleteDBAppointmentAction"
 import { Button } from "@/components/Button"
-import { updateDBAppointmentAction } from "../../actions/updateDBAppointmentAction"
 import { Input } from "@/components/Input"
 import useToast from "@/store/useToast"
 import { useScopedI18n } from "@/locales/client"
+import { useBookingActions } from "../../hooks/useBookingActions"
 
 export function BookedAppointments({ booked_appointments }: { booked_appointments: BookingsResponse[] }) {
   const { selectedTimezone } = useSelectedTimezoneStore()
@@ -23,28 +22,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
   const t = useScopedI18n("appointment.page")
   const commonT = useScopedI18n("common")
   const toastT = useScopedI18n("toast")
-  const [isLoading, setIsLoading] = useState(false)
   const [editingAppointmentId, setEditingAppointmentId] = useState<string | null>(null)
   const [draftBookingDate, setDraftBookingDate] = useState("")
   const [draftBookingTime, setDraftBookingTime] = useState("")
 
-  async function deleteDBAppointmentFn(
-    bookedAppointmentId: string,
-    bookedAppointmentDate: string,
-    bookedAppointmentTimeMSK: string,
-  ) {
-    try {
-      setIsLoading(true)
-      await deleteDBAppointmentAction(
-        bookedAppointmentId,
-        moment(bookedAppointmentDate).format("DD.MM.YYYY"),
-        bookedAppointmentTimeMSK,
-      )
-    } catch (error) {
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const { isLoading, deleteBooking, updateBooking } = useBookingActions({
+    onError: (error) => toast.show("error", toastT("defaultErrorTitle"), error.message),
+    onUpdateSuccess: stopEditing,
+  })
 
   function startEditing(booking: BookingsResponse) {
     setEditingAppointmentId(booking.id)
@@ -58,27 +43,19 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
     setDraftBookingTime("")
   }
 
-  async function updateDBAppointmentFn(booking: BookingsResponse) {
-    try {
-      setIsLoading(true)
-      const nextBookingTimeMSK = convertCurrentToTargetTimezone(draftBookingTime, selectedTimezone, "Europe/Moscow")
+  function deleteDBAppointmentFn(id: string, date: string, timeMSK: string) {
+    deleteBooking(id, moment(date).format("DD.MM.YYYY"), timeMSK)
+  }
 
-      await updateDBAppointmentAction(
-        booking.id,
-        draftBookingDate,
-        nextBookingTimeMSK,
-        moment(booking.booking_date).format("DD.MM.YYYY"),
-        booking.booking_time_MSK,
-      )
-
-      stopEditing()
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.show("error", toastT("defaultErrorTitle"), error.message)
-      }
-    } finally {
-      setIsLoading(false)
-    }
+  function updateDBAppointmentFn(booking: BookingsResponse) {
+    const nextBookingTimeMSK = convertCurrentToTargetTimezone(draftBookingTime, selectedTimezone, "Europe/Moscow")
+    updateBooking(
+      booking.id,
+      draftBookingDate,
+      nextBookingTimeMSK,
+      moment(booking.booking_date).format("DD.MM.YYYY"),
+      booking.booking_time_MSK,
+    )
   }
 
   return (

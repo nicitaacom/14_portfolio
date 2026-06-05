@@ -6,9 +6,8 @@ import { FaDiscord, FaLinkedinIn, FaTelegramPlane } from "react-icons/fa"
 import { FiEdit3, FiMail, FiSave } from "react-icons/fi"
 import { MdOutlineCancel } from "react-icons/md"
 import { SiGooglemeet } from "react-icons/si"
-import { deleteDBAppointmentAction } from "../actions/deleteDBAppointmentAction"
-import { updateDBAppointmentAction } from "../actions/updateDBAppointmentAction"
 import { Input } from "@/components/Input"
+import { useBookingActions } from "../hooks/useBookingActions"
 import { ProjectClicksDashboardSection } from "./components/ProjectClicksDashboardSection"
 import { UTMStatsDashboardSection } from "./components/UTMStatsDashboardSection"
 import { useScopedI18n } from "@/locales/client"
@@ -244,36 +243,21 @@ function CronScheduleItem({ job }: { job: CronScheduleRow }) {
 function BookingItem({ booking }: { booking: BookingRow }) {
   const t = useScopedI18n("admin")
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [draftBookingDate, setDraftBookingDate] = useState(booking.booking_date)
   const [draftBookingTime, setDraftBookingTime] = useState(booking.booking_time_MSK.slice(0, 5))
 
-  async function saveBookingChanges() {
-    try {
-      setIsLoading(true)
-      await updateDBAppointmentAction(
-        booking.id,
-        draftBookingDate,
-        draftBookingTime,
-        formatDate(booking.booking_date),
-        booking.booking_time_MSK,
-      )
-      setIsEditing(false)
-      router.refresh()
-    } finally {
-      setIsLoading(false)
-    }
+  const { isLoading, deleteBooking, updateBooking } = useBookingActions({
+    onDeleteSuccess: () => router.refresh(),
+    onUpdateSuccess: () => { setIsEditing(false); router.refresh() },
+  })
+
+  function saveBookingChanges() {
+    updateBooking(booking.id, draftBookingDate, draftBookingTime, formatDate(booking.booking_date), booking.booking_time_MSK)
   }
 
-  async function deleteBooking() {
-    try {
-      setIsLoading(true)
-      await deleteDBAppointmentAction(booking.id, formatDate(booking.booking_date), booking.booking_time_MSK)
-      router.refresh()
-    } finally {
-      setIsLoading(false)
-    }
+  function handleDelete() {
+    deleteBooking(booking.id, formatDate(booking.booking_date), booking.booking_time_MSK)
   }
 
   return (
@@ -342,7 +326,7 @@ function BookingItem({ booking }: { booking: BookingRow }) {
                 <button
                   className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-danger/40 bg-[#321b1f] text-danger transition-opacity disabled:opacity-50"
                   disabled={isLoading}
-                  onClick={deleteBooking}
+                  onClick={handleDelete}
                   type="button">
                   <MdOutlineCancel size={16} />
                 </button>
