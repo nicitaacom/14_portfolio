@@ -123,6 +123,7 @@ export function ProjectClicksDashboardSection() {
         project =>
           overviewByProjectSlug[project.slug] ?? createEmptyOverviewItemFn(project.slug, project.name, project.group),
       )
+      .filter(item => item.total_clicks > 0)
       .sort((a, b) => b.total_clicks - a.total_clicks)
   }, [overviewByProjectSlug])
 
