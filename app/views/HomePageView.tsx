@@ -10,7 +10,7 @@ import { TooltipOther, TooltipReact } from "@/components/Tooltips"
 import { TooltipText } from "@/components/Tooltips/TooltipText"
 import { ProjectsSwitcher } from "@/components/ProjectsSwitcher"
 import { Footer } from "@/components/Footer"
-import { hours } from "@/data/hours"
+import { hours } from "@/data/hours-and-applications"
 import { Button } from "@/components/Button"
 import { useScopedI18n } from "@/locales/client"
 
@@ -30,7 +30,6 @@ export function HomePageView() {
       key: "business",
       label: t("audiences.business.label"),
       items: [t("audiences.business.item1"), "", t("audiences.business.item3")],
-
     },
     {
       key: "agency",
@@ -83,7 +82,9 @@ export function HomePageView() {
                   onClick={() => setActiveTab(key)}
                   className={twMerge(
                     "border-b-2 pb-xs text-sm font-bold transition-colors duration-200",
-                    activeTab === key ? "border-cta text-cta" : "border-transparent text-secondary-foreground hover:text-secondary",
+                    activeTab === key
+                      ? "border-cta text-cta"
+                      : "border-transparent text-secondary-foreground hover:text-secondary",
                   )}>
                   {label}
                 </button>
@@ -107,7 +108,9 @@ export function HomePageView() {
                   {t("story.messagePrefix")}&nbsp;
                   <TooltipText
                     label={t("story.messageLabel")}
-                    tooltip={<h2 className="whitespace-pre-line text-sm tablet:text-xs">{t("story.messageTooltip")}</h2>}
+                    tooltip={
+                      <h2 className="whitespace-pre-line text-sm tablet:text-xs">{t("story.messageTooltip")}</h2>
+                    }
                   />
                   &nbsp;{t("story.messageSuffix")}
                 </div>
@@ -151,9 +154,13 @@ export function HomePageView() {
                                   {key === "business" && i === 1 ? (
                                     <>
                                       {t("audiences.business.item2Prefix")}&nbsp;
-                                      <span className="underline underline-offset-2">{t("audiences.business.item2FastLabel")}</span>
+                                      <span className="underline underline-offset-2">
+                                        {t("audiences.business.item2FastLabel")}
+                                      </span>
                                     </>
-                                  ) : item}
+                                  ) : (
+                                    item
+                                  )}
                                 </li>
                               ))}
                             </ul>

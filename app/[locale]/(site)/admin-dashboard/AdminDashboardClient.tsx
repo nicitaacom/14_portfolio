@@ -1,13 +1,15 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { FaDiscord, FaLinkedinIn, FaTelegramPlane } from "react-icons/fa"
 import { FiEdit3, FiMail, FiSave } from "react-icons/fi"
 import { MdOutlineCancel } from "react-icons/md"
 import { SiGooglemeet } from "react-icons/si"
+import Image from "next/image"
 import { Input } from "@/components/Input"
 import { useBookingActions } from "../hooks/useBookingActions"
+import { JobSearchDashboardSection } from "./components/JobSearchDashboardSection"
 import { ProjectClicksDashboardSection } from "./components/ProjectClicksDashboardSection"
 import { UTMStatsDashboardSection } from "./components/UTMStatsDashboardSection"
 import { useScopedI18n } from "@/locales/client"
@@ -372,8 +374,31 @@ function DashboardCard({
   )
 }
 
+type TActiveTab = "utm" | "projectClick" | "jobSearch"
+
+const STORAGE_KEY = "admin-dashboard-active-tab"
+
+function isValidTab(value: unknown): value is TActiveTab {
+  return value === "utm" || value === "projectClick" || value === "jobSearch"
+}
+
 export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminDashboardClientProps) {
-  const [activeTab, setActiveTab] = useState<"utm" | "projectClick">("utm")
+  const [activeTab, setActiveTab] = useState<TActiveTab>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      return isValidTab(stored) ? stored : "utm"
+    } catch {
+      return "utm"
+    }
+  })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, activeTab)
+    } catch {
+      // localStorage unavailable (private browsing, storage full)
+    }
+  }, [activeTab])
   const t = useScopedI18n("admin")
   const stats = useMemo(() => {
     const activeCronJobs = cronSchedules.filter(job => job.is_active).length
@@ -435,24 +460,42 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
                 onClick={() => setActiveTab("projectClick")}>
                 {t("projectClick")}
               </button>
+              <button
+                type="button"
+                className={`rounded-[2px] border px-[10px] py-[8px] text-sm transition ${
+                  activeTab === "jobSearch"
+                    ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
+                    : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                }`}
+                onClick={() => setActiveTab("jobSearch")}>
+                {t("jobSearch")}
+              </button>
             </div>
-            <p className="text-xs text-secondary-foreground">{t("tabHelper")}</p>
           </div>
         </section>
 
         <div className="mt-sm">
-          {activeTab === "utm" ? <UTMStatsDashboardSection /> : <ProjectClicksDashboardSection />}
+          {activeTab === "utm" && <UTMStatsDashboardSection />}
+          {activeTab === "projectClick" && <ProjectClicksDashboardSection />}
+          {activeTab === "jobSearch" && <JobSearchDashboardSection />}
         </div>
 
         <div className="mt-sm grid gap-[4px] desktop:grid-cols-[1.2fr_0.8fr]">
           <DashboardCard
             title={t("cronSchedules")}
             subtitle={t("cronSchedulesSubtitle")}>
-            <div className="flex flex-col gap-[4px]">
-              {cronSchedules.map(job => (
-                <CronScheduleItem key={job.id} job={job} />
-              ))}
-            </div>
+            {cronSchedules.length === 0 ? (
+              <div className="flex flex-col items-center gap-sm py-lg">
+                <Image src="/cron-jobs.png" alt="No cron schedules" width={120} height={120} className="opacity-50" />
+                <p className="text-sm text-secondary-foreground">{t("noCronSchedulesYet")}</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-[4px]">
+                {cronSchedules.map(job => (
+                  <CronScheduleItem key={job.id} job={job} />
+                ))}
+              </div>
+            )}
           </DashboardCard>
 
           <DashboardCard

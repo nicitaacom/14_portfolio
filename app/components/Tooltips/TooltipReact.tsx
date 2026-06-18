@@ -1,4 +1,4 @@
-import { hours } from "@/data/hours"
+import { hours } from "@/data/hours-and-applications"
 import { Skill } from "../Skill"
 
 export function TooltipReact() {

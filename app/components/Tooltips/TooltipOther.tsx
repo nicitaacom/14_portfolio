@@ -1,6 +1,6 @@
 "use client"
 
-import { hours } from "@/data/hours"
+import { hours } from "@/data/hours-and-applications"
 import { Skill } from "../Skill"
 import { useScopedI18n } from "@/locales/client"
 
