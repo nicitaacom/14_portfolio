@@ -6,36 +6,40 @@ import CountUp from "react-countup"
 import gsap from "gsap"
 
 export function Skill(skill: ISkill) {
-  const progressRef: RefObject<HTMLDivElement> = useRef(null)
+  const progressRef: RefObject<HTMLDivElement | null> = useRef(null)
 
   useLayoutEffect(() => {
-    const wn8 = 100 / 6
-    const percent = skill.hours / 100
-    let background = "#fe0e00"
-    if (percent > wn8 * 0) {
-      background = "#fe0e00" //red
-    }
-    if (percent > wn8 * 1) {
-      background = "#fe7903" //orange
-    }
-    if (percent > wn8 * 2) {
-      background = "#f8f403" //yellow
-    }
-    if (percent > wn8 * 3) {
-      background = "#60ff00" //green
-    }
-    if (percent > wn8 * 4) {
-      background = "#02c9b3" //turquoise
-    }
-    if (percent > wn8 * 5) {
-      background = "#d042f3" //violet
+    const maxHours = 10000
+    const percent = (skill.hours / maxHours) * 100
+
+    // 6 fixed bands across 0–100%: each spans 100/6 ≈ 16.67%.
+    // Color snaps to whichever band the bar's CURRENT fill sits in,
+    // so as the bar grows it sweeps red → orange → … → violet.
+    const band = 100 / 6
+    const colorForFill = (fill: number) => {
+      if (fill > band * 5) return "#d042f3" // violet
+      if (fill > band * 4) return "#02c9b3" // turquoise
+      if (fill > band * 3) return "#60ff00" // green
+      if (fill > band * 2) return "#f8f403" // yellow
+      if (fill > band * 1) return "#fe7903" // orange
+      return "#fe0e00" // red
     }
 
-    if (progressRef.current) {
-      gsap.to(progressRef.current, {
-        width: `${percent}%`,
-        background,
-      })
+    if (!progressRef.current) return
+
+    gsap.set(progressRef.current, { width: "0%", background: colorForFill(0) })
+    const tween = gsap.to(progressRef.current, {
+      width: `${percent}%`,
+      duration: 5,
+      ease: "power1.inOut",
+      onUpdate: function () {
+        const fill = parseFloat((this.targets()[0] as HTMLDivElement).style.width)
+        if (progressRef.current) progressRef.current.style.background = colorForFill(fill)
+      },
+    })
+
+    return () => {
+      tween.kill()
     }
   }, [skill.hours])
 
@@ -54,10 +58,7 @@ export function Skill(skill: ISkill) {
         {skill.tooltip ? "" : skill.label}
       </h1>
       <div className={`relative w-full rounded-xl ${skill.small ? "bg-primary" : "bg-primary"} overflow-hidden`}>
-        <div
-          className="w-[0px] h-full transition-all duration-[5000ms] shadow-[inset_0px_2px_2px_rgba(0,0,0,0.3)]"
-          ref={progressRef}
-        />
+        <div className="w-[0px] h-full shadow-[inset_0px_2px_2px_rgba(0,0,0,0.3)]" ref={progressRef} />
         <CountUp
           className="absolute top-[50%] right-[4%] -translate-y-1/2 text-xs font-bold text-secondary-foreground"
           end={skill.hours}
