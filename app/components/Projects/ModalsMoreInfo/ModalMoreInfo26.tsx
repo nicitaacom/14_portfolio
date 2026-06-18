@@ -1,7 +1,6 @@
 "use client"
 
 import { useModalsStore } from "@/store/modalsStore"
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 
@@ -17,9 +16,7 @@ export default function ModalMoreInfo26() {
       siteUrl="https://hot-delivery.vercel.app/"
       taskLabel={t("project26Task")}
       deadline="2 weeks"
-      collaborationChildren={
-        <CollaborationIcon tooltiptext={<div className="whitespace-pre-line">{t("project26Collaboration")}</div>} />
-      }
+      collaborators={[{ description: t("project26Collaboration") }]}
     />
   )
 }

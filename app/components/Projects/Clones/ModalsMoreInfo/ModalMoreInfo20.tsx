@@ -1,7 +1,6 @@
 "use client"
 
 import { useModalsStore } from "@/store/modalsStore"
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 
 export default function ModalMoreInfo20() {
@@ -14,7 +13,7 @@ export default function ModalMoreInfo20() {
       siteUrl="https://github.com/nicitaacom/20_flowmazon-clone"
       taskLabel="Improve FullStack WEB developer skill"
       deadline="no deadline"
-      collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
+      collaborators={[{ description: "Whole site" }]}
     />
   )
 }

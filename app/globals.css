@@ -44,11 +44,7 @@
       2px 2px 4px hsla(var(--cta-tooltip) / 0.2);
   }
 
-  .collaboration-tooltip::before {
-    @apply content-[""] w-[48px] h-[48px] absolute rounded-[50%] -translate-x-1/2 shadow-[0px_4px_12px_var(--cta-tooltip),_inset_0px_4px_12px_var(--cta-tooltip)];
-  }
-
-  .tooltip {
+.tooltip {
     @apply relative inline-block;
   }
 
@@ -145,17 +141,6 @@
     border-right-color: #3a3a3a;
   }
 
-  .tooltip-modal:hover .tooltiptext-modal {
-    @apply opacity-100 visible transition-all duration-300
-    whitespace-nowrap w-auto h-auto p-sm text-secondary z-[99];
-  }
-
-  .tooltiptext-modal {
-    @apply opacity-0 invisible transition-all duration-300
-    absolute inset-[0] 
-    text-sm bg-primary-foreground rounded-lg
-    z-[99] pointer-events-none;
-  }
 }
 
 body {
@@ -235,7 +220,7 @@ div {
   background-color: hsl(var(--primary));
 }
 .rdrCalendarWrapper {
-  background-color: hsl(var(--primary-foregorund));
+  background-color: hsl(var(--primary-foreground));
 }
 .rdrSelected {
   background-color: hsl(0, 0%, 47%, 15%);
@@ -460,7 +445,7 @@ div {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--primary-foregorund));
+  background-color: hsl(var(--primary-foreground));
   border-radius: 10px;
 }
 

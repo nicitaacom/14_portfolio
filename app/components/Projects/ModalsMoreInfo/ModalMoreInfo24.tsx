@@ -1,6 +1,5 @@
 "use client"
 
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
@@ -17,11 +16,7 @@ export default function ModalMoreInfo24() {
       siteUrl="https://24-dashboard-mui.vercel.app"
       taskLabel={t("project24Task")}
       deadline="2 weeks"
-      collaborationChildren={
-        <>
-          <CollaborationIcon tooltiptext={<div className="whitespace-pre-line">{t("project24Collaboration")}</div>} />
-        </>
-      }
+      collaborators={[{ description: t("project24Collaboration") }]}
     />
   )
 }

@@ -1,5 +1,4 @@
 "use client"
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
@@ -16,7 +15,7 @@ export default function ModalMoreInfo15() {
       siteUrl="https://15-hoo-bank.vercel.app/"
       taskLabel={t("project15Task")}
       deadline="2 weeks"
-      collaborationChildren={<CollaborationIcon tooltiptext={t("wholeSite")} />}
+      collaborators={[{ description: t("wholeSite") }]}
     />
   )
 }

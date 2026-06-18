@@ -1,26 +1,33 @@
 import Image from "next/image"
-import { ReactElement } from "react"
 
-interface CollaborationIconIconProps {
-  tooltiptext: string | ReactElement
-  profileUrl?: string
+interface CollaborationIconProps {
+  name?: string
   imgSrc?: string
+  profileUrl?: string
+  isSelected: boolean
+  onClick: () => void
 }
 
-export function CollaborationIcon({ tooltiptext, profileUrl, imgSrc }: CollaborationIconIconProps) {
+export function CollaborationIcon({
+  name = "nicitaacom",
+  imgSrc = "/collaborations/web-avatar.jpg",
+  profileUrl,
+  isSelected,
+  onClick,
+}: CollaborationIconProps) {
   return (
-    <div className="tooltip-modal collaboration-tooltip">
+    <button
+      type="button"
+      title={name}
+      onClick={onClick}
+      className={`w-[42px] h-[42px] rounded-full shrink-0 transition-all duration-200 ${isSelected ? "ring-2 ring-secondary ring-offset-2 ring-offset-primary" : "opacity-60 hover:opacity-100"}`}>
       <Image
-        className="cursor-pointer w-[48px] h-[48px] rounded-[50%]"
-        onClick={() => window.open(profileUrl ? profileUrl : "https://github.com/nicitaacom")}
-        src={imgSrc ? imgSrc : "/web-avatar.jpg"}
-        alt="collaboration"
-        width={32}
-        height={32}
+        className="w-[42px] h-[42px] rounded-full block"
+        src={imgSrc}
+        alt={name}
+        width={64}
+        height={64}
       />
-      <div className="tooltiptext-modal">
-        <h1>{tooltiptext}</h1>
-      </div>
-    </div>
+    </button>
   )
 }

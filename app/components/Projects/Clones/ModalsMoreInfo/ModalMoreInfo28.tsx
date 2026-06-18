@@ -1,10 +1,9 @@
 "use client"
 
 import { useModalsStore } from "@/store/modalsStore"
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 
-export default function ModalMoreInfo15() {
+export default function ModalMoreInfo28() {
   const { isOpen, closeModal } = useModalsStore()
   return (
     <ModalMoreInfo
@@ -14,7 +13,7 @@ export default function ModalMoreInfo15() {
       siteUrl="https://github.com/nicitaacom/28_notion-clone"
       taskLabel="Develop skill to change something on click"
       deadline="No deadline"
-      collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
+      collaborators={[{ description: "Whole site" }]}
     />
   )
 }

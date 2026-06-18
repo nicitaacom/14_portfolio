@@ -1,6 +1,5 @@
 "use client"
 
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
@@ -17,7 +16,7 @@ export default function ModalMoreInfoRizAdminDashboard() {
       siteUrl="https://admin.waka.cool/not-deployed"
       taskLabel={t("projectRizTask")}
       deadline={t("noDeadline")}
-      collaborationChildren={<CollaborationIcon tooltiptext={t("wholeSiteUiUx")} />}
+      collaborators={[{ description: t("wholeSiteUiUx") }]}
     />
   )
 }

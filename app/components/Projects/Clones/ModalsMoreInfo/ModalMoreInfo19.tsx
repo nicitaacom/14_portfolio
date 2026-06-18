@@ -1,7 +1,6 @@
 "use client"
 
 import { useModalsStore } from "@/store/modalsStore"
-import { CollaborationIcon } from "@/components/CollaborationIcon"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 
 export default function ModalMoreInfo19() {
@@ -14,7 +13,7 @@ export default function ModalMoreInfo19() {
       siteUrl="https://github.com/Nicitaa/15_HooBank"
       taskLabel="Improve FullStack developer skill"
       deadline="no deadline"
-      collaborationChildren={<CollaborationIcon tooltiptext={<>Whole site</>} />}
+      collaborators={[{ description: "Whole site" }]}
     />
   )
 }
