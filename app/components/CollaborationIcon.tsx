@@ -13,7 +13,7 @@ export function CollaborationIcon({ tooltiptext, profileUrl, imgSrc }: Collabora
       <Image
         className="cursor-pointer w-[48px] h-[48px] rounded-[50%]"
         onClick={() => window.open(profileUrl ? profileUrl : "https://github.com/nicitaacom")}
-        src={imgSrc ? imgSrc : "/WEB.ico"}
+        src={imgSrc ? imgSrc : "/web-avatar.jpg"}
         alt="collaboration"
         width={32}
         height={32}

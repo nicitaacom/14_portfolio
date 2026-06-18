@@ -4,8 +4,12 @@ import type { Metadata } from "next"
 import Script from "next/script"
 
 export const metadata: Metadata = {
-  title: "Portfolio t.me/nicitaacom",
-  description: "https://t.me/nicitaacom",
+  title: "nicitaacom | Portfolio",
+  description:
+    "Portfolio of Nikita - Teamlead WEB developer. 8 years of experience - Get results or you don't pay - Russian / Ukrainian / English / German / Polish",
+  icons: {
+    icon: "/favicon.png",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
