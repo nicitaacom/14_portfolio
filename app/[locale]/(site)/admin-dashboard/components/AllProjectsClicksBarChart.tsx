@@ -24,42 +24,31 @@ export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: All
     totalClicks && selectedProject ? Math.round((selectedProject.total_clicks / totalClicks) * 100) : 0
 
   if (!overview.length) {
-    return (
-      <p className="py-10 text-center text-sm text-secondary-foreground">{t("noWindowClickData")}</p>
-    )
+    return <p className="py-10 text-center text-sm text-secondary-foreground">{t("noWindowClickData")}</p>
   }
 
   return (
     <div className="flex min-w-0 flex-col gap-sm">
-      <div className="grid gap-xs tablet:grid-cols-3">
-        <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
-          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">{t("windowTotal")}</p>
-          <p className="mt-[6px] text-lg text-secondary">{totalClicks}</p>
-        </div>
-        <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
-          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">{t("activeProjects")}</p>
-          <p className="mt-[6px] text-lg text-secondary">{activeProjects}</p>
-        </div>
-        <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
-          <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">{t("selectedShare")}</p>
-          <p className="mt-[6px] text-lg text-secondary">{selectedProjectShare}%</p>
-        </div>
+      <div className="flex gap-sm text-xs text-secondary-foreground">
+        <span>{t("windowTotal")} <span className="text-secondary">{totalClicks}</span></span>
+        <span className="opacity-30">·</span>
+        <span>{t("activeProjects")} <span className="text-secondary">{activeProjects}</span></span>
+        <span className="opacity-30">·</span>
+        <span>{t("selectedShare")} <span className="text-secondary">{selectedProjectShare}%</span></span>
       </div>
 
-      <div className="max-w-full overflow-x-auto pb-[4px]">
-        <div className="flex min-w-[760px] flex-col gap-xs">
-          {overview.map((item, index) => (
-            <ProjectClicksOverviewBarItem
-              barWidthPercent={(item.total_clicks / maxClicks) * 100}
-              isSelected={item.project_slug === selectedProjectSlug}
-              item={item}
-              key={item.project_slug}
-              rank={index + 1}
-              shortLabel={trackedProjectsMap[item.project_slug]?.shortName ?? item.project_name}
-              totalWindowClicks={totalClicks}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col divide-y divide-[#2a2a2a]">
+        {overview.map((item, index) => (
+          <ProjectClicksOverviewBarItem
+            barWidthPercent={(item.total_clicks / maxClicks) * 100}
+            isSelected={item.project_slug === selectedProjectSlug}
+            item={item}
+            key={item.project_slug}
+            rank={index + 1}
+            shortLabel={trackedProjectsMap[item.project_slug]?.shortName ?? item.project_name}
+            totalWindowClicks={totalClicks}
+          />
+        ))}
       </div>
     </div>
   )

@@ -542,6 +542,12 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
             </div>
 
             <div className="admin-dashboard-scrollbar max-h-[860px] overflow-auto pr-xs">
+              {bookingsView === "upcoming" && stats.upcomingBookings.length === 0 && (
+                <p className="py-lg text-center text-sm text-secondary-foreground">{t("noUpcomingBookings")}</p>
+              )}
+              {bookingsView === "past" && stats.pastBookings.length === 0 && (
+                <p className="py-lg text-center text-sm text-secondary-foreground">{t("noPastBookings")}</p>
+              )}
               <div className="flex flex-col gap-[4px]">
                 {bookingsView === "upcoming"
                   ? stats.upcomingBookings.map(booking => <BookingItem key={booking.id} booking={booking} />)
