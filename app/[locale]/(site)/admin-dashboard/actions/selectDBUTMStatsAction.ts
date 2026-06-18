@@ -2,18 +2,9 @@
 
 import supabaseAdmin from "@/libs/supabaseAdmin"
 import type { TUTMTimeRange } from "../types/TUTMTimeRange"
+import type { TUTMAggregatedStats } from "../types/TUTMAggregatedStats"
 
 const supabase = supabaseAdmin as any
-
-export type UTMAggregatedStats = {
-  totalVisits: number
-  uniqueUsers: number
-  sourceStats: { name: string; count: number }[]
-  mediumStats: { name: string; count: number }[]
-  campaignStats: { name: string; count: number }[]
-  chartData: { date: string; visits: number }[]
-  timeRange: TUTMTimeRange
-}
 
 function getWindowStart(timeRange: TUTMTimeRange): Date {
   const now = new Date()
@@ -23,7 +14,7 @@ function getWindowStart(timeRange: TUTMTimeRange): Date {
   return now
 }
 
-export async function selectDBUTMStatsAction(timeRange: TUTMTimeRange = "1m"): Promise<UTMAggregatedStats | string> {
+export async function selectDBUTMStatsAction(timeRange: TUTMTimeRange = "1m"): Promise<TUTMAggregatedStats | string> {
   try {
     const windowStart = getWindowStart(timeRange)
 
@@ -47,7 +38,7 @@ export async function selectDBUTMStatsAction(timeRange: TUTMTimeRange = "1m"): P
     }>
 
     if (!entries.length) {
-      return { totalVisits: 0, uniqueUsers: 0, sourceStats: [], mediumStats: [], campaignStats: [], chartData: [], timeRange }
+      return { totalVisits: 0, uniqueUsers: 0, sourceStats: [], mediumStats: [], campaignStats: [], chartData: [], timeRange } satisfies TUTMAggregatedStats
     }
 
     const totalVisits = entries.length

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { selectDBUTMStatsAction, type UTMAggregatedStats } from "../actions/selectDBUTMStatsAction"
+import { selectDBUTMStatsAction } from "../actions/selectDBUTMStatsAction"
 import type { TUTMTimeRange } from "../types/TUTMTimeRange"
+import type { TUTMAggregatedStats } from "../types/TUTMAggregatedStats"
 
 export function useUTMStats() {
   const [timeRange, setTimeRange] = useState<TUTMTimeRange>("1m")
-  const [utmStats, setUtmStats] = useState<UTMAggregatedStats | null>(null)
+  const [utmStats, setUtmStats] = useState<TUTMAggregatedStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const requestIdRef = useRef(0)
