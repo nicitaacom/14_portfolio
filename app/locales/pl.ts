@@ -238,6 +238,8 @@ cronSchedules: "Cron schedules",
     bookedAppointmentsSubtitle:
       "Wszystkie rezerwacje z badge'ami kanałów i identyfikatorami w kompaktowej przewijanej liście.",
     upcoming: "Nadchodzące",
+    past: "Minione",
+    total: "Łącznie",
     allRows: "Wszystkie wiersze",
     created: "Utworzono",
     bookingId: "Booking ID",

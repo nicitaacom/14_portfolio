@@ -382,7 +382,10 @@ function isValidTab(value: unknown): value is TActiveTab {
   return value === "utm" || value === "projectClick" || value === "jobSearch"
 }
 
+type TBookingsView = "upcoming" | "past"
+
 export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminDashboardClientProps) {
+  const [bookingsView, setBookingsView] = useState<TBookingsView>("upcoming")
   const [activeTab, setActiveTab] = useState<TActiveTab>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -401,18 +404,26 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
   }, [activeTab])
   const t = useScopedI18n("admin")
   const stats = useMemo(() => {
+    const now = new Date()
     const activeCronJobs = cronSchedules.filter(job => job.is_active).length
     const failedCronJobs = cronSchedules.filter(job => job.last_run_status === "failed").length
     const upcomingBookings = bookings.filter(
-      booking => new Date(`${booking.booking_date}T${booking.booking_time_MSK}`) >= new Date(),
-    ).length
+      booking => new Date(`${booking.booking_date}T${booking.booking_time_MSK}`) >= now,
+    )
+    const pastBookings = bookings
+      .filter(booking => new Date(`${booking.booking_date}T${booking.booking_time_MSK}`) < now)
+      .sort((a, b) =>
+        new Date(`${b.booking_date}T${b.booking_time_MSK}`).getTime() -
+        new Date(`${a.booking_date}T${a.booking_time_MSK}`).getTime(),
+      )
 
     return {
       activeCronJobs,
       failedCronJobs,
-      totalBookings: bookings.length,
       totalCronJobs: cronSchedules.length,
       upcomingBookings,
+      pastBookings,
+      totalBookings: bookings.length,
     }
   }, [bookings, cronSchedules])
 
@@ -501,16 +512,41 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           <DashboardCard
             title={t("bookedAppointments")}
             subtitle={t("bookedAppointmentsSubtitle")}>
-            <div className="mb-[4px] grid grid-cols-2 gap-[4px]">
-              <OverviewStat label={t("upcoming")} value={stats.upcomingBookings} />
-              <OverviewStat label={t("allRows")} value={bookings.length} />
+            <div className="mb-[4px] grid grid-cols-3 gap-[4px]">
+              <OverviewStat label={t("upcoming")} value={stats.upcomingBookings.length} />
+              <OverviewStat label={t("past")} value={stats.pastBookings.length} />
+              <OverviewStat label={t("total")} value={stats.totalBookings} />
+            </div>
+
+            <div className="mb-[4px] flex gap-[4px]">
+              <button
+                type="button"
+                className={`rounded-[2px] border px-[10px] py-[6px] text-xs transition ${
+                  bookingsView === "upcoming"
+                    ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
+                    : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                }`}
+                onClick={() => setBookingsView("upcoming")}>
+                {t("upcoming")}
+              </button>
+              <button
+                type="button"
+                className={`rounded-[2px] border px-[10px] py-[6px] text-xs transition ${
+                  bookingsView === "past"
+                    ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
+                    : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                }`}
+                onClick={() => setBookingsView("past")}>
+                {t("past")}
+              </button>
             </div>
 
             <div className="admin-dashboard-scrollbar max-h-[860px] overflow-auto pr-xs">
               <div className="flex flex-col gap-[4px]">
-                {bookings.map(booking => (
-                  <BookingItem key={booking.id} booking={booking} />
-                ))}
+                {bookingsView === "upcoming"
+                  ? stats.upcomingBookings.map(booking => <BookingItem key={booking.id} booking={booking} />)
+                  : stats.pastBookings.map(booking => <BookingItem key={booking.id} booking={booking} />)
+                }
               </div>
             </div>
           </DashboardCard>

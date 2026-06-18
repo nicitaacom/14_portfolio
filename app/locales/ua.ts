@@ -235,6 +235,8 @@ cronSchedules: "Cron schedules",
     bookedAppointmentsSubtitle:
       "Усі записи з бейджами каналів та ідентифікаторами в компактному прокручуваному списку.",
     upcoming: "Майбутні",
+    past: "Минулі",
+    total: "Всього",
     allRows: "Усі рядки",
     created: "Створено",
     bookingId: "Booking ID",
