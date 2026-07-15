@@ -1,17 +1,18 @@
-// 2026-05-01 until 2026-05-31
+// 2026-06-01 until 2026-06-30
 
 // if you see an email from waka time - update it and rest of skills
+// ⚠️ Note that email might be delayed for ca. 6 days
 export const hours = {
-  htmlcss: 6340,
+  htmlcss: 6540,
   vite: 1163,
-  next: 4790,
-  typescript: 5859,
+  next: 4990,
+  typescript: 6059,
   other: {
-    supabase: 374,
-    zustand: 353,
-    photoshop: 179,
+    supabase: 394,
+    zustand: 359,
+    photoshop: 180,
     figma: 153,
-    devops: 174,
+    devops: 175,
   },
 }
 
