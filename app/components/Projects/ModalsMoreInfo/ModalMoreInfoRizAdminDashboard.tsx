@@ -12,11 +12,11 @@ export default function ModalMoreInfoRizAdminDashboard() {
     <ModalMoreInfo
       isOpen={isOpen["rizAdminDashboard"]}
       onClose={() => closeModal("rizAdminDashboard")}
-      label="riz admin dashboard"
+      label={t("projectRizLabel")}
       siteUrl="https://admin.waka.cool/not-deployed"
       taskLabel={t("projectRizTask")}
       deadline={t("noDeadline")}
-      collaborators={[{ description: t("wholeSiteUiUx") }]}
+      collaborators={[{ description: t("projectRizCollaboration") }]}
     />
   )
 }
