@@ -59,7 +59,7 @@ export default {
       developers: {
         label: "For developers",
         item1: "Consulting and advice on how to code.",
-        item2: "React · Next.js · TypeScript · Tailwind",
+        item2: "Next.js · TypeScript · Tailwind",
       },
     },
     story: {
@@ -96,6 +96,8 @@ export default {
     collaboration: "Collaboration",
     deadline: "Deadline",
     projectTask: "Project task",
+    whatIDid: "What I did",
+    selectedContributorOutcomes: "Selected contributor’s responsibilities and outcomes",
     similarSite: "Want a similar site? Message me:",
     wholeSite: "Whole site",
     wholeSiteUiUx: "Whole site + UI/UX design",
@@ -118,7 +120,38 @@ export default {
     project26Task: "Create a full-stack restaurant website.",
     project26Collaboration:
       "- login / register functionality\n- custom support chat with USER / SUPPORT / ADMIN roles\n- admin panel where ADMIN can add / edit / delete food\n- PayPal payment setup\n- Supabase setup\n- order delivery flow with Google Maps API\n- CHEF dashboard setup\n- frontend and backend development\n- task organization in GitHub Projects\n- project documentation\n- scalability improvements",
+    projectRizLabel: "Riz admin dashboard",
     projectRizTask: "Add a UI in the admin dashboard to create, update, and delete people.",
+    projectRizCollaboration:
+      "- Created CMS for startup about dating using React - Next.js - TypeScript - Tailwind - MongoDB\n- Created i18n EN/IT\n- Illuminated (removed) need in Nest.js by using Next.js for backend work",
+  },
+  ndaProject: {
+    preview: {
+      ariaLabel: "A glowing question-mark lamp swinging on a dark wall",
+      level: "Mid-level NDA",
+      title: "Confidential service case study",
+      description: "Private clients, domains, and code. Outcomes do not.",
+      identityProtected: "Identity protected",
+      outcomes: "{count} outcomes",
+    },
+    card: {
+      confidentialEngagement: "Confidential engagement",
+    },
+    modal: {
+      label: "Confidential outreach & operations platform",
+      badge: "Mid-level NDA",
+      contributionTitle: "What I’ve done",
+      task: "Built and scaled a confidential B2B platform covering outreach, email operations, calling, compliance, support, analytics, billing, and AI-assisted workflows.",
+    },
+    notice: {
+      title: "What “Mid-level NDA” means",
+      description:
+        "This is an approved, outcome-focused case study—not a release of private client material. I may describe the product category, my responsibilities, technologies, and measurable results. Client and company names, domains, repositories, source code, credentials, user data, and sensitive implementation details remain confidential.",
+    },
+    details: {
+      deliveredOutcomes: "{count} delivered outcomes",
+      intro: "Selected work across a confidential B2B outreach, communications, support, and operations platform.",
+    },
   },
   appointment: {
     page: {
@@ -229,7 +262,7 @@ export default {
     bookings: "Bookings",
     utm: "UTM",
     projectClick: "Project click",
-cronSchedules: "Cron schedules",
+    cronSchedules: "Cron schedules",
     cronSchedulesSubtitle: "Compact live view of every pg_cron job configured for this project.",
     noCronSchedulesYet: "No cron schedules yet.",
     bookedAppointments: "Booked appointments",

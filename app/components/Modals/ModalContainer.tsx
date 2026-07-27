@@ -19,15 +19,26 @@ export function ModalContainer({ isOpen, onClose, children, className }: ModalCo
   /* onOpen - show modal - disable scroll and scrollbar - hide navbar - show bg */
   useEffect(() => {
     setShowModal(isOpen)
+
     if (isOpen) {
       document.body.style.overflow = "hidden"
+      document.body.classList.add("modal-open")
+    } else {
+      document.body.style.overflow = ""
+      document.body.classList.remove("modal-open")
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+      document.body.classList.remove("modal-open")
     }
   }, [isOpen])
 
   /* onClose - close modal - show navbar - show scrollbar */
   function closeModal() {
     onClose()
-    document.body.removeAttribute("style")
+    document.body.style.overflow = ""
+    document.body.classList.remove("modal-open")
   }
 
   /* for e.stopPropagation when mousedown on modal and mouseup on modalBg */
@@ -49,7 +60,7 @@ export function ModalContainer({ isOpen, onClose, children, className }: ModalCo
     <AnimatePresence>
       {showModal && (
         <motion.div
-          className="fixed inset-[0] z-[222] flex items-end justify-center bg-[rgba(0,0,0,0.55)] p-sm backdrop-blur-[10px] tablet:items-center"
+          className="fixed inset-[0] z-[222] flex items-end justify-center bg-[rgba(0,0,0,0.82)] p-sm tablet:items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

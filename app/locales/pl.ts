@@ -59,7 +59,7 @@ export default {
       developers: {
         label: "Dla developerów",
         item1: "Konsultacje i porady dotyczące kodowania.",
-        item2: "React · Next.js · TypeScript · Tailwind",
+        item2: "Next.js · TypeScript · Tailwind",
       },
     },
     story: {
@@ -97,6 +97,8 @@ export default {
     collaboration: "Współpraca",
     deadline: "Termin",
     projectTask: "Zadanie projektu",
+    whatIDid: "Co zrobiłem",
+    selectedContributorOutcomes: "Obowiązki i rezultaty wybranej osoby",
     similarSite: "Chcesz podobną stronę? Napisz do mnie:",
     wholeSite: "Cała strona",
     wholeSiteUiUx: "Cała strona + projekt UI/UX",
@@ -119,7 +121,38 @@ export default {
     project26Task: "Stworzyć full-stackową stronę dla restauracji.",
     project26Collaboration:
       "- logowanie / rejestracja\n- własny support chat z rolami USER / SUPPORT / ADMIN\n- panel admina, w którym ADMIN może dodawać / edytować / usuwać jedzenie\n- konfiguracja płatności PayPal\n- konfiguracja Supabase\n- logika dostawy zamówień przez Google Maps API\n- konfiguracja CHEF dashboard\n- rozwój frontendu i backendu\n- organizacja zadań w GitHub Projects\n- dokumentacja projektu\n- poprawa skalowalności",
+    projectRizLabel: "Panel administracyjny Riz",
     projectRizTask: "Dodać UI w admin dashboard do tworzenia, aktualizowania i usuwania osób.",
+    projectRizCollaboration:
+      "- Stworzyłem CMS dla startupu randkowego przy użyciu React - Next.js - TypeScript - Tailwind - MongoDB\n- Stworzyłem i18n EN/IT\n- Usunąłem potrzebę używania Nest.js, wykorzystując Next.js do pracy backendowej",
+  },
+  ndaProject: {
+    preview: {
+      ariaLabel: "Świecąca lampa ze znakiem zapytania kołysze się na ciemnej ścianie",
+      level: "NDA średniego poziomu",
+      title: "Poufne studium przypadku usługi",
+      description: "Klienci, domeny i kod pozostają poufne. Rezultaty nie.",
+      identityProtected: "Tożsamość chroniona",
+      outcomes: "{count} rezultatów",
+    },
+    card: {
+      confidentialEngagement: "Poufne zlecenie",
+    },
+    modal: {
+      label: "Poufna platforma outreach i operacyjna",
+      badge: "NDA średniego poziomu",
+      contributionTitle: "Co zrobiłem",
+      task: "Zbudowałem i skalowałem poufną platformę B2B obejmującą outreach, obsługę e-maili, połączenia, compliance, support, analitykę, rozliczenia i przepływy pracy wspierane przez AI.",
+    },
+    notice: {
+      title: "Co oznacza „NDA średniego poziomu”",
+      description:
+        "To zatwierdzone studium przypadku skupione na rezultatach, a nie publikacja prywatnych materiałów klienta. Mogę opisać kategorię produktu, moje obowiązki, technologie i mierzalne wyniki. Nazwy klientów i firm, domeny, repozytoria, kod źródłowy, dane logowania, dane użytkowników i wrażliwe szczegóły implementacji pozostają poufne.",
+    },
+    details: {
+      deliveredOutcomes: "{count} dostarczone rezultaty",
+      intro: "Wybrane prace nad poufną platformą B2B do outreachu, komunikacji, wsparcia i procesów operacyjnych.",
+    },
   },
   appointment: {
     page: {
@@ -231,7 +264,7 @@ export default {
     bookings: "Rezerwacje",
     utm: "UTM",
     projectClick: "Kliknięcia projektów",
-cronSchedules: "Cron schedules",
+    cronSchedules: "Cron schedules",
     cronSchedulesSubtitle: "Kompaktowy live view wszystkich pg_cron jobs skonfigurowanych dla tego projektu.",
     noCronSchedulesYet: "Brak harmonogramów cron.",
     bookedAppointments: "Zarezerwowane spotkania",

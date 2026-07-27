@@ -10,6 +10,7 @@ import {
   ModalMoreInfo26,
   ModalMoreInfo28,
   ModalMoreInfo29,
+  ModalMoreInfoNDA,
   ModalMoreInfoRizAdminDashboard,
 } from "./Projects/ModalsMoreInfo"
 
@@ -23,6 +24,7 @@ export default function Layout({ children }: LayoutProps) {
       className="bg-background text-title
       min-h-[calc(100vh-72px)] overflow-x-hidden overflow-y-auto transition-colors duration-300 pt-[62px]">
       {children}
+      <ModalMoreInfoNDA />
       <ModalMoreInfo15 />
       <ModalMoreInfo16 />
       <ModalMoreInfo17 />

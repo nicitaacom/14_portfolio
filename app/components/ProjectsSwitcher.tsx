@@ -10,6 +10,7 @@ import {
   Project23,
   Project24,
   Project26,
+  ProjectNDA,
   ProjectRizAdminDashboard,
 } from "./Projects"
 import { useModalsStore } from "@/store/modalsStore"
@@ -39,6 +40,7 @@ export function ProjectsSwitcher() {
 
       {projectTab === "work" ? (
         <>
+          <ProjectNDA openModal={() => openModal("ndaMoreInfo")} />
           <ProjectRizAdminDashboard openModal={() => openModal("rizAdminDashboard")} />
         </>
       ) : projectTab === "projects" ? (

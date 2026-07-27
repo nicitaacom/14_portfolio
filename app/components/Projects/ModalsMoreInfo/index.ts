@@ -4,7 +4,14 @@ import ModalMoreInfo22 from "./ModalMoreInfo22"
 import ModalMoreInfo23 from "./ModalMoreInfo23"
 import ModalMoreInfo24 from "./ModalMoreInfo24"
 import ModalMoreInfo26 from "./ModalMoreInfo26"
-import { ModalMoreInfo17, ModalMoreInfo19, ModalMoreInfo20, ModalMoreInfo28, ModalMoreInfo29 } from "../Clones/ModalsMoreInfo"
+import ModalMoreInfoNDA from "./ModalMoreInfoNDA"
+import {
+  ModalMoreInfo17,
+  ModalMoreInfo19,
+  ModalMoreInfo20,
+  ModalMoreInfo28,
+  ModalMoreInfo29,
+} from "../Clones/ModalsMoreInfo"
 
 export {
   ModalMoreInfo15,
@@ -18,6 +25,7 @@ export {
   ModalMoreInfo26,
   ModalMoreInfo28,
   ModalMoreInfo29,
+  ModalMoreInfoNDA,
 }
 
 import ModalMoreInfoRizAdminDashboard from "./ModalMoreInfoRizAdminDashboard"

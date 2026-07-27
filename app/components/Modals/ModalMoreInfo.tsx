@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, ReactElement } from "react"
+import { ReactNode, useState } from "react"
 import Image from "next/image"
 import { Button } from "../Button"
 import { ModalContainer } from "./ModalContainer"
@@ -15,7 +15,7 @@ export interface Collaborator {
   name?: string
   imgSrc?: string
   profileUrl?: string
-  description: string | ReactElement
+  description: ReactNode
 }
 
 interface ModalInfoProps {
@@ -25,7 +25,47 @@ interface ModalInfoProps {
   collaborators: Collaborator[]
   taskLabel?: string
   deadline?: string
-  siteUrl: string
+  siteUrl?: string
+  badge?: string
+  notice?: ReactNode
+  contributionTitle?: string
+}
+
+function DescriptionContent({ description }: { description: ReactNode }) {
+  if (typeof description !== "string") return <>{description}</>
+
+  return (
+    <div className="flex flex-col gap-y-xs">
+      {description.split("\n").map((line, index) => {
+        const text = line.trim()
+
+        if (!text) return <div key={index} className="h-xs" aria-hidden="true" />
+
+        if (text.startsWith("-") || text.startsWith("•")) {
+          return (
+            <div key={index} className="flex items-start gap-x-sm text-sm leading-relaxed">
+              <span className="mt-[0.65em] h-1.5 w-1.5 shrink-0 rounded-full bg-cta/75" aria-hidden="true" />
+              <span>{text.replace(/^[-•]\s*/, "")}</span>
+            </div>
+          )
+        }
+
+        if (text.endsWith(":")) {
+          return (
+            <p key={index} className="pt-xs text-xs font-bold uppercase tracking-[0.12em] text-secondary-foreground/50">
+              {text}
+            </p>
+          )
+        }
+
+        return (
+          <p key={index} className="text-sm leading-relaxed">
+            {text}
+          </p>
+        )
+      })}
+    </div>
+  )
 }
 
 export function ModalMoreInfo({
@@ -36,8 +76,12 @@ export function ModalMoreInfo({
   deadline,
   collaborators,
   siteUrl,
+  badge,
+  notice,
+  contributionTitle,
 }: ModalInfoProps) {
   const t = useScopedI18n("projectModal")
+  const resolvedContributionTitle = contributionTitle ?? t("whatIDid")
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selected = collaborators[selectedIndex]
   const selectedName = selected?.name ?? "nicitaacom"
@@ -46,115 +90,127 @@ export function ModalMoreInfo({
 
   return (
     <ModalContainer
-      className="max-w-[calc(100vw-2rem)] tablet:max-w-[700px] laptop:max-w-[850px] max-h-[85vh] flex flex-col"
+      className="flex h-[calc(100dvh-1rem)] max-h-[940px] max-w-[calc(100vw-1rem)] flex-col tablet:h-[90vh] tablet:max-w-[900px] laptop:max-w-[1180px] desktop:max-w-[1280px]"
       isOpen={isOpen}
       onClose={onClose}>
-      <div className="flex flex-col h-full overflow-hidden">
-        {/* Header */}
-        <header className="px-lg pt-lg pb-sm shrink-0">
-          <h1 className="text-xl font-bold tracking-tight text-secondary-foreground">
-            <a
-              className="hover:text-secondary transition-colors duration-300"
-              href={siteUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              {label}
-            </a>
-          </h1>
+      <div className="flex h-full min-h-0 flex-col overflow-hidden">
+        <header className="relative shrink-0 overflow-hidden border-b border-secondary-foreground/10 px-md py-sm pr-xl tablet:py-md">
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--cta)/0.12),transparent_48%)]"
+            aria-hidden="true"
+          />
+          <div className="relative flex flex-col items-start gap-y-xs">
+            {badge && (
+              <span className="rounded-md border border-cta/35 bg-cta/10 px-sm py-[5px] text-[10px] font-bold uppercase tracking-[0.14em] text-cta">
+                {badge}
+              </span>
+            )}
+            <h1 className="text-xl font-bold tracking-tight text-secondary">
+              {siteUrl ? (
+                <a
+                  className="inline-flex items-center gap-x-sm transition-colors duration-300 hover:text-cta"
+                  href={siteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  {label}
+                  <FiExternalLink className="opacity-45" size={16} />
+                </a>
+              ) : (
+                label
+              )}
+            </h1>
+          </div>
         </header>
-        {/* Main Content Area */}
-        <div className="flex-1 overflow-y-auto px-lg pb-lg space-y-lg">
 
-          {/* Properties Grid */}
-          <div className="grid grid-cols-1 gap-y-sm text-sm border-y border-secondary-foreground/5 py-md">
-            {/* Collaboration Property */}
-            <div className="flex items-start gap-x-md">
-              <div className="flex items-center gap-x-sm w-[140px] text-secondary-foreground/40 font-medium shrink-0 pt-[11px]">
-                <FiUsers className="shrink-0" size={16} />
-                <span>{t("collaboration")}</span>
-              </div>
-              <div className="flex flex-col gap-y-sm flex-1 min-w-0">
-                <div className="flex flex-row gap-md">
-                  {collaborators.map((c, i) => (
+        <main className="modal-scroll hide-scrollbar flex-1 overflow-y-auto p-sm tablet:p-md">
+          <div className="grid items-start gap-sm laptop:grid-cols-[320px_minmax(0,1fr)]">
+            <aside className="flex flex-col gap-y-sm laptop:sticky laptop:top-0">
+              {notice}
+
+              {taskLabel && (
+                <section className="rounded-md border border-secondary-foreground/10 bg-secondary-foreground/[0.025] p-sm">
+                  <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-secondary-foreground/45">
+                    <FiFileText size={15} />
+                    <span>{t("projectTask")}</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-secondary-foreground/80">{taskLabel}</p>
+                </section>
+              )}
+
+              {deadline && (
+                <section className="rounded-md border border-secondary-foreground/10 bg-secondary-foreground/[0.025] p-sm">
+                  <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-secondary-foreground/45">
+                    <FiCalendar size={15} />
+                    <span>{t("deadline")}</span>
+                  </div>
+                  <p className="text-sm font-semibold text-secondary">{deadline}</p>
+                </section>
+              )}
+
+              <section className="rounded-md border border-secondary-foreground/10 bg-secondary-foreground/[0.025] p-sm">
+                <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-secondary-foreground/45">
+                  <FiUsers size={15} />
+                  <span>{t("collaboration")}</span>
+                </div>
+                <div className="flex flex-wrap gap-sm laptop:flex-col">
+                  {collaborators.map((collaborator, index) => (
                     <CollaborationIcon
-                      key={i}
-                      name={c.name}
-                      imgSrc={c.imgSrc}
-                      profileUrl={c.profileUrl}
-                      isSelected={selectedIndex === i}
-                      onClick={() => setSelectedIndex(i)}
+                      key={`${collaborator.name ?? "nicitaacom"}-${index}`}
+                      name={collaborator.name}
+                      imgSrc={collaborator.imgSrc}
+                      isSelected={selectedIndex === index}
+                      onClick={() => setSelectedIndex(index)}
                     />
                   ))}
                 </div>
-                {/* Detail panel for selected collaborator */}
-                <div className="w-full bg-secondary-foreground/5 rounded-md overflow-hidden">
-                  {selected && (
-                    <>
-                      <div className="flex items-center gap-x-sm p-sm border-b border-secondary-foreground/10">
-                        <Image
-                          className="w-[32px] h-[32px] rounded-full shrink-0"
-                          src={selectedImgSrc}
-                          alt={selectedName}
-                          width={32}
-                          height={32}
-                        />
-                        <button
-                          type="button"
-                          className="flex items-center gap-x-xs text-sm font-semibold text-secondary-foreground/80 hover:text-secondary transition-colors duration-200 w-fit"
-                          onClick={() => window.open(selectedProfileUrl)}>
-                          {selectedName}
-                          <FiExternalLink size={12} className="opacity-50" />
-                        </button>
-                      </div>
-                      <div className="h-[120px] overflow-y-scroll p-sm text-sm text-secondary-foreground/60 whitespace-pre-line">
-                        {selected.description}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
+              </section>
+            </aside>
 
-            {/* Deadline Property */}
-            {deadline && (
-              <div className="group flex items-center gap-x-md">
-                <div className="flex items-center gap-x-sm w-[140px] text-secondary-foreground/40 font-medium">
-                  <FiCalendar className="shrink-0" size={16} />
-                  <span>{t("deadline")}</span>
+            <section className="min-w-0 overflow-hidden rounded-md border border-secondary-foreground/10 bg-secondary-foreground/[0.025]">
+              <div className="flex min-h-[60px] items-center justify-between gap-x-md border-b border-secondary-foreground/10 bg-secondary-foreground/[0.025] px-md py-sm">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-cta">{resolvedContributionTitle}</p>
+                  <p className="mt-xs text-xs text-secondary-foreground/40">{t("selectedContributorOutcomes")}</p>
                 </div>
-                <div className="flex-1 font-medium text-secondary-foreground/80">{deadline}</div>
+                {selected && (
+                  <div className="flex shrink-0 items-center gap-x-sm">
+                    <Image
+                      className="h-9 w-9 shrink-0 rounded-full object-cover"
+                      src={selectedImgSrc}
+                      alt={selectedName}
+                      width={36}
+                      height={36}
+                    />
+                    <a
+                      className="hidden w-fit items-center gap-x-xs text-sm font-semibold text-secondary-foreground/85 transition-colors duration-200 hover:text-cta tablet:inline-flex"
+                      href={selectedProfileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      {selectedName}
+                      <FiExternalLink size={12} className="opacity-50" />
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Task / Description */}
-          {taskLabel && (
-            <section className="space-y-sm pb-lg">
-              <div className="flex items-center gap-x-sm text-xs font-bold uppercase tracking-widest text-secondary-foreground/30">
-                <FiFileText size={14} />
-                <span>{t("projectTask")}</span>
-              </div>
-              <p className="text-base leading-relaxed text-secondary-foreground/70 whitespace-pre-wrap">
-                {taskLabel}
-              </p>
+              {selected && (
+                <div className="p-md text-secondary-foreground/70">
+                  <DescriptionContent description={selected.description} />
+                </div>
+              )}
             </section>
-          )}
-        </div>
+          </div>
+        </main>
 
-        {/* CTA Footer */}
-        <footer className="mt-auto p-md bg-secondary-foreground/[0.02] border-t border-secondary-foreground/5 flex flex-col items-end gap-y-sm shrink-0">
-          <p className="text-sm font-medium text-secondary-foreground/40 italic">
-            {t("similarSite")}
-          </p>
+        <footer className="flex shrink-0 flex-col items-end gap-y-sm border-t border-secondary-foreground/10 bg-secondary-foreground/[0.02] px-md py-sm tablet:flex-row tablet:items-center tablet:justify-between">
+          <p className="text-xs font-medium italic text-secondary-foreground/40">{t("similarSite")}</p>
           <div className="flex items-center gap-x-sm">
             <Button
               className="text-xs py-xs px-sm"
               onClick={() => window.open("https://discord.com/users/780002958380498955")}>
               Discord <RiDiscordLine size={18} />
             </Button>
-            <Button
-              className="text-xs py-xs px-sm"
-              onClick={() => window.open("https://t.me/nicitaacom")}>
+            <Button className="text-xs py-xs px-sm" onClick={() => window.open("https://t.me/nicitaacom")}>
               Telegram <PiTelegramLogoBold size={18} />
             </Button>
           </div>

@@ -59,7 +59,7 @@ export default {
       developers: {
         label: "Für Entwickler",
         item1: "Consulting und Beratung rund ums Coden.",
-        item2: "React · Next.js · TypeScript · Tailwind",
+        item2: "Next.js · TypeScript · Tailwind",
       },
     },
     story: {
@@ -98,6 +98,8 @@ export default {
     collaboration: "Zusammenarbeit",
     deadline: "Deadline",
     projectTask: "Projektaufgabe",
+    whatIDid: "Was ich umgesetzt habe",
+    selectedContributorOutcomes: "Aufgaben und Ergebnisse der ausgewählten Person",
     similarSite: "Du willst eine ähnliche Website? Schreib mir:",
     wholeSite: "Gesamte Website",
     wholeSiteUiUx: "Gesamte Website + UI/UX Design",
@@ -120,7 +122,39 @@ export default {
     project26Task: "Eine Full-Stack-Website für ein Restaurant erstellen.",
     project26Collaboration:
       "- Login / Registrierung\n- eigener support chat mit USER / SUPPORT / ADMIN Rollen\n- Admin-Panel, in dem ADMIN Essen hinzufügen / bearbeiten / löschen kann\n- PayPal-Zahlungsintegration\n- Supabase-Setup\n- Bestelllieferung mit Google Maps API\n- CHEF-Dashboard-Setup\n- Frontend- und Backend-Entwicklung\n- Aufgabenorganisation in GitHub Projects\n- Projektdokumentation\n- Verbesserungen der Skalierbarkeit",
+    projectRizLabel: "Riz Admin-Dashboard",
     projectRizTask: "Ein UI im Admin-Dashboard hinzufügen, um Personen zu erstellen, zu aktualisieren und zu löschen.",
+    projectRizCollaboration:
+      "- CMS für ein Dating-Startup mit React - Next.js - TypeScript - Tailwind - MongoDB erstellt\n- i18n EN/IT erstellt\n- Die Notwendigkeit von Nest.js beseitigt, indem Next.js für die Backend-Arbeit verwendet wurde",
+  },
+  ndaProject: {
+    preview: {
+      ariaLabel: "Eine leuchtende Fragezeichen-Lampe schwingt vor einer dunklen Wand",
+      level: "NDA mittlerer Stufe",
+      title: "Fallstudie zu einem vertraulichen Service",
+      description: "Kunden, Domains und Code bleiben vertraulich. Ergebnisse nicht.",
+      identityProtected: "Identität geschützt",
+      outcomes: "{count} Ergebnisse",
+    },
+    card: {
+      confidentialEngagement: "Vertrauliches Projekt",
+    },
+    modal: {
+      label: "Vertrauliche Outreach- und Operations-Plattform",
+      badge: "NDA mittlerer Stufe",
+      contributionTitle: "Was ich umgesetzt habe",
+      task: "Aufbau und Skalierung einer vertraulichen B2B-Plattform für Outreach, E-Mail-Prozesse, Telefonie, Compliance, Support, Analysen, Abrechnung und KI-gestützte Workflows.",
+    },
+    notice: {
+      title: "Was „NDA mittlerer Stufe“ bedeutet",
+      description:
+        "Dies ist eine genehmigte, ergebnisorientierte Fallstudie und keine Veröffentlichung privaten Kundenmaterials. Ich darf die Produktkategorie, meine Verantwortlichkeiten, Technologien und messbaren Ergebnisse beschreiben. Namen von Kunden und Unternehmen, Domains, Repositories, Quellcode, Zugangsdaten, Nutzerdaten und sensible Implementierungsdetails bleiben vertraulich.",
+    },
+    details: {
+      deliveredOutcomes: "{count} umgesetzte Ergebnisse",
+      intro:
+        "Ausgewählte Arbeiten an einer vertraulichen B2B-Plattform für Outreach, Kommunikation, Support und operative Abläufe.",
+    },
   },
   appointment: {
     page: {
@@ -231,7 +265,7 @@ export default {
     bookings: "Buchungen",
     utm: "UTM",
     projectClick: "Projektklick",
-cronSchedules: "Cron Schedules",
+    cronSchedules: "Cron Schedules",
     cronSchedulesSubtitle: "Kompakte Live-Ansicht aller pg_cron Jobs, die für dieses Projekt konfiguriert sind.",
     noCronSchedulesYet: "Noch keine Cron-Zeitpläne.",
     bookedAppointments: "Gebuchte Termine",

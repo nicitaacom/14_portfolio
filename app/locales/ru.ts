@@ -59,7 +59,7 @@ export default {
       developers: {
         label: "Для разработчиков",
         item1: "Консультации и советы по коду.",
-        item2: "React · Next.js · TypeScript · Tailwind",
+        item2: "Next.js · TypeScript · Tailwind",
       },
     },
     story: {
@@ -97,6 +97,8 @@ export default {
     collaboration: "Участие",
     deadline: "Срок",
     projectTask: "Задача проекта",
+    whatIDid: "Что я сделал",
+    selectedContributorOutcomes: "Задачи и результаты выбранного участника",
     similarSite: "Нужен похожий сайт? Напишите мне:",
     wholeSite: "Весь сайт",
     wholeSiteUiUx: "Весь сайт + UI/UX дизайн",
@@ -119,7 +121,39 @@ export default {
     project26Task: "Сделать full-stack сайт для ресторана.",
     project26Collaboration:
       "- логин / регистрация\n- кастомный support chat с ролями USER / SUPPORT / ADMIN\n- админ-панель, где ADMIN может добавлять / редактировать / удалять еду\n- настройка оплаты через PayPal\n- настройка Supabase\n- логика доставки заказов через Google Maps API\n- настройка CHEF dashboard\n- frontend и backend разработка\n- организация задач в GitHub Projects\n- документация проекта\n- улучшения масштабируемости",
+    projectRizLabel: "Админ-панель Riz",
     projectRizTask: "Добавить UI в admin dashboard для создания, обновления и удаления людей.",
+    projectRizCollaboration:
+      "- Создал CMS для дейтинг-стартапа с использованием React - Next.js - TypeScript - Tailwind - MongoDB\n- Создал i18n EN/IT\n- Устранил необходимость в Nest.js, используя Next.js для backend-разработки",
+  },
+  ndaProject: {
+    preview: {
+      ariaLabel: "Светящаяся лампа со знаком вопроса качается на тёмной стене",
+      level: "NDA среднего уровня",
+      title: "Кейс конфиденциального сервиса",
+      description: "Клиенты, домены и код остаются конфиденциальными. Результаты — нет.",
+      identityProtected: "Личность защищена",
+      outcomes: "{count} результатов",
+    },
+    card: {
+      confidentialEngagement: "Конфиденциальный проект",
+    },
+    modal: {
+      label: "Конфиденциальная outreach- и operations-платформа",
+      badge: "NDA среднего уровня",
+      contributionTitle: "Что я сделал",
+      task: "Создал и масштабировал конфиденциальную B2B-платформу для аутрича, работы с электронной почтой, звонков, комплаенса, поддержки, аналитики, биллинга и процессов с использованием ИИ.",
+    },
+    notice: {
+      title: "Что означает «NDA среднего уровня»",
+      description:
+        "Это согласованный кейс, сфокусированный на результатах, а не публикация частных материалов клиента. Я могу описывать категорию продукта, свои обязанности, технологии и измеримые результаты. Имена клиентов и компаний, домены, репозитории, исходный код, учётные данные, пользовательские данные и чувствительные детали реализации остаются конфиденциальными.",
+    },
+    details: {
+      deliveredOutcomes: "{count} реализованных результатов",
+      intro:
+        "Избранные работы над конфиденциальной B2B-платформой для аутрича, коммуникаций, поддержки и операционных процессов.",
+    },
   },
   appointment: {
     page: {
@@ -230,7 +264,7 @@ export default {
     bookings: "Записи",
     utm: "UTM",
     projectClick: "Клики по проектам",
-cronSchedules: "Cron schedules",
+    cronSchedules: "Cron schedules",
     cronSchedulesSubtitle: "Компактный live-view всех pg_cron jobs, настроенных для этого проекта.",
     noCronSchedulesYet: "Пока нет cron-расписаний.",
     bookedAppointments: "Забронированные встречи",

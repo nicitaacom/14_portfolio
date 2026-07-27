@@ -4,6 +4,7 @@ import Project22 from "./Project22"
 import Project23 from "./Project23"
 import Project24 from "./Project24"
 import Project26 from "./Project26"
+import ProjectNDA from "./ProjectNDA"
 import { Project17, Project19, Project20, Project28, Project29 } from "./Clones"
 
 export {
@@ -18,6 +19,7 @@ export {
   Project26,
   Project28,
   Project29,
+  ProjectNDA,
 }
 
 import ProjectRizAdminDashboard from "./ProjectRizAdminDashboard"

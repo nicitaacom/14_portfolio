@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import type { TTrackedProjectGroup } from "@/interfaces/TTrackedProject"
 import { FigmaUrlIcon } from "./FigmaUrlIcon"
 import { GithubUrlIcon } from "./GithubUrlIcon"
@@ -13,6 +14,7 @@ interface ProjectProps {
   youtubeUrl?: string
   githubUrl?: string
   youTubeEmbedPreview?: string
+  preview?: ReactNode
   siteUrl?: string
   stack: string
   date: string // this is string - not ISO
@@ -28,6 +30,7 @@ export function Project({
   githubUrl,
   siteUrl,
   youTubeEmbedPreview,
+  preview,
   stack,
   date,
   openMoreInfoModal,
@@ -67,7 +70,9 @@ export function Project({
           />
         )}
       </div>
-      {youTubeEmbedPreview ? (
+      {preview ? (
+        <div className={previewClassName}>{preview}</div>
+      ) : youTubeEmbedPreview ? (
         <div className={previewClassName}>
           <iframe
             className="h-full w-full"

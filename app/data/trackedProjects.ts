@@ -8,6 +8,12 @@ export const trackedProjects: TTrackedProject[] = [
     group: "work",
   },
   {
+    slug: "project-nda-outreach-platform",
+    name: "Mid-level NDA",
+    shortName: "NDA",
+    group: "work",
+  },
+  {
     slug: "project-26-hot-delivery",
     name: "Hot Delivery",
     shortName: "Hot Delivery",
