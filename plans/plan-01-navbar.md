@@ -8,7 +8,7 @@ Status lives in [plan-00-tracker.md](plan-00-tracker.md) only.
 - Repo: `/home/kali/Documents/GitHub/14_portfolio`
 - Branch: `git checkout ui/crazy-mechanics` — it exists, all work lands there
 - Read before touching code: [dev_readme-it-worked-ui.md](../dev_readme-it-worked-ui.md) §3.1–3.3 + §3.5, and [app/components/Projects/NDAProjectPreview.tsx](../app/components/Projects/NDAProjectPreview.tsx) (the seed — its shadow numbers and gradient style are the law)
-- Reference shots: [crazy-mechanics-main.jpg](../public/UI/crazy-mechanics-main.jpg) (bottom rail), [crazy-mechanics-menu.png](../public/UI/crazy-mechanics-menu.png) (riveted plate)
+- Reference shots: [crazy-mechanics-main.jpg](../public/UI/crazy-mechanics/crazy-mechanics-main.jpg) (bottom rail), [crazy-mechanics-menu.png](../public/UI/crazy-mechanics/crazy-mechanics-menu.png) (riveted plate)
 - Never run the dev server. After building, show the diff, list what Nikita opens, STOP
 - Commit only after Nikita approves, locally only: `feat: navbar hazard rail` — then hand him `git push -u origin ui/crazy-mechanics`, never push
 - A pre-write hook (`no-banned-words.js`, word list in the hook script) blocks lazy words in any file, code comments and class names included. If a write bounces, rename the flagged word to the real noun/verb — never bypass the hook
@@ -229,7 +229,7 @@ As the LAST children inside `<nav>`, after the right-side div, add the rail and 
 - [ ] Crawl paused when `body.modal-open`; `animation: none` under reduced motion; stripes visible in both
 - [ ] Zero raster files added; stripes, rivets, steel are gradients
 - [ ] `ProgressBorder.tsx` removed, type check still green (`npx tsc --noEmit`)
-- [ ] Screenshot next to [crazy-mechanics-main.jpg](../public/UI/crazy-mechanics-main.jpg) bottom rail — same read
+- [ ] Screenshot next to [crazy-mechanics-main.jpg](../public/UI/crazy-mechanics/crazy-mechanics-main.jpg) bottom rail — same read
 
 ## 6. What Nikita opens to check (he runs the server, never you)
 
@@ -291,7 +291,7 @@ Current, [NavbarProjects.tsx:25-33](../app/components/Navbar/NavbarProjects.tsx)
   <Link className="navbar-engraved transition-all duration-200 ease-in hover:brightness-75 whitespace-nowrap cursor-pointer select-none " ...>
 ```
 
-Target — the odometer strip from [crazy-mechanics-main.jpg](../public/UI/crazy-mechanics-main.jpg) bottom rail:
+Target — the odometer strip from [crazy-mechanics-main.jpg](../public/UI/crazy-mechanics/crazy-mechanics-main.jpg) bottom rail:
 
 ```
  ┌────────┐
