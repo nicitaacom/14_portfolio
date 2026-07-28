@@ -19,10 +19,10 @@ const SHORT_ATTEMPTS = [
   { offsets: [10, 12, 14], frameMs: 400 / 9, restMs: 120 },
 ]
 
-// The long attempt pulls four times as wide as both short probes put together
+// The long attempt pulls four times as wide as both short probes put together, at twice their speed
 const LONG_ATTEMPT = {
   offsets: SHORT_ATTEMPTS[0].offsets.map((offset, index) => (offset + SHORT_ATTEMPTS[1].offsets[index]) * 4),
-  frameMs: 640 / 9,
+  frameMs: 200 / 9,
   restMs: 0,
 }
 
@@ -108,28 +108,30 @@ export function HalloweenProjectSkull() {
 
     let cancelled = false
     let frameId = 0
+    let sleepId = 0
     let isOnScreen = true
 
     let attemptIndex = 0
     let attemptOffset = pick(SPLIT_ATTEMPTS[0].offsets)
     let attemptStartedAt = performance.now() + pick(SPLIT_IDLE_MS)
-    let streaks: Streak[] = []
+    const streaks: Streak[] = []
     let nextStreakAt = performance.now() + pick(STREAK_IDLE_MS)
+
+    // Track what the last frame actually wrote, so an unchanged offset skips the style
+    // write and an already-blank canvas skips the clear
+    let lastOffset = -1
+    let hasInk = false
+
+    context.strokeStyle = "#ffffff"
+    context.lineCap = "round"
 
     const drawStreak = (streak: Streak, progress: number) => {
       const head = progress
       const tail = Math.max(0, progress - STREAK_TRAIL)
       const fade = progress < 0.25 ? progress / 0.25 : progress > 0.7 ? (1 - progress) / 0.3 : 1
+      const alpha = Math.max(0, Math.min(1, fade)) * 0.85
 
-      context.save()
-      context.globalAlpha = Math.max(0, Math.min(1, fade)) * 0.85
-      context.strokeStyle = "#ffffff"
-      context.shadowColor = "#ffffff"
-      context.shadowBlur = 7
-      context.lineCap = "round"
-      context.lineWidth = streak.width
       context.beginPath()
-
       for (let sample = 0; sample <= STREAK_SAMPLES; sample += 1) {
         const t = tail + ((head - tail) * sample) / STREAK_SAMPLES
         const point = pointOnCurve(streak, t)
@@ -137,8 +139,14 @@ export function HalloweenProjectSkull() {
         else context.lineTo(point.x, point.y)
       }
 
+      // Two strokes over one path fake the glow far cheaper than a real shadowBlur pass
+      context.globalAlpha = alpha * 0.26
+      context.lineWidth = streak.width * 3.4
       context.stroke()
-      context.restore()
+
+      context.globalAlpha = alpha
+      context.lineWidth = streak.width
+      context.stroke()
     }
 
     const animate = (now: number) => {
@@ -160,10 +168,11 @@ export function HalloweenProjectSkull() {
         }
       }
 
-      skull.style.setProperty("--rgb-red-x", `${offset}px`)
-      skull.style.setProperty("--rgb-blue-x", `${-offset}px`)
-
-      context.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT)
+      if (offset !== lastOffset) {
+        skull.style.setProperty("--rgb-red-x", `${offset}px`)
+        skull.style.setProperty("--rgb-blue-x", `${-offset}px`)
+        lastOffset = offset
+      }
 
       if (now >= nextStreakAt) {
         const burst = 2 + Math.floor(Math.random() * 3)
@@ -171,10 +180,45 @@ export function HalloweenProjectSkull() {
         nextStreakAt = now + pick(STREAK_IDLE_MS)
       }
 
-      streaks = streaks.filter(streak => now - streak.startedAt < streak.duration)
-      for (const streak of streaks) drawStreak(streak, (now - streak.startedAt) / streak.duration)
+      // Compact in place rather than rebuilding the array on every single frame
+      let liveCount = 0
+      for (let index = 0; index < streaks.length; index += 1) {
+        const streak = streaks[index]
+        if (now - streak.startedAt < streak.duration) {
+          streaks[liveCount] = streak
+          liveCount += 1
+        }
+      }
+      streaks.length = liveCount
+
+      if (liveCount > 0 || hasInk) {
+        context.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT)
+        for (let index = 0; index < liveCount; index += 1) {
+          const streak = streaks[index]
+          drawStreak(streak, (now - streak.startedAt) / streak.duration)
+        }
+        hasInk = liveCount > 0
+      }
+
+      // Nothing is moving until the next scheduled event, so stand down instead of
+      // holding a 60fps loop open through gaps that run for seconds
+      const idleUntil = Math.min(attemptStartedAt, nextStreakAt)
+      if (offset === 0 && liveCount === 0 && idleUntil - now > 120) {
+        sleepId = window.setTimeout(() => {
+          sleepId = 0
+          frameId = requestAnimationFrame(animate)
+        }, idleUntil - now - 32)
+        return
+      }
 
       frameId = requestAnimationFrame(animate)
+    }
+
+    const stop = () => {
+      cancelAnimationFrame(frameId)
+      if (sleepId) window.clearTimeout(sleepId)
+      frameId = 0
+      sleepId = 0
     }
 
     // Only burn frames while the card is actually on screen — every project card mounts one of these
@@ -185,7 +229,7 @@ export function HalloweenProjectSkull() {
 
         isOnScreen = nowVisible
         if (nowVisible) frameId = requestAnimationFrame(animate)
-        else cancelAnimationFrame(frameId)
+        else stop()
       },
       { rootMargin: "120px" },
     )
@@ -195,7 +239,7 @@ export function HalloweenProjectSkull() {
 
     return () => {
       cancelled = true
-      cancelAnimationFrame(frameId)
+      stop()
       observer.disconnect()
       skull.style.removeProperty("--rgb-red-x")
       skull.style.removeProperty("--rgb-blue-x")

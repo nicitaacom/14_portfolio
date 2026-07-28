@@ -332,6 +332,7 @@
 .halloween-project-skull-red {
   background-color: #f00;
   transform: translateX(var(--rgb-red-x, 0px));
+  will-change: transform;
 }
 
 .halloween-project-skull-green {
@@ -341,6 +342,7 @@
 .halloween-project-skull-blue {
   background-color: #00f;
   transform: translateX(var(--rgb-blue-x, 0px));
+  will-change: transform;
 }
 
 @media (max-width: 767px) {
