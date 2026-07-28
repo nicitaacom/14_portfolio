@@ -93,7 +93,7 @@ export function ModalMoreInfo({
       isOpen={isOpen}
       onClose={onClose}
       title={badge ?? label}>
-      <div className="flex min-h-0 flex-col overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <header className="relative shrink-0 overflow-hidden border-b border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--paper)/0.06),transparent_70%)] px-md py-sm pr-xl shadow-[0_2px_0_rgb(0_0_0/0.22),inset_0_1px_0_rgb(255_255_255/0.1)] tablet:py-md">
           <div
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--cta)/0.12),transparent_48%)]"

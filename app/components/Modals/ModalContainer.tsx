@@ -105,7 +105,7 @@ export function ModalContainer({
                 <span className="h-[6px] w-[6px] rounded-full border border-steel-deep bg-paper" />
               </div>
             </div>
-            <div className="modal-frame-surface relative z-10 overflow-hidden rounded-[1px] bg-[radial-gradient(ellipse_52%_10%_at_18%_14%,hsl(var(--paper)/0.13),transparent_68%),radial-gradient(ellipse_44%_9%_at_74%_67%,hsl(var(--paper)/0.1),transparent_68%),repeating-linear-gradient(1deg,hsl(var(--steel-deep)/0.2)_0_1px,transparent_1px_6px,hsl(var(--paper)/0.045)_7px_9px,transparent_10px_18px),linear-gradient(100deg,hsl(var(--wood)),hsl(var(--brass)/0.48)_48%,hsl(var(--wood)))] shadow-[inset_0_1px_0_rgb(255_255_255/0.13),inset_0_-2px_0_rgb(0_0_0/0.42)]">
+            <div className="modal-frame-surface relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1px] bg-[radial-gradient(ellipse_52%_10%_at_18%_14%,hsl(var(--paper)/0.13),transparent_68%),radial-gradient(ellipse_44%_9%_at_74%_67%,hsl(var(--paper)/0.1),transparent_68%),repeating-linear-gradient(1deg,hsl(var(--steel-deep)/0.2)_0_1px,transparent_1px_6px,hsl(var(--paper)/0.045)_7px_9px,transparent_10px_18px),linear-gradient(100deg,hsl(var(--wood)),hsl(var(--brass)/0.48)_48%,hsl(var(--wood)))] shadow-[inset_0_1px_0_rgb(255_255_255/0.13),inset_0_-2px_0_rgb(0_0_0/0.42)]">
               {title && (
                 <div className="modal-title-label absolute left-1/2 top-[-2px] z-20 max-w-[60%] -translate-x-1/2 rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-[3px] font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)]">
                   {title}
