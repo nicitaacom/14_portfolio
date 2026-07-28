@@ -1,3 +1,26 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-untranslated-ui": [
+      "warn",
+      {
+        "ignore": [
+          "Applications delta",
+          "Close modal",
+          "Dropdown arrow",
+          "MSK",
+          "No cron schedules",
+          "Page not found",
+          "Visits over time",
+          "applies",
+          "clicks",
+          "figma",
+          "nicitaacom",
+          "visits",
+          "YouTube",
+          "UTC"
+        ]
+      }
+    ]
+  }
 }
