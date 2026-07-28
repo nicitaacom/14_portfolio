@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,6 +15,14 @@
   --danger: 0deg 84% 48%;
   --warning: 47deg 100% 50%;
   --success: 118deg 79% 44%;
+  --steel: 276deg 10% 22%; /* #38323F — panel face, from the seed */
+  --steel-deep: 270deg 21% 9%; /* #17131D — panel shadow side, from the seed */
+  --wood: 28deg 25% 22%;
+  --brass: 40deg 45% 55%;
+  --paper: 38deg 40% 88%;
+  --pipe: 185deg 7% 66%;
+  --blueprint: 210deg 25% 30%;
+  --room: 260deg 33% 4%; /* the black room behind every page; the NDA scene keeps its own darker #09070d */
 }
 
 @layer components {
@@ -48,19 +54,38 @@
     @apply relative inline-block;
   }
 
-  .tooltip:hover .tooltiptext {
-    @apply opacity-100 visible transition-all duration-300
-    translate-y-[-105%]
-    whitespace-nowrap w-auto h-auto p-sm text-secondary z-[99];
+  .tooltiptext-open { display: block; }
+
+  .text-tooltip-inline.tooltip:hover > .tooltiptext,
+  .text-tooltip-inline.tooltip:focus > .tooltiptext {
+    animation: tape-tooltip-in 180ms ease-out both;
+    display: block;
   }
 
   .tooltiptext {
-    @apply opacity-0 invisible transition-all duration-300
-    fixed top-[50%] translate-y-[110%]
-    desktop:absolute desktop:top-[0px] left-[50%] translate-x-[-50%] desktop:translate-y-[-110%]
-    text-sm bg-primary-foreground
-    text-center rounded-lg z-[99]
-    pointer-events-none;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
+      linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.84));
+    border: 1px solid hsl(var(--brass) / 0.32);
+    box-shadow: 0 5px 7px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.42);
+    color: hsl(var(--steel-deep));
+    display: none;
+    font-family: var(--font-inter), Inter, sans-serif;
+    left: 50%;
+    line-height: 1.45;
+    max-width: min(260px, calc(100vw - 24px));
+    padding: 0.5rem;
+    pointer-events: none;
+    position: absolute;
+    top: auto;
+    transform: translate(-50%, calc(-100% - 10px)) rotate(-1.3deg);
+    width: min(260px, calc(100vw - 24px));
+    z-index: 99;
+  }
+
+  .tooltiptext * {
+    color: hsl(var(--steel-deep)) !important;
+    text-shadow: none !important;
   }
 
   /* Directional tooltip variants */
@@ -77,9 +102,7 @@
   .tooltip-r .tooltiptext-r {
     @apply absolute z-[99] pointer-events-none
     w-max max-w-[220px] px-sm py-xs
-    text-xs text-secondary text-center leading-snug
-    bg-[#1e1e1e] border border-[#3a3a3a]
-    rounded-[6px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]
+    text-xs text-steel-deep text-center leading-snug
     opacity-0 invisible
     scale-95
     transition-all duration-200 ease-out;
@@ -96,7 +119,7 @@
     content: "";
     @apply absolute top-full left-1/2 -translate-x-1/2;
     border: 5px solid transparent;
-    border-top-color: #3a3a3a;
+    border-top-color: hsl(var(--paper));
   }
 
   /* Bottom */
@@ -110,7 +133,7 @@
     content: "";
     @apply absolute bottom-full left-1/2 -translate-x-1/2;
     border: 5px solid transparent;
-    border-bottom-color: #3a3a3a;
+    border-bottom-color: hsl(var(--paper));
   }
 
   /* Left */
@@ -124,7 +147,7 @@
     content: "";
     @apply absolute left-full top-1/2 -translate-y-1/2;
     border: 5px solid transparent;
-    border-left-color: #3a3a3a;
+    border-left-color: hsl(var(--paper));
   }
 
   /* Right */
@@ -138,9 +161,350 @@
     content: "";
     @apply absolute right-full top-1/2 -translate-y-1/2;
     border: 5px solid transparent;
-    border-right-color: #3a3a3a;
+    border-right-color: hsl(var(--paper));
   }
 
+  .navbar-plate {
+    background:
+      radial-gradient(ellipse 64px 160% at 18% 50%, transparent 0 47px, rgba(0, 0, 0, 0.2) 48px 50px, transparent 51px)
+        padding-box,
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 7px, rgba(255, 255, 255, 0.05) 7px 8px)
+        padding-box,
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent 32%, rgba(0, 0, 0, 0.28)) padding-box,
+      linear-gradient(to bottom, hsl(var(--wood)), hsl(var(--wood))) padding-box,
+      linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep))) border-box;
+    background-clip: padding-box, padding-box, padding-box, padding-box, border-box;
+    border: 3px solid transparent;
+    box-shadow:
+      0 12px 12px rgba(0, 0, 0, 0.75),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+
+  .navbar-plate::before {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent 18%, rgba(0, 0, 0, 0.18));
+    border: 1px solid hsl(var(--steel-deep) / 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.1);
+    content: "";
+    inset: 3px 3px 9px;
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .navbar-plate > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .navbar-rivet {
+    background: radial-gradient(
+      circle at 50% 28%,
+      rgba(255, 255, 255, 0.82) 0%,
+      hsl(var(--steel)) 38%,
+      hsl(var(--steel-deep)) 72%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+    border-radius: 9999px;
+    box-shadow:
+      0 2px 2px rgba(0, 0, 0, 0.6),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.5);
+    height: 10px;
+    width: 10px;
+  }
+
+  .navbar-rivet::after {
+    background:
+      linear-gradient(to right, transparent 42%, hsl(var(--steel-deep) / 0.86) 43% 57%, transparent 58%),
+      linear-gradient(to bottom, transparent 42%, hsl(var(--steel-deep) / 0.86) 43% 57%, transparent 58%);
+    content: "";
+    inset: 3px;
+    position: absolute;
+  }
+
+  .navbar-status-light {
+    animation: navbar-status-pulse 8s ease-in-out infinite;
+    background: radial-gradient(
+      circle at 50% 32%,
+      hsl(var(--success) / 0.92) 0%,
+      hsl(var(--success) / 0.58) 38%,
+      hsl(var(--success) / 0.22) 72%,
+      hsl(var(--steel-deep)) 100%
+    );
+  }
+
+  .navbar-status-light::after {
+    display: none;
+  }
+
+  .hazard-rail {
+    animation: rail-crawl 10.5s linear infinite;
+    background: repeating-linear-gradient(-45deg, hsl(var(--warning)) 0 8px, #111111 8px 16px);
+  }
+
+  .hazard-rail-progress {
+    background: hsl(var(--cta) / 0.45);
+    box-shadow: 0 0 10px hsl(var(--cta) / 0.8);
+    height: 100%;
+    transition: width 150ms linear;
+  }
+
+  .navbar-engraved {
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08),
+      0 -1px 1px rgba(0, 0, 0, 0.65);
+  }
+
+  .navbar-bezel {
+    background: hsl(var(--steel-deep) / 0.6);
+    border-radius: 8px;
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.6),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+    padding: 2px 4px;
+  }
+
+  .navbar-repo-wavefield {
+    background:
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 7px),
+      linear-gradient(to bottom, hsl(var(--steel-deep) / 0.98), hsl(var(--wood) / 0.42) 48%, hsl(var(--steel-deep) / 0.99));
+    box-shadow:
+      inset 0 1px 0 hsl(var(--cta) / 0.1),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .navbar-wave-canvas {
+    height: 100%;
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+  }
+
+  .navbar-repo-wave-items {
+    position: relative;
+    z-index: 1;
+  }
+
+  .machine-face {
+    background: linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep)));
+    border: 1px solid hsl(var(--brass) / 0.35);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 12px 12px rgba(0, 0, 0, 0.6);
+  }
+
+  .machine-slot {
+    background: hsl(var(--steel-deep));
+    border-radius: 4px;
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.7),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .workbench-glow {
+    animation: wall-flicker 6.3s linear infinite;
+  }
+
+  .workbench-board {
+    background:
+      repeating-linear-gradient(0deg, hsl(var(--wood) / 0.16) 0 2px, transparent 2px 9px),
+      repeating-linear-gradient(91deg, transparent 0 17px, hsl(var(--brass) / 0.055) 18px 19px),
+      linear-gradient(to bottom, hsl(var(--wood) / 0.98), hsl(var(--steel-deep) / 0.96));
+    border: 2px solid hsl(var(--brass) / 0.38);
+    box-shadow: 0 12px 12px rgb(0 0 0 / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -2px 0 rgb(0 0 0 / 0.34);
+  }
+
+  .machine-panel {
+    background:
+      linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 12%, rgb(0 0 0 / 0.28) 100%),
+      repeating-linear-gradient(95deg, transparent 0 22px, rgb(255 255 255 / 0.018) 23px 24px),
+      linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background-clip: padding-box, padding-box, border-box;
+    background-origin: border-box;
+    box-shadow: 0 12px 12px rgb(0 0 0 / 0.75), inset 0 1px 0 hsl(var(--cta) / 0.42), inset 0 -2px 0 rgb(0 0 0 / 0.55);
+    position: relative;
+  }
+
+  .machine-panel::before {
+    background:
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 8px 8px / 12px 12px no-repeat,
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 8px) 8px / 12px 12px no-repeat,
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 8px calc(100% - 8px) / 12px 12px no-repeat,
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 8px) calc(100% - 8px) / 12px 12px no-repeat;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .machine-panel > * { position: relative; z-index: 1; }
+
+  .machine-bezel {
+    background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel) / 0.55));
+    border: 1px solid hsl(var(--brass) / 0.44);
+    border-radius: 3px;
+    box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.72), inset 0 1px 0 rgb(255 255 255 / 0.055), 0 1px 0 hsl(var(--cta) / 0.18);
+  }
+
+  .plaque {
+    background:
+      linear-gradient(to bottom, rgb(255 255 255 / 0.15), transparent 33%, rgb(0 0 0 / 0.26)),
+      linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+    border: 1px solid hsl(var(--brass) / 0.54);
+    border-radius: 3px;
+    box-shadow: 0 4px 0 hsl(var(--steel-deep)), 0 8px 10px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.16);
+    color: hsl(var(--paper));
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.9), 0 -1px 0 rgb(255 255 255 / 0.08);
+    transition: transform 80ms linear, box-shadow 80ms linear, filter 180ms ease;
+  }
+
+  .plaque:hover { filter: brightness(1.13); }
+  .plaque:active { box-shadow: 0 3px 0 hsl(var(--steel-deep)), 0 4px 6px rgb(0 0 0 / 0.5), inset 0 2px 4px rgb(0 0 0 / 0.45); transform: translateY(1px); }
+
+  .tape-label,
+  .tooltiptext-t,
+  .tooltiptext-b,
+  .tooltiptext-l,
+  .tooltiptext-r {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
+      linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.84));
+    border: 1px solid hsl(var(--brass) / 0.32);
+    box-shadow: 0 5px 7px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.42);
+    color: hsl(var(--steel-deep));
+    font-family: var(--font-typewriter), monospace;
+    transform: rotate(-1.3deg);
+  }
+
+  .pipe-frame {
+    background:
+      radial-gradient(circle at 12px 12px, hsl(var(--paper) / 0.35) 0 3px, hsl(var(--steel)) 4px 8px, hsl(var(--steel-deep)) 9px 13px, transparent 14px) 0 0 / 100% 100% no-repeat,
+      linear-gradient(135deg, hsl(var(--brass)), hsl(var(--steel)) 28%, hsl(var(--steel-deep)) 62%, hsl(var(--brass)));
+    border: 4px solid hsl(var(--steel-deep));
+    border-radius: 10px;
+    box-shadow: 0 18px 18px rgb(0 0 0 / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.24);
+    padding: 7px;
+  }
+
+  .wood-body {
+    background:
+      repeating-linear-gradient(2deg, hsl(var(--wood) / 0.3) 0 2px, transparent 2px 10px),
+      linear-gradient(to bottom, hsl(var(--wood) / 0.96), hsl(var(--steel-deep) / 0.94));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -2px 0 rgb(0 0 0 / 0.38);
+  }
+
+  .project-wood-body {
+    background:
+      repeating-linear-gradient(2deg, hsl(var(--steel-deep) / 0.25) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(92deg, transparent 0 39px, hsl(var(--paper) / 0.055) 40px 41px),
+      linear-gradient(to bottom, hsl(var(--brass) / 0.38), hsl(var(--wood) / 0.92) 28%, hsl(var(--steel-deep) / 0.86));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -3px 0 rgb(0 0 0 / 0.44);
+  }
+
+  .project-header {
+    align-items: center;
+    background: linear-gradient(to bottom, hsl(var(--paper) / 0.12), transparent 58%);
+    border-bottom: 1px solid hsl(var(--brass) / 0.52);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.17), 0 2px 0 rgb(0 0 0 / 0.28);
+    display: flex;
+    height: 42px;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 4px 8px;
+  }
+
+  .project-paper-tab {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 5px, hsl(var(--wood) / 0.09) 6px 7px),
+      linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.8));
+    border: 1px solid hsl(var(--brass) / 0.5);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.55);
+    color: hsl(var(--steel-deep));
+    font-family: var(--font-typewriter), monospace;
+    line-height: 1;
+    max-width: calc(100% - 8px);
+    padding: 7px 12px;
+    transform: rotate(-0.7deg);
+  }
+
+  .project-wood-body::before {
+    background:
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 7px 7px / 12px 12px no-repeat,
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 7px) 7px / 12px 12px no-repeat,
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 7px calc(100% - 7px) / 12px 12px no-repeat,
+      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 7px) calc(100% - 7px) / 12px 12px no-repeat;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 3;
+  }
+
+  .project-info-board {
+    background:
+      repeating-linear-gradient(1deg, hsl(var(--steel-deep) / 0.24) 0 1px, transparent 1px 7px),
+      linear-gradient(to bottom, hsl(var(--brass) / 0.31), hsl(var(--wood) / 0.96));
+    border: 1px solid hsl(var(--brass) / 0.5);
+    box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.14), 0 4px 7px rgb(0 0 0 / 0.5);
+    color: hsl(var(--paper));
+  }
+
+  .paper-tab {
+    background: linear-gradient(95deg, hsl(var(--paper)), hsl(var(--paper) / 0.8));
+    box-shadow: 0 4px 5px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.62);
+    color: hsl(var(--steel-deep));
+    font-family: var(--font-typewriter), monospace;
+    transform: rotate(-1deg);
+  }
+
+  .gearset { animation: gearset-turn 12s linear infinite; transform-origin: center; }
+  .gearset-reverse { animation: gearset-turn 12s linear infinite reverse; transform-origin: center; }
+
+  .workshop-input,
+  .workshop-input:focus {
+    background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel-deep) / 0.72));
+    border: 1px solid hsl(var(--brass) / 0.52);
+    border-radius: 3px;
+    box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.72), inset 0 1px 0 rgb(255 255 255 / 0.05), 0 1px 0 hsl(var(--cta) / 0.14);
+  }
+
+  .lever-gate {
+    background: linear-gradient(to right, hsl(var(--steel-deep)), hsl(var(--steel) / 0.7), hsl(var(--steel-deep)));
+    border: 1px solid hsl(var(--brass) / 0.46);
+    box-shadow: inset 0 3px 5px rgb(0 0 0 / 0.72), 0 5px 8px rgb(0 0 0 / 0.48), inset 0 1px 0 hsl(var(--cta) / 0.15);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lever-gate::before {
+    background: radial-gradient(circle at 50% 30%, hsl(var(--paper)), hsl(var(--brass)) 42%, hsl(var(--steel-deep)) 72%);
+    border: 1px solid hsl(var(--paper) / 0.46);
+    border-radius: 50%;
+    box-shadow: 0 13px 0 -5px hsl(var(--brass)), 0 20px 0 -7px hsl(var(--steel-deep)), 0 2px 3px rgb(0 0 0 / 0.6);
+    content: "";
+    height: 14px;
+    left: 10px;
+    position: absolute;
+    top: 7px;
+    width: 14px;
+  }
+
+  .lever-gate:active::before { transform: translateX(calc(100% + 16px)) translateY(10px); }
+
+  .admin-rack section,
+  .admin-rack article,
+  .appointment-rack > div > div,
+  .auth-panel {
+    background: linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep)));
+    border-color: hsl(var(--brass) / 0.42);
+    box-shadow: 0 12px 12px rgb(0 0 0 / 0.75), inset 0 1px 0 hsl(var(--cta) / 0.3), inset 0 -2px 0 rgb(0 0 0 / 0.45);
+  }
 }
 
 body {
@@ -162,7 +526,7 @@ body,
   max-width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--room));
   min-height: -webkit-fill-available;
 }
 
@@ -255,6 +619,61 @@ div {
   }
 }
 
+@keyframes wall-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 0.82;
+  }
+  52% {
+    opacity: 0.9;
+  }
+  71% {
+    opacity: 0.86;
+  }
+}
+
+@keyframes gearset-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes tape-tooltip-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 4px)) rotate(1deg);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 12px)) rotate(-1.8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 10px)) rotate(-1.3deg);
+  }
+}
+
+@keyframes rail-crawl {
+  to {
+    background-position-x: 22.63px;
+  }
+}
+
+@keyframes navbar-status-pulse {
+  0%,
+  100% {
+    filter: brightness(0.55) saturate(0.45);
+    opacity: 0.52;
+  }
+  50% {
+    filter: brightness(0.85) saturate(0.82);
+    opacity: 0.88;
+  }
+}
+
 .nda-lamp-swing {
   animation: nda-lamp-swing 5s ease-in-out infinite;
   transform-box: view-box;
@@ -291,7 +710,12 @@ body.modal-open .nda-lamp-swing,
 body.modal-open .nda-lamp-glow,
 body.modal-open .nda-lamp-beam,
 body.modal-open .nda-lamp-email-icon,
-body.modal-open .nda-lamp-panel-progress {
+body.modal-open .nda-lamp-panel-progress,
+body.modal-open .hazard-rail,
+body.modal-open .navbar-status-light,
+body.modal-open .workbench-glow,
+body.modal-open .gearset,
+body.modal-open .gearset-reverse {
   animation-play-state: paused;
 }
 
@@ -300,12 +724,22 @@ body.modal-open .nda-lamp-panel-progress {
   .nda-lamp-glow,
   .nda-lamp-beam,
   .nda-lamp-email-icon,
-  .nda-lamp-panel-progress {
+  .nda-lamp-panel-progress,
+  .hazard-rail,
+  .navbar-status-light,
+  .workbench-glow,
+  .gearset,
+  .gearset-reverse {
     animation: none;
   }
 
   .nda-lamp-email-icon {
     opacity: 0.05;
+  }
+
+  .text-tooltip-inline.tooltip:hover > .tooltiptext,
+  .text-tooltip-inline.tooltip:focus > .tooltiptext {
+    animation: none;
   }
 }
 
@@ -596,15 +1030,32 @@ body.modal-open .nda-lamp-panel-progress {
 
 .navbar-right-shadow {
   position: relative;
+  z-index: 2;
 }
 .navbar-right-shadow::before {
   content: "";
   position: absolute;
-  width: 80px;
+  width: 112px;
   height: 100%;
   right: 100%;
   top: 0;
-  background: linear-gradient(to left, rgb(48, 48, 48), transparent);
+  background: linear-gradient(to left, hsl(var(--steel-deep) / 0.92), hsl(var(--wood) / 0.78) 38%, transparent);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.navbar-left-shadow {
+  position: relative;
+  z-index: 2;
+}
+.navbar-left-shadow::after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 100%;
+  left: 100%;
+  top: 0;
+  background: linear-gradient(to right, hsl(var(--wood)), transparent);
   z-index: 10;
   pointer-events: none;
 }
