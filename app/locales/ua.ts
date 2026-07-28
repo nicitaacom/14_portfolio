@@ -8,6 +8,8 @@ export default {
     demo: "Демо",
     work: "Робота",
     projects: "Проєкти",
+    tabShowing: "Показано зараз",
+    tabClickToView: "Натисніть, щоб відкрити",
     back: "Назад",
     continue: "Продовжити",
     done: "Готово",

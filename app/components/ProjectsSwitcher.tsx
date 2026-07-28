@@ -24,15 +24,17 @@ export function ProjectsSwitcher() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-x-md">
+      <div className="mx-auto grid w-full max-w-[640px] grid-cols-2 gap-x-sm tablet:gap-x-md">
         <RadioButton
           label={t("work")}
+          hint={projectTab === "work" ? t("tabShowing") : t("tabClickToView")}
           inputName="input-name"
           onChange={() => setProjectTab("work")}
           isChecked={projectTab === "work"}
         />
         <RadioButton
           label={t("projects")}
+          hint={projectTab === "projects" ? t("tabShowing") : t("tabClickToView")}
           inputName="input-name"
           onChange={() => setProjectTab("projects")}
           isChecked={projectTab === "projects"}

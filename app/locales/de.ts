@@ -8,6 +8,8 @@ export default {
     demo: "Demo",
     work: "Arbeit",
     projects: "Projekte",
+    tabShowing: "Wird angezeigt",
+    tabClickToView: "Zum Ansehen klicken",
     back: "Zurück",
     continue: "Weiter",
     done: "Fertig",
