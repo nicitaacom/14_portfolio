@@ -120,12 +120,12 @@ export function ModalMoreInfo({
 
         <main className="modal-scroll hide-scrollbar flex-1 overflow-y-auto p-sm tablet:p-md">
           <div className="grid items-start gap-sm laptop:grid-cols-[380px_minmax(0,1fr)]">
-            <aside className="flex flex-col gap-y-sm laptop:sticky laptop:top-0">
+            <aside className="flex h-fit self-start flex-col gap-y-sm laptop:sticky laptop:top-0 laptop:self-start">
               {notice}
 
               {taskLabel && (
-                <section className="rounded-md border border-secondary-foreground/10 bg-secondary-foreground/[0.025] p-sm">
-                  <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-secondary-foreground/45">
+                <section className="rounded-md border border-cta/30 bg-cta/[0.065] p-sm">
+                  <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-cta">
                     <FiFileText size={15} />
                     <span>{t("projectTask")}</span>
                   </div>

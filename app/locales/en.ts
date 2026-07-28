@@ -128,7 +128,7 @@ export default {
   ndaProject: {
     preview: {
       ariaLabel: "A glowing question-mark lamp swinging on a dark wall",
-      level: "Mid-level NDA",
+      level: "NDA",
       title: "Confidential service case study",
       description: "Private clients, domains, and code. Outcomes do not.",
       identityProtected: "Identity protected",
@@ -139,14 +139,14 @@ export default {
     },
     modal: {
       label: "Confidential outreach & operations platform",
-      badge: "Mid-level NDA",
+      badge: "NDA",
       contributionTitle: "What I’ve done",
-      task: "Built and scaled a confidential B2B platform covering outreach, email operations, calling, compliance, support, analytics, billing, and AI-assisted workflows.",
+      task: "Created secure website for outreach for SMMA owners that allows to automate business processes such as cold emailing and email management. Saves money on expensive subscriptions such as GHL/Close/Instantly | warmbox | outscraper | zerobounce | Google workspace/M365 | twin",
     },
     notice: {
-      title: "What “Mid-level NDA” means",
+      title: "What “mid-level NDA” means",
       description:
-        "This is an approved, outcome-focused case study—not a release of private client material. I may describe the product category, my responsibilities, technologies, and measurable results. Client and company names, domains, repositories, source code, credentials, user data, and sensitive implementation details remain confidential.",
+        "Client identities, domains, and source code remain confidential. This case study focuses on my responsibilities, technologies, and measurable outcomes.",
     },
     details: {
       deliveredOutcomes: "{count} delivered outcomes",
