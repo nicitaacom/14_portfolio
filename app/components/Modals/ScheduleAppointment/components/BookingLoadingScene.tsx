@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 
+import { HalloweenBookingLoadingScene } from "@/components/Halloween/HalloweenBookingLoadingScene"
+import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { useScopedI18n } from "@/locales/client"
 
 const TAU = Math.PI * 2
@@ -64,7 +66,7 @@ function Gear({
   )
 }
 
-export function BookingLoadingScene() {
+function CrazyMechanicsBookingLoadingScene() {
   const sceneRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const blueprintFloatRef = useRef<HTMLDivElement>(null)
@@ -158,7 +160,7 @@ export function BookingLoadingScene() {
       context.save()
       context.globalCompositeOperation = "screen"
       for (const mote of motes) {
-        const x = (mote.x * width + (elapsed / 1000) * mote.speed) % (width + 20) - 10
+        const x = ((mote.x * width + (elapsed / 1000) * mote.speed) % (width + 20)) - 10
         const y = mote.y * height + Math.sin(elapsed * 0.00055 + mote.phase) * 10
         context.beginPath()
         context.arc(x, y, mote.radius, 0, TAU)
@@ -348,11 +350,7 @@ export function BookingLoadingScene() {
                 />
                 <g clipPath="url(#appointment-blueprint-clip)">
                   <rect width="600" height="360" fill="url(#appointment-blueprint-grid)" />
-                  <g
-                    fill="none"
-                    stroke="rgb(235 244 247 / 0.34)"
-                    strokeLinecap="round"
-                    strokeLinejoin="round">
+                  <g fill="none" stroke="rgb(235 244 247 / 0.34)" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="210" cy="132" r="50" strokeWidth="4" />
                     <circle cx="210" cy="132" r="19" strokeWidth="3" />
                     <circle cx="406" cy="132" r="33" strokeWidth="3" />
@@ -372,20 +370,13 @@ export function BookingLoadingScene() {
                       1 : 4
                     </text>
                     <text x="58" y="318">
-                      F = m · a
+                      {"F = m · a"}
                     </text>
                     <text x="456" y="316">
-                      R.14
+                      {"R.14"}
                     </text>
                   </g>
-                  <rect
-                    data-loading-scan
-                    x="28"
-                    y="170"
-                    width="545"
-                    height="3"
-                    fill="rgb(210 238 246 / 0.55)"
-                  />
+                  <rect data-loading-scan x="28" y="170" width="545" height="3" fill="rgb(210 238 246 / 0.55)" />
                 </g>
               </g>
 
@@ -436,7 +427,11 @@ export function BookingLoadingScene() {
                 <stop offset="1" stopColor="#565e63" />
               </linearGradient>
             </defs>
-            <g filter="url(#appointment-gear-shadow)" fill="url(#appointment-gear-metal)" stroke="#252b2f" strokeWidth="4">
+            <g
+              filter="url(#appointment-gear-shadow)"
+              fill="url(#appointment-gear-metal)"
+              stroke="#252b2f"
+              strokeWidth="4">
               <Gear x={112} y={112} radius={43} teeth={12} direction="counter-clockwise" />
               <Gear x={252} y={105} radius={72} teeth={16} direction="clockwise" />
               <Gear x={403} y={115} radius={45} teeth={12} direction="slow-clockwise" />
@@ -454,4 +449,12 @@ export function BookingLoadingScene() {
       </div>
     </motion.div>
   )
+}
+
+export function BookingLoadingScene() {
+  const theme = useSiteTheme()
+
+  if (theme === "halloween") return <HalloweenBookingLoadingScene />
+
+  return <CrazyMechanicsBookingLoadingScene />
 }
