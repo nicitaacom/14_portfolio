@@ -7,7 +7,7 @@ export function HalloweenFrameOrnaments({ variant }: HalloweenFrameOrnamentsProp
     variant === "modal"
       ? "translate(470 -34) scale(.65)"
       : variant === "project"
-        ? "translate(477 -24) scale(.5)"
+        ? "translate(477 14) scale(.5)"
         : "translate(484 4) scale(.32)"
   const leftPumpkinTransform = variant === "modal" ? "translate(73 526) scale(.55)" : "translate(78 532) scale(.48)"
   const rightPumpkinTransform = variant === "modal" ? "translate(868 526) scale(.55)" : "translate(874 532) scale(.48)"
