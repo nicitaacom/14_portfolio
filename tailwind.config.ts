@@ -4,7 +4,8 @@ const config: Config = {
   content: ["./app/**/*.{tsx,mdx}"],
   theme: {
     fontFamily: {
-      primary: ["Inter", "sans-serif"],
+      primary: ["var(--font-inter)", "Inter", "sans-serif"],
+      typewriter: ["var(--font-typewriter)", "monospace"],
     },
     fontSize: {
       xs: "clamp(0.72rem, 0.68rem + 0.18vw, 0.82rem)",
@@ -41,6 +42,14 @@ const config: Config = {
         warning: "hsl(var(--warning) / 1)",
         danger: "hsl(var(--danger) / 1)",
         success: "hsl(var(--success) / 1)",
+        steel: "hsl(var(--steel) / 1)",
+        "steel-deep": "hsl(var(--steel-deep) / 1)",
+        wood: "hsl(var(--wood) / 1)",
+        brass: "hsl(var(--brass) / 1)",
+        paper: "hsl(var(--paper) / 1)",
+        pipe: "hsl(var(--pipe) / 1)",
+        blueprint: "hsl(var(--blueprint) / 1)",
+        room: "hsl(var(--room) / 1)",
       },
     },
   },
