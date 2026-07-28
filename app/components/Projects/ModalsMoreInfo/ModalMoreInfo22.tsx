@@ -21,13 +21,13 @@ export default function ModalMoreInfo22() {
         {
           name: "ottakist",
           imgSrc: "/collaborations/22_aer/ottakist.png",
-          profileUrl: "https://github.com/ottakist",
+          collaboratorUrl: "https://github.com/ottakist",
           description: t("project22Ottakist"),
         },
         {
           name: "arifm6",
           imgSrc: "/collaborations/22_aer/arifm6.png",
-          profileUrl: "https://github.com/arifm6",
+          collaboratorUrl: "https://github.com/arifm6",
           description: t("project22Arif"),
         },
       ]}

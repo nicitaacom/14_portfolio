@@ -4,7 +4,7 @@ import { FiExternalLink } from "react-icons/fi"
 interface CollaborationIconProps {
   name?: string
   imgSrc?: string
-  profileUrl?: string
+  collaboratorUrl?: string
   isSelected: boolean
   onClick: () => void
 }
@@ -12,13 +12,13 @@ interface CollaborationIconProps {
 export function CollaborationIcon({
   name = "nicitaacom",
   imgSrc = "/collaborations/web-avatar.jpg",
-  profileUrl = "https://github.com/nicitaacom/",
+  collaboratorUrl = "https://github.com/nicitaacom/",
   isSelected,
   onClick,
 }: CollaborationIconProps) {
   return (
     <a
-      href={profileUrl}
+      href={collaboratorUrl}
       target="_blank"
       rel="noopener noreferrer"
       title={name}

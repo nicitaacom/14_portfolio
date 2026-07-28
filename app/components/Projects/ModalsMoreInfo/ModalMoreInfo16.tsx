@@ -19,7 +19,7 @@ export default function ModalMoreInfo16() {
         {
           name: "Kilomebit17",
           imgSrc: "/collaborations/16_gericht-restaurant/Kilomebit17.png",
-          profileUrl: "https://github.com/Kilomebit17",
+          collaboratorUrl: "https://github.com/Kilomebit17",
           description: t("project16CollaborationLead"),
         },
         { description: t("wholeSite") },

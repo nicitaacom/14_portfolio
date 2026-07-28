@@ -14,7 +14,7 @@ import { useScopedI18n } from "@/locales/client"
 export interface Collaborator {
   name?: string
   imgSrc?: string
-  profileUrl?: string
+  collaboratorUrl?: string
   description: ReactNode
 }
 
@@ -86,7 +86,7 @@ export function ModalMoreInfo({
   const selected = collaborators[selectedIndex]
   const selectedName = selected?.name ?? "nicitaacom"
   const selectedImgSrc = selected?.imgSrc ?? "/collaborations/web-avatar.jpg"
-  const selectedProfileUrl = selected?.profileUrl ?? "https://github.com/nicitaacom"
+  const selectedCollaboratorUrl = selected?.collaboratorUrl ?? "https://github.com/nicitaacom"
 
   return (
     <ModalContainer
@@ -158,6 +158,7 @@ export function ModalMoreInfo({
                       key={`${collaborator.name ?? "nicitaacom"}-${index}`}
                       name={collaborator.name}
                       imgSrc={collaborator.imgSrc}
+                      collaboratorUrl={collaborator.collaboratorUrl}
                       isSelected={selectedIndex === index}
                       onClick={() => setSelectedIndex(index)}
                     />
@@ -183,7 +184,7 @@ export function ModalMoreInfo({
                     />
                     <a
                       className="hidden w-fit items-center gap-x-xs text-sm font-semibold text-secondary-foreground/85 transition-colors duration-200 hover:text-cta tablet:inline-flex"
-                      href={selectedProfileUrl}
+                      href={selectedCollaboratorUrl}
                       target="_blank"
                       rel="noopener noreferrer">
                       {selectedName}
