@@ -110,6 +110,7 @@ export function HalloweenProjectSkull() {
     let frameId = 0
     let sleepId = 0
     let isOnScreen = true
+    let isRunning = false
 
     let attemptIndex = 0
     let attemptOffset = pick(SPLIT_ATTEMPTS[0].offsets)
@@ -221,26 +222,39 @@ export function HalloweenProjectSkull() {
       sleepId = 0
     }
 
+    // A card is worth animating only while it is on screen and nothing is covering it. An
+    // open modal hides every card behind it, so the loop would otherwise keep compositing
+    // three blended layers per card straight through the modal's own scrolling.
+    const isRunnable = () => isOnScreen && !document.body.classList.contains("modal-open")
+    const syncRunState = () => {
+      const shouldRun = isRunnable()
+      if (shouldRun === isRunning) return
+
+      isRunning = shouldRun
+      if (shouldRun) frameId = requestAnimationFrame(animate)
+      else stop()
+    }
+
     // Only burn frames while the card is actually on screen — every project card mounts one of these
     const observer = new IntersectionObserver(
       entries => {
-        const nowVisible = entries.some(entry => entry.isIntersecting)
-        if (nowVisible === isOnScreen) return
-
-        isOnScreen = nowVisible
-        if (nowVisible) frameId = requestAnimationFrame(animate)
-        else stop()
+        isOnScreen = entries.some(entry => entry.isIntersecting)
+        syncRunState()
       },
       { rootMargin: "120px" },
     )
     observer.observe(canvas)
 
-    frameId = requestAnimationFrame(animate)
+    const modalObserver = new MutationObserver(syncRunState)
+    modalObserver.observe(document.body, { attributeFilter: ["class"], attributes: true })
+
+    syncRunState()
 
     return () => {
       cancelled = true
       stop()
       observer.disconnect()
+      modalObserver.disconnect()
       skull.style.removeProperty("--rgb-red-x")
       skull.style.removeProperty("--rgb-blue-x")
     }

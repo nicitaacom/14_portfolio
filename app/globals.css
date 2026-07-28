@@ -824,6 +824,10 @@ div {
 
 .modal-scroll {
   -webkit-overflow-scrolling: touch;
+  /* The scroller is transparent and sits over the frame's stacked gradients. Without paint
+     containment the browser re-rasterizes that whole background on every scroll frame
+     rather than promoting the scroller to its own compositing layer. */
+  contain: paint;
   overscroll-behavior: contain;
 }
 
