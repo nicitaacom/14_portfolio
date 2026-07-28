@@ -419,6 +419,15 @@
       inset 0 -2px 3px rgb(0 0 0 / 0.48);
   }
 
+  .appointment-details-panel {
+    background: rgb(15 11 16 / 0.4);
+    border: 1px solid rgb(192 176 143 / 0.32);
+    border-radius: 3px;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 8px 18px rgb(0 0 0 / 0.18);
+  }
+
   .appointment-loading-screen {
     background: #000 url("/UI/crazy-mechanics-loading.jpg") center / cover no-repeat;
   }

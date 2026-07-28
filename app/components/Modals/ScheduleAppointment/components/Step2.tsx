@@ -153,7 +153,10 @@ export function Step2({ onBookingStateChange }: Step2Props) {
 
   return (
     <form
-      className={twMerge("flex w-full flex-col gap-sm", step === "step-1" ? "" : "pt-xs")}
+      className={twMerge(
+        "appointment-details-panel flex w-full flex-col gap-sm p-sm",
+        step === "step-1" ? "" : "pt-sm",
+      )}
       onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center gap-xs rounded-[12px] border border-brass/40 px-sm py-xs">
         <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full border border-cta/40 bg-cta/10">
