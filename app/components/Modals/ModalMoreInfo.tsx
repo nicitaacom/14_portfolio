@@ -1,7 +1,6 @@
 "use client"
 
 import { ReactNode, useState } from "react"
-import Image from "next/image"
 import { Button } from "../Button"
 import { ModalContainer } from "./ModalContainer"
 import { CollaborationIcon } from "../CollaborationIcon"
@@ -84,9 +83,6 @@ export function ModalMoreInfo({
   const resolvedContributionTitle = contributionTitle ?? t("whatIDid")
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selected = collaborators[selectedIndex]
-  const selectedName = selected?.name ?? "nicitaacom"
-  const selectedImgSrc = selected?.imgSrc ?? "/collaborations/web-avatar.jpg"
-  const selectedCollaboratorUrl = selected?.collaboratorUrl ?? "https://github.com/nicitaacom"
 
   return (
     <ModalContainer
@@ -168,30 +164,11 @@ export function ModalMoreInfo({
             </aside>
 
             <section className="min-w-0 overflow-hidden rounded-md border border-secondary-foreground/10 bg-secondary-foreground/[0.025]">
-              <div className="flex min-h-[60px] items-center justify-between gap-x-md border-b border-secondary-foreground/10 bg-secondary-foreground/[0.025] px-md py-sm">
+              <div className="flex min-h-[60px] items-center border-b border-secondary-foreground/10 bg-secondary-foreground/[0.025] px-md py-sm">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-cta">{resolvedContributionTitle}</p>
                   <p className="mt-xs text-xs text-secondary-foreground/40">{t("selectedContributorOutcomes")}</p>
                 </div>
-                {selected && (
-                  <div className="flex shrink-0 items-center gap-x-sm">
-                    <Image
-                      className="h-9 w-9 shrink-0 rounded-full object-cover"
-                      src={selectedImgSrc}
-                      alt={selectedName}
-                      width={36}
-                      height={36}
-                    />
-                    <a
-                      className="hidden w-fit items-center gap-x-xs text-sm font-semibold text-secondary-foreground/85 transition-colors duration-200 hover:text-cta tablet:inline-flex"
-                      href={selectedCollaboratorUrl}
-                      target="_blank"
-                      rel="noopener noreferrer">
-                      {selectedName}
-                      <FiExternalLink size={12} className="opacity-50" />
-                    </a>
-                  </div>
-                )}
               </div>
 
               {selected && (
