@@ -357,6 +357,13 @@
   z-index: 8;
 }
 
+/* The skull perches on the modal's top edge with its upper half outside the frame, so it
+   sits above the title plate rather than sharing its row */
+
+.halloween-frame-ornaments-modal .halloween-frame-skull {
+  overflow: visible;
+}
+
 /* Remove every workshop-specific silhouette */
 
 :root[data-theme="halloween"] .navbar-rivet,
@@ -755,7 +762,7 @@
   box-shadow:
     0 28px 70px rgb(0 0 0 / 0.86),
     0 0 0 2px rgb(118 94 139 / 0.48);
-  clip-path: polygon(5% 0, 95% 0, 100% 7%, 98% 93%, 93% 100%, 7% 100%, 2% 93%, 0 7%);
+  /* No clip-path here: it would sever the skull that perches on the top edge */
   padding: 14px;
 }
 
