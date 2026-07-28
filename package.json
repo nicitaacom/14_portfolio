@@ -6,7 +6,7 @@
     "dev": "next dev -p 3014",
     "build": "next build",
     "start": "next start -p 3014",
-    "lint": "next lint",
+    "lint": "eslint app --ext .ts,.tsx --rulesdir eslint-rules",
     "update-types": "pnpx supabase gen types typescript --project-id bvvhwcmjlbofleanshdm > app/interfaces/types_db.ts"
   },
   "dependencies": {
@@ -15,25 +15,25 @@
     "@supabase/supabase-js": "^2.43.2",
     "@upstash/ratelimit": "^1.1.3",
     "@upstash/redis": "^1.29.0",
-    "next": "^16.2.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "next-international": "^1.3.1",
-    "react-calendar": "^5.0.0",
-    "react-countup": "^6.5.3",
-    "react-hook-form": "^7.51.4",
-    "react-icons": "^4.12.0",
-    "react-swipeable": "^7.0.1",
-    "recharts": "^3.8.1",
-    "tailwind-merge": "^2.3.0",
-    "zustand": "^4.5.2",
     "framer-motion": "^12.40.0",
     "gsap": "^3.12.5",
     "ioredis": "^5.4.1",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
     "nanoid": "^5.0.7",
-    "pnpm": "^11.5.1"
+    "next": "^16.2.6",
+    "next-international": "^1.3.1",
+    "pnpm": "^11.5.1",
+    "react": "^19.2.0",
+    "react-calendar": "^5.0.0",
+    "react-countup": "^6.5.3",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.51.4",
+    "react-icons": "^4.12.0",
+    "react-swipeable": "^7.0.1",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^2.3.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "latest",
@@ -41,10 +41,10 @@
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
     "eslint": "^8.57.0",
-    "eslint-config-next": "latest",
+    "eslint-config-next": "15.5.9",
     "postcss": "latest",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.19",
-    "typescript": "latest"
+    "typescript": "5.7.3"
   }
 }
