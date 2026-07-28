@@ -206,6 +206,8 @@ export function AuthPageClient() {
           onClick={signInWithGithub}
           isDisabled={!isPasswordVerified || isCheckingPassword || isSigningIn}
           disabled={!isPasswordVerified || isCheckingPassword || isSigningIn}
+          requestAction
+          requestPending={isSigningIn}
           className="w-full">
           <>
             {!isSigningIn && <FiGithub size={16} />}

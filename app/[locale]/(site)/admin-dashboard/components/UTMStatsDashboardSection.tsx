@@ -2,15 +2,8 @@
 
 import { useMemo } from "react"
 import { FiRefreshCcw } from "react-icons/fi"
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts"
+import { Button } from "@/components/Button"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { useUTMStats } from "../hooks/useUTMStats"
 import { UTMTimeRangeSwitcher } from "./UTMTimeRangeSwitcher"
 import { useScopedI18n } from "@/locales/client"
@@ -104,10 +97,7 @@ function VisitsAreaChart({ data, isMonthly }: { data: { date: string; visits: nu
             tickFormatter={v => (v === 0 ? "0" : String(v))}
           />
 
-          <Tooltip
-            content={<VisitsTooltip />}
-            cursor={{ stroke: "#3a3a3a", strokeWidth: 1, strokeDasharray: "4 4" }}
-          />
+          <Tooltip content={<VisitsTooltip />} cursor={{ stroke: "#3a3a3a", strokeWidth: 1, strokeDasharray: "4 4" }} />
 
           <Area
             type="monotone"
@@ -141,10 +131,13 @@ export function UTMStatsDashboardSection() {
     }
     if (timeRange === "1y") {
       // weekly buckets — group into distinct calendar months
-      const months = new Set(chartData.map(d => {
-        // "2026-W21" → parse year+week to approximate month
-        return d.date.slice(0, 4) + "-" + String(Math.ceil(parseInt(d.date.slice(6)) / 4.33)).padStart(2, "0")
-      })).size || 1
+      const months =
+        new Set(
+          chartData.map(d => {
+            // "2026-W21" → parse year+week to approximate month
+            return d.date.slice(0, 4) + "-" + String(Math.ceil(parseInt(d.date.slice(6)) / 4.33)).padStart(2, "0")
+          }),
+        ).size || 1
       return Math.round(utmStats.totalVisits / months)
     }
     // 1w → avg per day
@@ -161,12 +154,14 @@ export function UTMStatsDashboardSection() {
         </div>
         <div className="flex items-center gap-[8px]">
           <UTMTimeRangeSwitcher timeRange={timeRange} onChange={setTimeRange} />
-          <button
+          <Button
             className="inline-flex shrink-0 items-center justify-center gap-[8px] rounded-[2px] border border-brass/40 bg-steel px-sm py-xs text-secondary transition hover:bg-steel"
-            onClick={refetch}>
+            onClick={refetch}
+            requestAction
+            requestPending={isLoading}>
             <FiRefreshCcw size={14} />
             {t("refresh")}
-          </button>
+          </Button>
         </div>
       </div>
 

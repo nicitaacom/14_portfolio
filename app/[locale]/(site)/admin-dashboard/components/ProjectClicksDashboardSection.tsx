@@ -177,17 +177,17 @@ export function ProjectClicksDashboardSection() {
         <div className="flex flex-col gap-[10px]">
           <div className="flex flex-col gap-[4px]">
             <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{t("projectOverviewTitle")}</h2>
-            <p className="max-w-[760px] text-xs text-secondary-foreground">
-              {t("projectOverviewSubtitle")}
-            </p>
+            <p className="max-w-[760px] text-xs text-secondary-foreground">{t("projectOverviewSubtitle")}</p>
           </div>
 
-          <button
+          <Button
             className="inline-flex w-fit items-center justify-center gap-[8px] rounded-[2px] border border-brass/40 bg-steel px-sm py-xs text-secondary hover:bg-steel transition"
-            onClick={handleRefetch}>
+            onClick={handleRefetch}
+            requestAction
+            requestPending={isOverviewSkeleton || isTimelineSkeleton}>
             <FiRefreshCcw size={14} />
             {t("refetch")}
-          </button>
+          </Button>
         </div>
 
         {overviewErrorMessage ? (
@@ -196,7 +196,9 @@ export function ProjectClicksDashboardSection() {
           </p>
         ) : null}
         {timelineErrorMessage ? (
-          <p className="relative mt-[4px] text-xs text-danger">{t("timelineLoadError", { message: timelineErrorMessage })}</p>
+          <p className="relative mt-[4px] text-xs text-danger">
+            {t("timelineLoadError", { message: timelineErrorMessage })}
+          </p>
         ) : null}
       </section>
 
@@ -205,7 +207,9 @@ export function ProjectClicksDashboardSection() {
       ) : (
         <div className="grid grid-cols-1 gap-xs tablet:grid-cols-2 laptop:grid-cols-4">
           <ProjectClicksSummaryStat
-            caption={t("activeProjectsInWindow", { count: orderedOverview.filter(item => item.total_clicks > 0).length })}
+            caption={t("activeProjectsInWindow", {
+              count: orderedOverview.filter(item => item.total_clicks > 0).length,
+            })}
             label={t("windowClicks")}
             tone="blue"
             value={summaryStats.totalClicks}
@@ -213,7 +217,10 @@ export function ProjectClicksDashboardSection() {
           <ProjectClicksSummaryStat
             caption={
               summaryStats.selectedProjectShare
-                ? t("selectedProjectShare", { projectName: selectedProject.name, share: summaryStats.selectedProjectShare })
+                ? t("selectedProjectShare", {
+                    projectName: selectedProject.name,
+                    share: summaryStats.selectedProjectShare,
+                  })
                 : t("selectedProjectNoClicks", { projectName: selectedProject.name })
             }
             label={t("selectedProject")}
@@ -236,9 +243,7 @@ export function ProjectClicksDashboardSection() {
       )}
 
       <div className="flex flex-col gap-sm">
-        <DashboardCard
-          subtitle={t("selectedTimelineSubtitle")}
-          title={t("selectedTimelineTitle")}>
+        <DashboardCard subtitle={t("selectedTimelineSubtitle")} title={t("selectedTimelineTitle")}>
           <div className="mb-sm flex flex-col gap-[4px] tablet:flex-row tablet:items-center tablet:justify-between">
             <ProjectClicksPicker projects={trackedProjects} />
             <TimelineModeSwitcher timelineMode={timelineMode} onChange={setTimelineMode} />
@@ -255,9 +260,7 @@ export function ProjectClicksDashboardSection() {
           )}
         </DashboardCard>
 
-        <DashboardCard
-          subtitle={t("allProjectsComparisonSubtitle")}
-          title={t("allProjectsComparisonTitle")}>
+        <DashboardCard subtitle={t("allProjectsComparisonSubtitle")} title={t("allProjectsComparisonTitle")}>
           {isOverviewSkeleton ? (
             <AllProjectsClicksBarChartSkeleton />
           ) : !orderedOverview.length ? (

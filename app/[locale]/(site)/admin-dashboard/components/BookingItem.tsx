@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { FiEdit3, FiSave } from "react-icons/fi"
 import { MdOutlineCancel } from "react-icons/md"
+import { Button } from "@/components/Button"
 import { Input } from "@/components/Input"
 import { useScopedI18n } from "@/locales/client"
 import { useBookingActions } from "../../hooks/useBookingActions"
@@ -41,11 +42,20 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
 
   const { isLoading, deleteBooking, updateBooking } = useBookingActions({
     onDeleteSuccess: () => router.refresh(),
-    onUpdateSuccess: () => { setIsEditing(false); router.refresh() },
+    onUpdateSuccess: () => {
+      setIsEditing(false)
+      router.refresh()
+    },
   })
 
   function saveBookingChanges() {
-    updateBooking(booking.id, draftBookingDate, draftBookingTime, formatDate(booking.booking_date), booking.booking_time_MSK)
+    updateBooking(
+      booking.id,
+      draftBookingDate,
+      draftBookingTime,
+      formatDate(booking.booking_date),
+      booking.booking_time_MSK,
+    )
   }
 
   function handleDelete() {
@@ -91,13 +101,15 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
 
             {isEditing ? (
               <>
-                <button
+                <Button
                   className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-success/40 bg-success/15 text-success transition-opacity disabled:opacity-50"
                   disabled={isLoading || !draftBookingDate || !draftBookingTime}
+                  requestAction="compact"
+                  requestPending={isLoading}
                   onClick={saveBookingChanges}
                   type="button">
                   <FiSave size={16} />
-                </button>
+                </Button>
                 <button
                   className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-secondary-foreground/30 bg-steel text-secondary transition-opacity disabled:opacity-50"
                   disabled={isLoading}
@@ -115,13 +127,15 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
                   type="button">
                   <FiEdit3 size={16} />
                 </button>
-                <button
+                <Button
                   className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-danger/40 bg-danger/15 text-danger transition-opacity disabled:opacity-50"
                   disabled={isLoading}
+                  requestAction="compact"
+                  requestPending={isLoading}
                   onClick={handleDelete}
                   type="button">
                   <MdOutlineCancel size={16} />
-                </button>
+                </Button>
               </>
             )}
           </div>

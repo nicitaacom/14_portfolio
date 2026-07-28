@@ -219,6 +219,8 @@ export function Step2({ onBookingStateChange }: Step2Props) {
             (!isShowUpOnACall || isLoading) && "cursor-default opacity-50",
           )}
           disabled={!isShowUpOnACall || isLoading}
+          requestAction
+          requestPending={isLoading}
           type="submit">
           {isLoading ? t("booking") : t("bookCall")}
           <IoMdArrowRoundForward className="duration-300 group-hover:-translate-x-0.5" />

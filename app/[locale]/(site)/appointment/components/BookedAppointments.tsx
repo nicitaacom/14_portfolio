@@ -27,7 +27,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
   const [draftBookingTime, setDraftBookingTime] = useState("")
 
   const { isLoading, deleteBooking, updateBooking } = useBookingActions({
-    onError: (error) => toast.show("error", toastT("defaultErrorTitle"), error.message),
+    onError: error => toast.show("error", toastT("defaultErrorTitle"), error.message),
     onUpdateSuccess: stopEditing,
   })
 
@@ -77,9 +77,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
             </li>
           )}
           {booked_appointments.map(booked_appointment => (
-            <li
-              className="machine-bezel flex min-w-0 flex-col gap-xs px-sm py-sm"
-              key={booked_appointment.id}>
+            <li className="machine-bezel flex min-w-0 flex-col gap-xs px-sm py-sm" key={booked_appointment.id}>
               <div className="flex flex-col gap-xs">
                 {editingAppointmentId === booked_appointment.id ? (
                   <div className="flex flex-col gap-y-xs">
@@ -132,6 +130,8 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                       title={t("saveChanges")}
                       className="h-[34px] w-[34px] border-success !p-[0px]"
                       isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
+                      requestAction="compact"
+                      requestPending={isLoading}
                       onClick={() => updateDBAppointmentFn(booked_appointment)}>
                       <FiSave className="text-success" size={16} />
                     </Button>
@@ -156,6 +156,8 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                       title={t("deleteAppointment")}
                       className="h-[34px] w-[34px] border-danger !p-[0px]"
                       isDisabled={isLoading}
+                      requestAction="compact"
+                      requestPending={isLoading}
                       onClick={() =>
                         deleteDBAppointmentFn(
                           booked_appointment.id,
