@@ -8,6 +8,7 @@ import { AdminDropdown } from "./AdminDropdown"
 import { LanguageDropdown } from "./LanguageDropdown"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { localizePath } from "@/locales/helpers"
+import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
 
 interface NavbarWithProgressProps {
   userId: string | undefined
@@ -43,8 +44,9 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
 
   return (
     <nav
-      className="navbar-plate relative w-full flex justify-between transition-[height] gap-x-sm duration-[600ms]
+      className="site-navbar navbar-plate relative w-full flex justify-between transition-[height] gap-x-sm duration-[600ms]
       px-md text-secondary overflow-visible">
+      <HalloweenFrameOrnaments variant="navbar" />
       <div className="navbar-left-shadow flex items-center pr-md line">
         <Link
           data-text="Portfolio"
@@ -67,7 +69,10 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
           </>
         )}
       </div>
-      <span className="navbar-rivet navbar-status-light absolute left-[6px] top-1/2 -translate-y-1/2" aria-hidden="true" />
+      <span
+        className="navbar-rivet navbar-status-light absolute left-[6px] top-1/2 -translate-y-1/2"
+        aria-hidden="true"
+      />
       <span className="navbar-rivet absolute right-[6px] top-1/2 -translate-y-1/2" aria-hidden="true" />
     </nav>
   )
