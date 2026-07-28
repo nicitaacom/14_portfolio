@@ -9,6 +9,7 @@ import { YoutubeUrlIcon } from "./YouTubeUrlIcon"
 import { Button } from "../Button"
 import { useScopedI18n } from "@/locales/client"
 import { limitProjectStack } from "@/utils/limitProjectStack"
+import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
 
 interface ProjectProps {
   figmaUrl?: string
@@ -45,7 +46,8 @@ export function Project({
   const previewClassName = "machine-bezel group relative block min-h-0 w-full flex-1 overflow-hidden"
 
   return (
-    <div className="pipe-frame relative w-full tablet:h-[720px] h-[784px]">
+    <div className="site-card pipe-frame relative w-full tablet:h-[720px] h-[784px]">
+      <HalloweenFrameOrnaments variant="project" />
       <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px] p-[10px]">
         <div className="project-header shrink-0">
           <span className="project-paper-tab truncate">{projectName}</span>
