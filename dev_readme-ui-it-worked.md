@@ -37,7 +37,7 @@ neutral white grid. Edges are worn round by use, not by a `border-radius` decisi
 
 **box in box** — no control sits directly on the page. It sits in a bezel, the bezel sits in a panel, the
 panel is screwed to a board, the board hangs on the wall. Look at
-[crazy-mechanics-aside.png](public/UI/crazy-mechanics-aside.png): the green scope is inside a bolted brass
+[crazy-mechanics-aside.png](public/UI/crazy-mechanics/crazy-mechanics-aside.png): the green scope is inside a bolted brass
 ring, inside a wooden panel, inside a steel bracket, inside the rack column. Four frames deep before you
 reach the data. That nesting is what makes it read as built rather than laid out.
 
@@ -48,14 +48,14 @@ lands. Small actions stay plaques. The one action that matters on a page gets th
 
 #### 1.2 Reference shots — what to take from each
 
-| Shot                                                                         | The vibe in one line                                                                                                                                   | What we take                                                                                            |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| [crazy-mechanics-loading.jpg](public/UI/crazy-mechanics-loading.jpg)         | Black room, one lit brick wall, a torn blueprint sheet with hand sketches and margin math, three gears turning below                                    | Loader, hero backdrop, the "torn sheet taped to a wall" framing, margin doodles as texture              |
-| [crazy-mechanics-main.jpg](public/UI/crazy-mechanics-main.jpg)               | The workbench — parts laid on a plaster wall, long soft shadows, blue cables, hazard rail with odometer counters at the bottom, steel rack on the right | Page layout: open work surface + bottom status rail + right rack. Shadow language. Cables as connectors |
-| [crazy-mechanics-menu.png](public/UI/crazy-mechanics-menu.png)               | Riveted plate wall, pipes running off-screen, buttons are stone plaques with engraved colored labels                                                    | Plaque = button. Nav as scattered plaques, not a row. Pipes and gears bleeding past the edge            |
-| [crazy-mechanics-aside.png](public/UI/crazy-mechanics-aside.png)             | The rack: steel bracket, wood panel, green oscilloscope in a bolted bezel, masking-tape label reading "Monitor 3", hazard triangle, brass knobs         | **box in box** in its purest form. Screws at panel corners. Handwritten tape labels. Live green readout |
-| [crazy-mechanics-modal.png](public/UI/crazy-mechanics-modal.png)             | Small wooden dialog inside a rounded steel pipe frame, paper strip tab for the title, three glass buttons                                               | Modal recipe: pipe frame + wood body + paper title tab, heavy shadow under it                           |
-| [crazy-mechanics-certificate.png](public/UI/crazy-mechanics-certificate.png) | Aged paper with torn edges, blackletter title, typewriter body, rubber stamp seal bottom-right                                                          | **old** at full strength. The award/testimonial surface. Stamp as the "verified" mark                   |
+| Shot                                                                                         | The vibe in one line                                                                                                                                    | What we take                                                                                            |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| [crazy-mechanics-loading.jpg](public/UI/crazy-mechanics/crazy-mechanics-loading.jpg)         | Black room, one lit brick wall, a torn blueprint sheet with hand sketches and margin math, three gears turning below                                    | Loader, hero backdrop, the "torn sheet taped to a wall" framing, margin doodles as texture              |
+| [crazy-mechanics-main.jpg](public/UI/crazy-mechanics/crazy-mechanics-main.jpg)               | The workbench — parts laid on a plaster wall, long soft shadows, blue cables, hazard rail with odometer counters at the bottom, steel rack on the right | Page layout: open work surface + bottom status rail + right rack. Shadow language. Cables as connectors |
+| [crazy-mechanics-menu.png](public/UI/crazy-mechanics/crazy-mechanics-menu.png)               | Riveted plate wall, pipes running off-screen, buttons are stone plaques with engraved colored labels                                                    | Plaque = button. Nav as scattered plaques, not a row. Pipes and gears bleeding past the edge            |
+| [crazy-mechanics-aside.png](public/UI/crazy-mechanics/crazy-mechanics-aside.png)             | The rack: steel bracket, wood panel, green oscilloscope in a bolted bezel, masking-tape label reading "Monitor 3", hazard triangle, brass knobs         | **box in box** in its purest form. Screws at panel corners. Handwritten tape labels. Live green readout |
+| [crazy-mechanics-modal.png](public/UI/crazy-mechanics/crazy-mechanics-modal.png)             | Small wooden dialog inside a rounded steel pipe frame, paper strip tab for the title, three glass buttons                                               | Modal recipe: pipe frame + wood body + paper title tab, heavy shadow under it                           |
+| [crazy-mechanics-certificate.png](public/UI/crazy-mechanics/crazy-mechanics-certificate.png) | Aged paper with torn edges, blackletter title, typewriter body, rubber stamp seal bottom-right                                                          | **old** at full strength. The award/testimonial surface. Stamp as the "verified" mark                   |
 
 #### 1.3 The seed we already ship
 
@@ -83,7 +83,7 @@ Already in [app/globals.css:7-20](app/globals.css), and it already covers every 
 | `--primary`            | 0 0% 13%     | The dark room the workshop sits in                      |
 | `--primary-foreground` | 0 0% 19%     | Panel face lifted off the wall                          |
 | `--secondary`          | 0 0% 87%     | Engraved label text, headings                           |
-| `--cta`                | 277 100% 68% | The lamp, the rim light, the glow. The one light source  |
+| `--cta`                | 277 100% 68% | The lamp, the rim light, the glow. The one light source |
 | `--warning`            | 47 100% 50%  | Hazard triangle, the striped rail                       |
 | `--success`            | 118 79% 44%  | The green oscilloscope trace                            |
 | `--danger`             | 0 84% 48%    | The red painted plate                                   |
@@ -335,7 +335,7 @@ Nothing is built from this doc yet. Order of work, cheapest and most visible fir
 | 1   | Add the six material tokens from §1.4 plus a `--shadow-lamp` token                                     | `app/globals.css`, `tailwind.config.ts` |
 | 2   | Panel recipe as a CSS component class, proved on one project card                                      | `app/globals.css`, `Project.tsx`        |
 | 3   | Plaque recipe applied to `Button.tsx`, with the press-sink state                                       | `Button.tsx`                            |
-| 4   | Workbench background: wall + swinging light pool lifted out of `NDAProjectPreview` into a shared layer  | `Layout.tsx`                            |
+| 4   | Workbench background: wall + swinging light pool lifted out of `NDAProjectPreview` into a shared layer | `Layout.tsx`                            |
 | 5   | **Lever** — pointer drag, keyboard travel, notch fire, spring return, gate flash                       | new component + `ScheduleAppointment`   |
 | 6   | Gearset loader replacing the spinner, wired to the lever's held-down window                            | `LoadingSpinner.tsx`                    |
 | 7   | Bezel recipe for `Input.tsx`, tape label above each field                                              | `Input.tsx`                             |
@@ -350,8 +350,8 @@ tracks the lamp, and every control sits at least two boxes deep.
 
 #### Decisions made AGAINST
 
-| Decision                                                          | Why                                                                                                                                                                                      |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Decision                                                          | Why                                                                                                                                                                                       |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Against raster texture files** (wood.jpg, metal.png, brick.png) | The seed proves gradients and patterns do it: they recolor from tokens, stay sharp at any zoom, and add zero download. Image skins freeze the colour into the file and go soft on retina. |
 | **Against warm tungsten light**                                   | The game's lamp is yellow. Ours stays `--cta` purple, so the workshop reads as this portfolio and not as fan art.                                                                         |
 | **Against texture behind body text**                              | Wood grain under a paragraph costs contrast. Text sits on a flat face inside the bezel; the material lives on the frames, edges and corners.                                              |
@@ -361,4 +361,4 @@ tracks the lamp, and every control sits at least two boxes deep.
 | **Against a physics engine for the swing**                        | Four CSS keyframes already sell the pendulum. A library to move one lamp is weight with nothing to show for it.                                                                           |
 | **Against per-component light direction**                         | One lamp, one shadow direction, page-wide. The moment two blocks disagree about where the light is, the illusion drops.                                                                   |
 | **Against nesting deeper than four boxes**                        | Board → panel → bezel → content is the depth the reference shots use. A fifth frame eats the content area on a phone and reads as noise.                                                  |
-| **Against idle loops faster than ~4s or slower than ~12s**        | Faster reads as a fidget, slower reads as broken. The idle band is 4–12s.                                                                                                                |
+| **Against idle loops faster than ~4s or slower than ~12s**        | Faster reads as a fidget, slower reads as broken. The idle band is 4–12s.                                                                                                                 |
