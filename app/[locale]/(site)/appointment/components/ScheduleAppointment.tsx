@@ -3,20 +3,24 @@
 import { useEffect } from "react"
 import { Calendar } from "react-calendar"
 import { nanoid } from "nanoid"
-import moment from "moment"
+import moment from "moment-timezone"
 
 import { Button } from "@/components/Button"
 import { TimePicker } from "./TimePicker"
 import { useSelectedDateStore } from "@/store/useSelectedDateStore"
+import { getNextAvailableTimeMSK, useSelectedTimeStore } from "@/store/useSelectedTimeStore"
+import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { useModalsStore } from "@/store/modalsStore"
 import { isDateBeforeTodayOrTime } from "@/utils/isDateBeforeTodayOrTime"
 import { TimeZonePicker } from "./TimezonePicker/TimeZonePicker"
-import { formatedDateTimeFn } from "../../functions/formatedDateTimeFn"
+import { convertCurrentToTargetTimezone } from "../../functions/convertCurrentToTargetTimezone"
 import { getCookie, setCookie } from "@/utils/helpersCSR"
 import { useScopedI18n } from "@/locales/client"
 
 export function ScheduleAppointment() {
   const { selectedDate, setSelectedDate } = useSelectedDateStore()
+  const { selectedTime, setSelectedTime } = useSelectedTimeStore()
+  const { selectedTimezone, setSelectedTimezone } = useSelectedTimezoneStore()
   const { openModal } = useModalsStore()
   const t = useScopedI18n("appointment.page")
 
@@ -24,6 +28,15 @@ export function ScheduleAppointment() {
     selectedDate instanceof Date ? selectedDate : Array.isArray(selectedDate) ? selectedDate[0] : null
 
   const selectedDateOnly = selectedDateValue ? moment(selectedDateValue).format("DD.MM.YYYY") : ""
+  const selectedDateTime = `${selectedDateOnly} at ${selectedTime} ${selectedTimezone}`
+
+  useEffect(() => {
+    const userTimezone = moment.tz.guess()
+    const nextTimeMSK = getNextAvailableTimeMSK()
+
+    setSelectedTimezone(userTimezone)
+    setSelectedTime(convertCurrentToTargetTimezone(nextTimeMSK, "Europe/Moscow", userTimezone))
+  }, [setSelectedTime, setSelectedTimezone])
 
   useEffect(() => {
     if (!getCookie("user_cookie_id")) {
@@ -42,7 +55,7 @@ export function ScheduleAppointment() {
                 <h2 className="text-[1.35rem] font-bold leading-tight text-secondary">{t("pickYourDay")}</h2>
                 <span className="text-sm text-secondary-foreground/80">
                   <span className="tablet:hidden">{selectedDateOnly}</span>
-                  <span className="hidden tablet:inline">{formatedDateTimeFn().trim()}</span>
+                  <span className="hidden tablet:inline">{selectedDateTime}</span>
                 </span>
               </div>
               <p className="mt-xs max-w-[32rem] text-sm leading-relaxed text-secondary-foreground/75">

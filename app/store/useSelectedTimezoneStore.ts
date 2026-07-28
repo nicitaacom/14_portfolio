@@ -1,14 +1,13 @@
 import { create } from "zustand"
-import moment from "moment-timezone"
 
 interface SelectedTimezoneStore {
   selectedTimezone: string
   setSelectedTimezone: (timezone: string) => void
 }
 
-const userTimezone = moment.tz.guess()
+export const DEFAULT_APPOINTMENT_TIMEZONE = "Europe/Moscow"
 
 export const useSelectedTimezoneStore = create<SelectedTimezoneStore>()(set => ({
-  selectedTimezone: userTimezone,
+  selectedTimezone: DEFAULT_APPOINTMENT_TIMEZONE,
   setSelectedTimezone: (timezone: string) => set({ selectedTimezone: timezone }),
 }))

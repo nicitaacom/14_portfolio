@@ -8,7 +8,7 @@ import moment from "moment"
 
 import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
-import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
+import { DEFAULT_APPOINTMENT_TIME_MSK, useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { useSelectedDateStore } from "@/store/useSelectedDateStore"
 import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
@@ -43,7 +43,9 @@ export function TimePicker() {
 
   // if time outside the time window, set to first time window (12:00 MSK)
   useEffect(() => {
-    if (disableAllToday) setSelectedTime("12:00")
+    if (disableAllToday) {
+      setSelectedTime(convertCurrentToTargetTimezone(DEFAULT_APPOINTMENT_TIME_MSK, "Europe/Moscow", selectedTimezone))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disableAllToday, selectedTimezone])
 
@@ -132,7 +134,8 @@ export function TimePicker() {
         <div className="max-h-[196px] overflow-y-scroll hide-scrollbar">
           {convertedTimePicker.map(time => {
             const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
-            const isPast = isDisabledFn(time.time, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate)
+            const timeMSK = convertCurrentToTargetTimezone(time.time, selectedTimezone, "Europe/Moscow")
+            const isPast = isDisabledFn(timeMSK, isDateBeforeTodayOrTime(targetDate) ? tomorrow : targetDate)
             const isBooked = isBookedTime(time.time)
             const isTimeDisabled = isPast || isBooked
             const isActive = isHover ? hover === time.time : selectedTime === time.time

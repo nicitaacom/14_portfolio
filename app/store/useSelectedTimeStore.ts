@@ -7,20 +7,21 @@ interface SelectedTimeStore {
   setSelectedTime: (time: string) => void
 }
 
-function getInitialTimeMSK(): string {
-  const now = moment.tz("Europe/Moscow")
+export const DEFAULT_APPOINTMENT_TIME_MSK = appointmentTimesMSK[0].time
+
+export function getNextAvailableTimeMSK(now = moment.tz("Europe/Moscow")): string {
   const h = now.hours()
   const m = now.minutes()
-  if (h < 12 || h >= 22) return "12:00"
+  if (h < 12 || h >= 22) return DEFAULT_APPOINTMENT_TIME_MSK
   return (
     appointmentTimesMSK.find(({ time }) => {
       const [hour, minute] = time.split(":").map(Number)
       return hour > h || (hour === h && minute > m)
-    })?.time ?? "12:00"
+    })?.time ?? DEFAULT_APPOINTMENT_TIME_MSK
   )
 }
 
 export const useSelectedTimeStore = create<SelectedTimeStore>()(set => ({
-  selectedTime: getInitialTimeMSK(),
+  selectedTime: DEFAULT_APPOINTMENT_TIME_MSK,
   setSelectedTime: (time: string) => set({ selectedTime: time }),
 }))
