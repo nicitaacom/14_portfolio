@@ -18,7 +18,7 @@ export function FigmaUrlIcon({ figmaUrl, projectGroup, projectName, projectSlug 
       projectGroup={projectGroup}
       projectName={projectName}
       projectSlug={projectSlug}
-      title="Open Figma design">
+      title={`Figma: ${projectName}`}>
       <FaFigma aria-hidden="true" size={16} />
     </TrackedProjectLink>
   )

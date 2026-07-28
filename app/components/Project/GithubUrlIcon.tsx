@@ -18,7 +18,7 @@ export function GithubUrlIcon({ githubUrl, projectGroup, projectName, projectSlu
       projectGroup={projectGroup}
       projectName={projectName}
       projectSlug={projectSlug}
-      title="Open GitHub repository">
+      title={`GitHub: ${projectName}`}>
       <AiFillGithub aria-hidden="true" size={17} />
     </TrackedProjectLink>
   )

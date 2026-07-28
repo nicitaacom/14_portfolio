@@ -18,7 +18,7 @@ export function YoutubeUrlIcon({ youTubeUrl, projectGroup, projectName, projectS
       projectGroup={projectGroup}
       projectName={projectName}
       projectSlug={projectSlug}
-      title="Open YouTube video">
+      title={`YouTube: ${projectName}`}>
       <FaYoutube aria-hidden="true" size={17} />
     </TrackedProjectLink>
   )
