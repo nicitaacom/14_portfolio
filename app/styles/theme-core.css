@@ -1,0 +1,398 @@
+:root,
+:root[data-theme="default"] {
+  --primary: 260deg 20% 10%;
+  --primary-foreground: 262deg 16% 16%;
+  --secondary: 260deg 12% 91%;
+  --secondary-foreground: 260deg 9% 72%;
+  --steel: 261deg 15% 20%;
+  --steel-deep: 263deg 24% 9%;
+  --wood: 262deg 13% 16%;
+  --brass: 277deg 32% 50%;
+  --paper: 260deg 16% 90%;
+  --pipe: 260deg 9% 52%;
+  --blueprint: 259deg 24% 25%;
+  --room: 264deg 32% 5%;
+
+  --theme-trim: hsl(var(--cta) / 0.28);
+  --theme-trim-strong: hsl(var(--cta) / 0.54);
+  --theme-top-edge: rgb(255 255 255 / 0.09);
+  --theme-shadow: rgb(0 0 0 / 0.42);
+  --theme-fastener-opacity: 0;
+  --theme-hardware-opacity: 0;
+  --theme-label-rotation: 0deg;
+  --theme-radius: 10px;
+  --theme-navbar-background: linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 54%),
+    linear-gradient(120deg, hsl(var(--primary-foreground) / 0.98), hsl(var(--steel-deep) / 0.98));
+  --theme-board-background: radial-gradient(circle at 18% 0%, hsl(var(--cta) / 0.08), transparent 42%),
+    linear-gradient(145deg, hsl(var(--primary-foreground) / 0.96), hsl(var(--steel-deep) / 0.96));
+  --theme-panel-background: radial-gradient(circle at 82% 0%, hsl(var(--cta) / 0.08), transparent 35%),
+    linear-gradient(145deg, hsl(var(--steel) / 0.98), hsl(var(--steel-deep) / 0.98));
+  --theme-inset-background: linear-gradient(180deg, hsl(var(--steel-deep) / 0.88), hsl(var(--primary) / 0.72));
+  --theme-control-background: linear-gradient(180deg, rgb(255 255 255 / 0.08), transparent 45%),
+    linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+  --theme-label-background: linear-gradient(120deg, hsl(var(--paper) / 0.96), hsl(var(--paper) / 0.8));
+  --theme-frame-background: linear-gradient(
+    135deg,
+    hsl(var(--cta) / 0.42),
+    hsl(var(--steel)) 22%,
+    hsl(var(--steel-deep)) 78%
+  );
+  --theme-project-background: radial-gradient(circle at 72% 0%, hsl(var(--cta) / 0.09), transparent 35%),
+    linear-gradient(160deg, hsl(var(--steel) / 0.98), hsl(var(--steel-deep) / 0.98));
+  --theme-project-info-background: linear-gradient(
+    145deg,
+    hsl(var(--primary-foreground) / 0.94),
+    hsl(var(--steel-deep) / 0.94)
+  );
+  --theme-input-background: linear-gradient(
+    180deg,
+    hsl(var(--steel-deep) / 0.96),
+    hsl(var(--primary-foreground) / 0.86)
+  );
+  --theme-modal-frame-background: linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+  --theme-modal-surface-background: radial-gradient(circle at 50% -20%, hsl(var(--cta) / 0.12), transparent 48%),
+    linear-gradient(145deg, hsl(var(--primary-foreground)), hsl(var(--steel-deep)));
+  --theme-appointment-background: radial-gradient(circle at 50% 5%, hsl(var(--cta) / 0.11), transparent 38%),
+    linear-gradient(180deg, hsl(var(--room)), hsl(var(--steel-deep)));
+  --theme-appointment-modal-background: radial-gradient(circle at 30% 0%, hsl(var(--cta) / 0.1), transparent 38%),
+    linear-gradient(145deg, hsl(var(--primary-foreground)), hsl(var(--steel-deep)));
+  --theme-loading-background: radial-gradient(circle at 50% 38%, hsl(var(--cta) / 0.12), transparent 34%),
+    hsl(var(--room));
+}
+
+html {
+  color-scheme: dark;
+}
+
+html,
+body {
+  transition: background-color 360ms ease;
+}
+
+.seasonal-backdrop {
+  height: 100dvh;
+  inset: 0;
+  position: fixed;
+}
+
+.halloween-request-content {
+  display: contents;
+}
+
+.theme-backdrop {
+  inset: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  transition: opacity 500ms ease;
+  visibility: hidden;
+}
+
+:root[data-theme="default"] .theme-backdrop-default,
+:root[data-theme="crazy-mechanics"] .theme-backdrop-crazy-mechanics,
+:root[data-theme="halloween"] .theme-backdrop-halloween,
+:root[data-theme="new-year"] .theme-backdrop-new-year {
+  opacity: 1;
+  visibility: visible;
+}
+
+.theme-backdrop-default {
+  background: radial-gradient(circle at 50% -10%, hsl(var(--cta) / 0.11), transparent 34rem),
+    linear-gradient(180deg, #110d18, #07050a 74%);
+}
+
+.default-grid {
+  background-image: linear-gradient(hsl(var(--cta) / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--cta) / 0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+  inset: 0;
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+  position: absolute;
+}
+
+.default-orbit {
+  border: 1px solid hsl(var(--cta) / 0.08);
+  border-radius: 50%;
+  position: absolute;
+}
+
+.default-orbit-one {
+  height: 36rem;
+  right: -14rem;
+  top: -18rem;
+  width: 36rem;
+}
+
+.default-orbit-two {
+  bottom: -26rem;
+  height: 48rem;
+  left: -22rem;
+  width: 48rem;
+}
+
+:root[data-theme="default"] .navbar-rivet {
+  display: none;
+}
+
+:root[data-theme="default"] .hazard-rail {
+  animation: none;
+  background: hsl(var(--cta) / 0.22);
+}
+
+.navbar-plate {
+  background: var(--theme-navbar-background);
+  background-clip: padding-box;
+  border: 1px solid var(--theme-trim);
+  border-radius: 0 0 var(--theme-radius) var(--theme-radius);
+  box-shadow:
+    0 12px 30px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.navbar-plate::before {
+  border-color: var(--theme-trim);
+  border-radius: calc(var(--theme-radius) - 3px);
+  opacity: var(--theme-hardware-opacity);
+}
+
+.navbar-rivet,
+.machine-panel::before,
+.project-wood-body::before {
+  opacity: var(--theme-fastener-opacity);
+  transition: opacity 300ms ease;
+}
+
+.navbar-bezel,
+.machine-slot,
+.machine-bezel {
+  background: var(--theme-inset-background);
+  border: 1px solid var(--theme-trim);
+  border-radius: calc(var(--theme-radius) - 3px);
+  box-shadow:
+    inset 0 3px 8px rgb(0 0 0 / 0.48),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.navbar-repo-wavefield {
+  background: var(--theme-inset-background);
+  border-color: var(--theme-trim);
+}
+
+.machine-face {
+  background: var(--theme-panel-background);
+  border-color: var(--theme-trim);
+  border-radius: var(--theme-radius);
+  box-shadow:
+    0 12px 30px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.workbench-board {
+  background: var(--theme-board-background);
+  border: 1px solid var(--theme-trim);
+  border-radius: var(--theme-radius);
+  box-shadow:
+    0 18px 42px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.machine-panel {
+  background: var(--theme-panel-background);
+  background-clip: padding-box;
+  border: 1px solid var(--theme-trim);
+  border-radius: var(--theme-radius);
+  box-shadow:
+    0 18px 42px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.plaque,
+.appointment-choice {
+  background: var(--theme-control-background);
+  border-color: var(--theme-trim-strong);
+  border-radius: calc(var(--theme-radius) - 3px);
+  box-shadow:
+    0 5px 14px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.6);
+}
+
+.plaque:active {
+  box-shadow:
+    0 2px 8px var(--theme-shadow),
+    inset 0 2px 5px rgb(0 0 0 / 0.38);
+}
+
+.tape-label,
+.tooltiptext,
+.tooltiptext-t,
+.tooltiptext-b,
+.tooltiptext-l,
+.tooltiptext-r,
+.project-paper-tab,
+.paper-tab,
+.modal-title-label {
+  background: var(--theme-label-background);
+  border-color: var(--theme-trim);
+  border-radius: calc(var(--theme-radius) - 5px);
+  box-shadow:
+    0 5px 14px var(--theme-shadow),
+    inset 0 1px 0 rgb(255 255 255 / 0.34);
+  font-family: var(--font-inter), Inter, sans-serif;
+  transform: rotate(var(--theme-label-rotation));
+}
+
+.pipe-frame {
+  background: var(--theme-frame-background);
+  border-color: hsl(var(--steel-deep));
+  border-radius: calc(var(--theme-radius) + 2px);
+  box-shadow:
+    0 20px 44px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.wood-body,
+.project-wood-body {
+  background: var(--theme-project-background);
+}
+
+.project-header {
+  background: linear-gradient(180deg, var(--theme-top-edge), transparent);
+  border-color: var(--theme-trim);
+}
+
+.project-info-board,
+.appointment-details-panel {
+  background: var(--theme-project-info-background);
+  border-color: var(--theme-trim);
+  border-radius: calc(var(--theme-radius) - 3px);
+}
+
+.workshop-input,
+.workshop-input:focus,
+.lever-gate {
+  background: var(--theme-input-background);
+  border-color: var(--theme-trim);
+  border-radius: calc(var(--theme-radius) - 3px);
+}
+
+.lever-gate::before {
+  opacity: var(--theme-hardware-opacity);
+}
+
+.modal-frame {
+  background: var(--theme-modal-frame-background);
+  border: 1px solid var(--theme-trim);
+  border-radius: var(--theme-radius);
+  box-shadow:
+    0 22px 60px rgb(0 0 0 / 0.7),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.modal-frame-hardware {
+  opacity: var(--theme-hardware-opacity);
+  transition: opacity 300ms ease;
+}
+
+.modal-frame-surface {
+  background: var(--theme-modal-surface-background);
+  border-radius: calc(var(--theme-radius) - 3px);
+}
+
+.appointment-rack {
+  background: var(--theme-appointment-background);
+}
+
+.appointment-modal-backdrop {
+  background: var(--theme-appointment-background);
+}
+
+.appointment-modal-surface,
+.appointment-rust-background {
+  background: var(--theme-appointment-modal-background);
+}
+
+.appointment-choice-icon {
+  background: var(--theme-inset-background);
+  border-color: var(--theme-trim);
+  border-radius: calc(var(--theme-radius) - 4px);
+}
+
+.appointment-loading-screen {
+  background: var(--theme-loading-background);
+}
+
+.appointment-loading-title {
+  color: hsl(var(--paper));
+  text-shadow:
+    0 2px 0 hsl(var(--steel)),
+    0 4px 0 hsl(var(--steel-deep)),
+    0 7px 8px rgb(0 0 0 / 0.72),
+    -1px -1px 0 rgb(255 255 255 / 0.3);
+  -webkit-text-stroke-color: hsl(var(--pipe));
+}
+
+.appointment-loading-subtitle {
+  color: hsl(var(--secondary));
+}
+
+.appointment-loading-gear-rim {
+  fill: hsl(var(--pipe));
+  stroke: hsl(var(--paper) / 0.72);
+}
+
+.appointment-loading-gear-spoke {
+  fill: hsl(var(--steel));
+  stroke: hsl(var(--steel-deep));
+}
+
+.appointment-loading-gear-hub {
+  fill: hsl(var(--brass));
+  stroke: hsl(var(--steel-deep));
+}
+
+.appointment-loading-gear-hole {
+  fill: hsl(var(--room));
+  stroke: hsl(var(--paper));
+}
+
+.admin-rack section,
+.admin-rack article,
+.appointment-rack > div > div:not(.appointment-modal-backdrop),
+.auth-panel {
+  background: var(--theme-panel-background);
+  border-color: var(--theme-trim);
+  box-shadow:
+    0 18px 42px var(--theme-shadow),
+    inset 0 1px 0 var(--theme-top-edge);
+}
+
+.halloween-web,
+.halloween-bats,
+.halloween-fog,
+.new-year-aurora,
+.new-year-snow,
+.new-year-star {
+  will-change: transform;
+}
+
+body.modal-open .halloween-web,
+body.modal-open .halloween-fog,
+body.modal-open .new-year-aurora,
+body.modal-open .new-year-snow,
+body.modal-open .new-year-star {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-backdrop,
+  .halloween-web,
+  .halloween-bats,
+  .halloween-fog,
+  .new-year-aurora,
+  .new-year-snow,
+  .new-year-star {
+    animation: none !important;
+    transition: none;
+  }
+}

@@ -1,0 +1,905 @@
+:root[data-theme="halloween"] {
+  --primary: 270deg 28% 7%;
+  --primary-foreground: 268deg 24% 12%;
+  --secondary: 43deg 23% 88%;
+  --secondary-foreground: 270deg 10% 70%;
+  --cta: 25deg 100% 55%;
+  --cta-tooltip: 25deg 100% 55%;
+  --steel: 267deg 27% 28%;
+  --steel-deep: 270deg 35% 8%;
+  --wood: 270deg 23% 14%;
+  --brass: 274deg 31% 54%;
+  --paper: 43deg 23% 88%;
+  --pipe: 269deg 10% 58%;
+  --blueprint: 270deg 35% 20%;
+  --room: 273deg 37% 4%;
+  --success: 116deg 28% 45%;
+  --warning: 36deg 100% 54%;
+
+  --halloween-room: #070509;
+  --halloween-crypt: #100d15;
+  --halloween-crypt-raised: #1a1422;
+  --halloween-purple: #4d3b69;
+  --halloween-purple-light: #7c6892;
+  --halloween-vine: #3f6847;
+  --halloween-vine-light: #72916d;
+  --halloween-orange: #ff7819;
+  --halloween-bone: #e7e1d1;
+  --halloween-web: #b8afbf;
+  --halloween-shadow: rgb(0 0 0 / 0.82);
+
+  --theme-trim: rgb(124 104 146 / 0.72);
+  --theme-trim-strong: rgb(255 120 25 / 0.84);
+  --theme-top-edge: rgb(231 225 209 / 0.18);
+  --theme-shadow: var(--halloween-shadow);
+  --theme-fastener-opacity: 0;
+  --theme-hardware-opacity: 0;
+  --theme-label-rotation: 0deg;
+  --theme-radius: 8px;
+  --theme-navbar-background: radial-gradient(circle at 18% -20%, rgb(116 82 154 / 0.2), transparent 36%),
+    linear-gradient(180deg, #241a30, #0c0911 72%);
+  --theme-board-background: radial-gradient(circle at 20% -10%, rgb(83 115 77 / 0.18), transparent 38%),
+    linear-gradient(150deg, #21172c, #0c0911 72%);
+  --theme-panel-background: radial-gradient(circle at 78% -12%, rgb(118 82 153 / 0.2), transparent 34%),
+    linear-gradient(150deg, #2b2038, #110d17 74%);
+  --theme-inset-background: linear-gradient(180deg, #08060b, #17111f);
+  --theme-control-background: linear-gradient(180deg, rgb(255 225 189 / 0.24), transparent 30%, rgb(77 22 0 / 0.3)),
+    linear-gradient(180deg, #ff8c2c, #c94408);
+  --theme-label-background: linear-gradient(180deg, rgb(255 255 255 / 0.13), transparent 35%),
+    linear-gradient(145deg, #5a4574, #30253e);
+  --theme-frame-background: linear-gradient(
+    145deg,
+    #93869e 0 2%,
+    #4d3b69 8%,
+    #17111e 22%,
+    #0a070d 78%,
+    #5b4771 94%,
+    #9d91a4
+  );
+  --theme-project-background: radial-gradient(circle at 74% -8%, rgb(125 84 159 / 0.22), transparent 36%),
+    linear-gradient(155deg, #261b31, #0d0a11 76%);
+  --theme-project-info-background: radial-gradient(circle at 14% 0%, rgb(86 128 84 / 0.12), transparent 38%),
+    linear-gradient(145deg, #18111f, #09070c);
+  --theme-input-background: linear-gradient(180deg, #08060a, #191020);
+  --theme-modal-frame-background: linear-gradient(
+    145deg,
+    #94899f 0 2%,
+    #4e3b67 8%,
+    #17111e 22%,
+    #09070c 78%,
+    #5b4771 94%,
+    #a299a8
+  );
+  --theme-modal-surface-background: radial-gradient(circle at 50% -12%, rgb(118 78 152 / 0.24), transparent 40%),
+    linear-gradient(155deg, #24192f, #0a070e 76%);
+  --theme-appointment-background: radial-gradient(circle at 50% 0%, rgb(117 81 152 / 0.12), transparent 44%),
+    linear-gradient(180deg, rgb(7 5 9 / 0.16), rgb(7 5 9 / 0.5));
+  --theme-appointment-modal-background: radial-gradient(circle at 50% -8%, rgb(111 76 147 / 0.22), transparent 38%),
+    linear-gradient(155deg, #24192f, #09070d 76%);
+  --theme-loading-background: radial-gradient(circle at 50% 42%, rgb(120 76 160 / 0.28), transparent 34%),
+    linear-gradient(180deg, #120b18, #040306);
+}
+
+.halloween-only {
+  display: none;
+}
+
+:root[data-theme="halloween"] .halloween-only {
+  display: block;
+}
+
+/* Graveyard environment */
+
+.halloween-scene {
+  background: var(--halloween-room);
+  inset: 0;
+  isolation: isolate;
+  overflow: clip;
+  position: absolute;
+}
+
+.halloween-ambient-canvas {
+  z-index: 2;
+}
+
+.halloween-graveyard-svg {
+  overflow: hidden;
+  z-index: 1;
+}
+
+.halloween-scene-vignette {
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.08), transparent 24%, rgb(0 0 0 / 0.18)),
+    radial-gradient(ellipse at center, transparent 36%, rgb(0 0 0 / 0.74) 100%);
+  z-index: 3;
+}
+
+.halloween-grave-event {
+  contain: layout paint;
+  height: 100%;
+  inset: 0;
+  isolation: isolate;
+  overflow: clip;
+  position: fixed;
+  width: 100%;
+}
+
+.halloween-grave-event-foreground {
+  z-index: 90;
+}
+
+.halloween-storm-layer {
+  background:
+    radial-gradient(circle at 74% 54%, rgb(124 157 118 / 0.13), transparent 28%),
+    linear-gradient(180deg, rgb(3 4 8 / 0.58), rgb(4 4 6 / 0.22) 62%, rgb(0 0 0 / 0.5));
+  height: 100%;
+  inset: 0;
+  width: 100%;
+}
+
+.halloween-storm-layer::before {
+  background:
+    radial-gradient(ellipse at 26% 5%, rgb(61 67 75 / 0.7), transparent 32%),
+    radial-gradient(ellipse at 72% -8%, rgb(68 72 82 / 0.82), transparent 38%),
+    linear-gradient(180deg, rgb(10 12 17 / 0.92), transparent 32%);
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.halloween-storm-rain {
+  opacity: 0.72;
+  z-index: 4;
+}
+
+.halloween-storm-flash {
+  background:
+    radial-gradient(circle at 74% 12%, rgb(233 244 230 / 0.84), transparent 34%),
+    linear-gradient(180deg, rgb(198 214 205 / 0.38), rgb(97 122 96 / 0.12) 52%, transparent);
+  mix-blend-mode: screen;
+  opacity: 0;
+  z-index: 7;
+}
+
+.halloween-lightning {
+  filter:
+    drop-shadow(0 0 10px rgb(225 240 221 / 0.88))
+    drop-shadow(0 0 32px rgb(146 179 143 / 0.65));
+  z-index: 6;
+}
+
+.halloween-event-grave {
+  bottom: -8%;
+  height: min(82vh, 690px);
+  max-height: 92%;
+  right: clamp(2rem, 8vw, 9rem);
+  transform-origin: 50% 100%;
+  width: min(39vw, 570px);
+  z-index: 5;
+}
+
+.halloween-event-grave-svg {
+  filter: saturate(0.82) contrast(1.08);
+}
+
+.halloween-event-weeds {
+  filter: drop-shadow(0 5px 4px rgb(0 0 0 / 0.72));
+}
+
+.halloween-scene-bat {
+  opacity: 0.72;
+  will-change: transform;
+}
+
+.halloween-tree {
+  filter: drop-shadow(0 18px 20px rgb(0 0 0 / 0.72));
+}
+
+.halloween-graves {
+  filter: drop-shadow(0 11px 8px rgb(0 0 0 / 0.72));
+}
+
+.halloween-candles,
+.halloween-scene-pumpkin {
+  filter: drop-shadow(0 0 13px rgb(255 120 25 / 0.22));
+}
+
+/* Reusable thorn / skull frame */
+
+.halloween-frame-ornaments {
+  color: var(--halloween-web);
+  inset: -18px;
+  overflow: visible;
+  pointer-events: none;
+  position: absolute;
+  z-index: 24;
+}
+
+.halloween-frame-vine {
+  fill: none;
+  stroke: var(--halloween-vine-light);
+  stroke-linejoin: round;
+  stroke-width: 8;
+  vector-effect: non-scaling-stroke;
+}
+
+.halloween-frame-web {
+  stroke: var(--halloween-web);
+  stroke-linecap: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.halloween-frame-skull {
+  fill: #d2cbd4;
+  stroke: #5e5366;
+  stroke-width: 4;
+}
+
+.halloween-frame-skull ellipse,
+.halloween-frame-skull path:not(:first-child) {
+  fill: var(--halloween-room);
+  stroke: none;
+}
+
+.halloween-frame-pumpkin {
+  fill: #b74714;
+  stroke: var(--halloween-orange);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 5;
+}
+
+.halloween-frame-pumpkin path {
+  fill: none;
+}
+
+.halloween-frame-ornaments-navbar {
+  bottom: -34px;
+  height: 150px;
+  inset-inline: 0;
+  overflow: hidden;
+  top: -36px;
+  width: 100%;
+}
+
+.halloween-frame-ornaments-navbar .halloween-frame-pumpkin {
+  display: none;
+}
+
+.halloween-frame-ornaments-navbar .halloween-frame-crown-vine,
+.halloween-frame-ornaments-navbar .halloween-frame-skull {
+  display: none;
+}
+
+.halloween-frame-ornaments-project {
+  inset: -13px;
+}
+
+.halloween-frame-ornaments-project .halloween-frame-pumpkin {
+  display: none;
+}
+
+.halloween-frame-ornaments-modal {
+  inset: -14px;
+  z-index: 8;
+}
+
+/* Remove every workshop-specific silhouette */
+
+:root[data-theme="halloween"] .navbar-rivet,
+:root[data-theme="halloween"] .machine-panel::before,
+:root[data-theme="halloween"] .project-wood-body::before,
+:root[data-theme="halloween"] .modal-frame-hardware,
+:root[data-theme="halloween"] .lever-gate::before {
+  display: none;
+}
+
+:root[data-theme="halloween"] .workbench-glow,
+:root[data-theme="halloween"] .gearset,
+:root[data-theme="halloween"] .gearset-reverse {
+  animation: none;
+}
+
+/* Navbar */
+
+:root[data-theme="halloween"] .site-navbar {
+  background: radial-gradient(circle at 12% 0%, rgb(115 81 150 / 0.22), transparent 28%),
+    linear-gradient(180deg, #241a30, #0a080e);
+  border: 0;
+  border-bottom: 3px solid #59456f;
+  border-radius: 0 0 18px 18px;
+  box-shadow:
+    0 14px 28px rgb(0 0 0 / 0.76),
+    inset 0 -2px 0 rgb(191 178 201 / 0.16);
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 98.7% 100%, 1.3% 100%, 0 78%);
+  min-height: 70px;
+}
+
+:root[data-theme="halloween"] .site-navbar::before {
+  display: none;
+}
+
+:root[data-theme="halloween"] .navbar-left-shadow::after,
+:root[data-theme="halloween"] .navbar-right-shadow::before {
+  background: linear-gradient(90deg, transparent, rgb(78 58 99 / 0.3), transparent);
+}
+
+:root[data-theme="halloween"] .navbar-bezel,
+:root[data-theme="halloween"] .navbar-repo-wavefield {
+  background: linear-gradient(180deg, rgb(123 99 144 / 0.08), transparent), #0d0a11;
+  border: 1px solid rgb(117 95 136 / 0.4);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 4px 10px rgb(0 0 0 / 0.7),
+    inset 0 1px 0 rgb(225 216 228 / 0.08);
+}
+
+:root[data-theme="halloween"] .machine-slot {
+  background: #18111f;
+  border: 1px solid rgb(129 105 151 / 0.44);
+  border-radius: 50% 50% 44% 44%;
+  box-shadow: inset 0 3px 5px rgb(0 0 0 / 0.68);
+  color: var(--halloween-bone);
+}
+
+:root[data-theme="halloween"] .navbar-engraved {
+  text-shadow: 0 2px 6px rgb(0 0 0 / 0.82);
+}
+
+:root[data-theme="halloween"] .hazard-rail {
+  animation: halloween-vine-crawl 17s linear infinite;
+  background:
+    radial-gradient(ellipse at 12px 4px, #76906e 0 3px, transparent 3.5px) 0 0 / 34px 8px repeat-x,
+    linear-gradient(180deg, transparent 36%, #31523a 38% 62%, transparent 64%);
+  height: 9px;
+}
+
+:root[data-theme="halloween"] .hazard-rail-progress {
+  background: linear-gradient(90deg, #4d7a51, var(--halloween-orange));
+  box-shadow: 0 0 11px rgb(255 120 25 / 0.62);
+}
+
+/* Panels and cards */
+
+:root[data-theme="halloween"] .workbench-board,
+:root[data-theme="halloween"] .machine-panel,
+:root[data-theme="halloween"] .machine-face {
+  background: radial-gradient(circle at 76% -8%, rgb(128 89 164 / 0.2), transparent 34%),
+    linear-gradient(150deg, #2a1f36, #0e0a13 74%);
+  border: 2px solid #5d4a70;
+  border-radius: 12px 12px 18px 18px;
+  box-shadow:
+    0 20px 34px rgb(0 0 0 / 0.72),
+    inset 0 2px 0 rgb(217 205 221 / 0.14),
+    inset 0 -4px 0 rgb(0 0 0 / 0.38);
+  clip-path: polygon(
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    calc(100% - 5px) calc(100% - 15px),
+    calc(100% - 18px) 100%,
+    18px 100%,
+    5px calc(100% - 15px),
+    0 12px
+  );
+}
+
+:root[data-theme="halloween"] .workbench-board {
+  background: radial-gradient(circle at 16% 0%, rgb(75 118 75 / 0.18), transparent 34%),
+    linear-gradient(145deg, #1d1724, #09070c);
+  border-color: #48644b;
+}
+
+:root[data-theme="halloween"] .machine-panel::after,
+:root[data-theme="halloween"] .workbench-board::after {
+  background:
+    linear-gradient(135deg, transparent 0 38%, rgb(194 184 201 / 0.18) 39% 40%, transparent 41%) 0 0 / 36px 36px
+      no-repeat,
+    linear-gradient(45deg, transparent 0 44%, rgb(194 184 201 / 0.14) 45% 46%, transparent 47%) 0 0 / 48px 48px
+      no-repeat;
+  content: "";
+  height: 58px;
+  left: 4px;
+  pointer-events: none;
+  position: absolute;
+  top: 4px;
+  width: 58px;
+  z-index: 2;
+}
+
+:root[data-theme="halloween"] .machine-bezel,
+:root[data-theme="halloween"] .machine-slot {
+  background: radial-gradient(circle at 50% 0%, rgb(103 76 132 / 0.12), transparent 44%), #0b080f;
+  border: 1px solid #59466b;
+  border-radius: 9px;
+  box-shadow:
+    inset 0 5px 12px rgb(0 0 0 / 0.74),
+    inset 0 1px 0 rgb(223 214 226 / 0.08);
+}
+
+:root[data-theme="halloween"] .site-card.pipe-frame {
+  background: linear-gradient(145deg, #a096a5 0 1%, #544367 6%, #15101b 20%, #08060a 80%, #624b75 95%, #aaa2ad);
+  border: 0;
+  border-radius: 18px;
+  box-shadow:
+    0 24px 42px rgb(0 0 0 / 0.82),
+    0 0 0 2px rgb(104 83 122 / 0.42);
+  clip-path: polygon(4% 0, 96% 0, 100% 4%, 98.5% 94%, 94% 100%, 6% 100%, 1.5% 94%, 0 4%);
+  padding: 13px;
+}
+
+:root[data-theme="halloween"] .project-wood-body {
+  background: radial-gradient(circle at 76% 0%, rgb(106 72 138 / 0.2), transparent 35%),
+    linear-gradient(155deg, #24192f, #09070d 74%);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 2px 0 rgb(226 217 230 / 0.12),
+    inset 0 -5px 0 rgb(0 0 0 / 0.4);
+}
+
+:root[data-theme="halloween"] .project-header {
+  background: linear-gradient(180deg, rgb(114 87 139 / 0.22), transparent);
+  border-bottom: 1px solid rgb(136 107 159 / 0.52);
+}
+
+:root[data-theme="halloween"] .project-paper-tab,
+:root[data-theme="halloween"] .paper-tab,
+:root[data-theme="halloween"] .site-label,
+:root[data-theme="halloween"] .tape-label {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.13), transparent 32%),
+    linear-gradient(145deg, #5f4978, #30243d);
+  border: 1px solid #8a76a0;
+  border-radius: 9px;
+  box-shadow:
+    0 5px 10px rgb(0 0 0 / 0.58),
+    inset 0 1px 0 rgb(242 231 245 / 0.18);
+  color: var(--halloween-bone) !important;
+  font-family: var(--font-typewriter), monospace;
+  transform: none;
+}
+
+:root[data-theme="halloween"] .site-label:nth-child(odd) {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.11), transparent 32%),
+    linear-gradient(145deg, #53725a, #293a2d);
+  border-color: #789178;
+}
+
+:root[data-theme="halloween"] .project-info-board,
+:root[data-theme="halloween"] .appointment-details-panel {
+  background: radial-gradient(circle at 14% 0%, rgb(87 126 84 / 0.12), transparent 34%), #0d0911;
+  border: 1px solid #5d4b6c;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 4px 10px rgb(0 0 0 / 0.64),
+    0 6px 12px rgb(0 0 0 / 0.42);
+}
+
+/* Controls */
+
+:root[data-theme="halloween"] .site-control.plaque,
+:root[data-theme="halloween"] .appointment-choice,
+:root[data-theme="halloween"] .plaque {
+  background: linear-gradient(180deg, rgb(255 238 202 / 0.24), transparent 28%, rgb(92 24 0 / 0.2)),
+    linear-gradient(180deg, #ff8d2d, #c64408);
+  border: 2px solid #ffab4e;
+  border-radius: 14px 14px 11px 11px;
+  box-shadow:
+    0 5px 0 #6d2104,
+    0 10px 15px rgb(0 0 0 / 0.58),
+    inset 0 2px 0 rgb(255 242 211 / 0.36);
+  clip-path: polygon(
+    9px 0,
+    calc(100% - 9px) 0,
+    100% 8px,
+    calc(100% - 4px) calc(100% - 6px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    4px calc(100% - 6px),
+    0 8px
+  );
+  color: #fff4dc !important;
+  position: relative;
+  text-shadow: 0 2px 2px rgb(81 22 0 / 0.72);
+  transform: translateY(0);
+}
+
+:root[data-theme="halloween"] .site-control.plaque::before,
+:root[data-theme="halloween"] .site-control.plaque::after {
+  background: var(--halloween-vine);
+  clip-path: polygon(0 45%, 72% 45%, 48% 0, 100% 50%, 48% 100%, 72% 55%, 0 55%);
+  content: "";
+  height: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: calc(50% - 7px);
+  width: 12px;
+}
+
+:root[data-theme="halloween"] .site-control.plaque::before {
+  left: -8px;
+}
+
+:root[data-theme="halloween"] .site-control.plaque::after {
+  right: -8px;
+  transform: scaleX(-1);
+}
+
+:root[data-theme="halloween"] .site-control.plaque:hover,
+:root[data-theme="halloween"] .appointment-choice:hover,
+:root[data-theme="halloween"] .plaque:hover {
+  filter: brightness(1.08) saturate(1.08);
+  transform: translateY(-2px);
+}
+
+:root[data-theme="halloween"] .site-control.plaque:active,
+:root[data-theme="halloween"] .appointment-choice:active,
+:root[data-theme="halloween"] .plaque:active {
+  box-shadow:
+    0 2px 0 #6d2104,
+    0 5px 9px rgb(0 0 0 / 0.52),
+    inset 0 3px 5px rgb(104 31 0 / 0.34);
+  transform: translateY(2px);
+}
+
+:root[data-theme="halloween"] .halloween-request-control {
+  isolation: isolate;
+  overflow: visible;
+}
+
+:root[data-theme="halloween"] .halloween-request-control-standard {
+  min-height: 44px;
+  padding-inline-end: 3.25rem !important;
+}
+
+:root[data-theme="halloween"] .halloween-request-control-compact {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.halloween-transmission-hand {
+  display: none;
+}
+
+:root[data-theme="halloween"] .halloween-transmission-hand {
+  display: block;
+  filter: drop-shadow(0 5px 4px rgb(0 0 0 / 0.72));
+  height: 52px;
+  pointer-events: none;
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-52%);
+  width: 45px;
+  z-index: 5;
+}
+
+:root[data-theme="halloween"] .halloween-transmission-hand-compact {
+  height: 38px;
+  right: -13px;
+  top: 18%;
+  transform: none;
+  width: 33px;
+}
+
+:root[data-theme="halloween"] .halloween-request-content {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+:root[data-theme="halloween"] .halloween-hand-gate {
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.62));
+}
+
+:root[data-theme="halloween"] .site-input,
+:root[data-theme="halloween"] .workshop-input,
+:root[data-theme="halloween"] .workshop-input:focus,
+:root[data-theme="halloween"] .lever-gate {
+  background: radial-gradient(circle at 20% 0%, rgb(104 76 134 / 0.12), transparent 38%), #09060d;
+  border: 2px solid #59466b;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 5px 12px rgb(0 0 0 / 0.78),
+    inset 0 1px 0 rgb(228 217 232 / 0.08);
+  clip-path: polygon(
+    7px 0,
+    calc(100% - 7px) 0,
+    100% 7px,
+    100% calc(100% - 7px),
+    calc(100% - 7px) 100%,
+    7px 100%,
+    0 calc(100% - 7px),
+    0 7px
+  );
+}
+
+:root[data-theme="halloween"] .site-input:focus,
+:root[data-theme="halloween"] .workshop-input:focus {
+  border-color: var(--halloween-orange);
+  box-shadow:
+    inset 0 5px 12px rgb(0 0 0 / 0.78),
+    0 0 0 2px rgb(255 120 25 / 0.22),
+    0 0 15px rgb(255 120 25 / 0.18);
+}
+
+:root[data-theme="halloween"] .site-progress {
+  background: #08060b;
+  border: 2px solid #665172;
+  border-radius: 999px;
+  padding: 2px;
+}
+
+:root[data-theme="halloween"] .site-progress > div {
+  border-radius: 999px;
+  box-shadow:
+    0 0 9px currentColor,
+    inset 0 1px 0 rgb(255 255 255 / 0.28);
+}
+
+:root[data-theme="halloween"] .tooltiptext,
+:root[data-theme="halloween"] .tooltiptext-t,
+:root[data-theme="halloween"] .tooltiptext-b,
+:root[data-theme="halloween"] .tooltiptext-l,
+:root[data-theme="halloween"] .tooltiptext-r {
+  background: radial-gradient(circle at 80% 0%, rgb(115 81 148 / 0.24), transparent 38%), #17101e;
+  border: 1px solid #806b91;
+  border-radius: 10px;
+  box-shadow:
+    0 14px 24px rgb(0 0 0 / 0.72),
+    inset 0 1px 0 rgb(228 218 231 / 0.14);
+  color: var(--halloween-bone);
+  font-family: var(--font-inter), Inter, sans-serif;
+  transform: none;
+}
+
+:root[data-theme="halloween"] .tooltiptext *,
+:root[data-theme="halloween"] .tooltiptext-t *,
+:root[data-theme="halloween"] .tooltiptext-b *,
+:root[data-theme="halloween"] .tooltiptext-l *,
+:root[data-theme="halloween"] .tooltiptext-r * {
+  color: var(--halloween-bone) !important;
+}
+
+/* Modals */
+
+:root[data-theme="halloween"] .site-modal.modal-frame {
+  background: linear-gradient(145deg, #a198a6 0 1.5%, #59446f 7%, #17101e 20%, #08060a 80%, #624a78 94%, #aaa2ad);
+  border: 0;
+  border-radius: 22px;
+  box-shadow:
+    0 28px 70px rgb(0 0 0 / 0.86),
+    0 0 0 2px rgb(118 94 139 / 0.48);
+  clip-path: polygon(5% 0, 95% 0, 100% 7%, 98% 93%, 93% 100%, 7% 100%, 2% 93%, 0 7%);
+  padding: 14px;
+}
+
+:root[data-theme="halloween"] .modal-frame-surface {
+  background: radial-gradient(circle at 50% -10%, rgb(112 76 145 / 0.24), transparent 40%),
+    linear-gradient(155deg, #21152b, #09070d 76%);
+  border: 1px solid #4e3d5f;
+  border-radius: 13px;
+  box-shadow:
+    inset 0 4px 13px rgb(0 0 0 / 0.64),
+    inset 0 1px 0 rgb(225 215 228 / 0.08);
+}
+
+:root[data-theme="halloween"] .modal-title-label {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.14), transparent), linear-gradient(145deg, #61487c, #332541);
+  border: 1px solid #8f7aa2;
+  border-radius: 10px;
+  color: var(--halloween-bone) !important;
+  font-family: var(--font-typewriter), monospace;
+  transform: translateX(-50%);
+}
+
+:root[data-theme="halloween"] .modal-scroll {
+  scrollbar-color: #725887 #0b080f;
+}
+
+:root[data-theme="halloween"] .site-modal .plaque.absolute {
+  min-height: 44px;
+  min-width: 44px;
+  position: absolute;
+}
+
+:root[data-theme="halloween"] :where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--halloween-bone);
+  outline-offset: 3px;
+}
+
+:root[data-theme="halloween"] :where(button, a):focus-visible {
+  box-shadow:
+    0 0 0 5px rgb(255 120 25 / 0.34),
+    0 8px 18px rgb(0 0 0 / 0.62);
+}
+
+/* Appointment and dashboard */
+
+:root[data-theme="halloween"] .appointment-rack {
+  background: radial-gradient(circle at 50% 0%, rgb(111 76 145 / 0.1), transparent 42%),
+    linear-gradient(180deg, rgb(7 5 9 / 0.08), rgb(7 5 9 / 0.46));
+}
+
+:root[data-theme="halloween"] .appointment-modal-backdrop {
+  background: radial-gradient(circle at 50% 42%, rgb(97 68 124 / 0.16), transparent 35%), rgb(4 3 6 / 0.84);
+}
+
+:root[data-theme="halloween"] .appointment-modal-surface,
+:root[data-theme="halloween"] .appointment-rust-background {
+  background: radial-gradient(circle at 50% -8%, rgb(114 79 149 / 0.25), transparent 38%),
+    linear-gradient(155deg, #24182f, #08060b 76%);
+}
+
+:root[data-theme="halloween"] .halloween-booking-loading-screen {
+  background: #050307;
+  isolation: isolate;
+}
+
+:root[data-theme="halloween"] .halloween-booking-webs {
+  color: rgb(197 186 205 / 0.2);
+  filter: drop-shadow(0 0 8px rgb(151 112 183 / 0.12));
+  z-index: 1;
+}
+
+:root[data-theme="halloween"] .halloween-booking-tablet {
+  filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.7));
+  transform-origin: 50% 50%;
+}
+
+:root[data-theme="halloween"] .halloween-booking-loading-title {
+  color: var(--halloween-bone);
+  font-family: var(--font-typewriter), monospace;
+  font-size: clamp(1.35rem, 6.2vw, 3.1rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  text-shadow:
+    0 3px 0 #3d2d4b,
+    0 6px 10px rgb(0 0 0 / 0.88),
+    0 0 18px rgb(143 102 177 / 0.24);
+  text-transform: uppercase;
+}
+
+:root[data-theme="halloween"] .halloween-booking-loading-subtitle {
+  color: rgb(231 225 209 / 0.78);
+  font-family: var(--font-typewriter), monospace;
+  font-size: clamp(0.65rem, 2.4vw, 0.95rem);
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  margin-top: 0.45rem;
+  text-shadow: 0 2px 4px rgb(0 0 0 / 0.92);
+  text-transform: uppercase;
+}
+
+:root[data-theme="halloween"] .halloween-booking-ritual {
+  filter: drop-shadow(0 0 20px rgb(109 76 141 / 0.22));
+}
+
+:root[data-theme="halloween"] .halloween-booking-status {
+  color: rgb(231 225 209 / 0.78);
+  text-shadow:
+    0 2px 4px rgb(0 0 0 / 0.94),
+    0 0 12px rgb(120 172 114 / 0.24);
+}
+
+:root[data-theme="halloween"] .appointment-choice {
+  background: linear-gradient(180deg, rgb(233 220 237 / 0.13), transparent 32%),
+    linear-gradient(145deg, #594174, #2b2038);
+  border-color: #8a74a0;
+  border-radius: 12px;
+  box-shadow:
+    0 5px 0 #130d19,
+    0 10px 15px rgb(0 0 0 / 0.52),
+    inset 0 2px 0 rgb(239 226 242 / 0.16);
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    calc(100% - 3px) calc(100% - 7px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    3px calc(100% - 7px),
+    0 8px
+  );
+}
+
+:root[data-theme="halloween"] .appointment-choice-icon {
+  background: radial-gradient(circle at 50% 40%, rgb(255 120 25 / 0.25), transparent 48%), #100b15;
+  border: 1px solid var(--halloween-orange);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 3px 7px rgb(0 0 0 / 0.72),
+    0 0 10px rgb(255 120 25 / 0.2);
+}
+
+:root[data-theme="halloween"] .admin-rack section,
+:root[data-theme="halloween"] .admin-rack article,
+:root[data-theme="halloween"] .appointment-rack > div > div:not(.appointment-modal-backdrop),
+:root[data-theme="halloween"] .auth-panel {
+  background: radial-gradient(circle at 78% -10%, rgb(116 80 151 / 0.17), transparent 34%),
+    linear-gradient(150deg, #251a30, #0c0911 76%);
+  border-color: #5e4b70;
+  border-radius: 12px;
+  box-shadow:
+    0 18px 32px rgb(0 0 0 / 0.68),
+    inset 0 2px 0 rgb(226 215 229 / 0.12);
+}
+
+:root[data-theme="halloween"] .react-calendar__navigation {
+  border-color: #5c486c;
+}
+
+:root[data-theme="halloween"] .react-calendar__navigation__arrow,
+:root[data-theme="halloween"] .react-calendar__tile {
+  border-radius: 10px;
+}
+
+:root[data-theme="halloween"] .react-calendar__tile--active {
+  background: radial-gradient(circle at 50% 45%, rgb(255 210 126 / 0.22), transparent 55%), var(--halloween-orange);
+  box-shadow: 0 0 11px rgb(255 120 25 / 0.32);
+  color: white;
+}
+
+:root[data-theme="halloween"] *::-webkit-scrollbar-track {
+  background: #09070c;
+}
+
+:root[data-theme="halloween"] *::-webkit-scrollbar-thumb {
+  background: linear-gradient(#655079, #34273f);
+  border: 2px solid #09070c;
+}
+
+@keyframes halloween-vine-crawl {
+  to {
+    background-position-x: 34px, 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .halloween-frame-ornaments-navbar .halloween-frame-skull,
+  .halloween-tree-right,
+  .halloween-scene-pumpkin:nth-of-type(2) {
+    display: none;
+  }
+
+  .halloween-frame-ornaments-project {
+    inset: -7px;
+  }
+
+  .halloween-frame-ornaments-modal {
+    inset: -12px;
+  }
+
+  .halloween-event-grave {
+    bottom: -4%;
+    height: min(72vh, 610px);
+    left: 4%;
+    max-height: 84%;
+    right: 4%;
+    width: auto;
+  }
+
+  :root[data-theme="halloween"] .site-navbar {
+    clip-path: polygon(0 0, 100% 0, 100% 86%, 96% 100%, 4% 100%, 0 86%);
+  }
+}
+
+body.modal-open .halloween-scene-bat,
+body.modal-open .halloween-candles,
+body.modal-open .halloween-scene-pumpkin,
+:root[data-theme="halloween"] body.modal-open .hazard-rail {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .hazard-rail {
+    animation: none;
+  }
+
+  .halloween-grave-event {
+    display: none;
+  }
+}

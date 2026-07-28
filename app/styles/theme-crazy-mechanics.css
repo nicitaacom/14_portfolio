@@ -1,0 +1,101 @@
+:root[data-theme="crazy-mechanics"] {
+  --primary: 0deg 0% 13%;
+  --primary-foreground: 0deg 0% 19%;
+  --secondary: 0deg 0% 87%;
+  --secondary-foreground: 0deg 0% 77%;
+  --cta: 277deg 100% 68%;
+  --cta-tooltip: 277deg 100% 68%;
+  --steel: 276deg 10% 22%;
+  --steel-deep: 270deg 21% 9%;
+  --wood: 28deg 25% 22%;
+  --brass: 40deg 45% 55%;
+  --paper: 38deg 40% 88%;
+  --pipe: 185deg 7% 66%;
+  --blueprint: 210deg 25% 30%;
+  --room: 260deg 33% 4%;
+
+  --theme-trim: hsl(var(--brass) / 0.42);
+  --theme-trim-strong: hsl(var(--brass) / 0.72);
+  --theme-top-edge: rgb(255 255 255 / 0.16);
+  --theme-shadow: rgb(0 0 0 / 0.75);
+  --theme-fastener-opacity: 1;
+  --theme-hardware-opacity: 1;
+  --theme-label-rotation: -1deg;
+  --theme-radius: 4px;
+  --theme-navbar-background: radial-gradient(
+      ellipse 64px 160% at 18% 50%,
+      transparent 0 47px,
+      rgb(0 0 0 / 0.2) 48px 50px,
+      transparent 51px
+    ),
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.16) 0 1px, transparent 1px 7px, rgb(255 255 255 / 0.05) 7px 8px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.2), transparent 32%, rgb(0 0 0 / 0.28)),
+    linear-gradient(to bottom, hsl(var(--wood)), hsl(var(--wood)));
+  --theme-board-background: repeating-linear-gradient(0deg, hsl(var(--wood) / 0.16) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(91deg, transparent 0 17px, hsl(var(--brass) / 0.055) 18px 19px),
+    linear-gradient(to bottom, hsl(var(--wood) / 0.98), hsl(var(--steel-deep) / 0.96));
+  --theme-panel-background: linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 12%, rgb(0 0 0 / 0.28) 100%),
+    repeating-linear-gradient(95deg, transparent 0 22px, rgb(255 255 255 / 0.018) 23px 24px),
+    linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+  --theme-inset-background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel) / 0.55));
+  --theme-control-background: linear-gradient(to bottom, rgb(255 255 255 / 0.15), transparent 33%, rgb(0 0 0 / 0.26)),
+    linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+  --theme-label-background: repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
+    linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.84));
+  --theme-frame-background: linear-gradient(
+    135deg,
+    hsl(var(--brass)),
+    hsl(var(--steel)) 28%,
+    hsl(var(--steel-deep)) 62%,
+    hsl(var(--brass))
+  );
+  --theme-project-background: repeating-linear-gradient(2deg, hsl(var(--steel-deep) / 0.25) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(92deg, transparent 0 39px, hsl(var(--paper) / 0.055) 40px 41px),
+    linear-gradient(to bottom, hsl(var(--brass) / 0.38), hsl(var(--wood) / 0.92) 28%, hsl(var(--steel-deep) / 0.86));
+  --theme-project-info-background: repeating-linear-gradient(
+      1deg,
+      hsl(var(--steel-deep) / 0.24) 0 1px,
+      transparent 1px 7px
+    ),
+    linear-gradient(to bottom, hsl(var(--brass) / 0.31), hsl(var(--wood) / 0.96));
+  --theme-input-background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel-deep) / 0.72));
+  --theme-modal-frame-background: linear-gradient(135deg, hsl(var(--wood)), hsl(var(--brass) / 0.46), hsl(var(--wood)));
+  --theme-modal-surface-background: radial-gradient(
+      ellipse 52% 10% at 18% 14%,
+      hsl(var(--paper) / 0.13),
+      transparent 68%
+    ),
+    repeating-linear-gradient(
+      1deg,
+      hsl(var(--steel-deep) / 0.2) 0 1px,
+      transparent 1px 6px,
+      hsl(var(--paper) / 0.045) 7px 9px,
+      transparent 10px 18px
+    ),
+    linear-gradient(100deg, hsl(var(--wood)), hsl(var(--brass) / 0.48) 48%, hsl(var(--wood)));
+  --theme-appointment-background: linear-gradient(rgb(15 11 16 / 0.62), rgb(12 8 13 / 0.72)),
+    url("/UI/crazy-mechanics/crazy-mechanics-brick.webp") center top / 600px auto repeat;
+  --theme-appointment-modal-background: linear-gradient(rgb(23 14 11 / 0.34), rgb(15 9 7 / 0.46)),
+    url("/UI/crazy-mechanics/crazy-mechanics-brick.webp") center / 600px auto repeat;
+  --theme-loading-background: #050404;
+}
+
+:root[data-theme="crazy-mechanics"] .tape-label,
+:root[data-theme="crazy-mechanics"] .tooltiptext,
+:root[data-theme="crazy-mechanics"] .tooltiptext-t,
+:root[data-theme="crazy-mechanics"] .tooltiptext-b,
+:root[data-theme="crazy-mechanics"] .tooltiptext-l,
+:root[data-theme="crazy-mechanics"] .tooltiptext-r,
+:root[data-theme="crazy-mechanics"] .project-paper-tab,
+:root[data-theme="crazy-mechanics"] .paper-tab,
+:root[data-theme="crazy-mechanics"] .modal-title-label {
+  font-family: var(--font-typewriter), monospace;
+}
+
+:root[data-theme="crazy-mechanics"] .navbar-plate {
+  border-width: 3px;
+}
+
+:root[data-theme="crazy-mechanics"] .pipe-frame {
+  border-width: 4px;
+}

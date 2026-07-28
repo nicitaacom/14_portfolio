@@ -1,0 +1,187 @@
+:root[data-theme="new-year"] {
+  --primary: 215deg 34% 9%;
+  --primary-foreground: 213deg 29% 15%;
+  --secondary: 204deg 36% 94%;
+  --secondary-foreground: 207deg 20% 76%;
+  --cta: 192deg 100% 70%;
+  --cta-tooltip: 192deg 100% 70%;
+  --steel: 210deg 24% 25%;
+  --steel-deep: 216deg 38% 8%;
+  --wood: 214deg 22% 18%;
+  --brass: 199deg 30% 68%;
+  --paper: 204deg 37% 91%;
+  --pipe: 205deg 24% 71%;
+  --blueprint: 211deg 45% 28%;
+  --room: 220deg 48% 5%;
+
+  --theme-trim: hsl(var(--brass) / 0.44);
+  --theme-trim-strong: hsl(var(--cta) / 0.66);
+  --theme-top-edge: rgb(223 249 255 / 0.2);
+  --theme-shadow: rgb(0 5 15 / 0.74);
+  --theme-fastener-opacity: 0.82;
+  --theme-hardware-opacity: 0.72;
+  --theme-label-rotation: -0.35deg;
+  --theme-radius: 8px;
+  --theme-navbar-background: radial-gradient(circle at 70% -20%, hsl(var(--cta) / 0.15), transparent 32%),
+    repeating-linear-gradient(0deg, rgb(224 250 255 / 0.035) 0 1px, transparent 1px 8px),
+    linear-gradient(145deg, #294155, #0a1525 78%);
+  --theme-board-background: radial-gradient(circle at 20% 0%, rgb(222 250 255 / 0.15), transparent 30%),
+    repeating-linear-gradient(95deg, transparent 0 31px, rgb(225 248 255 / 0.025) 32px 33px),
+    linear-gradient(145deg, #2b4051, #0a1421);
+  --theme-panel-background: radial-gradient(circle at 82% -12%, hsl(var(--cta) / 0.16), transparent 34%),
+    repeating-linear-gradient(94deg, transparent 0 27px, rgb(232 252 255 / 0.025) 28px 29px),
+    linear-gradient(145deg, #31485a, #0a1423);
+  --theme-inset-background: linear-gradient(180deg, #07101c, #1a3042);
+  --theme-control-background: linear-gradient(180deg, rgb(232 252 255 / 0.2), transparent 38%, rgb(0 10 27 / 0.32)),
+    linear-gradient(145deg, #365469, #0b1828);
+  --theme-label-background: radial-gradient(circle at 8% 0%, white, transparent 16%),
+    repeating-linear-gradient(0deg, transparent 0 8px, rgb(52 106 132 / 0.05) 9px 10px),
+    linear-gradient(100deg, #edf7f8, #bdd9e2);
+  --theme-frame-background: linear-gradient(140deg, #d9f4f6, #547487 23%, #0a1726 76%, #a8d2db);
+  --theme-project-background: radial-gradient(circle at 74% -5%, rgb(226 250 255 / 0.14), transparent 32%),
+    repeating-linear-gradient(93deg, transparent 0 38px, rgb(223 248 255 / 0.025) 39px 40px),
+    linear-gradient(155deg, #294355, #081321 76%);
+  --theme-project-info-background: radial-gradient(circle at 12% 0%, hsl(var(--cta) / 0.1), transparent 34%),
+    linear-gradient(145deg, #1c3243, #07101c);
+  --theme-input-background: linear-gradient(180deg, #07101c, #1a2d3d);
+  --theme-modal-frame-background: linear-gradient(135deg, #c9e6eb, #45677b 28%, #0a1726 74%, #8fbcc7);
+  --theme-modal-surface-background: radial-gradient(circle at 50% -8%, rgb(226 251 255 / 0.18), transparent 42%),
+    repeating-linear-gradient(0deg, transparent 0 8px, rgb(220 248 255 / 0.025) 9px 10px),
+    linear-gradient(145deg, #294255, #081321);
+  --theme-appointment-background: radial-gradient(circle at 50% 0%, rgb(211 249 255 / 0.18), transparent 36%),
+    repeating-linear-gradient(0deg, transparent 0 48px, rgb(218 246 255 / 0.05) 49px 51px),
+    linear-gradient(180deg, #102438, #040b15);
+  --theme-appointment-modal-background: radial-gradient(circle at 22% 0%, rgb(226 252 255 / 0.2), transparent 34%),
+    repeating-linear-gradient(95deg, transparent 0 32px, rgb(230 252 255 / 0.025) 33px 34px),
+    linear-gradient(145deg, #2d485b, #07111f);
+  --theme-loading-background: radial-gradient(circle at 50% 35%, hsl(var(--cta) / 0.18), transparent 32%),
+    linear-gradient(180deg, #071524, #01040a);
+}
+
+.theme-backdrop-new-year {
+  background: radial-gradient(circle at 50% -12%, rgb(198 246 255 / 0.22), transparent 38%),
+    linear-gradient(180deg, #112a43, #040915 72%);
+}
+
+.new-year-aurora {
+  border-radius: 50%;
+  filter: blur(64px);
+  height: 32rem;
+  opacity: 0.18;
+  position: absolute;
+  width: 72rem;
+}
+
+.new-year-aurora-one {
+  animation: new-year-aurora-drift 13s ease-in-out infinite alternate;
+  background: #65d9ef;
+  left: -22rem;
+  top: -19rem;
+  transform: rotate(-12deg);
+}
+
+.new-year-aurora-two {
+  animation: new-year-aurora-drift 18s ease-in-out infinite alternate-reverse;
+  background: #8c83ff;
+  right: -30rem;
+  top: 2rem;
+  transform: rotate(18deg);
+}
+
+.new-year-snow {
+  inset: -120px 0 0;
+  position: absolute;
+}
+
+.new-year-snow-back {
+  animation: new-year-snowfall 18s linear infinite;
+  background-image: radial-gradient(circle, rgb(230 250 255 / 0.68) 0 1.4px, transparent 1.9px),
+    radial-gradient(circle, rgb(230 250 255 / 0.5) 0 1.2px, transparent 1.7px);
+  background-position:
+    20px 10px,
+    90px 70px;
+  background-size:
+    120px 120px,
+    170px 170px;
+}
+
+.new-year-snow-front {
+  animation: new-year-snowfall 11s linear infinite;
+  background-image: radial-gradient(circle, rgb(245 253 255 / 0.9) 0 2px, transparent 2.6px),
+    radial-gradient(circle, rgb(229 250 255 / 0.76) 0 1.7px, transparent 2.2px);
+  background-position:
+    40px 30px,
+    130px 95px;
+  background-size:
+    210px 210px,
+    270px 270px;
+}
+
+.new-year-star {
+  animation: new-year-star-turn 24s linear infinite;
+  opacity: 0.22;
+  position: absolute;
+  stroke: #dff9ff;
+  stroke-linecap: round;
+  stroke-width: 1.2;
+  width: min(18vw, 170px);
+}
+
+.new-year-star-left {
+  left: 3vw;
+  top: 11vh;
+}
+
+.new-year-star-right {
+  animation-direction: reverse;
+  bottom: 7vh;
+  right: 4vw;
+}
+
+.new-year-frost {
+  background:
+    linear-gradient(135deg, rgb(225 251 255 / 0.13), transparent 13%) top left / 44% 28% no-repeat,
+    linear-gradient(225deg, rgb(225 251 255 / 0.1), transparent 13%) top right / 40% 24% no-repeat,
+    linear-gradient(45deg, rgb(225 251 255 / 0.08), transparent 12%) bottom left / 35% 22% no-repeat,
+    radial-gradient(ellipse at center, transparent 36%, rgb(0 7 18 / 0.72) 100%);
+  inset: 0;
+  position: absolute;
+}
+
+:root[data-theme="new-year"] .navbar-status-light {
+  background: radial-gradient(circle at 45% 32%, white, #8eeaff 36%, #246d8a 70%, #071420);
+  box-shadow: 0 0 11px rgb(111 227 255 / 0.58);
+}
+
+:root[data-theme="new-year"] .hazard-rail {
+  background: repeating-linear-gradient(-45deg, #e6f7fa 0 8px, #2f6680 8px 16px);
+}
+
+:root[data-theme="new-year"] .appointment-loading-gear-rim {
+  fill: #8baab8;
+  stroke: rgb(224 250 255 / 0.82);
+}
+
+@keyframes new-year-snowfall {
+  from {
+    transform: translate3d(0, -120px, 0);
+  }
+  to {
+    transform: translate3d(36px, 120px, 0);
+  }
+}
+
+@keyframes new-year-aurora-drift {
+  from {
+    transform: translate3d(-4%, 0, 0) rotate(-12deg);
+  }
+  to {
+    transform: translate3d(12%, 7%, 0) rotate(2deg);
+  }
+}
+
+@keyframes new-year-star-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}

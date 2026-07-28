@@ -1,7 +1,14 @@
 import "./globals.css"
+import "./styles/theme-core.css"
+import "./styles/theme-crazy-mechanics.css"
+import "./styles/theme-halloween.css"
+import "./styles/theme-new-year.css"
 
 import type { Metadata } from "next"
 import Script from "next/script"
+
+import { SeasonalThemeLifecycle } from "@/components/SeasonalThemeLifecycle"
+import { resolveSeasonalTheme } from "@/utils/resolveSeasonalTheme"
 
 export const metadata: Metadata = {
   title: "nicitaacom | Portfolio",
@@ -12,10 +19,24 @@ export const metadata: Metadata = {
   },
 }
 
+const seasonalThemesByMonth = Array.from({ length: 12 }, (_, monthIndex) => resolveSeasonalTheme(monthIndex + 1))
+
+const seasonalThemeInitScript = `
+  (() => {
+    const month = new Date().getMonth() + 1;
+    const themesByMonth = ${JSON.stringify(seasonalThemesByMonth)};
+    const theme = themesByMonth[month - 1] || "default";
+    document.documentElement.dataset.theme = theme;
+  })();
+`
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="default" suppressHydrationWarning>
       <head>
+        <Script id="seasonal-theme" strategy="beforeInteractive">
+          {seasonalThemeInitScript}
+        </Script>
         {/* Add Google Tag Manager script */}
         <Script
           id="google-tag-manager"
@@ -32,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="hide-scrollbar font-sans">
+        <SeasonalThemeLifecycle />
         <noscript>
           {/* Fallback for browsers with disabled JavaScript */}
           <iframe
