@@ -50,11 +50,13 @@
       2px 2px 4px hsla(var(--cta-tooltip) / 0.2);
   }
 
-.tooltip {
+  .tooltip {
     @apply relative inline-block;
   }
 
-  .tooltiptext-open { display: block; }
+  .tooltiptext-open {
+    display: block;
+  }
 
   .text-tooltip-inline.tooltip:hover > .tooltiptext,
   .text-tooltip-inline.tooltip:focus > .tooltiptext {
@@ -63,11 +65,12 @@
   }
 
   .tooltiptext {
-    background:
-      repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
+    background: repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
       linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.84));
     border: 1px solid hsl(var(--brass) / 0.32);
-    box-shadow: 0 5px 7px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.42);
+    box-shadow:
+      0 5px 7px rgb(0 0 0 / 0.42),
+      inset 0 1px 0 rgb(255 255 255 / 0.42);
     color: hsl(var(--steel-deep));
     display: none;
     font-family: var(--font-inter), Inter, sans-serif;
@@ -215,8 +218,7 @@
   }
 
   .navbar-rivet::after {
-    background:
-      linear-gradient(to right, transparent 42%, hsl(var(--steel-deep) / 0.86) 43% 57%, transparent 58%),
+    background: linear-gradient(to right, transparent 42%, hsl(var(--steel-deep) / 0.86) 43% 57%, transparent 58%),
       linear-gradient(to bottom, transparent 42%, hsl(var(--steel-deep) / 0.86) 43% 57%, transparent 58%);
     content: "";
     inset: 3px;
@@ -266,9 +268,13 @@
   }
 
   .navbar-repo-wavefield {
-    background:
-      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 7px),
-      linear-gradient(to bottom, hsl(var(--steel-deep) / 0.98), hsl(var(--wood) / 0.42) 48%, hsl(var(--steel-deep) / 0.99));
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 7px),
+      linear-gradient(
+        to bottom,
+        hsl(var(--steel-deep) / 0.98),
+        hsl(var(--wood) / 0.42) 48%,
+        hsl(var(--steel-deep) / 0.99)
+      );
     box-shadow:
       inset 0 1px 0 hsl(var(--cta) / 0.1),
       inset 0 -2px 0 rgba(0, 0, 0, 0.3);
@@ -309,12 +315,14 @@
   }
 
   .workbench-board {
-    background:
-      repeating-linear-gradient(0deg, hsl(var(--wood) / 0.16) 0 2px, transparent 2px 9px),
+    background: repeating-linear-gradient(0deg, hsl(var(--wood) / 0.16) 0 2px, transparent 2px 9px),
       repeating-linear-gradient(91deg, transparent 0 17px, hsl(var(--brass) / 0.055) 18px 19px),
       linear-gradient(to bottom, hsl(var(--wood) / 0.98), hsl(var(--steel-deep) / 0.96));
     border: 2px solid hsl(var(--brass) / 0.38);
-    box-shadow: 0 12px 12px rgb(0 0 0 / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -2px 0 rgb(0 0 0 / 0.34);
+    box-shadow:
+      0 12px 12px rgb(0 0 0 / 0.75),
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 0 -2px 0 rgb(0 0 0 / 0.34);
   }
 
   .machine-panel {
@@ -324,15 +332,17 @@
       hsl(var(--brass)) 18% 40%,
       hsl(var(--steel-deep)) 62% 100%
     );
-    background:
-      linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 12%, rgb(0 0 0 / 0.28) 100%),
+    background: linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 12%, rgb(0 0 0 / 0.28) 100%),
       repeating-linear-gradient(95deg, transparent 0 22px, rgb(255 255 255 / 0.018) 23px 24px),
       linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
     border: 2px solid transparent;
     border-radius: 4px;
     background-clip: padding-box, padding-box, border-box;
     background-origin: border-box;
-    box-shadow: 0 12px 12px rgb(0 0 0 / 0.75), inset 0 1px 0 hsl(var(--cta) / 0.42), inset 0 -2px 0 rgb(0 0 0 / 0.55);
+    box-shadow:
+      0 12px 12px rgb(0 0 0 / 0.75),
+      inset 0 1px 0 hsl(var(--cta) / 0.42),
+      inset 0 -2px 0 rgb(0 0 0 / 0.55);
     position: relative;
   }
 
@@ -349,7 +359,10 @@
     z-index: 2;
   }
 
-  .machine-panel > * { position: relative; z-index: 1; }
+  .machine-panel > * {
+    position: relative;
+    z-index: 1;
+  }
 
   .appointment-schedule-panel::before {
     background:
@@ -366,24 +379,25 @@
 
   .appointment-modal-backdrop {
     background-color: #2f2a27;
-    background-image:
-      linear-gradient(rgb(8 7 7 / 0.2), rgb(8 7 7 / 0.2)),
-      url("/UI/crazy-mechanics-plaster.webp");
+    background-image: linear-gradient(rgb(8 7 7 / 0.2), rgb(8 7 7 / 0.2)),
+      url("/UI/crazy-mechanics/crazy-mechanics-plaster.webp");
     background-position: center, center;
     background-repeat: no-repeat;
-    background-size: 100% 100%, cover;
+    background-size:
+      100% 100%,
+      cover;
   }
 
   .appointment-rust-background {
     background:
       linear-gradient(rgb(23 14 11 / 0.34), rgb(15 9 7 / 0.46)),
-      url("/UI/crazy-mechanics-brick.webp") center / 600px auto repeat;
+      url("/UI/crazy-mechanics/crazy-mechanics-brick.webp") center / 600px auto repeat;
   }
 
   .appointment-rack {
     background:
       linear-gradient(rgb(15 11 16 / 0.62), rgb(12 8 13 / 0.72)),
-      url("/UI/crazy-mechanics-brick.webp") center top / 600px auto repeat;
+      url("/UI/crazy-mechanics/crazy-mechanics-brick.webp") center top / 600px auto repeat;
     margin-top: -62px;
     min-height: 100dvh;
     padding-top: calc(4.75rem + 62px);
@@ -401,8 +415,7 @@
   }
 
   .appointment-choice {
-    background:
-      repeating-linear-gradient(0deg, transparent 0 5px, rgb(0 0 0 / 0.12) 6px 7px),
+    background: repeating-linear-gradient(0deg, transparent 0 5px, rgb(0 0 0 / 0.12) 6px 7px),
       linear-gradient(to bottom, rgb(92 88 78 / 0.88), rgb(35 32 31 / 0.94));
     border: 1px solid rgb(192 176 143 / 0.58);
     border-radius: 3px;
@@ -419,8 +432,7 @@
   }
 
   .appointment-choice-icon {
-    background:
-      radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.13), transparent 35%),
+    background: radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.13), transparent 35%),
       linear-gradient(145deg, rgb(64 59 57 / 0.96), rgb(31 27 28 / 0.98));
     border: 1px solid rgb(191 176 148 / 0.52);
     border-radius: 3px;
@@ -510,34 +522,53 @@
     background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel) / 0.55));
     border: 1px solid hsl(var(--brass) / 0.44);
     border-radius: 3px;
-    box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.72), inset 0 1px 0 rgb(255 255 255 / 0.055), 0 1px 0 hsl(var(--cta) / 0.18);
+    box-shadow:
+      inset 0 3px 6px rgb(0 0 0 / 0.72),
+      inset 0 1px 0 rgb(255 255 255 / 0.055),
+      0 1px 0 hsl(var(--cta) / 0.18);
   }
 
   .plaque {
-    background:
-      linear-gradient(to bottom, rgb(255 255 255 / 0.15), transparent 33%, rgb(0 0 0 / 0.26)),
+    background: linear-gradient(to bottom, rgb(255 255 255 / 0.15), transparent 33%, rgb(0 0 0 / 0.26)),
       linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
     border: 1px solid hsl(var(--brass) / 0.54);
     border-radius: 3px;
-    box-shadow: 0 4px 0 hsl(var(--steel-deep)), 0 8px 10px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.16);
+    box-shadow:
+      0 4px 0 hsl(var(--steel-deep)),
+      0 8px 10px rgb(0 0 0 / 0.5),
+      inset 0 1px 0 rgb(255 255 255 / 0.16);
     color: hsl(var(--paper));
-    text-shadow: 0 1px 0 rgb(0 0 0 / 0.9), 0 -1px 0 rgb(255 255 255 / 0.08);
-    transition: transform 80ms linear, box-shadow 80ms linear, filter 180ms ease;
+    text-shadow:
+      0 1px 0 rgb(0 0 0 / 0.9),
+      0 -1px 0 rgb(255 255 255 / 0.08);
+    transition:
+      transform 80ms linear,
+      box-shadow 80ms linear,
+      filter 180ms ease;
   }
 
-  .plaque:hover { filter: brightness(1.13); }
-  .plaque:active { box-shadow: 0 3px 0 hsl(var(--steel-deep)), 0 4px 6px rgb(0 0 0 / 0.5), inset 0 2px 4px rgb(0 0 0 / 0.45); transform: translateY(1px); }
+  .plaque:hover {
+    filter: brightness(1.13);
+  }
+  .plaque:active {
+    box-shadow:
+      0 3px 0 hsl(var(--steel-deep)),
+      0 4px 6px rgb(0 0 0 / 0.5),
+      inset 0 2px 4px rgb(0 0 0 / 0.45);
+    transform: translateY(1px);
+  }
 
   .tape-label,
   .tooltiptext-t,
   .tooltiptext-b,
   .tooltiptext-l,
   .tooltiptext-r {
-    background:
-      repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
+    background: repeating-linear-gradient(0deg, transparent 0 6px, hsl(var(--wood) / 0.09) 7px 8px),
       linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.84));
     border: 1px solid hsl(var(--brass) / 0.32);
-    box-shadow: 0 5px 7px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.42);
+    box-shadow:
+      0 5px 7px rgb(0 0 0 / 0.42),
+      inset 0 1px 0 rgb(255 255 255 / 0.42);
     color: hsl(var(--steel-deep));
     font-family: var(--font-typewriter), monospace;
     transform: rotate(-1.3deg);
@@ -545,34 +576,47 @@
 
   .pipe-frame {
     background:
-      radial-gradient(circle at 12px 12px, hsl(var(--paper) / 0.35) 0 3px, hsl(var(--steel)) 4px 8px, hsl(var(--steel-deep)) 9px 13px, transparent 14px) 0 0 / 100% 100% no-repeat,
+      radial-gradient(
+          circle at 12px 12px,
+          hsl(var(--paper) / 0.35) 0 3px,
+          hsl(var(--steel)) 4px 8px,
+          hsl(var(--steel-deep)) 9px 13px,
+          transparent 14px
+        )
+        0 0 / 100% 100% no-repeat,
       linear-gradient(135deg, hsl(var(--brass)), hsl(var(--steel)) 28%, hsl(var(--steel-deep)) 62%, hsl(var(--brass)));
     border: 4px solid hsl(var(--steel-deep));
     border-radius: 10px;
-    box-shadow: 0 18px 18px rgb(0 0 0 / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.24);
+    box-shadow:
+      0 18px 18px rgb(0 0 0 / 0.75),
+      inset 0 1px 0 rgb(255 255 255 / 0.24);
     padding: 7px;
   }
 
   .wood-body {
-    background:
-      repeating-linear-gradient(2deg, hsl(var(--wood) / 0.3) 0 2px, transparent 2px 10px),
+    background: repeating-linear-gradient(2deg, hsl(var(--wood) / 0.3) 0 2px, transparent 2px 10px),
       linear-gradient(to bottom, hsl(var(--wood) / 0.96), hsl(var(--steel-deep) / 0.94));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -2px 0 rgb(0 0 0 / 0.38);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 0 -2px 0 rgb(0 0 0 / 0.38);
   }
 
   .project-wood-body {
-    background:
-      repeating-linear-gradient(2deg, hsl(var(--steel-deep) / 0.25) 0 1px, transparent 1px 7px),
+    background: repeating-linear-gradient(2deg, hsl(var(--steel-deep) / 0.25) 0 1px, transparent 1px 7px),
       repeating-linear-gradient(92deg, transparent 0 39px, hsl(var(--paper) / 0.055) 40px 41px),
       linear-gradient(to bottom, hsl(var(--brass) / 0.38), hsl(var(--wood) / 0.92) 28%, hsl(var(--steel-deep) / 0.86));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -3px 0 rgb(0 0 0 / 0.44);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 0 -3px 0 rgb(0 0 0 / 0.44);
   }
 
   .project-header {
     align-items: center;
     background: linear-gradient(to bottom, hsl(var(--paper) / 0.12), transparent 58%);
     border-bottom: 1px solid hsl(var(--brass) / 0.52);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.17), 0 2px 0 rgb(0 0 0 / 0.28);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.17),
+      0 2px 0 rgb(0 0 0 / 0.28);
     display: flex;
     height: 42px;
     justify-content: space-between;
@@ -581,11 +625,12 @@
   }
 
   .project-paper-tab {
-    background:
-      repeating-linear-gradient(0deg, transparent 0 5px, hsl(var(--wood) / 0.09) 6px 7px),
+    background: repeating-linear-gradient(0deg, transparent 0 5px, hsl(var(--wood) / 0.09) 6px 7px),
       linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.8));
     border: 1px solid hsl(var(--brass) / 0.5);
-    box-shadow: 0 3px 5px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.55);
+    box-shadow:
+      0 3px 5px rgb(0 0 0 / 0.42),
+      inset 0 1px 0 rgb(255 255 255 / 0.55);
     color: hsl(var(--steel-deep));
     font-family: var(--font-typewriter), monospace;
     line-height: 1;
@@ -596,10 +641,34 @@
 
   .project-wood-body::before {
     background:
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 7px 7px / 12px 12px no-repeat,
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 7px) 7px / 12px 12px no-repeat,
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 7px calc(100% - 7px) / 12px 12px no-repeat,
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.84) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 7px) calc(100% - 7px) / 12px 12px no-repeat;
+      radial-gradient(
+          circle at 50% 30%,
+          hsl(var(--paper) / 0.84) 0 8%,
+          hsl(var(--brass)) 18% 40%,
+          hsl(var(--steel-deep)) 62% 100%
+        )
+        7px 7px / 12px 12px no-repeat,
+      radial-gradient(
+          circle at 50% 30%,
+          hsl(var(--paper) / 0.84) 0 8%,
+          hsl(var(--brass)) 18% 40%,
+          hsl(var(--steel-deep)) 62% 100%
+        )
+        calc(100% - 7px) 7px / 12px 12px no-repeat,
+      radial-gradient(
+          circle at 50% 30%,
+          hsl(var(--paper) / 0.84) 0 8%,
+          hsl(var(--brass)) 18% 40%,
+          hsl(var(--steel-deep)) 62% 100%
+        )
+        7px calc(100% - 7px) / 12px 12px no-repeat,
+      radial-gradient(
+          circle at 50% 30%,
+          hsl(var(--paper) / 0.84) 0 8%,
+          hsl(var(--brass)) 18% 40%,
+          hsl(var(--steel-deep)) 62% 100%
+        )
+        calc(100% - 7px) calc(100% - 7px) / 12px 12px no-repeat;
     content: "";
     inset: 0;
     pointer-events: none;
@@ -608,46 +677,70 @@
   }
 
   .project-info-board {
-    background:
-      repeating-linear-gradient(1deg, hsl(var(--steel-deep) / 0.24) 0 1px, transparent 1px 7px),
+    background: repeating-linear-gradient(1deg, hsl(var(--steel-deep) / 0.24) 0 1px, transparent 1px 7px),
       linear-gradient(to bottom, hsl(var(--brass) / 0.31), hsl(var(--wood) / 0.96));
     border: 1px solid hsl(var(--brass) / 0.5);
-    box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.14), 0 4px 7px rgb(0 0 0 / 0.5);
+    box-shadow:
+      inset 0 2px 5px rgb(0 0 0 / 0.45),
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      0 4px 7px rgb(0 0 0 / 0.5);
     color: hsl(var(--paper));
   }
 
   .paper-tab {
     background: linear-gradient(95deg, hsl(var(--paper)), hsl(var(--paper) / 0.8));
-    box-shadow: 0 4px 5px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.62);
+    box-shadow:
+      0 4px 5px rgb(0 0 0 / 0.45),
+      inset 0 1px 0 rgb(255 255 255 / 0.62);
     color: hsl(var(--steel-deep));
     font-family: var(--font-typewriter), monospace;
     transform: rotate(-1deg);
   }
 
-  .gearset { animation: gearset-turn 12s linear infinite; transform-origin: center; }
-  .gearset-reverse { animation: gearset-turn 12s linear infinite reverse; transform-origin: center; }
+  .gearset {
+    animation: gearset-turn 12s linear infinite;
+    transform-origin: center;
+  }
+  .gearset-reverse {
+    animation: gearset-turn 12s linear infinite reverse;
+    transform-origin: center;
+  }
 
   .workshop-input,
   .workshop-input:focus {
     background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel-deep) / 0.72));
     border: 1px solid hsl(var(--brass) / 0.52);
     border-radius: 3px;
-    box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.72), inset 0 1px 0 rgb(255 255 255 / 0.05), 0 1px 0 hsl(var(--cta) / 0.14);
+    box-shadow:
+      inset 0 3px 6px rgb(0 0 0 / 0.72),
+      inset 0 1px 0 rgb(255 255 255 / 0.05),
+      0 1px 0 hsl(var(--cta) / 0.14);
   }
 
   .lever-gate {
     background: linear-gradient(to right, hsl(var(--steel-deep)), hsl(var(--steel) / 0.7), hsl(var(--steel-deep)));
     border: 1px solid hsl(var(--brass) / 0.46);
-    box-shadow: inset 0 3px 5px rgb(0 0 0 / 0.72), 0 5px 8px rgb(0 0 0 / 0.48), inset 0 1px 0 hsl(var(--cta) / 0.15);
+    box-shadow:
+      inset 0 3px 5px rgb(0 0 0 / 0.72),
+      0 5px 8px rgb(0 0 0 / 0.48),
+      inset 0 1px 0 hsl(var(--cta) / 0.15);
     overflow: hidden;
     position: relative;
   }
 
   .lever-gate::before {
-    background: radial-gradient(circle at 50% 30%, hsl(var(--paper)), hsl(var(--brass)) 42%, hsl(var(--steel-deep)) 72%);
+    background: radial-gradient(
+      circle at 50% 30%,
+      hsl(var(--paper)),
+      hsl(var(--brass)) 42%,
+      hsl(var(--steel-deep)) 72%
+    );
     border: 1px solid hsl(var(--paper) / 0.46);
     border-radius: 50%;
-    box-shadow: 0 13px 0 -5px hsl(var(--brass)), 0 20px 0 -7px hsl(var(--steel-deep)), 0 2px 3px rgb(0 0 0 / 0.6);
+    box-shadow:
+      0 13px 0 -5px hsl(var(--brass)),
+      0 20px 0 -7px hsl(var(--steel-deep)),
+      0 2px 3px rgb(0 0 0 / 0.6);
     content: "";
     height: 14px;
     left: 10px;
@@ -656,7 +749,9 @@
     width: 14px;
   }
 
-  .lever-gate:active::before { transform: translateX(calc(100% + 16px)) translateY(10px); }
+  .lever-gate:active::before {
+    transform: translateX(calc(100% + 16px)) translateY(10px);
+  }
 
   .admin-rack section,
   .admin-rack article,
@@ -664,7 +759,10 @@
   .auth-panel {
     background: linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep)));
     border-color: hsl(var(--brass) / 0.42);
-    box-shadow: 0 12px 12px rgb(0 0 0 / 0.75), inset 0 1px 0 hsl(var(--cta) / 0.3), inset 0 -2px 0 rgb(0 0 0 / 0.45);
+    box-shadow:
+      0 12px 12px rgb(0 0 0 / 0.75),
+      inset 0 1px 0 hsl(var(--cta) / 0.3),
+      inset 0 -2px 0 rgb(0 0 0 / 0.45);
   }
 }
 
