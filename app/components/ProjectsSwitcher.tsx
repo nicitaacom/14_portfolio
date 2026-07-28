@@ -20,6 +20,7 @@ export function ProjectsSwitcher() {
   const [projectTab, setProjectTab] = useState<"work" | "projects">("work")
   const { openModal } = useModalsStore()
   const t = useScopedI18n("common")
+  const homeT = useScopedI18n("home")
 
   return (
     <>
@@ -51,12 +52,12 @@ export function ProjectsSwitcher() {
             <div className="grid w-full grid-cols-[1fr_auto_1fr] items-center gap-x-md">
               <div className="h-0 border-t border-secondary/60" />
               <p className="px-sm text-center text-sm font-bold uppercase leading-none tracking-wide text-secondary">
-                Not maintained
+                {homeT("notMaintainedTitle")}
               </p>
               <div className="h-0 border-t border-secondary/60" />
             </div>
             <p className="w-full max-w-[720px] text-center text-sm text-secondary-foreground/70">
-              These projects are old and not maintained - so don&apos;t expect that something will work there
+              {homeT("notMaintainedText")}
             </p>
           </div>
           <Project22 openModal={() => openModal("22MoreInfo")} />

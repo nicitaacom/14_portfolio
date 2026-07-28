@@ -1,12 +1,12 @@
 function SummarySkeletonCard() {
   return (
-    <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm">
       <div className="flex items-center gap-[8px]">
         <div className="h-[8px] w-[8px] animate-pulse rounded-full bg-[#4a4a4a]" />
-        <div className="h-[10px] w-[88px] animate-pulse rounded bg-[#3a3a3a]" />
+        <div className="h-[10px] w-[88px] animate-pulse rounded bg-steel" />
       </div>
-      <div className="mt-[12px] h-[24px] w-[132px] animate-pulse rounded bg-[#2f2f2f]" />
-      <div className="mt-[8px] h-[10px] w-[110px] animate-pulse rounded bg-[#242424]" />
+      <div className="mt-[12px] h-[24px] w-[132px] animate-pulse rounded bg-steel" />
+      <div className="mt-[8px] h-[10px] w-[110px] animate-pulse rounded bg-steel" />
     </div>
   )
 }
@@ -24,38 +24,38 @@ export function ProjectClicksSummarySkeletonRow() {
 export function ProjectClicksLineChartSkeleton() {
   return (
     <div className="flex min-w-0 flex-col gap-sm">
-      <div className="grid gap-xs rounded-[2px] border border-[#343434] bg-[#2a2a2a] p-sm tablet:grid-cols-[minmax(0,1fr)_auto]">
+      <div className="grid gap-xs rounded-[2px] border border-brass/40 bg-steel p-sm tablet:grid-cols-[minmax(0,1fr)_auto]">
         <div className="flex flex-col gap-[8px]">
-          <div className="h-[10px] w-[112px] animate-pulse rounded bg-[#3a3a3a]" />
+          <div className="h-[10px] w-[112px] animate-pulse rounded bg-steel" />
           <div className="flex items-end gap-sm">
-            <div className="h-[22px] w-[184px] animate-pulse rounded bg-[#2f2f2f]" />
-            <div className="h-[30px] w-[72px] animate-pulse rounded bg-[#242424]" />
+            <div className="h-[22px] w-[184px] animate-pulse rounded bg-steel" />
+            <div className="h-[30px] w-[72px] animate-pulse rounded bg-steel" />
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-xs">
           {Array.from({ length: 3 }).map((_, index) => (
-            <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[10px]" key={index}>
-              <div className="h-[9px] w-[40px] animate-pulse rounded bg-[#3a3a3a]" />
-              <div className="mt-[8px] h-[16px] w-[42px] animate-pulse rounded bg-[#2f2f2f]" />
-              <div className="mt-[6px] h-[9px] w-[32px] animate-pulse rounded bg-[#242424]" />
+            <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-[10px]" key={index}>
+              <div className="h-[9px] w-[40px] animate-pulse rounded bg-steel" />
+              <div className="mt-[8px] h-[16px] w-[42px] animate-pulse rounded bg-steel" />
+              <div className="mt-[6px] h-[9px] w-[32px] animate-pulse rounded bg-steel" />
             </div>
           ))}
         </div>
       </div>
 
       <div className="overflow-x-auto pb-[4px]">
-        <div className="flex min-w-[920px] flex-col gap-[18px] rounded-[2px] border border-[#343434] bg-[#242424] px-sm py-sm">
+        <div className="flex min-w-[920px] flex-col gap-[18px] rounded-[2px] border border-brass/40 bg-steel px-sm py-sm">
           {[1, 2, 3].map(item => (
-            <div className="h-px w-full border-t border-dashed border-[#3a3a3a]" key={item} />
+            <div className="h-px w-full border-t border-dashed border-brass/40" key={item} />
           ))}
 
           <div className="relative h-[184px]">
-            <div className="absolute bottom-[32px] left-[16px] right-[52px] h-[3px] rounded-full bg-[#2f2f2f]" />
+            <div className="absolute bottom-[32px] left-[16px] right-[52px] h-[3px] rounded-full bg-steel" />
             <div className="absolute bottom-[26px] left-[16px] right-[52px] flex items-center justify-between">
               {Array.from({ length: 12 }).map((_, index) => (
                 <div
-                  className="h-[8px] w-[8px] animate-pulse rounded-full border-[2px] border-[#5a5a5a] bg-[#242424]"
+                  className="h-[8px] w-[8px] animate-pulse rounded-full border-[2px] border-brass/40 bg-steel"
                   key={index}
                 />
               ))}
@@ -64,7 +64,7 @@ export function ProjectClicksLineChartSkeleton() {
 
           <div className="flex items-center justify-between px-[6px]">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div className="h-[10px] w-[38px] animate-pulse rounded bg-[#2a2a2a]" key={index} />
+              <div className="h-[10px] w-[38px] animate-pulse rounded bg-steel" key={index} />
             ))}
           </div>
         </div>
@@ -78,9 +78,9 @@ export function AllProjectsClicksBarChartSkeleton() {
     <div className="flex min-w-0 flex-col gap-sm">
       <div className="grid gap-xs tablet:grid-cols-3">
         {Array.from({ length: 3 }).map((_, index) => (
-          <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm" key={index}>
-            <div className="h-[10px] w-[78px] animate-pulse rounded bg-[#3a3a3a]" />
-            <div className="mt-[10px] h-[20px] w-[52px] animate-pulse rounded bg-[#2f2f2f]" />
+          <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm" key={index}>
+            <div className="h-[10px] w-[78px] animate-pulse rounded bg-steel" />
+            <div className="mt-[10px] h-[20px] w-[52px] animate-pulse rounded bg-steel" />
           </div>
         ))}
       </div>
@@ -88,19 +88,19 @@ export function AllProjectsClicksBarChartSkeleton() {
       <div className="max-w-full overflow-x-auto pb-[4px]">
         <div className="flex min-w-[760px] flex-col gap-xs">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm" key={index}>
+            <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm" key={index}>
               <div className="flex items-center gap-sm">
-                <div className="h-[28px] w-[28px] animate-pulse rounded-full bg-[#2a2a2a]" />
+                <div className="h-[28px] w-[28px] animate-pulse rounded-full bg-steel" />
                 <div className="w-[160px]">
-                  <div className="h-[14px] w-[96px] animate-pulse rounded bg-[#3a3a3a]" />
-                  <div className="mt-[6px] h-[10px] w-[52px] animate-pulse rounded bg-[#242424]" />
+                  <div className="h-[14px] w-[96px] animate-pulse rounded bg-steel" />
+                  <div className="mt-[6px] h-[10px] w-[52px] animate-pulse rounded bg-steel" />
                 </div>
-                <div className="h-[12px] flex-1 animate-pulse rounded-full bg-[#242424]" />
-                <div className="h-[18px] w-[52px] animate-pulse rounded bg-[#2f2f2f]" />
+                <div className="h-[12px] flex-1 animate-pulse rounded-full bg-steel" />
+                <div className="h-[18px] w-[52px] animate-pulse rounded bg-steel" />
               </div>
               <div className="mt-[10px] flex flex-wrap gap-[6px] pl-[44px]">
                 {Array.from({ length: 4 }).map((__, chipIndex) => (
-                  <div className="h-[20px] w-[70px] animate-pulse rounded-full bg-[#242424]" key={chipIndex} />
+                  <div className="h-[20px] w-[70px] animate-pulse rounded-full bg-steel" key={chipIndex} />
                 ))}
               </div>
             </div>

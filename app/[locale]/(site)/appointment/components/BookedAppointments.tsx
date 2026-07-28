@@ -59,8 +59,8 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
   }
 
   return (
-    <div className="mx-auto w-full max-w-[680px] laptop:sticky laptop:top-[6rem] laptop:max-w-none">
-      <div className="rounded-[16px] border border-[#555555] bg-[#202020] p-sm shadow-[0_18px_54px_rgba(0,0,0,0.18)]">
+    <div className="workbench-board mx-auto w-full max-w-[680px] p-[6px] laptop:sticky laptop:top-[6rem] laptop:max-w-none">
+      <div className="machine-panel p-sm">
         <div className="mb-xs">
           <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-secondary">
             {t("scheduledAppointments")}
@@ -72,26 +72,26 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
 
         <ul className="flex flex-col gap-xs">
           {!booked_appointments.length && (
-            <li className="rounded-[10px] border border-[#4c4c4c] bg-[#1c1c1c] px-sm py-sm text-sm leading-relaxed text-secondary-foreground">
+            <li className="machine-bezel px-sm py-sm text-sm leading-relaxed text-secondary-foreground">
               {t("noAppointments")}
             </li>
           )}
           {booked_appointments.map(booked_appointment => (
             <li
-              className="flex min-w-0 flex-col gap-xs rounded-[10px] border border-[#4c4c4c] bg-[#1c1c1c] px-sm py-sm"
+              className="machine-bezel flex min-w-0 flex-col gap-xs px-sm py-sm"
               key={booked_appointment.id}>
               <div className="flex flex-col gap-xs">
                 {editingAppointmentId === booked_appointment.id ? (
                   <div className="flex flex-col gap-y-xs">
                     <div className="flex flex-col gap-xs tablet:flex-row">
                       <Input
-                        className="min-w-0 w-full rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        className="min-w-0 w-full text-secondary"
                         type="date"
                         value={draftBookingDate}
                         onChange={e => setDraftBookingDate(e.target.value)}
                       />
                       <Input
-                        className="min-w-0 w-full rounded-[9px] border-[#5d5d5d] bg-[#202020] text-secondary"
+                        className="min-w-0 w-full text-secondary"
                         type="time"
                         value={draftBookingTime}
                         onChange={e => setDraftBookingTime(e.target.value)}
@@ -130,14 +130,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                   <>
                     <Button
                       title={t("saveChanges")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-success bg-[#1e2b21] !p-[0px]"
+                      className="h-[34px] w-[34px] border-success !p-[0px]"
                       isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
                       onClick={() => updateDBAppointmentFn(booked_appointment)}>
                       <FiSave className="text-success" size={16} />
                     </Button>
                     <Button
                       title={t("cancelEdit")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-secondary-foreground bg-[#232323] !p-[0px]"
+                      className="h-[34px] w-[34px] border-secondary-foreground !p-[0px]"
                       isDisabled={isLoading}
                       onClick={stopEditing}>
                       <MdOutlineCancel size={16} />
@@ -147,14 +147,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                   <>
                     <Button
                       title={t("editAppointment")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-cta bg-[#261f2f] !p-[0px]"
+                      className="h-[34px] w-[34px] border-cta !p-[0px]"
                       isDisabled={isLoading}
                       onClick={() => startEditing(booked_appointment)}>
                       <FiEdit3 className="text-cta" size={16} />
                     </Button>
                     <Button
                       title={t("deleteAppointment")}
-                      className="h-[34px] w-[34px] rounded-[9px] border-danger bg-[#2a1f21] !p-[0px]"
+                      className="h-[34px] w-[34px] border-danger !p-[0px]"
                       isDisabled={isLoading}
                       onClick={() =>
                         deleteDBAppointmentFn(

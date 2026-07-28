@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { FaYoutube } from "react-icons/fa6"
 import type { TTrackedProjectGroup } from "@/interfaces/TTrackedProject"
 import { TrackedProjectLink } from "./TrackedProjectLink"
 
@@ -12,21 +12,14 @@ interface Props {
 export function YoutubeUrlIcon({ youTubeUrl, projectGroup, projectName, projectSlug }: Props) {
   return (
     <TrackedProjectLink
-      className=" w-[48px] h-[48px] rounded-[50%] bg-primary-foreground cursor-pointer hidden desktop:flex"
+      className="plaque hidden h-[30px] w-[30px] cursor-pointer items-center justify-center desktop:flex"
       href={youTubeUrl}
       linkType="youtube"
       projectGroup={projectGroup}
       projectName={projectName}
-      projectSlug={projectSlug}>
-      <div className="relative w-[48px] h-[48px]">
-        <Image
-          className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[48px] h-[48px]"
-          src="/YouTube.png"
-          alt="YouTube"
-          width={128}
-          height={128}
-        />
-      </div>
+      projectSlug={projectSlug}
+      title="Open YouTube video">
+      <FaYoutube aria-hidden="true" size={17} />
     </TrackedProjectLink>
   )
 }

@@ -11,9 +11,10 @@ interface ModalContainerProps {
   onClose: () => void
   children: React.ReactNode
   className?: string
+  title?: string
 }
 
-export function ModalContainer({ isOpen, onClose, children, className }: ModalContainerProps) {
+export function ModalContainer({ isOpen, onClose, children, className, title }: ModalContainerProps) {
   const [showModal, setShowModal] = useState(isOpen)
 
   /* onOpen - show modal - disable scroll and scrollbar - hide navbar - show bg */
@@ -67,21 +68,38 @@ export function ModalContainer({ isOpen, onClose, children, className }: ModalCo
           transition={{ duration: 0.25 }}
           {...modalBgHandler}>
           <motion.div
-            className={`relative z-[100] w-full overflow-hidden rounded-md border border-secondary-foreground/70 bg-primary shadow-[0_32px_90px_rgba(0,0,0,0.45)] ${className}`}
+            className={`relative z-[100] w-full overflow-visible rounded-[5px] bg-wood p-[9px] shadow-[0_12px_12px_rgb(0_0_0/0.75)] ${className}`}
             initial={{ scale: 0.75, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.25 }}
             {...modalHandler}>
-            <button
+            <div aria-hidden="true" className="pointer-events-none absolute inset-[0] z-20">
+              <div className="absolute left-[15px] right-[15px] top-[0] h-[9px] rounded-[1px] border border-steel-deep bg-pipe shadow-[0_2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.62)]" />
+              <div className="absolute bottom-[0] left-[15px] right-[15px] h-[9px] rounded-[1px] border border-steel-deep bg-pipe shadow-[0_-2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.62)]" />
+              <div className="absolute bottom-[15px] left-[0] top-[15px] w-[9px] rounded-[1px] border border-steel-deep bg-pipe shadow-[2px_0_2px_rgb(0_0_0/0.55),inset_1px_0_0_rgb(255_255_255/0.62)]" />
+              <div className="absolute bottom-[15px] right-[0] top-[15px] w-[9px] rounded-[1px] border border-steel-deep bg-pipe shadow-[-2px_0_2px_rgb(0_0_0/0.55),inset_-1px_0_0_rgb(255_255_255/0.62)]" />
+              <div className="absolute left-[0] top-[0] flex h-[18px] w-[18px] items-center justify-center rounded-[2px] border border-steel-deep bg-pipe shadow-[0_2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.38)]"><span className="h-[6px] w-[6px] rounded-full border border-steel-deep bg-paper" /></div>
+              <div className="absolute right-[0] top-[0] flex h-[18px] w-[18px] items-center justify-center rounded-[2px] border border-steel-deep bg-pipe shadow-[0_2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.38)]"><span className="h-[6px] w-[6px] rounded-full border border-steel-deep bg-paper" /></div>
+              <div className="absolute bottom-[0] left-[0] flex h-[18px] w-[18px] items-center justify-center rounded-[2px] border border-steel-deep bg-pipe shadow-[0_2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.38)]"><span className="h-[6px] w-[6px] rounded-full border border-steel-deep bg-paper" /></div>
+              <div className="absolute bottom-[0] right-[0] flex h-[18px] w-[18px] items-center justify-center rounded-[2px] border border-steel-deep bg-pipe shadow-[0_2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.38)]"><span className="h-[6px] w-[6px] rounded-full border border-steel-deep bg-paper" /></div>
+            </div>
+            <div className="relative z-10 overflow-hidden rounded-[1px] bg-[radial-gradient(ellipse_52%_10%_at_18%_14%,hsl(var(--paper)/0.13),transparent_68%),radial-gradient(ellipse_44%_9%_at_74%_67%,hsl(var(--paper)/0.1),transparent_68%),repeating-linear-gradient(1deg,hsl(var(--steel-deep)/0.2)_0_1px,transparent_1px_6px,hsl(var(--paper)/0.045)_7px_9px,transparent_10px_18px),linear-gradient(100deg,hsl(var(--wood)),hsl(var(--brass)/0.48)_48%,hsl(var(--wood)))] shadow-[inset_0_1px_0_rgb(255_255_255/0.13),inset_0_-2px_0_rgb(0_0_0/0.42)]">
+              {title && (
+                <div className="absolute left-1/2 top-[-2px] z-20 max-w-[60%] -translate-x-1/2 rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-[3px] font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)]">
+                  {title}
+                </div>
+              )}
+              <button
               type="button"
               aria-label="Close modal"
-              className="absolute z-20 flex h-10 w-10 items-center justify-center text-secondary-foreground/70 transition-colors duration-300 hover:text-secondary"
-              style={{ top: 0, right: 0, left: "auto", bottom: "auto" }}
+              className="plaque absolute right-[10px] top-[10px] z-30 flex h-9 w-9 items-center justify-center !p-0 text-secondary-foreground/70 hover:text-secondary"
+              style={{ top: 10, right: 10, left: "auto", bottom: "auto" }}
               onClick={closeModal}>
               <IoMdClose size={34} />
             </button>
             {children}
+            </div>
           </motion.div>
         </motion.div>
       )}

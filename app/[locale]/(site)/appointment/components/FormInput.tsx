@@ -61,7 +61,7 @@ export function FormInput({
       <div className="flex flex-col">
         <input
           className={twMerge(
-            "w-full rounded-[16px] border border-[#909090] bg-primary/70 px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-cta",
+            "workshop-input w-full px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-cta",
             errors[id] && "border-danger text-danger",
             disabled && "opacity-50 cursor-default pointer-events-none",
             className,

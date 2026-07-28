@@ -19,7 +19,7 @@ const numberFormatter = new Intl.NumberFormat("en-US")
 
 function SummaryCard({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-xs">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
       <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">{label}</p>
       <p className="mt-[6px] text-lg text-secondary">{value}</p>
     </div>
@@ -28,9 +28,9 @@ function SummaryCard({ label, value }: { label: string; value: string | number }
 
 function StatPill({ label, count }: { label: string; count: number }) {
   return (
-    <div className="flex items-center justify-between rounded-[2px] border border-[#3a3a3a] bg-[#262626] px-[10px] py-[6px] text-xs text-secondary">
-      <span className="font-medium text-[#f5f7fb]">{label}</span>
-      <span className="text-[#a8b1c7]">{count}</span>
+    <div className="flex items-center justify-between rounded-[2px] border border-brass/40 bg-steel px-[10px] py-[6px] text-xs text-secondary">
+      <span className="font-medium text-secondary">{label}</span>
+      <span className="text-secondary-foreground">{count}</span>
     </div>
   )
 }
@@ -47,11 +47,11 @@ function VisitsTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-[2px] border border-[#444] bg-[#2a2a2a] px-[10px] py-[8px] shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
-      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-[#999]">{label}</p>
-      <p className="text-sm font-semibold text-[#f0f0f0]">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-[10px] py-[8px] shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
+      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
+      <p className="text-sm font-semibold text-secondary">
         {numberFormatter.format(payload[0].value)}{" "}
-        <span className="text-[10px] uppercase tracking-[0.12em] text-[#999]">visits</span>
+        <span className="text-[10px] uppercase tracking-[0.12em] text-secondary-foreground/70">visits</span>
       </p>
     </div>
   )
@@ -70,8 +70,8 @@ function VisitsAreaChart({ data, isMonthly }: { data: { date: string; visits: nu
   if (!data.length) return null
 
   return (
-    <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] p-sm">
-      <p className="mb-[10px] text-[10px] uppercase tracking-[0.18em] text-[#999]">Visits over time</p>
+    <div className="rounded-[2px] border border-brass/40 bg-steel-deep p-sm">
+      <p className="mb-[10px] text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">Visits over time</p>
       <ResponsiveContainer width="100%" height={220}>
         <AreaChart data={data} margin={{ top: 12, right: 8, bottom: 20, left: -8 }}>
           <defs>
@@ -153,7 +153,7 @@ export function UTMStatsDashboardSection() {
   }, [utmStats, chartData, timeRange])
 
   return (
-    <section className="rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
+    <section className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
       <div className="mb-sm flex flex-wrap items-start justify-between gap-sm">
         <div className="flex flex-col gap-[4px]">
           <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{t("utmOverviewTitle")}</h2>
@@ -162,7 +162,7 @@ export function UTMStatsDashboardSection() {
         <div className="flex items-center gap-[8px]">
           <UTMTimeRangeSwitcher timeRange={timeRange} onChange={setTimeRange} />
           <button
-            className="inline-flex shrink-0 items-center justify-center gap-[8px] rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-xs text-secondary transition hover:bg-[#2f2f2f]"
+            className="inline-flex shrink-0 items-center justify-center gap-[8px] rounded-[2px] border border-brass/40 bg-steel px-sm py-xs text-secondary transition hover:bg-steel"
             onClick={refetch}>
             <FiRefreshCcw size={14} />
             {t("refresh")}
@@ -171,7 +171,7 @@ export function UTMStatsDashboardSection() {
       </div>
 
       {error ? (
-        <div className="mb-sm rounded-[2px] border border-danger/20 bg-[#2d1218] px-sm py-sm text-sm text-danger">
+        <div className="mb-sm rounded-[2px] border border-danger/20 bg-danger/15 px-sm py-sm text-sm text-danger">
           {error}
         </div>
       ) : null}
@@ -179,7 +179,7 @@ export function UTMStatsDashboardSection() {
       {isLoading ? (
         <div className="flex flex-col gap-[10px] laptop:flex-row">
           {[1, 2].map(index => (
-            <div key={index} className="h-[95px] w-full animate-pulse rounded-[2px] bg-[#202020]" />
+            <div key={index} className="h-[95px] w-full animate-pulse rounded-[2px] bg-steel" />
           ))}
         </div>
       ) : (
@@ -200,12 +200,12 @@ export function UTMStatsDashboardSection() {
       )}
 
       <div className="mt-sm grid gap-[10px] lg:grid-cols-[1.25fr_0.75fr]">
-        <div className="rounded-[2px] border border-[#343434] bg-[#202020] p-sm">
+        <div className="rounded-[2px] border border-brass/40 bg-steel p-sm">
           <h3 className="mb-sm text-sm uppercase tracking-[0.18em] text-secondary-foreground">{t("topSources")}</h3>
           {isLoading ? (
             <div className="space-y-[8px]">
               {[1, 2, 3, 4].map(index => (
-                <div key={index} className="h-[34px] animate-pulse rounded-[2px] bg-[#1f1f1f]" />
+                <div key={index} className="h-[34px] animate-pulse rounded-[2px] bg-steel-deep" />
               ))}
             </div>
           ) : topSources.length ? (
@@ -219,12 +219,12 @@ export function UTMStatsDashboardSection() {
           )}
         </div>
 
-        <div className="rounded-[2px] border border-[#343434] bg-[#202020] p-sm">
+        <div className="rounded-[2px] border border-brass/40 bg-steel p-sm">
           <h3 className="mb-sm text-sm uppercase tracking-[0.18em] text-secondary-foreground">{t("topCampaigns")}</h3>
           {isLoading ? (
             <div className="space-y-[8px]">
               {[1, 2, 3].map(index => (
-                <div key={index} className="h-[34px] animate-pulse rounded-[2px] bg-[#1f1f1f]" />
+                <div key={index} className="h-[34px] animate-pulse rounded-[2px] bg-steel-deep" />
               ))}
             </div>
           ) : topCampaigns.length ? (

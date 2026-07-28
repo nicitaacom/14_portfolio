@@ -14,8 +14,8 @@ export function DropdownContainerContent({
     <button
       type="button"
       className={twMerge(
-        "flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-[#555555] bg-[#242424] px-sm text-left transition-colors duration-200",
-        isShowDropdown && "border-cta/60 bg-[#28222e]",
+        "flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-brass/40 bg-steel px-sm text-left transition-colors duration-200",
+        isShowDropdown && "border-cta/60 bg-cta/15",
       )}
       onClick={toggleDropdown}>
       <span className="truncate text-sm font-medium text-secondary">{selectedTimezone}</span>

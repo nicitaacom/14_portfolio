@@ -48,9 +48,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
   const failedCronJobs = cronSchedules.filter(job => job.last_run_status === "failed").length
 
   return (
-    <div className="min-h-[calc(100vh-72px)] bg-[#191919] px-sm py-sm tablet:px-md tablet:py-md">
+    <div className="admin-rack min-h-[calc(100vh-72px)] px-sm py-sm tablet:px-md tablet:py-md">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-[4px]">
-        <section className="rounded-[2px] border border-[#323232] bg-[#242424] px-sm py-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)] tablet:px-md tablet:py-md">
+        <section className="machine-panel px-sm py-sm tablet:px-md tablet:py-md">
           <div className="flex flex-col gap-[4px] laptop:flex-row laptop:items-end laptop:justify-between">
             <div className="flex flex-col gap-[4px]">
               <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground">{t("panel")}</p>
@@ -68,34 +68,34 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           </div>
         </section>
 
-        <section className="mt-sm rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
+        <section className="machine-panel mt-sm p-sm">
           <div className="flex flex-wrap gap-[4px]">
             <button
               type="button"
-              className={`rounded-[2px] border px-[10px] py-[8px] text-sm transition ${
+              className={`plaque px-[10px] py-[8px] text-sm ${
                 activeTab === "utm"
-                  ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
-                  : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                  ? "border-brass/40 bg-steel text-secondary"
+                  : "border-brass/40 bg-steel-deep text-secondary-foreground"
               }`}
               onClick={() => setActiveTab("utm")}>
               {t("utm")}
             </button>
             <button
               type="button"
-              className={`rounded-[2px] border px-[10px] py-[8px] text-sm transition ${
+              className={`plaque px-[10px] py-[8px] text-sm ${
                 activeTab === "projectClick"
-                  ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
-                  : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                  ? "border-brass/40 bg-steel text-secondary"
+                  : "border-brass/40 bg-steel-deep text-secondary-foreground"
               }`}
               onClick={() => setActiveTab("projectClick")}>
               {t("projectClick")}
             </button>
             <button
               type="button"
-              className={`rounded-[2px] border px-[10px] py-[8px] text-sm transition ${
+              className={`plaque px-[10px] py-[8px] text-sm ${
                 activeTab === "jobSearch"
-                  ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
-                  : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+                  ? "border-brass/40 bg-steel text-secondary"
+                  : "border-brass/40 bg-steel-deep text-secondary-foreground"
               }`}
               onClick={() => setActiveTab("jobSearch")}>
               {t("jobSearch")}

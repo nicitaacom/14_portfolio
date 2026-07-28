@@ -149,7 +149,7 @@ export function Step2() {
     <form
       className={twMerge("flex w-full flex-col gap-sm", step === "step-1" ? "" : "pt-xs")}
       onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center gap-xs rounded-[12px] border border-[#777777] px-sm py-xs">
+      <div className="flex items-center gap-xs rounded-[12px] border border-brass/40 px-sm py-xs">
         <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full border border-cta/40 bg-cta/10">
           {channelIcon}
         </div>

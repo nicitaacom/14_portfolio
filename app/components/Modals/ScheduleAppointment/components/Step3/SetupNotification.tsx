@@ -13,7 +13,7 @@ export function SetupNotification() {
     sendNotificationTo === "tg" ? commonT("telegram") : sendNotificationTo === "dis" ? commonT("discord") : commonT("email")
 
   return (
-    <div className="w-full rounded-[12px] border border-[#777777] px-sm py-xs">
+    <div className="w-full rounded-[12px] border border-brass/40 px-sm py-xs">
       {isSendNotification && inputNotificationTo.length > 3 ? (
         <div className="flex items-center gap-xs">
           <FiBell className="shrink-0 text-cta" size={18} />

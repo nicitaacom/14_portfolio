@@ -18,7 +18,7 @@ export function ProjectClicksSummaryStat({ caption, label, tone = "neutral", val
   const formattedValue = typeof value === "number" ? numberFormatter.format(value) : value
 
   return (
-    <div className="rounded-[2px] border border-[#343434] bg-[#2a2a2a] px-sm py-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
       <div className="flex items-center gap-[8px]">
         <span className={`h-[8px] w-[8px] rounded-full ${toneStyles[tone]}`} />
         <p className="text-xs uppercase tracking-[0.18em] text-secondary-foreground">{label}</p>

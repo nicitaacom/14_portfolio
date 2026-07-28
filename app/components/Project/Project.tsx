@@ -39,95 +39,96 @@ export function Project({
   projectGroup,
 }: ProjectProps) {
   const t = useScopedI18n("common")
-  const previewClassName =
-    "group relative block w-full h-[640px] border-[1px] border-solid border-secondary rounded-t-md overflow-hidden"
+  const previewClassName = "machine-bezel group relative block min-h-0 w-full flex-1 overflow-hidden"
 
   return (
-    <div className="relative w-full tablet:h-[720px] h-[784px]">
-      <div className="absolute top-sm right-sm flex gap-x-md">
-        {figmaUrl && (
-          <FigmaUrlIcon
-            figmaUrl={figmaUrl}
-            projectGroup={projectGroup}
-            projectName={projectName}
-            projectSlug={projectSlug}
-          />
-        )}
-        {githubUrl && (
-          <GithubUrlIcon
-            githubUrl={githubUrl}
-            projectGroup={projectGroup}
-            projectName={projectName}
-            projectSlug={projectSlug}
-          />
-        )}
-        {youtubeUrl && (
-          <YoutubeUrlIcon
-            youTubeUrl={youtubeUrl}
-            projectGroup={projectGroup}
-            projectName={projectName}
-            projectSlug={projectSlug}
-          />
-        )}
-      </div>
-      {preview ? (
-        <div className={previewClassName}>{preview}</div>
-      ) : youTubeEmbedPreview ? (
-        <div className={previewClassName}>
-          <iframe
-            className="h-full w-full"
-            width="100%"
-            height="100%"
-            src={youTubeEmbedPreview}
-            loading="lazy"
-            tabIndex={-1}
-            title={`${projectName} preview`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen></iframe>
-          <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
-        </div>
-      ) : (
-        <div className={previewClassName}>
-          <iframe
-            className="h-full w-full"
-            src={siteUrl}
-            loading="lazy"
-            tabIndex={-1}
-            title={`${projectName} preview`}
-          />
-          <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
-        </div>
-      )}
-      {/* Footer */}
-      <div
-        className="w-full h-[144px] tablet:h-[80px] relative flex flex-col tablet:flex-row justify-between items-center 
-          border-r-[1px] border-l-[1px] border-b-[1px] border-solid border-secondary rounded-b-md px-md py-md">
-        <div className="w-full flex flex-col">
-          <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
-            {t("stack")}: <span>{stack}</span>
-          </p>
-          <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm block">
-            {t("date")}: <span>{date}</span>
-          </p>
-          {siteUrl && (
-            <p className="flex flex-row">
-              {t("demo")}:&nbsp;
-              <TrackedProjectLink
-                className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info block"
-                href={siteUrl}
-                linkType="demo"
+    <div className="pipe-frame relative w-full tablet:h-[720px] h-[784px]">
+      <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px] p-[10px]">
+        <div className="project-header shrink-0">
+          <span className="project-paper-tab truncate">{projectName}</span>
+          <div className="flex gap-x-sm">
+            {figmaUrl && (
+              <FigmaUrlIcon
+                figmaUrl={figmaUrl}
                 projectGroup={projectGroup}
                 projectName={projectName}
-                projectSlug={projectSlug}>
-                {siteUrl.split("?")[0]}
-              </TrackedProjectLink>
-            </p>
-          )}
+                projectSlug={projectSlug}
+              />
+            )}
+            {githubUrl && (
+              <GithubUrlIcon
+                githubUrl={githubUrl}
+                projectGroup={projectGroup}
+                projectName={projectName}
+                projectSlug={projectSlug}
+              />
+            )}
+            {youtubeUrl && (
+              <YoutubeUrlIcon
+                youTubeUrl={youtubeUrl}
+                projectGroup={projectGroup}
+                projectName={projectName}
+                projectSlug={projectSlug}
+              />
+            )}
+          </div>
         </div>
+        {preview ? (
+          <div className={previewClassName}>{preview}</div>
+        ) : youTubeEmbedPreview ? (
+          <div className={previewClassName}>
+            <iframe
+              className="h-full w-full"
+              width="100%"
+              height="100%"
+              src={youTubeEmbedPreview}
+              loading="lazy"
+              tabIndex={-1}
+              title={`${projectName} preview`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen></iframe>
+            <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+          </div>
+        ) : (
+          <div className={previewClassName}>
+            <iframe
+              className="h-full w-full"
+              src={siteUrl}
+              loading="lazy"
+              tabIndex={-1}
+              title={`${projectName} preview`}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+          </div>
+        )}
+        <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md tablet:h-[80px] tablet:flex-row">
+          <div className="flex w-full flex-col">
+            <p className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm">
+              {t("stack")}: <span>{stack}</span>
+            </p>
+            <p className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm">
+              {t("date")}: <span>{date}</span>
+            </p>
+            {siteUrl && (
+              <p className="flex flex-row">
+                {t("demo")}:&nbsp;
+                <TrackedProjectLink
+                  className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm text-info"
+                  href={siteUrl}
+                  linkType="demo"
+                  projectGroup={projectGroup}
+                  projectName={projectName}
+                  projectSlug={projectSlug}>
+                  {siteUrl.split("?")[0]}
+                </TrackedProjectLink>
+              </p>
+            )}
+          </div>
 
-        <Button className="w-full tablet:w-fit whitespace-nowrap" onClick={openMoreInfoModal}>
-          {t("moreInfo")}
-        </Button>
+          <Button className="w-full whitespace-nowrap tablet:w-fit" onClick={openMoreInfoModal}>
+            {t("moreInfo")}
+          </Button>
+        </div>
       </div>
     </div>
   )

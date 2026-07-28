@@ -26,7 +26,7 @@ function DetailRow({ label, value, mono = false }: { label: string; value: strin
 function BookingControlChip({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`flex h-[40px] shrink-0 items-center rounded-[2px] border border-[#343434] bg-[#232323] px-sm ${className}`}>
+      className={`flex h-[40px] shrink-0 items-center rounded-[2px] border border-brass/40 bg-steel-deep px-sm ${className}`}>
       {children}
     </div>
   )
@@ -53,7 +53,7 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
   }
 
   return (
-    <article className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-sm">
+    <article className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm">
       <div className="flex flex-col gap-[4px]">
         <div className="admin-dashboard-scrollbar overflow-x-auto pb-[4px]">
           <div className="flex min-w-max items-center gap-[4px]">
@@ -92,14 +92,14 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
             {isEditing ? (
               <>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-success/40 bg-[#14281a] text-success transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-success/40 bg-success/15 text-success transition-opacity disabled:opacity-50"
                   disabled={isLoading || !draftBookingDate || !draftBookingTime}
                   onClick={saveBookingChanges}
                   type="button">
                   <FiSave size={16} />
                 </button>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-secondary-foreground/30 bg-[#2b2b2b] text-secondary transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-secondary-foreground/30 bg-steel text-secondary transition-opacity disabled:opacity-50"
                   disabled={isLoading}
                   onClick={() => setIsEditing(false)}
                   type="button">
@@ -109,14 +109,14 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
             ) : (
               <>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-cta/40 bg-[#2f203d] text-cta transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-cta/40 bg-cta/15 text-cta transition-opacity disabled:opacity-50"
                   disabled={isLoading}
                   onClick={() => setIsEditing(true)}
                   type="button">
                   <FiEdit3 size={16} />
                 </button>
                 <button
-                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-danger/40 bg-[#321b1f] text-danger transition-opacity disabled:opacity-50"
+                  className="inline-flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[2px] border border-danger/40 bg-danger/15 text-danger transition-opacity disabled:opacity-50"
                   disabled={isLoading}
                   onClick={handleDelete}
                   type="button">
@@ -127,7 +127,7 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
           </div>
         </div>
 
-        <div className="h-px w-full bg-[#2e2e2e]"></div>
+        <div className="h-px w-full bg-steel"></div>
 
         <div className="flex flex-col gap-[4px] pt-[4px]">
           <p className="truncate whitespace-nowrap text-xs" title={formatDateTime(booking.created_at)}>

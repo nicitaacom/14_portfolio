@@ -41,7 +41,7 @@ export function ScheduleButtons() {
         <button
           key={option.channel}
           className={twMerge(
-            "flex items-center gap-sm rounded-[14px] border border-[#777777] px-sm py-sm text-left transition-colors duration-300",
+            "flex items-center gap-sm rounded-[14px] border border-brass/40 px-sm py-sm text-left transition-colors duration-300",
             "hover:border-cta hover:bg-primary-foreground/20",
           )}
           onClick={() => setStepFn(option.channel)}

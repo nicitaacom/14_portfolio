@@ -16,13 +16,13 @@ export function Footer() {
     <footer className="mb-lg mt-auto">
       <div className="relative grid grid-cols-2 min-[882px]:flex gap-y-md max-w-[80vw] mx-auto justify-center gap-x-md">
         <Button href="https://t.me/nicitaacom" target="_blank">
-          Telegram <PiTelegramLogoBold />
+          {t("telegram")} <PiTelegramLogoBold />
         </Button>
         <Button href="https://discord.com/users/780002958380498955" target="_blank">
-          Discord <RiDiscordLine />
+          {t("discord")} <RiDiscordLine />
         </Button>
         <Button href="https://linkedin.com/in/nicitaacom" target="_blank">
-          LinkedIn <AiFillLinkedin />
+          {t("linkedIn")} <AiFillLinkedin />
         </Button>
         <Button
           href="https://drive.google.com/file/d/1FmubKhYXUM8TmdqXHe5cxRBWKdPObxQN/view?usp=sharing"

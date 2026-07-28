@@ -187,7 +187,7 @@ export function AuthPageClient() {
 
   return (
     <div className="min-h-[calc(100vh-72px)] flex items-center justify-center px-md">
-      <div className="w-full max-w-[460px] rounded-lg border border-cta bg-primary-foreground p-lg flex flex-col gap-md">
+      <div className="auth-panel machine-panel w-full max-w-[460px] p-lg flex flex-col gap-md">
         <AuthHeader errorMessage={errorMessage} />
 
         <input
@@ -195,7 +195,7 @@ export function AuthPageClient() {
           value={password}
           onChange={event => changePassword(event.target.value)}
           placeholder={t("passwordPlaceholder")}
-          className="w-full rounded-lg border border-secondary-foreground bg-transparent px-sm py-xs text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground focus:border-cta"
+          className="workshop-input w-full px-sm py-xs text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground focus:border-cta"
         />
         <div className="min-h-[20px] flex items-center gap-xs text-sm">
           {isCheckingPassword && <LoadingSpinner />}

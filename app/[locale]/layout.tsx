@@ -3,9 +3,11 @@ import { notFound } from "next/navigation"
 
 import Layout from "@/components/Layout"
 import { Navbar } from "@/components/Navbar/Navbar"
+import { WorkbenchWall } from "@/components/WorkbenchWall"
 import { UTMTracker } from "@/utm-stats/UTMTracker"
 import { I18nProviderClient } from "@/locales/client"
 import { isLocale } from "@/locales/helpers"
+import { inter, specialElite } from "@/fonts"
 
 export const dynamic = "force-dynamic"
 
@@ -22,9 +24,14 @@ export default async function LocaleLayout({
 
   return (
     <I18nProviderClient locale={locale}>
-      <Navbar />
-      <UTMTracker userId={`14-${nanoid()}`} />
-      <Layout>{children}</Layout>
+      <div className={`${inter.variable} ${specialElite.variable} relative isolate`}>
+        <WorkbenchWall />
+        <div className="relative z-10">
+          <Navbar />
+          <UTMTracker userId={`14-${nanoid()}`} />
+          <Layout>{children}</Layout>
+        </div>
+      </div>
     </I18nProviderClient>
   )
 }

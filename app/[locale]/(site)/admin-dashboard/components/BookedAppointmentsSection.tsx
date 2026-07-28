@@ -24,8 +24,8 @@ export function BookedAppointmentsSection({ bookings }: { bookings: TBookingRow[
           type="button"
           className={`rounded-[2px] border px-[10px] py-[6px] text-xs transition ${
             bookingsView === "upcoming"
-              ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
-              : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+              ? "border-brass/40 bg-steel text-secondary"
+              : "border-brass/40 bg-steel-deep text-secondary-foreground"
           }`}
           onClick={() => setBookingsView("upcoming")}>
           {t("upcoming")}
@@ -34,8 +34,8 @@ export function BookedAppointmentsSection({ bookings }: { bookings: TBookingRow[
           type="button"
           className={`rounded-[2px] border px-[10px] py-[6px] text-xs transition ${
             bookingsView === "past"
-              ? "border-[#4a4a4a] bg-[#2a2a2a] text-secondary"
-              : "border-[#343434] bg-[#1f1f1f] text-secondary-foreground"
+              ? "border-brass/40 bg-steel text-secondary"
+              : "border-brass/40 bg-steel-deep text-secondary-foreground"
           }`}
           onClick={() => setBookingsView("past")}>
           {t("past")}

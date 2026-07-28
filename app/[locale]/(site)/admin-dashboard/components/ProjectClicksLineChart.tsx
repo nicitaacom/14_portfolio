@@ -40,11 +40,11 @@ function CustomTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-[4px] border border-[#3a3a3a] bg-[#1a1a1a] px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-[#6a6a6a]">{label}</p>
-      <p className="text-sm font-medium text-[#e8e8e8]">
+    <div className="rounded-[4px] border border-brass/40 bg-steel-deep px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
+      <p className="text-sm font-medium text-secondary">
         {numberFormatter.format(payload[0].value)}{" "}
-        <span className="text-[10px] uppercase tracking-[0.12em] text-[#5a5a5a]">clicks</span>
+        <span className="text-[10px] uppercase tracking-[0.12em] text-secondary-foreground/70">clicks</span>
       </p>
     </div>
   )
@@ -117,38 +117,38 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
   return (
     <div className="flex min-w-0 flex-col gap-sm">
       {/* Header stats */}
-      <div className="grid gap-xs rounded-[2px] border border-[#343434] bg-[#1e1e1e] p-sm tablet:grid-cols-[minmax(0,1fr)_auto]">
+      <div className="grid gap-xs rounded-[2px] border border-brass/40 bg-steel-deep p-sm tablet:grid-cols-[minmax(0,1fr)_auto]">
         <div className="min-w-0">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-[#5a5a5a]">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">
             {timelineMode === "monthly" ? t("last30Days") : t("last12Months")}
           </p>
           <div className="mt-[8px] flex flex-wrap items-end gap-sm">
-            <p className="truncate text-base text-[#c8c8c8]">{projectName}</p>
-            <p className="text-[28px] leading-none text-[#e8e8e8]">{numberFormatter.format(totalClicks)}</p>
-            <p className="pb-[3px] text-[10px] uppercase tracking-[0.18em] text-[#5a5a5a]">{t("totalClicks")}</p>
+            <p className="truncate text-base text-secondary">{projectName}</p>
+            <p className="text-[28px] leading-none text-secondary">{numberFormatter.format(totalClicks)}</p>
+            <p className="pb-[3px] text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("totalClicks")}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-xs">
-          <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] px-sm py-[10px]">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-[#555]">{t("average")}</p>
-            <p className="mt-[4px] text-sm text-[#c8c8c8]">{formatMetricValue(averageClicks)}</p>
+          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-[10px]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("average")}</p>
+            <p className="mt-[4px] text-sm text-secondary">{formatMetricValue(averageClicks)}</p>
           </div>
-          <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] px-sm py-[10px]">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-[#555]">{t("peak")}</p>
-            <p className="mt-[4px] text-sm text-[#c8c8c8]">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
-            <p className="text-[9px] uppercase tracking-[0.16em] text-[#4a4a4a]">{peakPoint?.bucket_label ?? "-"}</p>
+          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-[10px]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("peak")}</p>
+            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
+            <p className="text-[9px] uppercase tracking-[0.16em] text-secondary-foreground/70">{peakPoint?.bucket_label ?? "-"}</p>
           </div>
-          <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] px-sm py-[10px]">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-[#555]">{t("latest")}</p>
-            <p className="mt-[4px] text-sm text-[#c8c8c8]">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
-            <p className="text-[9px] uppercase tracking-[0.16em] text-[#4a4a4a]">{latestPoint?.bucket_label ?? "-"}</p>
+          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-[10px]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("latest")}</p>
+            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
+            <p className="text-[9px] uppercase tracking-[0.16em] text-secondary-foreground/70">{latestPoint?.bucket_label ?? "-"}</p>
           </div>
         </div>
       </div>
 
       {/* Chart */}
-      <div className="rounded-[2px] border border-[#2e2e2e] bg-[#161616] p-sm">
+      <div className="rounded-[2px] border border-brass/40 bg-steel-deep p-sm">
         <ResponsiveContainer width="100%" height={280}>
           <AreaChart data={timeline} margin={{ top: 16, right: 12, bottom: 0, left: -8 }}>
             <defs>

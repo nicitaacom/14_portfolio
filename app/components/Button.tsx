@@ -18,8 +18,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ onClick, children, href, target, isDisabled, className = "", ...props }: ButtonProps) {
   const locale = useCurrentLocale()
   const buttonCSS = twMerge(
-    "px-sm py-xs border-[1px] border-solid border-cta rounded flex justify-center items-center gap-x-xs",
-    "hover:bg-primary-foreground transition-colors duration-300 text-secondary",
+    "plaque px-sm py-xs flex justify-center items-center gap-x-xs text-secondary",
     isDisabled && "opacity-50 cursor-default pointer-events-none",
     className,
   )

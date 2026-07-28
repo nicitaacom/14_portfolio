@@ -15,7 +15,7 @@ interface NavbarWithProgressProps {
 }
 
 export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressProps) {
-  const [scrollRef, setScrollRef] = useState<React.RefObject<HTMLDivElement> | null>(null)
+  const [scrollRef, setScrollRef] = useState<React.RefObject<HTMLDivElement | null> | null>(null)
   const [progress, setProgress] = useState(0)
   const locale = useCurrentLocale()
   const t = useScopedI18n("common")
@@ -43,31 +43,32 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
 
   return (
     <nav
-      className="w-full flex justify-between transition-[height] gap-x-sm duration-[600ms] px-md
-      text-secondary bg-primary-foreground"
-      style={{
-        borderBottom: `2px solid #c4c4c4`,
-        borderImage: `linear-gradient(to right, hsl(var(--cta)) ${progress}%, #c4c4c4 ${progress}%) 1`,
-        overflow: "visible",
-      }}>
-      <div className="flex items-center pr-md line">
+      className="navbar-plate relative w-full flex justify-between transition-[height] gap-x-sm duration-[600ms]
+      px-md text-secondary overflow-visible">
+      <div className="navbar-left-shadow flex items-center pr-md line">
         <Link
           data-text="Portfolio"
           href={localizePath("/", locale)}
-          className="text-shadow text-lg text-secondary before:text-secondary">
+          className="text-shadow navbar-engraved text-lg text-secondary before:text-secondary">
           {t("portfolio")}
         </Link>
       </div>
-      <NavbarProjects setScrollRef={setScrollRef} />
+      <NavbarProjects progress={progress} setScrollRef={setScrollRef} />
       <div className="flex items-center gap-x-sm pl-xs overflow-visible shrink-0 navbar-right-shadow">
-        <LanguageDropdown />
+        <div className="navbar-bezel">
+          <LanguageDropdown />
+        </div>
         {userId && (
           <>
-            <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-[#909090]"></div>
-            <AdminDropdown isGMLive={is_live_call} />
+            <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-brass/40"></div>
+            <div className="navbar-bezel">
+              <AdminDropdown isGMLive={is_live_call} />
+            </div>
           </>
         )}
       </div>
+      <span className="navbar-rivet navbar-status-light absolute left-[6px] top-1/2 -translate-y-1/2" aria-hidden="true" />
+      <span className="navbar-rivet absolute right-[6px] top-1/2 -translate-y-1/2" aria-hidden="true" />
     </nav>
   )
 }

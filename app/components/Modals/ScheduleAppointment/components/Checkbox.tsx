@@ -26,7 +26,7 @@ export function Checkbox({
     <label
       htmlFor={checkboxId}
       className={twMerge(
-        "group relative flex cursor-pointer items-start gap-xs rounded-[12px] border border-[#777777] px-sm py-xs",
+        "group relative flex cursor-pointer items-start gap-xs rounded-[12px] border border-brass/40 px-sm py-xs",
         "transition-colors duration-50 hover:bg-white/20",
         isChecked && "border-cta/60",
         disabled && "opacity-50 cursor-default pointer-events-none",
@@ -44,7 +44,7 @@ export function Checkbox({
         />
         <span
           className={twMerge(
-            "flex h-[18px] w-[18px] items-center justify-center rounded-[5px] border border-[#777777] bg-primary",
+            "flex h-[18px] w-[18px] items-center justify-center rounded-[5px] border border-brass/40 bg-primary",
             "transition-colors duration-50",
             isChecked && "border-cta bg-cta",
           )}

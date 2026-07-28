@@ -48,20 +48,20 @@ export function LanguageDropdown() {
     <div className="relative" ref={dropdownContainerRef}>
       <button
         className={twMerge(
-          "flex h-[38px] min-w-[176px] items-center justify-between gap-sm rounded-[12px] border border-[#3b3b3b] bg-[#232323] px-md shadow-[0_8px_22px_rgba(0,0,0,0.14)] transition-all duration-200 hover:border-cta/70 hover:bg-[#292929]",
-          isOpen && "border-cta/70 bg-[#292929]",
+          "machine-face flex h-[38px] min-w-[176px] items-center justify-between gap-sm rounded-[6px] px-md transition-all duration-200 hover:border-cta/70 hover:brightness-110",
+          isOpen && "border-cta/70 brightness-110",
         )}
         onClick={() => setIsOpen(prevState => !prevState)}
         type="button">
         <div className="flex min-w-0 items-center gap-xs">
-          <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border border-[#4a4a4a] bg-[#2b2b2b]">
-            <TbWorld className="text-secondary-foreground" size={13} />
+          <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border border-brass/40 bg-steel-deep">
+            <TbWorld className="text-brass" size={13} />
           </span>
           <span className="truncate text-sm text-secondary">{t(currentLanguage.code)}</span>
         </div>
         <BiSolidDownArrow
           className={twMerge(
-            "shrink-0 text-[11px] text-secondary-foreground transition-transform duration-200",
+            "shrink-0 text-[11px] text-brass/80 transition-transform duration-200",
             isOpen && "rotate-180 text-secondary",
           )}
         />
@@ -69,7 +69,7 @@ export function LanguageDropdown() {
 
       <div
         className={twMerge(
-          "absolute left-0 top-[calc(100%+10px)] z-[120] min-w-full rounded-[14px] border border-[#3b3b3b] bg-[#242424] p-[6px] shadow-[0_16px_40px_rgba(0,0,0,0.24)] transition-all duration-200",
+          "machine-face absolute left-0 top-[calc(100%+10px)] z-[120] min-w-full rounded-[6px] p-[6px] transition-all duration-200",
           isOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-[-8px] opacity-0 pointer-events-none",
         )}>
         <div className="flex flex-col gap-xs">
@@ -77,8 +77,8 @@ export function LanguageDropdown() {
             <button
               key={language.code}
               className={twMerge(
-                "flex h-[38px] items-center justify-between gap-sm whitespace-nowrap rounded-[10px] border border-[#3b3b3b] bg-[#1f1f1f] px-sm text-sm text-secondary transition-colors duration-200 hover:border-cta/60 hover:bg-[#292929]",
-                language.code === locale && "border-cta/70 bg-[#292929]",
+                "machine-slot flex h-[38px] items-center justify-between gap-sm whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-200 hover:border-cta/60 hover:brightness-125",
+                language.code === locale && "border-cta/70 brightness-125",
               )}
               onClick={() => changeLanguage(language.code)}
               type="button">

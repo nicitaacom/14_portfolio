@@ -8,15 +8,15 @@ function TooltipGithub() {
   const t = useScopedI18n("skills")
 
   return (
-    <div className="tooltiptext top-[6%] left-[40%] desktop:top-[0px] desktop:left-[50%]">
-      <h1 className="whitespace-pre-line text-secondary text-xs">{t("githubTooltip")}</h1>
+    <div>
+      <h1 className="whitespace-pre-line text-steel-deep text-xs">{t("githubTooltip")}</h1>
     </div>
   )
 }
 
 export function TooltipOther() {
   return (
-    <div className="tooltiptext">
+    <div>
       <div className="flex flex-col justify-start items-center gap-y-sm w-[250px] h-fit">
         <Skill
           id={5.1} // Why do I need id here? (5.1 because its fifth skill)

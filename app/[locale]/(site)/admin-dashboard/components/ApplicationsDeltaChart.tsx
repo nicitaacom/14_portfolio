@@ -24,11 +24,11 @@ function ChartTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-[4px] border border-[#3a3a3a] bg-[#1a1a1a] px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-[#6a6a6a]">{label}</p>
-      <p className="text-sm font-medium text-[#e8e8e8]">
+    <div className="rounded-[4px] border border-brass/40 bg-steel-deep px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
+      <p className="text-sm font-medium text-secondary">
         {payload[0].value}{" "}
-        <span className="text-[10px] uppercase tracking-[0.12em] text-[#5a5a5a]">applies</span>
+        <span className="text-[10px] uppercase tracking-[0.12em] text-secondary-foreground/70">applies</span>
       </p>
     </div>
   )
@@ -60,8 +60,8 @@ export function ApplicationsDeltaChart({ months }: Props) {
   if (!chartData.length) return null
 
   return (
-    <div className="mt-sm rounded-[2px] border border-[#2e2e2e] bg-[#161616] p-sm">
-      <p className="mb-[10px] text-[10px] uppercase tracking-[0.18em] text-[#5a5a5a]">Applications delta</p>
+    <div className="mt-sm rounded-[2px] border border-brass/40 bg-steel-deep p-sm">
+      <p className="mb-[10px] text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">Applications delta</p>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={chartData} margin={{ top: 12, right: 8, bottom: 0, left: -8 }} barSize={32}>
           <CartesianGrid strokeDasharray="2 6" stroke="#252525" vertical={false} />

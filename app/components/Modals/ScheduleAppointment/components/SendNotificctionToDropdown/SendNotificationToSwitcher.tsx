@@ -27,7 +27,7 @@ export function SendNotificationToSwitcher() {
       style={{ width: "40px", height: "40px" }}>
       <div
         className={twMerge(
-          `relative flex h-full w-full items-center justify-center rounded-[10px] border border-[#777777]
+          `relative flex h-full w-full items-center justify-center rounded-[10px] border border-brass/40
            cursor-pointer z-[111]`,
         )}
         onClick={toggleDropdown}

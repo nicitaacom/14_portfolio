@@ -24,7 +24,7 @@ export function Input({ type, value, onChange, className, placeholder, ...props 
 
   return (
     <input
-      className={`px-sm py-xs text-secondary bg-transparent border-[1px] border-[#909090] rounded outline-none ${className}`}
+      className={`workshop-input px-sm py-xs text-secondary outline-none ${className}`}
       type={type}
       inputMode={type === "number" ? "numeric" : undefined}
       value={value}

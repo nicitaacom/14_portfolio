@@ -34,7 +34,7 @@ export const ProjectClicksOverviewBarItem = memo(function ProjectClicksOverviewB
       </span>
 
       <div className="min-w-0 flex-1">
-        <div className="relative h-[2px] overflow-hidden rounded-full bg-[#2a2a2a]">
+        <div className="relative h-[2px] overflow-hidden rounded-full bg-steel">
           <motion.div
             animate={{ width: `${animatedBarWidth}%` }}
             className={twMerge("h-full rounded-full", isSelected ? "bg-[#888]" : "bg-[#555]")}

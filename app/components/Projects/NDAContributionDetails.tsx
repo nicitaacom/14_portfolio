@@ -42,6 +42,21 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
     (total, [, sectionAchievements]) => total + Object.keys(sectionAchievements).length,
     0,
   )
+  const sectionTitles = {
+    saveMoney: t("sections.saveMoney"),
+    backend: t("sections.backend"),
+    frontend: t("sections.frontend"),
+    dialerCalling: t("sections.dialerCalling"),
+    emails: t("sections.emails"),
+    ai: t("sections.ai"),
+    performance: t("sections.performance"),
+    legal: t("sections.legal"),
+    socialMediaOutreach: t("sections.socialMediaOutreach"),
+    verification: t("sections.verification"),
+    payments: t("sections.payments"),
+    notifications: t("sections.notifications"),
+    scale: t("sections.scale"),
+  }
 
   return (
     <div className="flex flex-col gap-y-lg">
@@ -55,7 +70,11 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
       <div className="flex flex-col gap-y-lg">
         {sections.map(([sectionTitle, sectionAchievements]) => (
           <section key={sectionTitle || "achievements"} className="flex flex-col gap-y-sm">
-            {sectionTitle && <h2 className="text-sm font-bold tracking-wide text-secondary">{sectionTitle}</h2>}
+            {sectionTitle && (
+              <h2 className="text-sm font-bold tracking-wide text-secondary">
+                {sectionTitles[sectionTitle as keyof typeof sectionTitles]}
+              </h2>
+            )}
             <div className="grid grid-cols-1 gap-sm">
               {Object.entries(sectionAchievements).map(([description, proofLink]) => (
                 <article
@@ -67,7 +86,7 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
                   {proofLink && (
                     <div className="flex shrink-0 justify-end">
                       <Button
-                        aria-label={`View proof for: ${description}`}
+                        aria-label={t("proofAriaLabel", { description: formatDescription(description) })}
                         className="group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
                         onClick={() =>
                           window.open(
@@ -78,7 +97,7 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
                         }
                         type="button">
                         <span className="text-cta transition-colors duration-300 group-hover/proof:text-[#111]">
-                          Proof
+                          {t("proof")}
                         </span>
                         <FiArrowUpRight
                           size={13}

@@ -12,7 +12,7 @@ export function PrevStepButton({ disabled }: { disabled: boolean }) {
   return (
     <button
       className={twMerge(
-        "group flex w-fit items-center gap-[2px] rounded-[8px] border border-[#777777] px-xs py-[4px] text-xs text-secondary-foreground transition-colors duration-300 hover:border-cta hover:text-secondary",
+        "group flex w-fit items-center gap-[2px] rounded-[8px] border border-brass/40 px-xs py-[4px] text-xs text-secondary-foreground transition-colors duration-300 hover:border-cta hover:text-secondary",
         disabled && "opacity-50 cursor-default pointer-events-none",
       )}
       onClick={setPrevStep}>

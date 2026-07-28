@@ -12,7 +12,7 @@ export function CronScheduleItem({ job }: { job: TCronScheduleRow }) {
   const descriptionText = job.description ? job.description : `Command: ${job.command}`
 
   return (
-    <article className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-sm">
+    <article className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm">
       <div className="flex flex-col gap-[4px]">
         <div className="flex flex-col gap-[4px] tablet:flex-row tablet:items-start tablet:justify-between">
           <div className="min-w-0 flex items-center gap-xs">

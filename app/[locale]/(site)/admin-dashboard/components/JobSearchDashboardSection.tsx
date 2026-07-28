@@ -20,7 +20,7 @@ const AVATAR_DOC_URL =
 
 function SummaryStat({ label, value, valueClassName }: { label: string; value: string | number; valueClassName?: string }) {
   return (
-    <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-xs">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
       <p className={`mt-[2px] text-lg ${valueClassName ?? "text-secondary"}`}>{value}</p>
     </div>
@@ -68,7 +68,7 @@ export function JobSearchDashboardSection() {
   }
 
   return (
-    <section className="rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
+    <section className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
       <div className="mb-sm flex flex-col gap-[4px]">
         <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{t("jobSearchTitle")}</h2>
         <p className="text-xs text-secondary-foreground">

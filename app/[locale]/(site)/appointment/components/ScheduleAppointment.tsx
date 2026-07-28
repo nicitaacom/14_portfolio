@@ -32,8 +32,8 @@ export function ScheduleAppointment() {
   }, [])
 
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-[680px] rounded-[16px] border border-[#555555] bg-[#202020] p-sm shadow-[0_18px_54px_rgba(0,0,0,0.24)] tablet:p-md">
+    <div className="workbench-board w-full p-[6px]">
+      <div className="machine-panel mx-auto w-full max-w-[680px] p-sm tablet:p-md">
         <div className="flex w-full min-w-0 flex-col gap-sm">
           <div className="grid gap-sm min-[900px]:grid-cols-[minmax(0,1fr)_220px] min-[900px]:items-start">
             <div className="min-w-0">
@@ -56,7 +56,7 @@ export function ScheduleAppointment() {
             </div>
           </div>
 
-          <div className="min-w-0 overflow-hidden rounded-[12px] border border-[#4c4c4c] bg-[#1c1c1c] px-xs pb-xs">
+          <div className="machine-bezel min-w-0 overflow-hidden px-xs pb-xs">
             <Calendar
               onChange={setSelectedDate}
               value={selectedDate}
@@ -68,7 +68,7 @@ export function ScheduleAppointment() {
           </div>
 
           <Button
-            className="h-[40px] w-full rounded-[10px] border border-cta/40 bg-cta px-md py-0 text-sm font-bold text-primary shadow-[0_10px_28px_rgba(168,85,247,0.18)] transition-colors duration-200 hover:bg-cta/90 tablet:w-fit tablet:self-end"
+            className="lever-gate h-[40px] w-full px-md py-0 text-sm font-bold text-secondary tablet:w-fit tablet:self-end"
             onClick={() => openModal("Appointment")}>
             {t("continueToBooking")}
           </Button>

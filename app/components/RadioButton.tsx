@@ -11,8 +11,9 @@ export function RadioButton({ label, inputName, onChange, isChecked, ...props }:
   return (
     <label
       htmlFor={label}
-      className="relative cursor-pointer flex justify-center items-center px-4 py-2
-    transition-all duration-300 text-secondary">
+      className={`machine-panel plaque relative flex cursor-pointer items-center justify-center px-4 py-2 text-secondary ${
+        isChecked ? "border-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.55),0_4px_0_hsl(var(--steel-deep)),0_8px_10px_rgb(0_0_0/0.5)]" : "border-brass/50"
+      }`}>
       <input
         type="radio"
         name={inputName}
@@ -22,12 +23,6 @@ export function RadioButton({ label, inputName, onChange, isChecked, ...props }:
         onChange={onChange}
         checked={isChecked ?? false}
         {...props}
-      />
-      <span
-        className={`before:absolute before:border-2 before:rounded-lg before:border-solid before:border-secondary before:w-full before:h-[50px]
-        before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%]
-        before:transition-all before:duration-300 
-        peer-checked:before:border-cta peer-checked:before:border-2`}
       />
       {label}
     </label>

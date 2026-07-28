@@ -42,7 +42,7 @@ export function ContactMethod({ errors, register }: ContactMethodProps) {
     <div className="flex w-full flex-col gap-xs">
       <div className="flex w-full flex-col gap-xs tablet:flex-row">
         <button
-          className="flex h-[40px] w-full items-center justify-center gap-xs rounded-[10px] border border-[#777777] px-sm text-secondary transition-colors duration-300 hover:border-cta hover:text-secondary tablet:w-[132px]"
+          className="flex h-[40px] w-full items-center justify-center gap-xs rounded-[10px] border border-brass/40 px-sm text-secondary transition-colors duration-300 hover:border-cta hover:text-secondary tablet:w-[132px]"
           onClick={setNextContactMethod}
           type="button">
           {icon}

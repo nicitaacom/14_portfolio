@@ -37,15 +37,15 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
     <div className="relative flex w-[132px] justify-center" ref={dropdownContainerRef}>
       <button
         className={twMerge(
-          "relative flex h-[36px] w-[132px] items-center justify-center rounded-[10px] border border-[#3b3b3b] bg-[#232323] px-sm transition-all duration-300 hover:border-cta hover:bg-[#292929]",
-          isShowDropdown && "border-cta bg-[#292929]",
+          "machine-face relative flex h-[36px] w-[132px] items-center justify-center rounded-[6px] px-sm transition-all duration-300 hover:border-cta hover:brightness-110",
+          isShowDropdown && "border-cta brightness-110",
         )}
         onClick={toggleDropdown}
         type="button">
         <span className="text-sm text-secondary">{t("panel")}</span>
         <BiSolidDownArrow
           className={twMerge(
-            "absolute right-sm text-secondary-foreground transition-transform duration-300",
+            "absolute right-sm text-brass/80 transition-transform duration-300",
             isShowDropdown && "rotate-180 text-secondary",
           )}
         />
@@ -53,19 +53,19 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
 
       <div
         className={twMerge(
-          "absolute left-1/2 top-[calc(100%+14px)] z-[120] w-[214px] -translate-x-[58%] rounded-[12px] border border-[#3b3b3b] bg-[#242424] p-xs shadow-[0_18px_40px_rgba(0,0,0,0.34)]",
+          "machine-face absolute left-1/2 top-[calc(100%+14px)] z-[120] w-[214px] -translate-x-[58%] rounded-[6px] p-xs",
           isShowDropdown
             ? "visible opacity-100 transition-all duration-300"
             : "invisible opacity-0 transition-all duration-300",
         )}>
         <div className="flex flex-col gap-xs">
-          <div className="flex justify-center rounded-[10px] border border-[#333333] bg-[#1f1f1f] px-sm py-xs">
+          <div className="machine-slot flex justify-center rounded-[10px] border border-transparent px-sm py-xs">
             <GMCheckbox isGMLive={isGMLive} />
           </div>
 
           <Link
             href={localizePath("/admin-dashboard", locale)}
-            className="flex h-[36px] items-center justify-center whitespace-nowrap rounded-[10px] border border-[#3b3b3b] bg-[#1f1f1f] px-sm text-sm text-secondary transition-colors duration-300 hover:border-cta hover:bg-[#292929]">
+            className="machine-slot flex h-[36px] items-center justify-center whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-300 hover:border-cta hover:brightness-125">
             {t("openAdminDashboard")}
           </Link>
         </div>

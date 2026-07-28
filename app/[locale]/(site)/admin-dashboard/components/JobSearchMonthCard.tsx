@@ -20,7 +20,7 @@ function formatMonthLabel(month: string) {
 
 function MetricBlock({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-xs">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
       <p className="mt-[2px] text-lg text-secondary">{value}</p>
     </div>
@@ -35,12 +35,12 @@ export function JobSearchMonthCard({ month }: { month: TJobSearchMonth }) {
     tone === "danger" ? t("appsBelowTarget") : tone === "warning" ? t("appsOnTrack") : t("appsStrong")
 
   return (
-    <article className="rounded-[2px] border border-[#323232] bg-[#242424] p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
+    <article className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
       <div className="mb-sm flex items-center justify-between gap-[4px]">
         <h3 className="text-sm uppercase tracking-[0.18em] text-secondary">{formatMonthLabel(month.month)}</h3>
         <div className="flex items-center gap-[4px]">
           {month.conversionRate !== null && (
-            <span className="inline-flex shrink-0 rounded-[2px] border border-[#343434] bg-[#202020] px-sm py-[2px] text-xs text-secondary-foreground">
+            <span className="inline-flex shrink-0 rounded-[2px] border border-brass/40 bg-steel px-sm py-[2px] text-xs text-secondary-foreground">
               {month.conversionRate}%
             </span>
           )}
