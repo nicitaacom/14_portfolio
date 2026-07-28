@@ -8,7 +8,7 @@ import gsap from "gsap"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { useScopedI18n } from "@/locales/client"
 
-type HalloweenEventPhase = "idle" | "storm"
+type HalloweenEventPhase = "idle" | "storm" | "fading"
 
 interface RainDrop {
   x: number
@@ -21,6 +21,8 @@ interface RainDrop {
 const INITIAL_EVENT_DELAY = { min: 18_000, max: 30_000 }
 const REPEAT_EVENT_DELAY = { min: 75_000, max: 130_000 }
 const STORM_DURATION = { min: 4_000, max: 6_000 }
+// The storm and grave run their entry animations backwards for this long before unmounting
+const STORM_FADE_MS = 500
 const RETRY_DELAY = 10_000
 
 function randomBetween(min: number, max: number) {
@@ -270,6 +272,9 @@ export function HalloweenGraveEvent() {
   const thunderAudioRef = useRef<HTMLAudioElement>(null)
   const bellsAudioRef = useRef<HTMLAudioElement>(null)
   const scheduleStormFinishRef = useRef<(() => void) | null>(null)
+  // Stays true across the fade so the lightning and rain keep running while the storm bows out,
+  // instead of the GSAP context reverting and freezing the canvas the moment the phase flips
+  const isStormVisible = phase === "storm" || phase === "fading"
 
   useEffect(() => {
     if (theme !== "halloween" || reducedMotion) {
@@ -333,9 +338,14 @@ export function HalloweenGraveEvent() {
     }
 
     const finishEvent = () => {
+      // Audio fades over 0.55s, so hold the visuals in "fading" for the matching stretch
+      // and only unmount once the reversed entry animation has played out
       stopStormAudio()
-      updatePhase("idle")
-      scheduleNextEvent()
+      updatePhase("fading")
+      schedule(() => {
+        updatePhase("idle")
+        scheduleNextEvent()
+      }, STORM_FADE_MS)
     }
 
     function beginEvent() {
@@ -435,7 +445,7 @@ export function HalloweenGraveEvent() {
   }, [phase])
 
   useEffect(() => {
-    if (phase !== "storm" || !stormPlaybackStarted || !eventRef.current) return
+    if (!isStormVisible || !stormPlaybackStarted || !eventRef.current) return
 
     const animationContext = gsap.context(() => {
       const stormTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1.65 })
@@ -468,10 +478,10 @@ export function HalloweenGraveEvent() {
     }, eventRef)
 
     return () => animationContext.revert()
-  }, [phase, stormPlaybackStarted])
+  }, [isStormVisible, stormPlaybackStarted])
 
   useEffect(() => {
-    if (phase !== "storm" || !stormPlaybackStarted) return
+    if (!isStormVisible || !stormPlaybackStarted) return
 
     const canvas = rainCanvasRef.current
     if (!canvas) return
@@ -537,7 +547,7 @@ export function HalloweenGraveEvent() {
       cancelAnimationFrame(animationFrame)
       resizeObserver.disconnect()
     }
-  }, [phase, stormPlaybackStarted])
+  }, [isStormVisible, stormPlaybackStarted])
 
   if (theme !== "halloween") return null
 
@@ -549,14 +559,14 @@ export function HalloweenGraveEvent() {
       <audio ref={thunderAudioRef} src="/thunderstorm.mp3" preload="auto" />
       <audio ref={bellsAudioRef} src="/creepy-halloween-bells.mp3" preload="auto" />
       <AnimatePresence mode="sync">
-        {phase === "storm" && (
+        {isStormVisible && (
           <motion.div
             key="storm"
             className="halloween-storm-layer absolute inset-0 overflow-hidden"
             initial={{ opacity: 0 }}
-            animate={{ opacity: stormPlaybackStarted ? 1 : 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: stormPlaybackStarted ? 0.12 : 0 }}>
+            animate={{ opacity: phase === "fading" || !stormPlaybackStarted ? 0 : 1 }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            transition={{ duration: phase === "fading" ? STORM_FADE_MS / 1000 : stormPlaybackStarted ? 0.12 : 0 }}>
             <canvas ref={rainCanvasRef} className="halloween-storm-rain absolute inset-0 h-full w-full" />
             <div data-halloween-storm-flash className="halloween-storm-flash absolute inset-0" />
             <svg
@@ -632,12 +642,18 @@ export function HalloweenGraveEvent() {
               className="halloween-event-grave absolute"
               initial={{ opacity: 0, y: "24%", rotate: -3, scale: 0.84 }}
               animate={
-                stormPlaybackStarted
-                  ? { opacity: 1, y: "0%", rotate: 0, scale: 1 }
-                  : { opacity: 0, y: "24%", rotate: -3, scale: 0.84 }
+                phase === "fading" || !stormPlaybackStarted
+                  ? { opacity: 0, y: "24%", rotate: -3, scale: 0.84 }
+                  : { opacity: 1, y: "0%", rotate: 0, scale: 1 }
               }
-              exit={{ opacity: 0, y: "8%", scale: 0.96 }}
-              transition={{ duration: 1.35, ease: [0.16, 1, 0.3, 1] }}>
+              exit={{ opacity: 0, transition: { duration: 0 } }}
+              transition={{
+                // Sinks back to exactly the values it rose from. A true time-reverse of the
+                // entry curve would be easeIn, which holds full opacity then snaps at the end
+                // and reads as no fade at all, so the way back is eased on both ends instead
+                duration: phase === "fading" ? STORM_FADE_MS / 1000 : 1.35,
+                ease: phase === "fading" ? [0.4, 0, 0.2, 1] : [0.16, 1, 0.3, 1],
+              }}>
               <StylizedGrave />
             </motion.div>
           </motion.div>
