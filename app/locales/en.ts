@@ -208,6 +208,8 @@ export default {
       stepLabel: "Step {current} / {total}",
       bookCall: "Book call",
       booking: "Booking...",
+      loadingTitle: "It works!",
+      loadingSubtitle: "Inventor's workshop",
       appointmentBooked: "Appointment booked",
       reminderEnabled: "Reminder enabled",
       reminderEnabledText: "Notification to {destination} with the Google Meets link 10 minutes before.",

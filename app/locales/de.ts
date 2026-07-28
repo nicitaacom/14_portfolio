@@ -211,6 +211,8 @@ export default {
       stepLabel: "Schritt {current} / {total}",
       bookCall: "Call buchen",
       booking: "Buchung...",
+      loadingTitle: "Es funktioniert!",
+      loadingSubtitle: "Werkstatt des Erfinders",
       appointmentBooked: "Termin gebucht",
       reminderEnabled: "Erinnerung aktiviert",
       reminderEnabledText: "Benachrichtigung an {destination} mit dem Google-Meets-Link 10 Minuten vor dem Termin.",

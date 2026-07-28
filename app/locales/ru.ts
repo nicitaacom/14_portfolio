@@ -210,6 +210,8 @@ export default {
       stepLabel: "Шаг {current} / {total}",
       bookCall: "Забронировать звонок",
       booking: "Бронирование...",
+      loadingTitle: "Заработало!",
+      loadingSubtitle: "Мастерская изобретателя",
       appointmentBooked: "Встреча забронирована",
       reminderEnabled: "Напоминание включено",
       reminderEnabledText: "Уведомление в {destination} с ссылкой на Google Meets за 10 минут до встречи.",

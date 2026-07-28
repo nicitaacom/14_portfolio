@@ -429,7 +429,71 @@
   }
 
   .appointment-loading-screen {
-    background: #000 url("/UI/crazy-mechanics-loading.jpg") center / cover no-repeat;
+    background: #050404;
+    isolation: isolate;
+  }
+
+  .appointment-loading-blueprint {
+    filter: drop-shadow(0 16px 18px rgb(0 0 0 / 0.56));
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  .appointment-loading-title {
+    color: #e2e5e7;
+    font-family: var(--font-typewriter), monospace;
+    font-size: clamp(1.45rem, 7vw, 3.35rem);
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 0.92;
+    text-shadow:
+      0 2px 0 #25313a,
+      0 4px 0 #172027,
+      0 7px 8px rgb(0 0 0 / 0.72),
+      -1px -1px 0 rgb(255 255 255 / 0.34);
+    text-transform: uppercase;
+    -webkit-text-stroke: 1px #44525c;
+  }
+
+  .appointment-loading-subtitle {
+    color: #d5e0e5;
+    font-family: var(--font-typewriter), monospace;
+    font-size: clamp(0.68rem, 2.6vw, 1rem);
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    margin-top: 0.3rem;
+    text-shadow: 0 2px 3px rgb(0 0 0 / 0.8);
+    text-transform: uppercase;
+  }
+
+  .appointment-loading-gear {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  .appointment-loading-gear-rim {
+    fill: #70787d;
+    stroke: rgb(228 232 233 / 0.7);
+    stroke-width: 3;
+  }
+
+  .appointment-loading-gear-spoke {
+    fill: #424a4f;
+    stroke: #2a3034;
+    stroke-width: 2;
+  }
+
+  .appointment-loading-gear-hub {
+    fill: #bfc4c7;
+    stroke: #2b3135;
+    stroke-width: 4;
+  }
+
+  .appointment-loading-gear-hole {
+    fill: #08090a;
+    stroke: #d2d6d8;
+    stroke-width: 2;
   }
 
   .machine-bezel {

@@ -12,11 +12,10 @@ import { Step2 } from "./components/Step2"
 import { AnimatePresence, motion } from "framer-motion"
 import { ScheduleAppointmentModalHeader } from "./components/ScheduleAppointmentModalHeader"
 import { Step3 } from "./components/Step3/Step3"
-import { useScopedI18n } from "@/locales/client"
+import { BookingLoadingScene } from "./components/BookingLoadingScene"
 
 export function ScheduleAppointmentModal() {
   const { isOpen, closeModal } = useModalsStore()
-  const t = useScopedI18n("appointment.modal")
 
   const { step } = useAppointmentStore()
   const [isBooking, setIsBooking] = useState(false)
@@ -107,18 +106,7 @@ export function ScheduleAppointmentModal() {
           )}
         </AnimatePresence>
         <AnimatePresence>
-          {isBooking && (
-            <motion.div
-              role="status"
-              aria-live="polite"
-              className="appointment-loading-screen absolute inset-[0] z-20"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}>
-              <span className="sr-only">{t("booking")}</span>
-            </motion.div>
-          )}
+          {isBooking && <BookingLoadingScene key="booking-loading-scene" />}
         </AnimatePresence>
       </div>
     </ModalContainer>
