@@ -35,9 +35,9 @@ export function HalloweenFrameOrnaments({ variant }: HalloweenFrameOrnamentsProp
           The first path is the bone silhouette, every path after it is a dark cut-out. */}
       <g className="halloween-frame-skull" transform={skullTransform}>
         <path d="M50 1C72 1 89 15 92 35C94 45 92 52 89 57C93 61 94 67 91 72C88 78 82 81 76 83C74 92 70 100 63 106C59 109 54 110 50 110C46 110 41 109 37 106C30 100 26 92 24 83C18 81 12 78 9 72C6 67 7 61 11 57C8 52 6 45 8 35C11 15 28 1 50 1Z" />
-        <path d="M13 42C21 34 38 34 44 43L47 56C45 62 34 65 25 62C16 59 10 50 13 42Z" />
-        <path d="M87 42C79 34 62 34 56 43L53 56C55 62 66 65 75 62C84 59 90 50 87 42Z" />
-        <path d="M50 62C47 68 42 73 41 79C40 84 44 87 48 85C49 84 50 83 50 82C50 83 51 84 52 85C56 87 60 84 59 79C58 73 53 68 50 62Z" />
+        <path d="M8 43C11 36 16 32 23 32L38 40C43 44 46 50 46 56L42 61C33 63 22 62 14 57C9 54 7 48 8 43Z" />
+        <path d="M92 43C89 36 84 32 77 32L62 40C57 44 54 50 54 56L58 61C67 63 78 62 86 57C91 54 93 48 92 43Z" />
+        <path d="M50 58L44 74C42 79 45 84 49 82L50 78L51 82C55 84 58 79 56 74Z" />
         <path d="M27 86H73V89H27ZM27 96H73V99H27ZM33 89H35V96H33ZM39 89H41V96H39ZM45 89H47V96H45ZM51 89H53V96H51ZM57 89H59V96H57ZM63 89H65V96H63ZM36 99H38V106H36ZM42 99H44V106H42ZM48 99H50V106H48ZM54 99H56V106H54ZM60 99H62V106H60Z" />
       </g>
       <g className="halloween-frame-pumpkin halloween-frame-pumpkin-left" transform={leftPumpkinTransform}>
