@@ -1,7 +1,19 @@
+import { HalloweenScene } from "@/components/Halloween/HalloweenScene"
+
 export function WorkbenchWall() {
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-      <svg className="h-full w-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMin slice" fill="none">
+    <div className="seasonal-backdrop pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+      <div className="theme-backdrop theme-backdrop-default">
+        <div className="default-orbit default-orbit-one" />
+        <div className="default-orbit default-orbit-two" />
+        <div className="default-grid" />
+      </div>
+
+      <svg
+        className="theme-backdrop theme-backdrop-crazy-mechanics"
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="xMidYMin slice"
+        fill="none">
         <defs>
           <linearGradient id="wall-base" x1="720" y1="0" x2="720" y2="900" gradientUnits="userSpaceOnUse">
             <stop stopColor="#0D0A12" />
@@ -19,7 +31,12 @@ export function WorkbenchWall() {
               strokeOpacity="0.35"
               strokeWidth="2"
             />
-            <path d="M0 2H180M0 48H180M90 2V46M45 48V92M135 48V92" stroke="white" strokeOpacity="0.05" strokeWidth="1" />
+            <path
+              d="M0 2H180M0 48H180M90 2V46M45 48V92M135 48V92"
+              stroke="white"
+              strokeOpacity="0.05"
+              strokeWidth="1"
+            />
           </pattern>
           <filter id="wall-grain" x="0" y="0" width="1440" height="900" filterUnits="userSpaceOnUse">
             <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
@@ -52,6 +69,26 @@ export function WorkbenchWall() {
         <rect width="1440" height="900" fill="url(#wall-pool)" className="workbench-glow" />
         <rect width="1440" height="900" fill="url(#wall-vignette)" />
       </svg>
+
+      <div className="theme-backdrop theme-backdrop-halloween">
+        <HalloweenScene />
+      </div>
+
+      <div className="theme-backdrop theme-backdrop-new-year">
+        <div className="new-year-aurora new-year-aurora-one" />
+        <div className="new-year-aurora new-year-aurora-two" />
+        <div className="new-year-snow new-year-snow-back" />
+        <div className="new-year-snow new-year-snow-front" />
+        <svg className="new-year-star new-year-star-left" viewBox="0 0 120 120" fill="none">
+          <path d="M60 8V112M8 60H112M23 23L97 97M97 23L23 97" />
+          <circle cx="60" cy="60" r="19" />
+        </svg>
+        <svg className="new-year-star new-year-star-right" viewBox="0 0 120 120" fill="none">
+          <path d="M60 8V112M8 60H112M23 23L97 97M97 23L23 97" />
+          <circle cx="60" cy="60" r="19" />
+        </svg>
+        <div className="new-year-frost" />
+      </div>
     </div>
   )
 }
