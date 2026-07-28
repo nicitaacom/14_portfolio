@@ -44,20 +44,30 @@ export function NDAProjectPreview() {
             <stop offset="0.52" stopColor="hsl(var(--cta))" stopOpacity="0.08" />
             <stop offset="1" stopColor="hsl(var(--cta))" stopOpacity="0" />
           </linearGradient>
+          {/* How far down the beam the wall stays lit — full under the bulb, gone by the floor */}
           <linearGradient id="nda-brick-mask" x1="300" y1="197" x2="300" y2="430" gradientUnits="userSpaceOnUse">
-            <stop stopColor="white" stopOpacity="0.8" />
-            <stop offset="0.55" stopColor="white" stopOpacity="0.32" />
+            <stop stopColor="white" stopOpacity="1" />
+            <stop offset="0.55" stopColor="white" stopOpacity="0.52" />
             <stop offset="1" stopColor="white" stopOpacity="0" />
           </linearGradient>
+          {/* Running bond. Every brick gets a face so the wall reads as masonry, and the
+              courses get a lit top edge — the lamp mask below decides how much of it shows */}
           <pattern id="nda-lit-bricks" width="180" height="92" patternUnits="userSpaceOnUse">
+            <rect width="180" height="92" fill="hsl(var(--cta))" fillOpacity="0.06" />
+
+            <rect x="2" y="2" width="86" height="42" fill="hsl(var(--cta))" fillOpacity="0.13" />
+            <rect x="92" y="2" width="86" height="42" fill="hsl(var(--cta))" fillOpacity="0.19" />
+            <rect x="2" y="48" width="41" height="42" fill="hsl(var(--cta))" fillOpacity="0.16" />
+            <rect x="47" y="48" width="86" height="42" fill="hsl(var(--cta))" fillOpacity="0.11" />
+            <rect x="137" y="48" width="41" height="42" fill="hsl(var(--cta))" fillOpacity="0.18" />
+
             <path
               d="M0 0H180M0 46H180M0 92H180M90 0V46M45 46V92M135 46V92"
               stroke="white"
-              strokeOpacity="0.01"
-              strokeWidth="1"
+              strokeOpacity="0.24"
+              strokeWidth="1.5"
             />
-            <rect x="91" y="1" width="88" height="44" fill="hsl(var(--cta))" fillOpacity="0.05" />
-            <rect x="46" y="47" width="88" height="44" fill="hsl(var(--cta))" fillOpacity="0.03" />
+            <path d="M2 3H88M92 3H178M2 49H43M47 49H133M137 49H178" stroke="white" strokeOpacity="0.14" />
           </pattern>
           <mask id="nda-moving-light-zone" maskUnits="userSpaceOnUse" x="0" y="0" width="600" height="430">
             <rect width="600" height="430" fill="black" />
