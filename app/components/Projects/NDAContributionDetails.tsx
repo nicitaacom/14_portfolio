@@ -11,7 +11,7 @@ export function NDANotice() {
   return (
     <aside className="relative overflow-hidden rounded-md border border-cta/30 bg-cta/[0.065] p-sm">
       <div className="relative flex items-start gap-x-sm">
-        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center text-cta">
+        <div className="relative top-[2px] flex h-6 w-6 shrink-0 items-center justify-center text-cta">
           <FiLock size={15} />
         </div>
         <div className="min-w-0">
