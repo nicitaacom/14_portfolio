@@ -5,7 +5,8 @@ import { useReducedMotion } from "framer-motion"
 
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 
-const BOX_WIDTH = 260
+// Wide enough that the long attempt's shifted copies still have room instead of being clipped
+const BOX_WIDTH = 320
 const BOX_HEIGHT = 116
 
 // Ramps the channel split up and back down over 9 frames, the same shape the boot-screen RGB cycle uses
@@ -13,11 +14,19 @@ const SPLIT_MULTIPLIERS = [0, 0.25, 0.5, 0.75, 1, 0.75, 0.5, 0.25, 0]
 
 // One burst is three attempts, each tearing wider than the one before it: two short
 // probes in quick succession, then a slower long pull that holds the widest split
-const SPLIT_ATTEMPTS = [
+const SHORT_ATTEMPTS = [
   { offsets: [4, 6, 8], frameMs: 400 / 9, restMs: 90 },
   { offsets: [10, 12, 14], frameMs: 400 / 9, restMs: 120 },
-  { offsets: [20, 24, 28], frameMs: 640 / 9, restMs: 0 },
 ]
+
+// The long attempt pulls four times as wide as both short probes put together
+const LONG_ATTEMPT = {
+  offsets: SHORT_ATTEMPTS[0].offsets.map((offset, index) => (offset + SHORT_ATTEMPTS[1].offsets[index]) * 4),
+  frameMs: 640 / 9,
+  restMs: 0,
+}
+
+const SPLIT_ATTEMPTS = [...SHORT_ATTEMPTS, LONG_ATTEMPT]
 const SPLIT_IDLE_MS = [900, 1300, 1800, 2400]
 
 const STREAK_DURATION_MS = [900, 1150, 1400]
