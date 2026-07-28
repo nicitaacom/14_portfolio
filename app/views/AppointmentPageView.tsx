@@ -20,7 +20,7 @@ export async function AppointmentPageView() {
     : { data: [] }
 
   return (
-    <div className="appointment-rack flex w-full justify-center overflow-x-hidden px-sm pt-[4.75rem] tablet:px-md tablet:pt-[5.5rem]">
+    <div className="appointment-rack flex w-full justify-center overflow-x-hidden px-sm tablet:px-md">
       <div className="mx-auto flex w-full max-w-[680px] flex-col gap-sm laptop:max-w-[920px]">
         <IsGMLive />
         <div className="grid gap-sm laptop:grid-cols-[minmax(0,1fr)_300px] laptop:items-start">

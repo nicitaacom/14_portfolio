@@ -364,6 +364,27 @@
       inset 0 -3px 8px rgb(0 0 0 / 0.5);
   }
 
+  .appointment-rust-background {
+    background:
+      linear-gradient(rgb(23 14 11 / 0.34), rgb(15 9 7 / 0.46)),
+      url("/UI/crazy-mechanics-brick.webp") center / 600px auto repeat;
+  }
+
+  .appointment-rack {
+    background:
+      linear-gradient(rgb(15 11 16 / 0.62), rgb(12 8 13 / 0.72)),
+      url("/UI/crazy-mechanics-brick.webp") center top / 600px auto repeat;
+    margin-top: -62px;
+    min-height: 100dvh;
+    padding-top: calc(4.75rem + 62px);
+  }
+
+  @media (min-width: 768px) {
+    .appointment-rack {
+      padding-top: calc(5.5rem + 62px);
+    }
+  }
+
   .appointment-modal-surface > :not(.appointment-rust-background):not(.appointment-loading-screen) {
     position: relative;
     z-index: 1;

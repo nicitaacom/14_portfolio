@@ -62,39 +62,10 @@ export function ScheduleAppointmentModal() {
       <div
         aria-busy={isBooking}
         className="appointment-modal-surface relative flex max-h-[88vh] flex-col gap-md overflow-x-hidden overflow-y-auto px-md pb-md pt-[3.25rem] tablet:px-[1.25rem] tablet:pb-[1.25rem] tablet:pt-[3.5rem]">
-        <svg
+        <div
           aria-hidden="true"
-          className="appointment-rust-background pointer-events-none absolute inset-[0] h-full w-full"
-          preserveAspectRatio="none">
-          <defs>
-            <symbol id="appointment-rust-crop" viewBox="258 105 160 80" preserveAspectRatio="none">
-              <image href="/UI/crazy-mechanics-menu.png" width="703" height="517" />
-            </symbol>
-            <pattern id="appointment-rust-pattern" width="640" height="320" patternUnits="userSpaceOnUse">
-              <use href="#appointment-rust-crop" width="320" height="160" />
-              <use
-                href="#appointment-rust-crop"
-                width="320"
-                height="160"
-                transform="translate(640 0) scale(-1 1)"
-              />
-              <use
-                href="#appointment-rust-crop"
-                width="320"
-                height="160"
-                transform="translate(0 320) scale(1 -1)"
-              />
-              <use
-                href="#appointment-rust-crop"
-                width="320"
-                height="160"
-                transform="translate(640 320) scale(-1 -1)"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#appointment-rust-pattern)" />
-          <rect width="100%" height="100%" fill="rgb(22 12 8 / 0.3)" />
-        </svg>
+          className="appointment-rust-background pointer-events-none absolute inset-[0]"
+        />
         <ScheduleAppointmentModalHeader />
         <AnimatePresence initial={false} mode="popLayout" custom={direction}>
           {step === "step-1" ? (
