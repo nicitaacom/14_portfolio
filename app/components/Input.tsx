@@ -24,7 +24,7 @@ export function Input({ type, value, onChange, className, placeholder, ...props 
 
   return (
     <input
-      className={`workshop-input px-sm py-xs text-secondary outline-none ${className}`}
+      className={`site-input workshop-input px-sm py-xs text-secondary outline-none ${className}`}
       type={type}
       inputMode={type === "number" ? "numeric" : undefined}
       value={value}

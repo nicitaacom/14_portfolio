@@ -52,11 +52,11 @@ export function Skill(skill: ISkill) {
       } gap-xs select-none`}
       key={skill.id}>
       <div
-        className={`tape-label relative flex justify-end items-center text-end text-steel-deep font-bold whitespace-nowrap px-xs
+        className={`site-label tape-label relative flex justify-end items-center text-end text-steel-deep font-bold whitespace-nowrap px-xs
         ${skill.small ? skill.labelClassName : "min-w-[32%]"}`}>
         {skill.label}
       </div>
-      <div className="machine-bezel relative w-full overflow-hidden">
+      <div className="site-progress machine-bezel relative w-full overflow-hidden">
         <div className="h-full w-[0px] shadow-[inset_0px_2px_2px_rgba(0,0,0,0.3)]" ref={progressRef} />
         <CountUp
           className="absolute top-[50%] right-[4%] -translate-y-1/2 text-xs font-bold text-secondary-foreground"
