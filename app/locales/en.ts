@@ -22,6 +22,7 @@ export default {
     linkedIn: "LinkedIn",
     summaryEn: "Summary EN",
     summaryDe: "Summary DE",
+    halloweenGraveEpitaph: "R.I.P.",
   },
   languages: {
     en: "English",
@@ -210,6 +211,8 @@ export default {
       booking: "Booking...",
       loadingTitle: "It works!",
       loadingSubtitle: "Inventor's workshop",
+      halloweenLoadingTitle: "The ritual is set!",
+      halloweenLoadingSubtitle: "Summoning your appointment",
       appointmentBooked: "Appointment booked",
       reminderEnabled: "Reminder enabled",
       reminderEnabledText: "Notification to {destination} with the Google Meets link 10 minutes before.",

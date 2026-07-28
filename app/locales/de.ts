@@ -22,6 +22,7 @@ export default {
     linkedIn: "LinkedIn",
     summaryEn: "Lebenslauf EN",
     summaryDe: "Lebenslauf DE",
+    halloweenGraveEpitaph: "R.I.P.",
   },
   languages: {
     en: "English",
@@ -213,6 +214,8 @@ export default {
       booking: "Buchung...",
       loadingTitle: "Es funktioniert!",
       loadingSubtitle: "Werkstatt des Erfinders",
+      halloweenLoadingTitle: "Das Ritual steht!",
+      halloweenLoadingSubtitle: "Dein Termin wird beschworen",
       appointmentBooked: "Termin gebucht",
       reminderEnabled: "Erinnerung aktiviert",
       reminderEnabledText: "Benachrichtigung an {destination} mit dem Google-Meets-Link 10 Minuten vor dem Termin.",

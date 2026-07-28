@@ -22,6 +22,7 @@ export default {
     linkedIn: "LinkedIn",
     summaryEn: "Резюме EN",
     summaryDe: "Резюме DE",
+    halloweenGraveEpitaph: "R.I.P.",
   },
   languages: {
     en: "English",
@@ -212,6 +213,8 @@ export default {
       booking: "Бронирование...",
       loadingTitle: "Заработало!",
       loadingSubtitle: "Мастерская изобретателя",
+      halloweenLoadingTitle: "Ритуал готов!",
+      halloweenLoadingSubtitle: "Призываем вашу встречу",
       appointmentBooked: "Встреча забронирована",
       reminderEnabled: "Напоминание включено",
       reminderEnabledText: "Уведомление в {destination} с ссылкой на Google Meets за 10 минут до встречи.",
