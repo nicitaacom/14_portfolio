@@ -2,6 +2,7 @@
 
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { NDAContributionDetails, NDANotice } from "@/components/Projects/NDAContributionDetails"
+import { ndaAchievements } from "@/data/ndaProject"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"
@@ -23,7 +24,7 @@ export default function ModalMoreInfoNDA() {
         {
           name: "nicitaacom",
           imgSrc: webAvatar.src,
-          description: <NDAContributionDetails />,
+          description: <NDAContributionDetails achievements={ndaAchievements} />,
         },
       ]}
     />
