@@ -9,7 +9,7 @@ export const trackedProjects: TTrackedProject[] = [
   },
   {
     slug: "project-nda-outreach-platform",
-    name: "Mid-level NDA",
+    name: "NDA",
     shortName: "NDA",
     group: "work",
   },
