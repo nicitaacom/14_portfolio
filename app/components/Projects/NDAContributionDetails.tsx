@@ -87,7 +87,7 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
                     <div className="flex shrink-0 justify-end">
                       <Button
                         aria-label={t("proofAriaLabel", { description: formatDescription(description) })}
-                        className="group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
+                        className="proof-control group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
                         onClick={() =>
                           window.open(
                             proofLink.startsWith("http") ? proofLink : `https://${proofLink}`,
@@ -96,13 +96,13 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
                           )
                         }
                         type="button">
-                        <span className="text-cta transition-colors duration-300 group-hover/proof:text-[#111]">
+                        <span className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111]">
                           {t("proof")}
                         </span>
                         <FiArrowUpRight
                           size={13}
                           aria-hidden="true"
-                          className="text-cta transition-colors duration-300 group-hover/proof:text-[#111] group-hover/proof:translate-x-[2px] group-hover/proof:-translate-y-[2px]"
+                          className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111] group-hover/proof:translate-x-[2px] group-hover/proof:-translate-y-[2px]"
                         />
                       </Button>
                     </div>

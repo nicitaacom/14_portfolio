@@ -614,6 +614,17 @@
   transform: translateY(2px);
 }
 
+/* The plaque treatment fills this chip with solid orange, and its label is orange too,
+   so the text has to switch to bone here to stay readable */
+
+:root[data-theme="halloween"] .proof-control .proof-label {
+  color: #fff4dc;
+}
+
+:root[data-theme="halloween"] .proof-control:hover .proof-label {
+  color: #1a0c02;
+}
+
 :root[data-theme="halloween"] .halloween-request-control {
   isolation: isolate;
   overflow: visible;
