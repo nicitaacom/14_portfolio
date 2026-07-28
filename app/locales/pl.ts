@@ -129,7 +129,7 @@ export default {
   ndaProject: {
     preview: {
       ariaLabel: "Świecąca lampa ze znakiem zapytania kołysze się na ciemnej ścianie",
-      level: "NDA średniego poziomu",
+      level: "NDA",
       title: "Poufne studium przypadku usługi",
       description: "Klienci, domeny i kod pozostają poufne. Rezultaty nie.",
       identityProtected: "Tożsamość chroniona",
@@ -140,18 +140,35 @@ export default {
     },
     modal: {
       label: "Poufna platforma outreach i operacyjna",
-      badge: "NDA średniego poziomu",
+      badge: "NDA",
       contributionTitle: "Co zrobiłem",
-      task: "Zbudowałem i skalowałem poufną platformę B2B obejmującą outreach, obsługę e-maili, połączenia, compliance, support, analitykę, rozliczenia i przepływy pracy wspierane przez AI.",
+      task: "Stworzyłem bezpieczną stronę do outreachu dla właścicieli SMMA, która automatyzuje procesy biznesowe, takie jak cold mailing i zarządzanie e-mailami. Oszczędza pieniądze na drogich subskrypcjach, takich jak GHL/Close/Instantly | Warmbox | Outscraper | ZeroBounce | Google Workspace/M365 | Twilio.",
     },
     notice: {
       title: "Co oznacza „NDA średniego poziomu”",
       description:
-        "To zatwierdzone studium przypadku skupione na rezultatach, a nie publikacja prywatnych materiałów klienta. Mogę opisać kategorię produktu, moje obowiązki, technologie i mierzalne wyniki. Nazwy klientów i firm, domeny, repozytoria, kod źródłowy, dane logowania, dane użytkowników i wrażliwe szczegóły implementacji pozostają poufne.",
+        "Tożsamości klientów, domeny i kod źródłowy pozostają poufne. To studium przypadku koncentruje się na moich obowiązkach, technologiach i mierzalnych rezultatach.",
     },
     details: {
       deliveredOutcomes: "{count} dostarczone rezultaty",
       intro: "Wybrane prace nad poufną platformą B2B do outreachu, komunikacji, wsparcia i procesów operacyjnych.",
+      proof: "Dowód",
+      proofAriaLabel: "Pokaż dowód dla: {description}",
+      sections: {
+        saveMoney: "💸 Oszczędności",
+        backend: "🧩 Backend",
+        frontend: "🎨 Frontend",
+        dialerCalling: "📞 Dialer i połączenia",
+        emails: "✉️ E-maile",
+        ai: "🤖 AI",
+        performance: "⚡ Wydajność",
+        legal: "⚖️ Prawo",
+        socialMediaOutreach: "📣 Outreach w mediach społecznościowych",
+        verification: "✅ Weryfikacja",
+        payments: "💳 Płatności",
+        notifications: "🔔 Powiadomienia",
+        scale: "📈 Skalowanie",
+      },
     },
   },
   appointment: {

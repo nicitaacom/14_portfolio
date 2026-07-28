@@ -151,6 +151,23 @@ export default {
     details: {
       deliveredOutcomes: "{count} delivered outcomes",
       intro: "Selected work across a confidential B2B outreach, communications, support, and operations platform.",
+      proof: "Proof",
+      proofAriaLabel: "View proof for: {description}",
+      sections: {
+        saveMoney: "💸 Save Money",
+        backend: "🧩 Backend",
+        frontend: "🎨 Frontend",
+        dialerCalling: "📞 Dialer & Calling",
+        emails: "✉️ Emails",
+        ai: "🤖 AI",
+        performance: "⚡ Performance",
+        legal: "⚖️ Legal",
+        socialMediaOutreach: "📣 Social Media Outreach",
+        verification: "✅ Verification",
+        payments: "💳 Payments",
+        notifications: "🔔 Notifications",
+        scale: "📈 Scale",
+      },
     },
   },
   appointment: {

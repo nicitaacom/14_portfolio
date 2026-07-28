@@ -130,7 +130,7 @@ export default {
   ndaProject: {
     preview: {
       ariaLabel: "Eine leuchtende Fragezeichen-Lampe schwingt vor einer dunklen Wand",
-      level: "NDA mittlerer Stufe",
+      level: "NDA",
       title: "Fallstudie zu einem vertraulichen Service",
       description: "Kunden, Domains und Code bleiben vertraulich. Ergebnisse nicht.",
       identityProtected: "Identität geschützt",
@@ -141,19 +141,36 @@ export default {
     },
     modal: {
       label: "Vertrauliche Outreach- und Operations-Plattform",
-      badge: "NDA mittlerer Stufe",
+      badge: "NDA",
       contributionTitle: "Was ich umgesetzt habe",
-      task: "Aufbau und Skalierung einer vertraulichen B2B-Plattform für Outreach, E-Mail-Prozesse, Telefonie, Compliance, Support, Analysen, Abrechnung und KI-gestützte Workflows.",
+      task: "Sichere Outreach-Website für SMMA-Inhaber erstellt, die Geschäftsprozesse wie Cold-E-Mailing und E-Mail-Management automatisiert. Spart Geld bei teuren Abonnements wie GHL/Close/Instantly | Warmbox | Outscraper | ZeroBounce | Google Workspace/M365 | Twilio.",
     },
     notice: {
       title: "Was „NDA mittlerer Stufe“ bedeutet",
       description:
-        "Dies ist eine genehmigte, ergebnisorientierte Fallstudie und keine Veröffentlichung privaten Kundenmaterials. Ich darf die Produktkategorie, meine Verantwortlichkeiten, Technologien und messbaren Ergebnisse beschreiben. Namen von Kunden und Unternehmen, Domains, Repositories, Quellcode, Zugangsdaten, Nutzerdaten und sensible Implementierungsdetails bleiben vertraulich.",
+        "Identitäten von Kunden, Domains und Quellcode bleiben vertraulich. Diese Fallstudie konzentriert sich auf meine Verantwortlichkeiten, die verwendeten Technologien und messbare Ergebnisse.",
     },
     details: {
       deliveredOutcomes: "{count} umgesetzte Ergebnisse",
       intro:
         "Ausgewählte Arbeiten an einer vertraulichen B2B-Plattform für Outreach, Kommunikation, Support und operative Abläufe.",
+      proof: "Nachweis",
+      proofAriaLabel: "Nachweis anzeigen für: {description}",
+      sections: {
+        saveMoney: "💸 Kosten sparen",
+        backend: "🧩 Backend",
+        frontend: "🎨 Frontend",
+        dialerCalling: "📞 Dialer & Telefonie",
+        emails: "✉️ E-Mails",
+        ai: "🤖 KI",
+        performance: "⚡ Performance",
+        legal: "⚖️ Rechtliches",
+        socialMediaOutreach: "📣 Social-Media-Outreach",
+        verification: "✅ Verifizierung",
+        payments: "💳 Zahlungen",
+        notifications: "🔔 Benachrichtigungen",
+        scale: "📈 Skalierung",
+      },
     },
   },
   appointment: {
