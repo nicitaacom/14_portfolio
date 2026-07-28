@@ -357,11 +357,39 @@
   z-index: 8;
 }
 
-/* The skull perches on the modal's top edge with its upper half outside the frame, so it
-   sits above the title plate rather than sharing its row */
+/* The modal wears the tribal skull instead of the vector one the project frames use. It
+   perches on the top edge with its upper half outside the frame, and its jaw tucks behind
+   the surface so the title plate reads over it. */
 
 .halloween-frame-ornaments-modal .halloween-frame-skull {
-  overflow: visible;
+  display: none;
+}
+
+.halloween-modal-skull {
+  background-image: url("/UI/halloween/skull-venom.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 88px;
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  /* The modal tops out around 5vh from the viewport edge, so the overhang stays under that
+     headroom — any deeper and the crown gets cut off by the screen rather than the frame */
+  top: -38px;
+  transform: translateX(-50%);
+  width: 78px;
+  z-index: 8;
+}
+
+/* A near full-height modal leaves no headroom, so the skull sits on the edge instead */
+
+@media (max-width: 767px) {
+  .halloween-modal-skull {
+    height: 62px;
+    top: -8px;
+    width: 55px;
+  }
 }
 
 /* Remove every workshop-specific silhouette */

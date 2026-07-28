@@ -87,6 +87,7 @@ export function ModalContainer({
             transition={{ duration: 0.25 }}
             {...modalHandler}>
             <HalloweenFrameOrnaments variant="modal" />
+            <span aria-hidden="true" className="halloween-only halloween-modal-skull" />
             <div aria-hidden="true" className="modal-frame-hardware pointer-events-none absolute inset-[0] z-20">
               <div className="absolute left-[15px] right-[15px] top-[0] h-[9px] rounded-[1px] border border-steel-deep bg-pipe shadow-[0_2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.62)]" />
               <div className="absolute bottom-[0] left-[15px] right-[15px] h-[9px] rounded-[1px] border border-steel-deep bg-pipe shadow-[0_-2px_2px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.62)]" />
