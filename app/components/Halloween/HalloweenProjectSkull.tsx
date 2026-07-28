@@ -5,16 +5,19 @@ import { useReducedMotion } from "framer-motion"
 
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 
-const SKULL_SRC = "/UI/halloween/skull.png"
-
-const BOX_WIDTH = 208
-const BOX_HEIGHT = 140
-const SKULL_WIDTH = 80
+const BOX_WIDTH = 260
+const BOX_HEIGHT = 116
 
 // Ramps the channel split up and back down over 9 frames, the same shape the boot-screen RGB cycle uses
 const SPLIT_MULTIPLIERS = [0, 0.25, 0.5, 0.75, 1, 0.75, 0.5, 0.25, 0]
-const SPLIT_FRAME_MS = 400 / 9
-const SPLIT_OFFSETS = [3, 5, 8]
+
+// One burst is three attempts, each tearing wider than the one before it: two short
+// probes in quick succession, then a slower long pull that holds the widest split
+const SPLIT_ATTEMPTS = [
+  { offsets: [4, 6, 8], frameMs: 400 / 9, restMs: 90 },
+  { offsets: [10, 12, 14], frameMs: 400 / 9, restMs: 120 },
+  { offsets: [20, 24, 28], frameMs: 640 / 9, restMs: 0 },
+]
 const SPLIT_IDLE_MS = [900, 1300, 1800, 2400]
 
 const STREAK_DURATION_MS = [900, 1150, 1400]
@@ -36,32 +39,6 @@ interface Streak {
 
 function pick<T>(values: T[]) {
   return values[Math.floor(Math.random() * values.length)]
-}
-
-// Keeps one colour channel and zeroes the rest so the two layers recombine to the original when unshifted
-function buildChannelLayer(image: HTMLImageElement, keepRed: boolean) {
-  const layer = document.createElement("canvas")
-  layer.width = image.naturalWidth
-  layer.height = image.naturalHeight
-
-  const layerContext = layer.getContext("2d")
-  if (!layerContext) return null
-
-  layerContext.drawImage(image, 0, 0)
-
-  const imageData = layerContext.getImageData(0, 0, layer.width, layer.height)
-  const pixels = imageData.data
-  for (let index = 0; index < pixels.length; index += 4) {
-    if (keepRed) {
-      pixels[index + 1] = 0
-      pixels[index + 2] = 0
-    } else {
-      pixels[index] = 0
-    }
-  }
-  layerContext.putImageData(imageData, 0, 0)
-
-  return layer
 }
 
 function createStreak(now: number, centerX: number, centerY: number): Streak {
@@ -97,15 +74,17 @@ function pointOnCurve(streak: Streak, t: number) {
 }
 
 export function HalloweenProjectSkull() {
+  const skullRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const theme = useSiteTheme()
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
-    if (theme !== "halloween") return
+    if (theme !== "halloween" || reduceMotion) return
 
+    const skull = skullRef.current
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!skull || !canvas) return
 
     const context = canvas.getContext("2d")
     if (!context) return
@@ -121,98 +100,70 @@ export function HalloweenProjectSkull() {
     let cancelled = false
     let frameId = 0
     let isOnScreen = true
-    let isReady = false
 
-    const image = new Image()
-    image.src = SKULL_SRC
+    let attemptIndex = 0
+    let attemptOffset = pick(SPLIT_ATTEMPTS[0].offsets)
+    let attemptStartedAt = performance.now() + pick(SPLIT_IDLE_MS)
+    let streaks: Streak[] = []
+    let nextStreakAt = performance.now() + pick(STREAK_IDLE_MS)
 
-    const start = () => {
+    const drawStreak = (streak: Streak, progress: number) => {
+      const head = progress
+      const tail = Math.max(0, progress - STREAK_TRAIL)
+      const fade = progress < 0.25 ? progress / 0.25 : progress > 0.7 ? (1 - progress) / 0.3 : 1
+
+      context.save()
+      context.globalAlpha = Math.max(0, Math.min(1, fade)) * 0.85
+      context.strokeStyle = "#ffffff"
+      context.shadowColor = "#ffffff"
+      context.shadowBlur = 7
+      context.lineCap = "round"
+      context.lineWidth = streak.width
+      context.beginPath()
+
+      for (let sample = 0; sample <= STREAK_SAMPLES; sample += 1) {
+        const t = tail + ((head - tail) * sample) / STREAK_SAMPLES
+        const point = pointOnCurve(streak, t)
+        if (sample === 0) context.moveTo(point.x, point.y)
+        else context.lineTo(point.x, point.y)
+      }
+
+      context.stroke()
+      context.restore()
+    }
+
+    const animate = (now: number) => {
       if (cancelled) return
 
-      const skullHeight = Math.round((SKULL_WIDTH * image.naturalHeight) / image.naturalWidth)
-      const skullX = centerX - SKULL_WIDTH / 2
-      const skullY = centerY - skullHeight / 2
+      let offset = 0
+      if (now >= attemptStartedAt) {
+        const attempt = SPLIT_ATTEMPTS[attemptIndex]
+        const frame = Math.floor((now - attemptStartedAt) / attempt.frameMs)
 
-      const redLayer = buildChannelLayer(image, true)
-      const cyanLayer = buildChannelLayer(image, false)
-
-      const drawSkull = (offset: number) => {
-        if (!redLayer || !cyanLayer) {
-          context.drawImage(image, skullX, skullY, SKULL_WIDTH, skullHeight)
-          return
+        if (frame >= SPLIT_MULTIPLIERS.length) {
+          // The last attempt closes the burst, so rest for a full idle gap before probing again
+          const wasLastAttempt = attemptIndex === SPLIT_ATTEMPTS.length - 1
+          attemptIndex = wasLastAttempt ? 0 : attemptIndex + 1
+          attemptOffset = pick(SPLIT_ATTEMPTS[attemptIndex].offsets)
+          attemptStartedAt = now + (wasLastAttempt ? pick(SPLIT_IDLE_MS) : attempt.restMs)
+        } else {
+          offset = SPLIT_MULTIPLIERS[frame] * attemptOffset
         }
-
-        context.globalCompositeOperation = "lighter"
-        context.drawImage(redLayer, skullX + offset, skullY, SKULL_WIDTH, skullHeight)
-        context.drawImage(cyanLayer, skullX - offset, skullY, SKULL_WIDTH, skullHeight)
-        context.globalCompositeOperation = "source-over"
       }
 
-      if (reduceMotion) {
-        context.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT)
-        drawSkull(0)
-        return
+      skull.style.setProperty("--rgb-red-x", `${offset}px`)
+      skull.style.setProperty("--rgb-blue-x", `${-offset}px`)
+
+      context.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT)
+
+      if (now >= nextStreakAt) {
+        const burst = 2 + Math.floor(Math.random() * 3)
+        for (let index = 0; index < burst; index += 1) streaks.push(createStreak(now, centerX, centerY))
+        nextStreakAt = now + pick(STREAK_IDLE_MS)
       }
 
-      let splitOffset = pick(SPLIT_OFFSETS)
-      let splitStartedAt = performance.now() + pick(SPLIT_IDLE_MS)
-      let streaks: Streak[] = []
-      let nextStreakAt = performance.now() + pick(STREAK_IDLE_MS)
-
-      const drawStreak = (streak: Streak, progress: number) => {
-        const head = progress
-        const tail = Math.max(0, progress - STREAK_TRAIL)
-        const fade = progress < 0.25 ? progress / 0.25 : progress > 0.7 ? (1 - progress) / 0.3 : 1
-
-        context.save()
-        context.globalAlpha = Math.max(0, Math.min(1, fade)) * 0.85
-        context.strokeStyle = "#ffffff"
-        context.shadowColor = "#ffffff"
-        context.shadowBlur = 7
-        context.lineCap = "round"
-        context.lineWidth = streak.width
-        context.beginPath()
-
-        for (let sample = 0; sample <= STREAK_SAMPLES; sample += 1) {
-          const t = tail + ((head - tail) * sample) / STREAK_SAMPLES
-          const point = pointOnCurve(streak, t)
-          if (sample === 0) context.moveTo(point.x, point.y)
-          else context.lineTo(point.x, point.y)
-        }
-
-        context.stroke()
-        context.restore()
-      }
-
-      const animate = (now: number) => {
-        if (cancelled) return
-
-        context.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT)
-
-        let offset = 0
-        if (now >= splitStartedAt) {
-          const frame = Math.floor((now - splitStartedAt) / SPLIT_FRAME_MS)
-          if (frame >= SPLIT_MULTIPLIERS.length) {
-            splitOffset = pick(SPLIT_OFFSETS)
-            splitStartedAt = now + pick(SPLIT_IDLE_MS)
-          } else {
-            offset = SPLIT_MULTIPLIERS[frame] * splitOffset
-          }
-        }
-
-        drawSkull(offset)
-
-        if (now >= nextStreakAt) {
-          const burst = 2 + Math.floor(Math.random() * 3)
-          for (let index = 0; index < burst; index += 1) streaks.push(createStreak(now, centerX, centerY))
-          nextStreakAt = now + pick(STREAK_IDLE_MS)
-        }
-
-        streaks = streaks.filter(streak => now - streak.startedAt < streak.duration)
-        for (const streak of streaks) drawStreak(streak, (now - streak.startedAt) / streak.duration)
-
-        frameId = requestAnimationFrame(animate)
-      }
+      streaks = streaks.filter(streak => now - streak.startedAt < streak.duration)
+      for (const streak of streaks) drawStreak(streak, (now - streak.startedAt) / streak.duration)
 
       frameId = requestAnimationFrame(animate)
     }
@@ -224,36 +175,34 @@ export function HalloweenProjectSkull() {
         if (nowVisible === isOnScreen) return
 
         isOnScreen = nowVisible
-        if (nowVisible) {
-          if (isReady) start()
-        } else {
-          cancelAnimationFrame(frameId)
-        }
+        if (nowVisible) frameId = requestAnimationFrame(animate)
+        else cancelAnimationFrame(frameId)
       },
       { rootMargin: "120px" },
     )
     observer.observe(canvas)
 
-    image
-      .decode()
-      .then(() => {
-        isReady = true
-        if (!cancelled && isOnScreen) start()
-      })
-      .catch(() => undefined)
+    frameId = requestAnimationFrame(animate)
 
     return () => {
       cancelled = true
       cancelAnimationFrame(frameId)
       observer.disconnect()
+      skull.style.removeProperty("--rgb-red-x")
+      skull.style.removeProperty("--rgb-blue-x")
     }
   }, [theme, reduceMotion])
 
   if (theme !== "halloween") return null
 
   return (
-    <div aria-hidden="true" className="halloween-project-skull">
-      <canvas ref={canvasRef} />
+    <div aria-hidden="true" className="halloween-project-skull" ref={skullRef}>
+      <canvas className="halloween-project-skull-streaks" ref={canvasRef} />
+      <span className="rgb-glitch halloween-project-skull-glitch">
+        <span className="halloween-project-skull-layer halloween-project-skull-green" />
+        <span className="halloween-project-skull-layer halloween-project-skull-red" />
+        <span className="halloween-project-skull-layer halloween-project-skull-blue" />
+      </span>
     </div>
   )
 }

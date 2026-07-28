@@ -280,23 +280,67 @@
   display: none;
 }
 
-/* Engraved skull crest — canvas draws the RGB channel split and the curved streaks */
+/* Engraved skull crest — canvas draws the curved streaks, stacked channel copies do the RGB split */
 
 .halloween-project-skull {
-  height: 140px;
+  --skull-width: 84px;
+  height: 116px;
   left: 50%;
   pointer-events: none;
   position: absolute;
   top: -6px;
   transform: translateX(-50%);
-  width: 208px;
+  width: 260px;
   z-index: 25;
 }
 
-.halloween-project-skull canvas {
+.halloween-project-skull-streaks {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+.halloween-project-skull-glitch {
+  inset: 0;
+  isolation: isolate;
+  position: absolute;
+}
+
+/* `auto` height keeps the file's own aspect ratio, so the skull can never stretch */
+
+.halloween-project-skull-layer {
+  -webkit-mask-image: url("/UI/halloween/skull.png");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: var(--skull-width) auto;
+  background-blend-mode: multiply;
+  background-image: url("/UI/halloween/skull.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: var(--skull-width) auto;
+  inset: 0;
+  mask-image: url("/UI/halloween/skull.png");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: var(--skull-width) auto;
+  mix-blend-mode: screen;
+  position: absolute;
+}
+
+/* Multiplying by a pure primary keeps that one channel, screen puts the three back together */
+
+.halloween-project-skull-red {
+  background-color: #f00;
+  transform: translateX(var(--rgb-red-x, 0px));
+}
+
+.halloween-project-skull-green {
+  background-color: #0f0;
+}
+
+.halloween-project-skull-blue {
+  background-color: #00f;
+  transform: translateX(var(--rgb-blue-x, 0px));
 }
 
 @media (max-width: 767px) {
