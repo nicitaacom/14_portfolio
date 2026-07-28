@@ -2,6 +2,7 @@
 
 import { useModalsStore } from "@/store/modalsStore"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo17() {
   const { isOpen, closeModal } = useModalsStore()
@@ -12,6 +13,7 @@ export default function ModalMoreInfo17() {
       label="17_messenger-clone"
       siteUrl="https://github.com/nicitaacom/17_messenger-clone"
       taskLabel="Build some clone to improve skills"
+      stack={projectStacks.project17}
       deadline="no deadline"
       collaborators={[{ description: "Whole site" }]}
     />

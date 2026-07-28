@@ -33,7 +33,7 @@ export function ScheduleAppointment() {
 
   return (
     <div className="workbench-board w-full p-[6px]">
-      <div className="machine-panel mx-auto w-full max-w-[680px] p-sm tablet:p-md">
+      <div className="appointment-schedule-panel machine-panel mx-auto w-full max-w-[680px] p-sm tablet:p-md">
         <div className="flex w-full min-w-0 flex-col gap-sm">
           <div className="grid gap-sm min-[900px]:grid-cols-[minmax(0,1fr)_220px] min-[900px]:items-start">
             <div className="min-w-0">
@@ -68,7 +68,7 @@ export function ScheduleAppointment() {
           </div>
 
           <Button
-            className="lever-gate h-[40px] w-full px-md py-0 text-sm font-bold text-secondary tablet:w-fit tablet:self-end"
+            className="h-[40px] w-full px-md py-0 text-sm font-bold text-secondary tablet:w-fit tablet:self-end"
             onClick={() => openModal("Appointment")}>
             {t("continueToBooking")}
           </Button>

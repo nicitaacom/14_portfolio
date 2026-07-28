@@ -318,6 +318,12 @@
   }
 
   .machine-panel {
+    --machine-fastener: radial-gradient(
+      circle at 50% 30%,
+      hsl(var(--paper) / 0.8) 0 8%,
+      hsl(var(--brass)) 18% 40%,
+      hsl(var(--steel-deep)) 62% 100%
+    );
     background:
       linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 12%, rgb(0 0 0 / 0.28) 100%),
       repeating-linear-gradient(95deg, transparent 0 22px, rgb(255 255 255 / 0.018) 23px 24px),
@@ -332,10 +338,10 @@
 
   .machine-panel::before {
     background:
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 8px 8px / 12px 12px no-repeat,
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 8px) 8px / 12px 12px no-repeat,
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) 8px calc(100% - 8px) / 12px 12px no-repeat,
-      radial-gradient(circle at 50% 30%, hsl(var(--paper) / 0.8) 0 8%, hsl(var(--brass)) 18% 40%, hsl(var(--steel-deep)) 62% 100%) calc(100% - 8px) calc(100% - 8px) / 12px 12px no-repeat;
+      var(--machine-fastener) left 8px top 8px / 12px 12px no-repeat,
+      var(--machine-fastener) right 8px top 8px / 12px 12px no-repeat,
+      var(--machine-fastener) left 8px bottom 8px / 12px 12px no-repeat,
+      var(--machine-fastener) right 8px bottom 8px / 12px 12px no-repeat;
     content: "";
     inset: 0;
     pointer-events: none;
@@ -344,6 +350,57 @@
   }
 
   .machine-panel > * { position: relative; z-index: 1; }
+
+  .appointment-schedule-panel::before {
+    background:
+      var(--machine-fastener) left 8px top 8px / 12px 12px no-repeat,
+      var(--machine-fastener) right 8px top 8px / 12px 12px no-repeat;
+  }
+
+  .appointment-modal-surface {
+    background-color: #6b4a35;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.18),
+      inset 0 -3px 8px rgb(0 0 0 / 0.5);
+  }
+
+  .appointment-modal-surface > :not(.appointment-rust-background):not(.appointment-loading-screen) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .appointment-choice {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 5px, rgb(0 0 0 / 0.12) 6px 7px),
+      linear-gradient(to bottom, rgb(92 88 78 / 0.88), rgb(35 32 31 / 0.94));
+    border: 1px solid rgb(192 176 143 / 0.58);
+    border-radius: 3px;
+    box-shadow:
+      0 4px 0 rgb(31 24 21 / 0.72),
+      0 7px 10px rgb(0 0 0 / 0.38),
+      inset 0 1px 0 rgb(255 255 255 / 0.2);
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.9);
+  }
+
+  .appointment-choice:hover {
+    border-color: hsl(var(--cta) / 0.72);
+    filter: brightness(1.12);
+  }
+
+  .appointment-choice-icon {
+    background:
+      radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.13), transparent 35%),
+      linear-gradient(145deg, rgb(64 59 57 / 0.96), rgb(31 27 28 / 0.98));
+    border: 1px solid rgb(191 176 148 / 0.52);
+    border-radius: 3px;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      inset 0 -2px 3px rgb(0 0 0 / 0.48);
+  }
+
+  .appointment-loading-screen {
+    background: #000 url("/UI/crazy-mechanics-loading.jpg") center / cover no-repeat;
+  }
 
   .machine-bezel {
     background: linear-gradient(to bottom, hsl(var(--steel-deep)), hsl(var(--steel) / 0.55));

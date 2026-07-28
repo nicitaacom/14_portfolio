@@ -96,6 +96,7 @@ export default {
     collaboration: "Collaboration",
     deadline: "Deadline",
     projectTask: "Project task",
+    projectStack: "Project stack",
     whatIDid: "What I did",
     selectedContributorOutcomes: "Selected contributor’s responsibilities and outcomes",
     similarSite: "Want a similar site? Message me:",

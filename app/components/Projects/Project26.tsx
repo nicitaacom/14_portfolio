@@ -1,12 +1,14 @@
 import { Project } from "../Project/Project"
 import { trackedProjectsMap } from "@/data/trackedProjects"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function Project26({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-26-hot-delivery"]
 
   return (
     <Project
-      stack="Next, TypeScript, Tailwind, Supabase, OpenAI, AWS, GCP"
+      stack={projectStacks.project26}
+      stackCharacterLimit={40}
       date="11.2023 - 01.2023 (~643h)"
       openMoreInfoModal={openModal}
       siteUrl="https://26-hot-delivery.vercel.app/?utm_source=portfolio&utm_medium=website&utm_campaign=personal_portfolio&utm_content=homepage"

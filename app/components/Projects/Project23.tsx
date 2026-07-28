@@ -1,12 +1,14 @@
 import { Project } from "../Project/Project"
 import { trackedProjectsMap } from "@/data/trackedProjects"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function Project23({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-23-store"]
 
   return (
     <Project
-      stack="Next, TypeScript, Tailwind, Zustand, Stripe, Telegram API"
+      stack={projectStacks.project23}
+      stackCharacterLimit={40}
       date="09.2023 - 11.2023 (~670h)"
       openMoreInfoModal={openModal}
       siteUrl="https://www.jokik.fi/?utm_source=nicitaa.com"

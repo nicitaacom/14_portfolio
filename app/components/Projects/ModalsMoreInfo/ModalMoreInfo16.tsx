@@ -2,6 +2,7 @@
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo16() {
   const { isOpen, closeModal } = useModalsStore()
@@ -14,6 +15,7 @@ export default function ModalMoreInfo16() {
       label="16_gericht-restaurant"
       siteUrl="https://16-gericht-restaurant.vercel.app"
       taskLabel={t("project16Task")}
+      stack={projectStacks.project16}
       deadline="1 month"
       collaborators={[
         {

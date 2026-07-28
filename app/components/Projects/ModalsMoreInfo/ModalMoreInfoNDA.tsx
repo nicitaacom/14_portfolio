@@ -6,6 +6,7 @@ import { ndaAchievementSections, ndaAchievements } from "@/data/ndaProject"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfoNDA() {
   const t = useScopedI18n("ndaProject.modal")
@@ -20,6 +21,7 @@ export default function ModalMoreInfoNDA() {
       contributionTitle={t("contributionTitle")}
       notice={<NDANotice />}
       taskLabel={t("task")}
+      stack={projectStacks.projectNda}
       collaborators={[
         {
           name: "nicitaacom",

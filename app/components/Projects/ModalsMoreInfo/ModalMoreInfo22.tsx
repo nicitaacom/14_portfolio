@@ -3,6 +3,7 @@
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo22() {
   const { isOpen, closeModal } = useModalsStore()
@@ -15,6 +16,7 @@ export default function ModalMoreInfo22() {
       label="22_aer"
       siteUrl="https://22-aer-nicitaa.vercel.app/"
       taskLabel={t("project22Task")}
+      stack={projectStacks.project22}
       deadline="1 month"
       collaborators={[
         { description: t("project22Owner") },

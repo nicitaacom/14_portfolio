@@ -7,7 +7,7 @@ import { CollaborationIcon } from "../CollaborationIcon"
 
 import { PiTelegramLogoBold } from "react-icons/pi"
 import { RiDiscordLine } from "react-icons/ri"
-import { FiCalendar, FiUsers, FiFileText, FiExternalLink } from "react-icons/fi"
+import { FiCalendar, FiUsers, FiFileText, FiExternalLink, FiLayers } from "react-icons/fi"
 import { useScopedI18n } from "@/locales/client"
 
 export interface Collaborator {
@@ -23,6 +23,7 @@ interface ModalInfoProps {
   label: string
   collaborators: Collaborator[]
   taskLabel?: string
+  stack?: string
   deadline?: string
   siteUrl?: string
   badge?: string
@@ -72,6 +73,7 @@ export function ModalMoreInfo({
   onClose,
   label,
   taskLabel,
+  stack,
   deadline,
   collaborators,
   siteUrl,
@@ -127,6 +129,16 @@ export function ModalMoreInfo({
                     <span>{t("projectTask")}</span>
                   </div>
                   <p className="text-sm leading-relaxed text-secondary-foreground/80">{taskLabel}</p>
+                </section>
+              )}
+
+              {stack && (
+                <section className="rounded-[3px] border border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--steel-deep)/0.74),hsl(var(--wood)/0.35))] p-sm shadow-[inset_0_3px_6px_rgb(0_0_0/0.5),inset_0_1px_0_rgb(255_255_255/0.06),0_2px_3px_rgb(0_0_0/0.3)]">
+                  <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-cta">
+                    <FiLayers size={15} />
+                    <span>{t("projectStack")}</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-secondary-foreground/80">{stack}</p>
                 </section>
               )}
 

@@ -35,7 +35,11 @@ const validationRules = {
   },
 }
 
-export function Step2() {
+interface Step2Props {
+  onBookingStateChange: (isBooking: boolean) => void
+}
+
+export function Step2({ onBookingStateChange }: Step2Props) {
   const router = useRouter()
   const toast = useToast()
   const t = useScopedI18n("appointment.modal")
@@ -127,6 +131,7 @@ export function Step2() {
 
     try {
       setIsLoading(true)
+      onBookingStateChange(true)
       const stepBefore = useAppointmentStore.getState().step
       await bookACallFn({
         chooseChannelFirst: t("chooseChannelFirst"),
@@ -142,6 +147,7 @@ export function Step2() {
       }
     } finally {
       setIsLoading(false)
+      onBookingStateChange(false)
     }
   }
 

@@ -1,5 +1,6 @@
 import { Project } from "../Project/Project"
 import { trackedProjectsMap } from "@/data/trackedProjects"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function Project22({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-24-dashboard-mui"]
@@ -7,7 +8,8 @@ export default function Project22({ openModal }: { openModal: () => void }) {
   return (
     <Project
       openMoreInfoModal={openModal}
-      stack="React, Vite, TypeScript, MUI"
+      stack={projectStacks.project24}
+      stackCharacterLimit={40}
       date="07.2023 - 08.2023 (~30h)"
       siteUrl="https://24-dashboard-mui.vercel.app"
       githubUrl="https://github.com/Nicitaa/24_dashboard-mui"

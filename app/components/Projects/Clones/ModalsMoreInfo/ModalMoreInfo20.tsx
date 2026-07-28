@@ -2,6 +2,7 @@
 
 import { useModalsStore } from "@/store/modalsStore"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo20() {
   const { isOpen, closeModal } = useModalsStore()
@@ -12,6 +13,7 @@ export default function ModalMoreInfo20() {
       label="20_flowmazon-clone"
       siteUrl="https://github.com/nicitaacom/20_flowmazon-clone"
       taskLabel="Improve FullStack WEB developer skill"
+      stack={projectStacks.project20}
       deadline="no deadline"
       collaborators={[{ description: "Whole site" }]}
     />

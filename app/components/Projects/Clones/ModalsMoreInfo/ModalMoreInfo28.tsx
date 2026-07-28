@@ -2,6 +2,7 @@
 
 import { useModalsStore } from "@/store/modalsStore"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo28() {
   const { isOpen, closeModal } = useModalsStore()
@@ -12,6 +13,7 @@ export default function ModalMoreInfo28() {
       label="28_HooBank"
       siteUrl="https://github.com/nicitaacom/28_notion-clone"
       taskLabel="Develop skill to change something on click"
+      stack={projectStacks.project28}
       deadline="No deadline"
       collaborators={[{ description: "Whole site" }]}
     />

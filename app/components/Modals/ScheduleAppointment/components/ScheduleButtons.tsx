@@ -41,12 +41,11 @@ export function ScheduleButtons() {
         <button
           key={option.channel}
           className={twMerge(
-            "flex items-center gap-sm rounded-[14px] border border-brass/40 px-sm py-sm text-left transition-colors duration-300",
-            "hover:border-cta hover:bg-primary-foreground/20",
+            "appointment-choice flex items-center gap-sm px-sm py-sm text-left transition-[filter,border-color] duration-300",
           )}
           onClick={() => setStepFn(option.channel)}
           type="button">
-          <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-cta/40 bg-cta/10">
+          <div className="appointment-choice-icon flex h-[38px] w-[38px] items-center justify-center">
             {option.icon}
           </div>
 

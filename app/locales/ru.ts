@@ -97,6 +97,7 @@ export default {
     collaboration: "Участие",
     deadline: "Срок",
     projectTask: "Задача проекта",
+    projectStack: "Стек проекта",
     whatIDid: "Что я сделал",
     selectedContributorOutcomes: "Задачи и результаты выбранного участника",
     similarSite: "Нужен похожий сайт? Напишите мне:",

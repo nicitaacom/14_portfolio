@@ -1,6 +1,7 @@
 "use client"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useModalsStore } from "@/store/modalsStore"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo29() {
   const { isOpen, closeModal } = useModalsStore()
@@ -11,6 +12,7 @@ export default function ModalMoreInfo29() {
       label="AI companion"
       siteUrl="https://29-ai-companion.vercel.app/"
       taskLabel="Develop a skill of creating SaaS and get experience with shadcn and cypress"
+      stack={projectStacks.project29}
       deadline="2 weeks"
       collaborators={[{ description: "Whole site" }]}
     />

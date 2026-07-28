@@ -97,6 +97,7 @@ export default {
     collaboration: "Współpraca",
     deadline: "Termin",
     projectTask: "Zadanie projektu",
+    projectStack: "Stack projektu",
     whatIDid: "Co zrobiłem",
     selectedContributorOutcomes: "Obowiązki i rezultaty wybranej osoby",
     similarSite: "Chcesz podobną stronę? Napisz do mnie:",

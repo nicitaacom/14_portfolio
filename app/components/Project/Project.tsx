@@ -8,6 +8,7 @@ import { TrackedProjectLink } from "./TrackedProjectLink"
 import { YoutubeUrlIcon } from "./YouTubeUrlIcon"
 import { Button } from "../Button"
 import { useScopedI18n } from "@/locales/client"
+import { limitProjectStack } from "@/utils/limitProjectStack"
 
 interface ProjectProps {
   figmaUrl?: string
@@ -17,6 +18,7 @@ interface ProjectProps {
   preview?: ReactNode
   siteUrl?: string
   stack: string
+  stackCharacterLimit: number
   date: string // this is string - not ISO
   openMoreInfoModal: () => void
   projectSlug: string
@@ -32,6 +34,7 @@ export function Project({
   youTubeEmbedPreview,
   preview,
   stack,
+  stackCharacterLimit,
   date,
   openMoreInfoModal,
   projectSlug,
@@ -104,7 +107,7 @@ export function Project({
         <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md tablet:h-[80px] tablet:flex-row">
           <div className="flex w-full flex-col">
             <p className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm">
-              {t("stack")}: <span>{stack}</span>
+              {t("stack")}: <span>{limitProjectStack(stack, stackCharacterLimit)}</span>
             </p>
             <p className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm">
               {t("date")}: <span>{date}</span>

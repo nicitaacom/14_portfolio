@@ -1,5 +1,6 @@
 import { Project } from "../Project/Project"
 import { trackedProjectsMap } from "@/data/trackedProjects"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function Project16({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-16-gericht-restaurant"]
@@ -7,7 +8,8 @@ export default function Project16({ openModal }: { openModal: () => void }) {
   return (
     <Project
       openMoreInfoModal={openModal}
-      stack="React, Vite, TypeScript, Tailwind, CSS"
+      stack={projectStacks.project16}
+      stackCharacterLimit={40}
       date="05.2023 - 31.07.2023 (~128h)"
       siteUrl="https://16-gericht-restaurant.vercel.app"
       githubUrl="https://github.com/Nicitaa/16_gericht-restaurant"

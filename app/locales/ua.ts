@@ -95,6 +95,7 @@ export default {
     collaboration: "Участь",
     deadline: "Термін",
     projectTask: "Завдання проєкту",
+    projectStack: "Стек проєкту",
     whatIDid: "Що я зробив",
     selectedContributorOutcomes: "Завдання та результати вибраного учасника",
     similarSite: "Потрібен схожий сайт? Напишіть мені:",

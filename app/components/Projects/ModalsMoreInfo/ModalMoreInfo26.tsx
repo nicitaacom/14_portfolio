@@ -4,6 +4,7 @@ import { useModalsStore } from "@/store/modalsStore"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"
+import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo26() {
   const { isOpen, closeModal } = useModalsStore()
@@ -16,6 +17,7 @@ export default function ModalMoreInfo26() {
       label="Hot delivery"
       siteUrl="https://hot-delivery.vercel.app/"
       taskLabel={t("project26Task")}
+      stack={projectStacks.project26}
       deadline="2 weeks"
       collaborators={[
         {
