@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import Layout from "@/components/Layout"
 import { Navbar } from "@/components/Navbar/Navbar"
 import { WorkbenchWall } from "@/components/WorkbenchWall"
+import { HalloweenGraveEvent } from "@/components/Halloween/HalloweenGraveEvent"
 import { UTMTracker } from "@/utm-stats/UTMTracker"
 import { I18nProviderClient } from "@/locales/client"
 import { isLocale } from "@/locales/helpers"
@@ -27,6 +28,7 @@ export default async function LocaleLayout({
       <div className={`${inter.variable} ${specialElite.variable} relative isolate`}>
         <WorkbenchWall />
         <div className="relative z-10">
+          <HalloweenGraveEvent />
           <Navbar />
           <UTMTracker userId={`14-${nanoid()}`} />
           <Layout>{children}</Layout>
