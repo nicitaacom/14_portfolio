@@ -385,7 +385,28 @@ body {
     0 5px 14px var(--theme-shadow),
     inset 0 1px 0 rgb(255 255 255 / 0.34);
   font-family: var(--font-inter), Inter, sans-serif;
+}
+
+/* Labels take the rotation as their whole transform */
+
+.tape-label,
+.project-paper-tab,
+.paper-tab,
+.modal-title-label {
   transform: rotate(var(--theme-label-rotation));
+}
+
+/* Tooltips already set a translate that centres them on their trigger, and the edge variants
+   animate a scale on top of it. Setting `transform` here would replace both and leave the
+   tooltip hanging off one side of its label, so the rotation composes through a variable. */
+
+.tooltiptext,
+.tooltiptext-t,
+.tooltiptext-b,
+.tooltiptext-l,
+.tooltiptext-r {
+  --tooltip-rotation: var(--theme-label-rotation);
+  --tw-rotate: var(--theme-label-rotation);
 }
 
 .pipe-frame {

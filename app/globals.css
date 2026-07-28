@@ -81,7 +81,9 @@
     pointer-events: none;
     position: absolute;
     top: auto;
-    transform: translate(-50%, calc(-100% - 10px)) rotate(-1.3deg);
+    /* Nudged off-centre so the left edge clears the panel's clip-path instead of being cut */
+    --tooltip-nudge: 24px;
+    transform: translate(calc(-50% + var(--tooltip-nudge)), calc(-100% - 10px)) rotate(var(--tooltip-rotation, -1.3deg));
     width: min(260px, calc(100vw - 24px));
     z-index: 99;
   }
@@ -903,15 +905,15 @@ div {
 @keyframes tape-tooltip-in {
   0% {
     opacity: 0;
-    transform: translate(-50%, calc(-100% - 4px)) rotate(1deg);
+    transform: translate(calc(-50% + var(--tooltip-nudge, 24px)), calc(-100% - 4px)) rotate(1deg);
   }
   70% {
     opacity: 1;
-    transform: translate(-50%, calc(-100% - 12px)) rotate(-1.8deg);
+    transform: translate(calc(-50% + var(--tooltip-nudge, 24px)), calc(-100% - 12px)) rotate(-1.8deg);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, calc(-100% - 10px)) rotate(-1.3deg);
+    transform: translate(calc(-50% + var(--tooltip-nudge, 24px)), calc(-100% - 10px)) rotate(var(--tooltip-rotation, -1.3deg));
   }
 }
 
