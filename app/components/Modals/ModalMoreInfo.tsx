@@ -119,7 +119,7 @@ export function ModalMoreInfo({
         </header>
 
         <main className="modal-scroll hide-scrollbar flex-1 overflow-y-auto p-sm tablet:p-md">
-          <div className="grid items-start gap-sm laptop:grid-cols-[320px_minmax(0,1fr)]">
+          <div className="grid items-start gap-sm laptop:grid-cols-[380px_minmax(0,1fr)]">
             <aside className="flex flex-col gap-y-sm laptop:sticky laptop:top-0">
               {notice}
 

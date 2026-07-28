@@ -40,17 +40,17 @@ export function NDAContributionDetails({ achievements }: NDAContributionDetailsP
         <p className="max-w-[720px] text-sm leading-relaxed text-secondary-foreground/65">{t("intro")}</p>
       </div>
 
-      <div className="grid gap-sm laptop:grid-cols-2">
+      <div className="grid grid-cols-1 gap-sm">
         {achievementEntries.map(([description, proofLink]) => (
           <article
             key={description}
-            className="group flex flex-col rounded-md border border-secondary-foreground/10 bg-primary/35 p-md transition-colors duration-200 hover:border-secondary-foreground/20">
-            <p className="text-sm leading-relaxed text-secondary-foreground/75">{description}</p>
+            className="group flex items-start gap-sm rounded-md border border-secondary-foreground/10 bg-primary/35 p-sm transition-colors duration-200 hover:border-secondary-foreground/20">
+            <p className="min-w-0 flex-1 text-sm leading-relaxed text-secondary-foreground/75">{description}</p>
             {proofLink && (
-              <div className="mt-auto flex justify-end pt-sm">
+              <div className="flex shrink-0 justify-end">
                 <Button
                   aria-label={`View proof for: ${description}`}
-                  className="group/proof mt-0 h-7 min-w-[92px] gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] px-sm py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
+                  className="group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
                   onClick={() =>
                     window.open(
                       proofLink.startsWith("http") ? proofLink : `https://${proofLink}`,
