@@ -15,7 +15,7 @@ export function Step3() {
   const commonT = useScopedI18n("common")
 
   return (
-    <div className="flex w-full flex-col items-center gap-sm pt-xs">
+    <div className="appointment-details-panel flex w-full flex-col items-center gap-sm p-sm">
       <div className="w-full rounded-[12px] border border-cta/40 px-sm py-sm">
         <p className="text-sm font-bold text-secondary">{t("appointmentBooked")}</p>
         <p className="mt-[2px] text-sm text-secondary-foreground">{formatedDateTimeFn().trim()}</p>

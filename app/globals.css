@@ -364,6 +364,16 @@
       inset 0 -3px 8px rgb(0 0 0 / 0.5);
   }
 
+  .appointment-modal-backdrop {
+    background-color: #2f2a27;
+    background-image:
+      linear-gradient(rgb(8 7 7 / 0.2), rgb(8 7 7 / 0.2)),
+      url("/UI/crazy-mechanics-plaster.webp");
+    background-position: center, center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, cover;
+  }
+
   .appointment-rust-background {
     background:
       linear-gradient(rgb(23 14 11 / 0.34), rgb(15 9 7 / 0.46)),
@@ -650,7 +660,7 @@
 
   .admin-rack section,
   .admin-rack article,
-  .appointment-rack > div > div,
+  .appointment-rack > div > div:not(.appointment-modal-backdrop),
   .auth-panel {
     background: linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep)));
     border-color: hsl(var(--brass) / 0.42);

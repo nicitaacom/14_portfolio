@@ -57,6 +57,7 @@ export function ScheduleAppointmentModal() {
         step === "step-3" && "max-w-[620px]",
       )}
       isOpen={isOpen["Appointment"]}
+      backdropClassName="appointment-modal-backdrop"
       onClose={() => closeModal<TModals>("Appointment")}>
       <div
         aria-busy={isBooking}

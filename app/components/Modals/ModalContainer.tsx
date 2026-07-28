@@ -11,10 +11,18 @@ interface ModalContainerProps {
   onClose: () => void
   children: React.ReactNode
   className?: string
+  backdropClassName?: string
   title?: string
 }
 
-export function ModalContainer({ isOpen, onClose, children, className, title }: ModalContainerProps) {
+export function ModalContainer({
+  isOpen,
+  onClose,
+  children,
+  className,
+  backdropClassName,
+  title,
+}: ModalContainerProps) {
   const [showModal, setShowModal] = useState(isOpen)
 
   /* onOpen - show modal - disable scroll and scrollbar - hide navbar - show bg */
@@ -61,7 +69,9 @@ export function ModalContainer({ isOpen, onClose, children, className, title }: 
     <AnimatePresence>
       {showModal && (
         <motion.div
-          className="fixed inset-[0] z-[222] flex items-end justify-center bg-[rgba(0,0,0,0.82)] p-sm tablet:items-center"
+          className={`fixed inset-[0] z-[222] flex items-end justify-center p-sm tablet:items-center ${
+            backdropClassName ?? "bg-[rgba(0,0,0,0.82)]"
+          }`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
