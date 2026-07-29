@@ -157,13 +157,40 @@
   box-shadow: 0 0 11px rgb(111 227 255 / 0.58);
 }
 
+/* A garland of baubles strung on a cord — diagonal hazard tape is workshop vocabulary */
 :root[data-theme="new-year"] .hazard-rail {
-  background: repeating-linear-gradient(-45deg, #e6f7fa 0 8px, #2f6680 8px 16px);
+  animation: new-year-garland-crawl 21s linear infinite;
+  background:
+    radial-gradient(circle at 9px 5.5px, hsl(var(--cta)) 0 2.4px, transparent 2.9px) 0 0 / 36px 9px repeat-x,
+    radial-gradient(circle at 27px 5.5px, hsl(var(--warning)) 0 2.4px, transparent 2.9px) 0 0 / 36px 9px repeat-x,
+    linear-gradient(180deg, transparent 24%, rgb(206 236 247 / 0.42) 26% 36%, transparent 38%);
+  height: 9px;
+}
+
+:root[data-theme="new-year"] .hazard-rail-progress {
+  background: linear-gradient(90deg, hsl(var(--info) / 0.55), hsl(var(--cta)));
+  box-shadow: 0 0 11px hsl(var(--cta) / 0.6);
+}
+
+:root[data-theme="new-year"] body.modal-open .hazard-rail {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="new-year"] .hazard-rail {
+    animation: none;
+  }
 }
 
 :root[data-theme="new-year"] .appointment-loading-gear-rim {
   fill: #8baab8;
   stroke: rgb(224 250 255 / 0.82);
+}
+
+@keyframes new-year-garland-crawl {
+  to {
+    background-position-x: 36px, 36px, 0;
+  }
 }
 
 @keyframes new-year-snowfall {
