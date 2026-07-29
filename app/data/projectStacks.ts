@@ -10,6 +10,7 @@ export const projectStacks = {
   project26: "Next, TypeScript, Tailwind, Supabase, OpenAI, AWS, GCP",
   project28: "Next, TypeScript, RadixUI, Convex, Blocknote",
   project29: "Next, TypeScript, Tailwind",
-  projectNda: "Next.js, AWS, Redis, Supabase, Cloudflare, Docker",
+  projectNda:
+    "Next, TypeScript, Tailwind, Supabase, Redis, AWS, Stripe, Twilio, Cloudflare, Docker, Coolify VPS, eslint, husky",
   projectRizAdminDashboard: "Next, TypeScript, Tailwind, MongoDB",
 } as const
