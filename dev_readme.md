@@ -10,6 +10,7 @@ and there you find info how Project.tsx work
 [AI_readme_code-sytle-patterns.md](./AI_readme_code-sytle-patterns.md)<br/>
 [AI_UI_skill.md](./AI_UI_skill.md)<br/>
 [dev_readme-supabase-sql.md](./dev_readme-supabase-sql.md)<br/>
+[dev_readme-ui-system.md](./dev_readme-ui-system.md) — how every seasonal theme is built<br/>
 
 ### Docs structure:
 
