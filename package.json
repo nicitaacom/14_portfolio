@@ -6,7 +6,7 @@
     "dev": "next dev -p 3014",
     "build": "next build",
     "start": "next start -p 3014",
-    "lint": "eslint app --ext .ts,.tsx --rulesdir eslint-rules",
+    "lint": "eslint app --ext .ts,.tsx",
     "update-types": "pnpx supabase gen types typescript --project-id bvvhwcmjlbofleanshdm > app/interfaces/types_db.ts"
   },
   "dependencies": {
@@ -42,6 +42,7 @@
     "autoprefixer": "latest",
     "eslint": "^8.57.0",
     "eslint-config-next": "15.5.9",
+    "eslint-plugin-local": "file:./eslint-rules",
     "postcss": "latest",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.19",

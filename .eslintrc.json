@@ -1,7 +1,8 @@
 {
   "extends": "next/core-web-vitals",
+  "plugins": ["local"],
   "rules": {
-    "no-untranslated-ui": [
+    "local/no-untranslated-ui": [
       "warn",
       {
         "ignore": [
