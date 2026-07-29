@@ -81,7 +81,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
               <div className="flex flex-col gap-xs">
                 {editingAppointmentId === booked_appointment.id ? (
                   <div className="flex flex-col gap-y-xs">
-                    <div className="flex flex-col gap-xs tablet:flex-row">
+                    <div className="flex flex-col gap-xs tablet:flex-row laptop:flex-col">
                       <Input
                         className="min-w-0 w-full text-secondary"
                         type="date"
