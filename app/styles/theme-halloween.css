@@ -13,6 +13,7 @@
   --pipe: 269deg 10% 58%;
   --blueprint: 270deg 35% 20%;
   --room: 273deg 37% 4%;
+  --danger: 0deg 100% 69%;
   --success: 116deg 28% 45%;
   --warning: 36deg 100% 54%;
 
@@ -670,6 +671,32 @@
 :root[data-theme="halloween"] .site-control.plaque::after {
   right: -8px;
   transform: scaleX(-1);
+}
+
+/* Icon controls with a semantic border sit on an iron face instead of the orange one:
+   the amber and red glyphs on orange sank to roughly 1.2:1 and were unreadable.
+   Colours come from the theme tokens, so text-cta/text-danger/text-success still drive the glyph */
+:root[data-theme="halloween"] .site-control.plaque.border-cta,
+:root[data-theme="halloween"] .site-control.plaque.border-danger,
+:root[data-theme="halloween"] .site-control.plaque.border-success {
+  background: linear-gradient(180deg, var(--theme-top-edge), transparent 32%, rgb(0 0 0 / 0.34)),
+    linear-gradient(180deg, hsl(var(--steel)), hsl(var(--steel-deep)));
+  box-shadow:
+    0 5px 0 hsl(var(--room)),
+    0 10px 15px var(--halloween-shadow),
+    inset 0 2px 0 var(--theme-top-edge);
+}
+
+:root[data-theme="halloween"] .site-control.plaque.border-cta {
+  border-color: hsl(var(--cta));
+}
+
+:root[data-theme="halloween"] .site-control.plaque.border-danger {
+  border-color: hsl(var(--danger));
+}
+
+:root[data-theme="halloween"] .site-control.plaque.border-success {
+  border-color: hsl(var(--success));
 }
 
 :root[data-theme="halloween"] .site-control.plaque:hover,
