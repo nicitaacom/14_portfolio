@@ -63,6 +63,50 @@ export function LoadingSpinner({ strokeWidth = 2 }: LoadingSpinnerProps) {
     )
   }
 
+  if (theme === "new-year") {
+    return (
+      <svg
+        className="h-[32px] w-[52px]"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 78 42"
+        aria-hidden="true">
+        <motion.g
+          animate={reduceMotion ? undefined : { rotate: 360 }}
+          transition={{ duration: 5.2, ease: "linear", repeat: Infinity }}
+          style={{ transformBox: "view-box", originX: "39px", originY: "21px" }}>
+          {[0, 60, 120, 180, 240, 300].map(angle => (
+            <path
+              key={angle}
+              d="M39 21H54M46.5 21l3.4-3.4M46.5 21l3.4 3.4"
+              stroke="hsl(var(--secondary))"
+              strokeLinecap="round"
+              strokeWidth={strokeWidth}
+              transform={`rotate(${angle} 39 21)`}
+            />
+          ))}
+          <circle cx="39" cy="21" r="2.6" fill="hsl(var(--secondary))" />
+        </motion.g>
+        <motion.circle
+          cx="15"
+          cy="21"
+          r="3"
+          fill="hsl(var(--cta))"
+          animate={reduceMotion ? undefined : { opacity: [0.35, 1, 0.35], r: [2.3, 3.4, 2.3] }}
+          transition={{ duration: 1.1, ease: "easeInOut", repeat: Infinity }}
+        />
+        <motion.circle
+          cx="63"
+          cy="21"
+          r="3"
+          fill="hsl(var(--cta))"
+          animate={reduceMotion ? undefined : { opacity: [1, 0.35, 1], r: [3.4, 2.3, 3.4] }}
+          transition={{ duration: 1.1, ease: "easeInOut", repeat: Infinity }}
+        />
+      </svg>
+    )
+  }
+
   return (
     <svg
       className="h-[32px] w-[52px]"
