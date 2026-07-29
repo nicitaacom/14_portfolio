@@ -8,7 +8,7 @@ export const projectStacks = {
   project23: "Next, TypeScript, Tailwind, Zustand, Stripe, Telegram API",
   project24: "React, Vite, TypeScript, MUI",
   project26: "Next, TypeScript, Tailwind, Supabase, OpenAI, AWS, GCP",
-  project28: "React, Next, TypeScript, Convex",
+  project28: "Next, TypeScript, RadixUI, Convex, Blocknote",
   project29: "Next, TypeScript, Tailwind",
   projectNda: "Next.js, AWS, Redis, Supabase, Cloudflare, Docker",
   projectRizAdminDashboard: "Next, TypeScript, Tailwind, MongoDB",
