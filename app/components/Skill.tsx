@@ -12,19 +12,19 @@ export function Skill(skill: ISkill) {
     const maxHours = 10000
     const percent = (skill.hours / maxHours) * 100
     const rootStyles = getComputedStyle(document.documentElement)
-    const workshopColor = (token: string) => `hsl(${rootStyles.getPropertyValue(token).trim()})`
+    const rampColor = (token: string) => rootStyles.getPropertyValue(token).trim()
 
     // 6 fixed bands across 0–100%: each spans 100/6 ≈ 16.67%.
     // Color snaps to whichever band the bar's CURRENT fill sits in,
     // so as the bar grows it sweeps red → orange → … → violet.
     const band = 100 / 6
     const colorForFill = (fill: number) => {
-      if (fill > band * 5) return workshopColor("--cta")
-      if (fill > band * 4) return workshopColor("--info")
-      if (fill > band * 3) return workshopColor("--success")
-      if (fill > band * 2) return workshopColor("--warning")
-      if (fill > band * 1) return workshopColor("--brass")
-      return workshopColor("--danger")
+      if (fill > band * 5) return rampColor("--skill-ramp-6") // violet
+      if (fill > band * 4) return rampColor("--skill-ramp-5") // turquoise
+      if (fill > band * 3) return rampColor("--skill-ramp-4") // green
+      if (fill > band * 2) return rampColor("--skill-ramp-3") // yellow
+      if (fill > band * 1) return rampColor("--skill-ramp-2") // orange
+      return rampColor("--skill-ramp-1") // red
     }
 
     if (!progressRef.current) return
