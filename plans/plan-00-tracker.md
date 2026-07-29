@@ -27,6 +27,7 @@ Seed: [app/components/Projects/NDAProjectPreview.tsx](../app/components/Projects
 | 10  | Counters — odometer digits in the hazard rail       | COUNTER                                            | —                                                        | proposed                          |
 | 11  | Blueprint + Certificate surfaces                    | BLUEPRINT / CERTIFICATE                            | —                                                        | proposed                          |
 | 12  | Calendar-driven full-site themes                    | GLOBAL THEME CONFIG                                | [plan-12-seasonal-themes.md](plan-12-seasonal-themes.md) | built — full-site pass            |
+| 13  | Nexgem hover audio routing + centre pulse           | REQUEST / RESPONSE (n8n canvas)                    | [plan-13-nexgem-hover-audio.md](plan-13-nexgem-hover-audio.md) | approved — ready to build         |
 
 **Reorder note:** Nikita moved the workbench wall to slot 02 (was proposal 05) — background lands before modal and Project card. Tasks 05–11 still wait for his ordering before any plan-05 sheet is written (decision №4).
 
