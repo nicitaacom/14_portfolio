@@ -151,6 +151,22 @@
   position: absolute;
 }
 
+/* Frosted panes rather than brushed chrome nameplates */
+:root[data-theme="new-year"] .paper-tab,
+:root[data-theme="new-year"] .project-paper-tab,
+:root[data-theme="new-year"] .site-label,
+:root[data-theme="new-year"] .tape-label,
+:root[data-theme="new-year"] .modal-title-label {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.82), transparent 48%),
+    linear-gradient(155deg, #e4f4fc, #a7cade);
+  border: 1px solid rgb(247 253 255 / 0.72);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 11px rgb(0 8 20 / 0.46),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+  transform: none;
+}
+
 :root[data-theme="new-year"] .navbar-status-light {
   background: radial-gradient(circle at 45% 32%, white, #8eeaff 36%, #246d8a 70%, #071420);
   box-shadow: 0 0 11px rgb(111 227 255 / 0.58);
