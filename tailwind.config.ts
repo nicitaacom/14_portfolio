@@ -15,6 +15,9 @@ const config: Config = {
       xl: "clamp(1.8rem, 1.35rem + 1.6vw, 2.8rem)",
     },
     spacing: {
+      // Keeps the *-0 utilities alive: this scale replaces Tailwind's default,
+      // and minWidth/inset/padding all derive from it
+      0: "0px",
       xs: "clamp(0.25rem, 0.1364rem + 0.5682vw, 0.5rem)", //320-1024px
       sm: "clamp(0.5rem, 0.3864rem + 0.5682vw, 0.75rem)", //320-1024px
       md: "1rem",
