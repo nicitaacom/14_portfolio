@@ -64,7 +64,7 @@ export function HalloweenRequestHand({ compact = false, engaged }: HalloweenRequ
                   mass: 0.65,
                 }
           }
-          style={{ originX: "36px", originY: "65px" }}>
+          style={{ transformBox: "view-box", originX: "36px", originY: "65px" }}>
           <path d="M31 62 27 38M41 62l3-24" stroke={`url(#${boneId})`} strokeLinecap="round" strokeWidth="5" />
           <circle cx="35.5" cy="36" r="7" fill={`url(#${boneId})`} stroke="#62586a" strokeWidth="2" />
           <path
