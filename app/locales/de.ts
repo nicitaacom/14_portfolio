@@ -25,6 +25,7 @@ export default {
     summaryEn: "Lebenslauf EN",
     summaryDe: "Lebenslauf DE",
     halloweenGraveEpitaph: "R.I.P.",
+    dontShowAgain: "Nicht mehr anzeigen",
   },
   languages: {
     en: "English",

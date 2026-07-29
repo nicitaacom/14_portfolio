@@ -25,6 +25,7 @@ export default {
     summaryEn: "CV EN",
     summaryDe: "CV DE",
     halloweenGraveEpitaph: "R.I.P.",
+    dontShowAgain: "Nie pokazuj ponownie",
   },
   languages: {
     en: "English",

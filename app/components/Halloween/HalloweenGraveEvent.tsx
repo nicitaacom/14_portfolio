@@ -5,6 +5,7 @@ import { useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 
+import { Button } from "@/components/Button"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { useScopedI18n } from "@/locales/client"
 
@@ -25,8 +26,47 @@ const STORM_DURATION = { min: 4_000, max: 6_000 }
 const STORM_FADE_MS = 500
 const RETRY_DELAY = 10_000
 
+const SUPPRESS_STORAGE_KEY = "isShowThunderstormAnim"
+const SUPPRESS_TTL_MS = 30 * 24 * 60 * 60 * 1000
+// setTimeout takes a 32-bit delay — anything longer wraps around and fires at once
+const MAX_TIMEOUT_MS = 2_147_483_647
+
 function randomBetween(min: number, max: number) {
   return Math.round(min + Math.random() * (max - min))
+}
+
+/** Returns when the suppression runs out, or 0 when the storm is free to play */
+function readSuppressedUntil() {
+  try {
+    const stored = localStorage.getItem(SUPPRESS_STORAGE_KEY)
+    if (!stored) return 0
+
+    const { value, expiresAt } = JSON.parse(stored) as { value?: boolean; expiresAt?: number }
+    if (value !== false || typeof expiresAt !== "number" || expiresAt <= Date.now()) {
+      localStorage.removeItem(SUPPRESS_STORAGE_KEY)
+      return 0
+    }
+
+    return expiresAt
+  } catch {
+    return 0
+  }
+}
+
+function writeSuppressed(expiresAt: number) {
+  try {
+    localStorage.setItem(SUPPRESS_STORAGE_KEY, JSON.stringify({ value: false, expiresAt }))
+  } catch {
+    // localStorage unavailable (private browsing, storage full)
+  }
+}
+
+function clearSuppressed() {
+  try {
+    localStorage.removeItem(SUPPRESS_STORAGE_KEY)
+  } catch {
+    // localStorage unavailable (private browsing, storage full)
+  }
 }
 
 function StylizedGrave() {
@@ -265,8 +305,11 @@ function StylizedGrave() {
 export function HalloweenGraveEvent() {
   const [phase, setPhase] = useState<HalloweenEventPhase>("idle")
   const [stormPlaybackStarted, setStormPlaybackStarted] = useState(false)
+  // null until localStorage has been read, so the first schedule waits for the check
+  const [suppressedUntil, setSuppressedUntil] = useState<number | null>(null)
   const reducedMotion = useReducedMotion()
   const theme = useSiteTheme()
+  const t = useScopedI18n("common")
   const eventRef = useRef<HTMLDivElement>(null)
   const rainCanvasRef = useRef<HTMLCanvasElement>(null)
   const thunderAudioRef = useRef<HTMLAudioElement>(null)
@@ -277,13 +320,46 @@ export function HalloweenGraveEvent() {
   const isStormVisible = phase === "storm" || phase === "fading"
 
   useEffect(() => {
-    if (theme !== "halloween" || reducedMotion) {
+    setSuppressedUntil(readSuppressedUntil())
+  }, [])
+
+  // Let the storm back in the moment the suppression expires, without waiting for a reload
+  useEffect(() => {
+    if (!suppressedUntil) return
+
+    const release = () => {
+      clearSuppressed()
+      setSuppressedUntil(0)
+    }
+
+    const remaining = suppressedUntil - Date.now()
+    if (remaining <= 0) {
+      release()
+      return
+    }
+
+    // Waits beyond the timer's range are picked up by the storage check on the next mount instead
+    if (remaining > MAX_TIMEOUT_MS) return
+
+    const timer = setTimeout(release, remaining)
+    return () => clearTimeout(timer)
+  }, [suppressedUntil])
+
+  const dismissStorm = () => {
+    const expiresAt = Date.now() + SUPPRESS_TTL_MS
+    writeSuppressed(expiresAt)
+    setSuppressedUntil(expiresAt)
+  }
+
+  useEffect(() => {
+    if (theme !== "halloween" || reducedMotion || suppressedUntil !== 0) {
       ;[thunderAudioRef.current, bellsAudioRef.current].forEach(audio => {
         if (!audio) return
         gsap.killTweensOf(audio)
         audio.pause()
         audio.currentTime = 0
       })
+      setStormPlaybackStarted(false)
       setPhase("idle")
       return
     }
@@ -405,7 +481,7 @@ export function HalloweenGraveEvent() {
       document.removeEventListener("visibilitychange", cancelWhileUnavailable)
       window.removeEventListener("halloween:grave-event", triggerForPreview)
     }
-  }, [reducedMotion, theme])
+  }, [reducedMotion, suppressedUntil, theme])
 
   useEffect(() => {
     if (phase !== "storm") return
@@ -554,14 +630,14 @@ export function HalloweenGraveEvent() {
   return (
     <div
       ref={eventRef}
-      className="halloween-grave-event halloween-grave-event-foreground pointer-events-none fixed inset-0"
-      aria-hidden="true">
+      className="halloween-grave-event halloween-grave-event-foreground pointer-events-none fixed inset-0">
       <audio ref={thunderAudioRef} src="/thunderstorm.mp3" preload="auto" />
       <audio ref={bellsAudioRef} src="/creepy-halloween-bells.mp3" preload="auto" />
       <AnimatePresence mode="sync">
         {isStormVisible && (
           <motion.div
             key="storm"
+            aria-hidden="true"
             className="halloween-storm-layer absolute inset-0 overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: phase === "fading" || !stormPlaybackStarted ? 0 : 1 }}
@@ -659,6 +735,21 @@ export function HalloweenGraveEvent() {
           </motion.div>
         )}
 
+        {isStormVisible && stormPlaybackStarted && (
+          <motion.div
+            key="dismiss"
+            className="halloween-storm-dismiss"
+            initial={{ opacity: 0, y: 14 }}
+            animate={phase === "fading" ? { opacity: 0, y: 14 } : { opacity: 1, y: 0 }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            transition={{ duration: phase === "fading" ? STORM_FADE_MS / 1000 : 0.3 }}>
+            <div className="halloween-storm-dismiss-scale">
+              <Button className="whitespace-nowrap px-md py-sm text-sm" onClick={dismissStorm}>
+                {t("dontShowAgain")}
+              </Button>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   )

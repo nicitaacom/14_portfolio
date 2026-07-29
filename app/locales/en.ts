@@ -25,6 +25,7 @@ export default {
     summaryEn: "Summary EN",
     summaryDe: "Summary DE",
     halloweenGraveEpitaph: "R.I.P.",
+    dontShowAgain: "Do not show again",
   },
   languages: {
     en: "English",
