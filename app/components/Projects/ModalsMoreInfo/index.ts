@@ -5,6 +5,7 @@ import ModalMoreInfo23 from "./ModalMoreInfo23"
 import ModalMoreInfo24 from "./ModalMoreInfo24"
 import ModalMoreInfo26 from "./ModalMoreInfo26"
 import ModalMoreInfoNDA from "./ModalMoreInfoNDA"
+import ModalMoreInfoNexgem from "./ModalMoreInfoNexgem"
 import {
   ModalMoreInfo17,
   ModalMoreInfo19,
@@ -26,6 +27,7 @@ export {
   ModalMoreInfo28,
   ModalMoreInfo29,
   ModalMoreInfoNDA,
+  ModalMoreInfoNexgem,
 }
 
 import ModalMoreInfoRizAdminDashboard from "./ModalMoreInfoRizAdminDashboard"

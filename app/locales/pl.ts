@@ -176,6 +176,26 @@ export default {
       },
     },
   },
+  nexgemProject: {
+    preview: {
+      badge: "Automatyzacja n8n",
+      title: "Auth i automatyzacje chatbotów",
+      description: "Bezpieczne logowanie z dopracowanym UI na platformie workflow n8n.",
+      secureAuth: "Bezpieczne auth",
+      embedWidget: "Widget kopiuj-wklej",
+      turnOnSound: "Włącz dźwięk",
+      hoverHere: "Najedź na ikonę",
+    },
+    card: {
+      engagement: "Zlecenie klienta",
+    },
+    modal: {
+      label: "Platforma automatyzacji Nexgem",
+      task: "Zbudować bezpieczne auth dla platformy automatyzacji n8n i zaprojektować architekturę automatyzacji chatbotów.",
+      contribution:
+        "- Stworzyłem bezpieczne auth ze świetnym UI dla platformy automatyzacji n8n\n- Stworzyłem przegląd architektury automatyzacji chatbotów z widgetem kopiuj-wklej",
+    },
+  },
   appointment: {
     page: {
       bookACall: "Umów rozmowę",

@@ -175,6 +175,26 @@ export default {
       },
     },
   },
+  nexgemProject: {
+    preview: {
+      badge: "n8n automation",
+      title: "Auth and chatbot automations",
+      description: "Secure sign-in with a polished UI on top of an n8n workflow platform.",
+      secureAuth: "Secure auth",
+      embedWidget: "Copy-paste widget",
+      turnOnSound: "Turn on sound",
+      hoverHere: "Hover an icon",
+    },
+    card: {
+      engagement: "Client engagement",
+    },
+    modal: {
+      label: "Nexgem automation platform",
+      task: "Build secure auth for an n8n automation platform and design the architecture for chatbot automations.",
+      contribution:
+        "- Created secure auth with an awesome UI for the n8n automation platform\n- Created the architecture overview for chatbot automations with a copy-paste widget",
+    },
+  },
   appointment: {
     page: {
       bookACall: "Book a call",

@@ -14,6 +14,12 @@ export const trackedProjects: TTrackedProject[] = [
     group: "work",
   },
   {
+    slug: "project-nexgem-automation-platform",
+    name: "Nexgem",
+    shortName: "Nexgem",
+    group: "work",
+  },
+  {
     slug: "project-26-hot-delivery",
     name: "Hot Delivery",
     shortName: "Hot Delivery",

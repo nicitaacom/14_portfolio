@@ -11,6 +11,7 @@ import {
   Project24,
   Project26,
   ProjectNDA,
+  ProjectNexgem,
   ProjectRizAdminDashboard,
 } from "./Projects"
 import { useModalsStore } from "@/store/modalsStore"
@@ -44,6 +45,7 @@ export function ProjectsSwitcher() {
       {projectTab === "work" ? (
         <>
           <ProjectNDA openModal={() => openModal("ndaMoreInfo")} />
+          <ProjectNexgem openModal={() => openModal("nexgemMoreInfo")} />
           <ProjectRizAdminDashboard openModal={() => openModal("rizAdminDashboard")} />
         </>
       ) : projectTab === "projects" ? (

@@ -178,6 +178,26 @@ export default {
       },
     },
   },
+  nexgemProject: {
+    preview: {
+      badge: "n8n-Automatisierung",
+      title: "Auth und Chatbot-Automatisierungen",
+      description: "Sichere Anmeldung mit starker UI auf Basis einer n8n-Workflow-Plattform.",
+      secureAuth: "Sichere Auth",
+      embedWidget: "Copy-Paste-Widget",
+      turnOnSound: "Ton einschalten",
+      hoverHere: "Auf ein Symbol zeigen",
+    },
+    card: {
+      engagement: "Kundenprojekt",
+    },
+    modal: {
+      label: "Nexgem Automatisierungsplattform",
+      task: "Sichere Auth für eine n8n-Automatisierungsplattform bauen und eine Architektur für Chatbot-Automatisierungen entwerfen.",
+      contribution:
+        "- Sichere Auth mit einer starken UI für eine n8n-Automatisierungsplattform erstellt\n- Architekturübersicht für Chatbot-Automatisierungen mit Copy-Paste-Widget erstellt",
+    },
+  },
   appointment: {
     page: {
       bookACall: "Call buchen",

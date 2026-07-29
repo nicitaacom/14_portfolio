@@ -971,11 +971,155 @@ div {
   vector-effect: non-scaling-stroke;
 }
 
+@keyframes nexgem-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes nexgem-node-pulse {
+  0%,
+  100% {
+    opacity: 0.14;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes nexgem-hub-breath {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes nexgem-typing-dot {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes nexgem-line-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The online indicator's ping, borrowed for the hub: a ring at the node's own size that swells and fades away.
+   It travels evenly, so a ring handed a 4s sound spends the whole 4s moving instead of arriving in the first
+   second and creeping the rest */
+@keyframes nexgem-pulse-out {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  8% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    /* 2 divided by 1.3 — the ring reaches a little over half again the node's size instead of double it */
+    transform: scale(1.54);
+  }
+}
+
+.nexgem-flow {
+  animation: nexgem-flow 4.4s linear infinite;
+  fill: none;
+  stroke: hsl(var(--cta));
+  stroke-dasharray: 9 91;
+  stroke-linecap: round;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.nexgem-node-pulse {
+  animation: nexgem-node-pulse 5.6s ease-in-out infinite;
+  opacity: 0.14;
+}
+
+.nexgem-hub-breath {
+  animation: nexgem-hub-breath 6.2s ease-in-out infinite;
+}
+
+/* Four blinks of the typing dot, then the reply writes itself one line at a time */
+.nexgem-typing-dot {
+  animation: nexgem-typing-dot 1s steps(1, end) 4;
+  opacity: 0;
+}
+
+.nexgem-reply-line {
+  animation: nexgem-line-draw 400ms ease-out forwards;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+/* Breathes so the nudge toward the icons reads as something waiting on the visitor */
+@keyframes nexgem-hint {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.nexgem-hint {
+  animation: nexgem-hint 2.4s ease-in-out infinite;
+}
+
+/* One ring per pulse on the hub. transform-box keeps it scaling about the node instead of the SVG origin.
+   The duration here is only the base beat — each ring is handed its own, sized to the rest it has to fill */
+.nexgem-pulse-in,
+.nexgem-pulse-out {
+  animation: nexgem-pulse-out 900ms linear;
+  fill: none;
+  opacity: 0;
+  pointer-events: none;
+  stroke: hsl(var(--cta));
+  stroke-width: 2.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Played backwards, the same ring arrives from outside and contracts into the hub */
+.nexgem-pulse-in {
+  animation-direction: reverse;
+}
+
 body.modal-open .nda-lamp-swing,
 body.modal-open .nda-lamp-glow,
 body.modal-open .nda-lamp-beam,
 body.modal-open .nda-lamp-email-icon,
 body.modal-open .nda-lamp-panel-progress,
+body.modal-open .nexgem-flow,
+body.modal-open .nexgem-node-pulse,
+body.modal-open .nexgem-hub-breath,
+body.modal-open .nexgem-typing-dot,
+body.modal-open .nexgem-reply-line,
+body.modal-open .nexgem-hint,
+body.modal-open .nexgem-pulse-in,
+body.modal-open .nexgem-pulse-out,
 body.modal-open .hazard-rail,
 body.modal-open .navbar-status-light,
 body.modal-open .workbench-glow,
@@ -990,12 +1134,28 @@ body.modal-open .gearset-reverse {
   .nda-lamp-beam,
   .nda-lamp-email-icon,
   .nda-lamp-panel-progress,
+  .nexgem-flow,
+  .nexgem-node-pulse,
+  .nexgem-hub-breath,
+  .nexgem-typing-dot,
+  .nexgem-reply-line,
+  .nexgem-hint,
+  .nexgem-pulse-in,
+  .nexgem-pulse-out,
   .hazard-rail,
   .navbar-status-light,
   .workbench-glow,
   .gearset,
   .gearset-reverse {
     animation: none;
+  }
+
+  .nexgem-node-pulse {
+    opacity: 0.3;
+  }
+
+  .nexgem-reply-line {
+    stroke-dashoffset: 0;
   }
 
   .nda-lamp-email-icon {

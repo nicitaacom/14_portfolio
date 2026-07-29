@@ -1,6 +1,7 @@
 export type TModals =
   | "Appointment"
   | "ndaMoreInfo"
+  | "nexgemMoreInfo"
   | "15MoreInfo"
   | "16MoreInfo"
   | "17MoreInfo"

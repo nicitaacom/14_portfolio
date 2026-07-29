@@ -11,6 +11,7 @@ import {
   ModalMoreInfo28,
   ModalMoreInfo29,
   ModalMoreInfoNDA,
+  ModalMoreInfoNexgem,
   ModalMoreInfoRizAdminDashboard,
 } from "./Projects/ModalsMoreInfo"
 
@@ -23,6 +24,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-[calc(100vh-72px)] overflow-x-clip transition-colors duration-300 pt-[62px]">
       {children}
       <ModalMoreInfoNDA />
+      <ModalMoreInfoNexgem />
       <ModalMoreInfo15 />
       <ModalMoreInfo16 />
       <ModalMoreInfo17 />
