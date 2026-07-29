@@ -13,6 +13,10 @@
   --pipe: 205deg 24% 71%;
   --blueprint: 211deg 45% 28%;
   --room: 220deg 48% 5%;
+  --danger: 352deg 88% 68%;
+  --info: 205deg 92% 70%;
+  --success: 158deg 55% 58%;
+  --warning: 43deg 92% 68%;
 
   --theme-trim: hsl(var(--brass) / 0.44);
   --theme-trim-strong: hsl(var(--cta) / 0.66);
