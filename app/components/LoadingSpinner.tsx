@@ -23,7 +23,7 @@ export function LoadingSpinner({ strokeWidth = 2 }: LoadingSpinnerProps) {
         <motion.g
           animate={reduceMotion ? undefined : { rotate: 360 }}
           transition={{ duration: 3.6, ease: "linear", repeat: Infinity }}
-          style={{ originX: "39px", originY: "21px" }}>
+          style={{ transformBox: "view-box", originX: "39px", originY: "21px" }}>
           <path
             d="M39 2 43 8 50 5 51 13 59 14 55 21 62 27 54 31 54 39 46 36 39 41 34 35 26 38 26 30 18 27 24 20 19 13 28 12 30 4Z"
             stroke="#76608e"
