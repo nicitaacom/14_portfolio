@@ -113,6 +113,115 @@ function SnowFir({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) 
   )
 }
 
+/* The cottage from the outdoor-lighting reference: cream walls, a thick snow roof, warm windows
+   and a string of bulbs run along the eaves and up the rake. Local origin is the middle of its
+   base, on the snow line */
+function SnowHouse({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
+  /* Bulbs along the eaves, then up both roof edges towards the ridge */
+  const eaveBulbs = Array.from({ length: 9 }, (_, index) => ({ x: -120 + index * 30, y: -116 }))
+  const rakeBulbs = Array.from({ length: 4 }, (_, index) => [
+    { x: -118 + index * 29, y: -124 - index * 19 },
+    { x: 118 - index * 29, y: -124 - index * 19 },
+  ]).flat()
+
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <ellipse cx="0" cy="4" rx="150" ry="16" fill="#b9b2a2" fillOpacity="0.35" />
+
+      {/* Walls */}
+      <path d="M-112 0V-118H112V0Z" fill="#e6ddcb" />
+      <path d="M-112 0V-118H-84V0Z" fill="#d4cab6" />
+
+      {/* Roof, then the snow sitting on it */}
+      <path d="M-132 -116L0 -206L132 -116Z" fill="#5d3f2c" />
+      <path d="M-132 -116L0 -206L132 -116L132 -108L0 -196L-132 -108Z" fill="#fffdfa" />
+      <path d="M-132 -110Q-66 -122 0 -108Q66 -122 132 -110L132 -100Q66 -112 0 -98Q-66 -112 -132 -100Z" fill="#fdfbf6" />
+
+      {/* Chimney with its own cap of snow */}
+      <path d="M56 -168V-214H86V-186Z" fill="#7d5238" />
+      <path d="M54 -214H88V-206H54Z" fill="#fffdfa" />
+
+      {/* Warm windows with muntins */}
+      <g>
+        <rect x="-84" y="-92" width="46" height="42" rx="4" fill="#f7b23b" fillOpacity="0.9" />
+        <path d="M-61 -92V-50M-84 -71H-38" stroke="#5d3f2c" strokeWidth="4" />
+        <rect x="38" y="-92" width="46" height="42" rx="4" fill="#f7b23b" fillOpacity="0.78" />
+        <path d="M61 -92V-50M38 -71H84" stroke="#5d3f2c" strokeWidth="4" />
+      </g>
+
+      {/* Door with a wreath */}
+      <path d="M-22 0V-76H22V0Z" fill="#8b0f1f" />
+      <circle cx="0" cy="-52" r="13" fill="none" stroke="#1d5c40" strokeWidth="6" />
+      <circle cx="0" cy="-39" r="4" fill="#c81a30" />
+
+      {/* Outdoor lighting: the cord follows the eaves and the rake, bulbs hang off it */}
+      <path
+        d="M-120 -116H120M-118 -124L0 -200L118 -124"
+        stroke="#d9c397"
+        strokeOpacity="0.6"
+        strokeWidth="2.4"
+        fill="none"
+      />
+      {[...eaveBulbs, ...rakeBulbs].map(bulb => (
+        <g key={`${bulb.x}-${bulb.y}`}>
+          <circle
+            data-new-year-bokeh
+            cx={bulb.x}
+            cy={bulb.y + 7}
+            r="11"
+            fill="#f7b23b"
+            opacity="0.3"
+            filter="url(#new-year-bokeh-blur)"
+          />
+          <circle data-new-year-bulb cx={bulb.x} cy={bulb.y + 7} r="4" fill="#ffd489" opacity="0.9" />
+        </g>
+      ))}
+
+      {/* Snow banked against the walls */}
+      <path d="M-150 4Q-80 -12 0 0Q80 -12 150 4L150 18H-150Z" fill="#fbf8f2" />
+    </g>
+  )
+}
+
+/* Sweets and a hot drink set down on the snow: two bars of chocolate and a steaming mug. The foil
+   takes the colours of the sweets references without reproducing anyone's branding */
+function SnowTreats({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <ellipse cx="0" cy="6" rx="118" ry="12" fill="#b9b2a2" fillOpacity="0.32" />
+
+      {/* Bar in crimson and white foil, part opened so the chocolate shows */}
+      <g transform="translate(-96 -6) rotate(-8)">
+        <path d="M0 0H84V30H0Z" fill="#c81a30" />
+        <path d="M0 8H84V16H0Z" fill="#fdfbf6" fillOpacity="0.92" />
+        <path d="M62 0H84V30H62Z" fill="#6b4326" />
+        <path d="M68 0V30M76 0V30M62 15H84" stroke="#4a2c17" strokeWidth="2" />
+      </g>
+
+      {/* Bar in lilac foil */}
+      <g transform="translate(-4 -2) rotate(6)">
+        <path d="M0 0H78V28H0Z" fill="#8f76c4" />
+        <path d="M0 0H78V8H0Z" fill="#a992d6" />
+        <path d="M56 0H78V28H56Z" fill="#6b4326" />
+        <path d="M62 0V28M70 0V28M56 14H78" stroke="#4a2c17" strokeWidth="2" />
+      </g>
+
+      {/* Mug of hot coffee, with steam that GSAP lifts and fades */}
+      <g transform="translate(74 -46)">
+        <path d="M0 6H46V44C46 52 40 58 32 58H14C6 58 0 52 0 44Z" fill="#fdfbf6" />
+        <path d="M0 14H46V22H0Z" fill="#c81a30" />
+        <path d="M46 20H56C63 20 63 38 56 38H46" fill="none" stroke="#fdfbf6" strokeWidth="7" />
+        <ellipse cx="23" cy="7" rx="23" ry="6" fill="#4a2c17" />
+        <g stroke="#fffdfa" strokeWidth="3.4" strokeLinecap="round" fill="none">
+          <path data-new-year-steam d="M10 -2C4 -12 14 -18 8 -30" opacity="0.55" />
+          <path data-new-year-steam d="M23 -4C17 -16 27 -22 21 -36" opacity="0.62" />
+          <path data-new-year-steam d="M36 -2C30 -12 40 -18 34 -30" opacity="0.5" />
+        </g>
+      </g>
+    </g>
+  )
+}
+
 function createLayers(): SnowLayer[] {
   return LAYER_SPECS.map(spec => ({
     fall: spec.fall,
@@ -261,6 +370,7 @@ export function NewYearScene() {
     const animationContext = gsap.context(() => {
       if (reducedMotion) {
         gsap.set("[data-new-year-bauble]", { rotation: 0 })
+        gsap.set("[data-new-year-steam]", { y: 0, opacity: 0.4 })
         gsap.set("[data-new-year-bokeh]", { opacity: 0.3 })
         return
       }
@@ -283,6 +393,15 @@ export function NewYearScene() {
             yoyo: true,
           },
         )
+      })
+      gsap.to("[data-new-year-steam]", {
+        y: -14,
+        opacity: 0.1,
+        duration: 2.4,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        stagger: { each: 0.5, from: "random" },
       })
       gsap.to("[data-new-year-bokeh]", {
         opacity: 0.46,
@@ -460,9 +579,12 @@ export function NewYearScene() {
           fill="url(#new-year-drift-mid)"
         />
 
+        {/* The cottage sits back on the middle drift, its lights above the door line */}
+        <SnowHouse x={1306} y={674} scale={0.6} />
+
         {/* Firs and snowmen stand on the middle drift, before the front drift buries their feet */}
         <SnowFir x={120} y={676} scale={1} />
-        <SnowFir x={1352} y={664} scale={0.84} />
+        <SnowFir x={1418} y={660} scale={0.66} />
         <SnowFir x={806} y={690} scale={0.62} />
         <Snowman x={566} y={648} scale={0.92} />
         <Snowman x={300} y={676} scale={0.62} />
@@ -471,6 +593,10 @@ export function NewYearScene() {
           d="M0 762C200 732 380 770 580 756C780 742 980 776 1180 754C1320 738 1390 760 1440 750V900H0V762Z"
           fill="url(#new-year-drift-front)"
         />
+
+        {/* Sweets and a hot drink resting on the near bank. Painted after the front drift because
+            that drift is opaque and buried them when they sat behind it */}
+        <SnowTreats x={640} y={730} scale={1.05} />
 
         <rect width="1440" height="900" fill="url(#new-year-vignette)" />
       </svg>
