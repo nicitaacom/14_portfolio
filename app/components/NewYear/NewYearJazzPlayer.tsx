@@ -138,6 +138,9 @@ export function NewYearJazzPlayer() {
         </div>
       )}
 
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/UI/new-year/lofi-new-year-girl.png" alt="" className="new-year-jazz-listener" aria-hidden="true" />
+
       <button
         type="button"
         className="new-year-jazz-control"

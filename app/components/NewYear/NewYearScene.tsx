@@ -95,6 +95,35 @@ function Snowman({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) 
   )
 }
 
+/* Places one of the cut-out photographs in the scene. The anchor is the bottom centre of the
+   subject, so a prop is positioned by putting that point on the snow line, exactly like the drawn
+   figures. Width is given and height follows from the file's own aspect. */
+function SceneCutout({
+  href,
+  x,
+  y,
+  width,
+  aspect,
+}: {
+  href: string
+  x: number
+  y: number
+  width: number
+  aspect: number
+}) {
+  const height = width / aspect
+  return (
+    <image
+      href={href}
+      x={x - width / 2}
+      y={y - height}
+      width={width}
+      height={height}
+      preserveAspectRatio="xMidYMax meet"
+    />
+  )
+}
+
 /* A snow-laden fir standing on the drift */
 function SnowFir({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
   return (
@@ -179,45 +208,6 @@ function SnowHouse({ x, y, scale = 1 }: { x: number; y: number; scale?: number }
 
       {/* Snow banked against the walls */}
       <path d="M-150 4Q-80 -12 0 0Q80 -12 150 4L150 18H-150Z" fill="#fbf8f2" />
-    </g>
-  )
-}
-
-/* Sweets and a hot drink set down on the snow: two bars of chocolate and a steaming mug. The foil
-   takes the colours of the sweets references without reproducing anyone's branding */
-function SnowTreats({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${scale})`}>
-      <ellipse cx="0" cy="6" rx="118" ry="12" fill="#b9b2a2" fillOpacity="0.32" />
-
-      {/* Bar in crimson and white foil, part opened so the chocolate shows */}
-      <g transform="translate(-96 -6) rotate(-8)">
-        <path d="M0 0H84V30H0Z" fill="#c81a30" />
-        <path d="M0 8H84V16H0Z" fill="#fdfbf6" fillOpacity="0.92" />
-        <path d="M62 0H84V30H62Z" fill="#6b4326" />
-        <path d="M68 0V30M76 0V30M62 15H84" stroke="#4a2c17" strokeWidth="2" />
-      </g>
-
-      {/* Bar in lilac foil */}
-      <g transform="translate(-4 -2) rotate(6)">
-        <path d="M0 0H78V28H0Z" fill="#8f76c4" />
-        <path d="M0 0H78V8H0Z" fill="#a992d6" />
-        <path d="M56 0H78V28H56Z" fill="#6b4326" />
-        <path d="M62 0V28M70 0V28M56 14H78" stroke="#4a2c17" strokeWidth="2" />
-      </g>
-
-      {/* Mug of hot coffee, with steam that GSAP lifts and fades */}
-      <g transform="translate(74 -46)">
-        <path d="M0 6H46V44C46 52 40 58 32 58H14C6 58 0 52 0 44Z" fill="#fdfbf6" />
-        <path d="M0 14H46V22H0Z" fill="#c81a30" />
-        <path d="M46 20H56C63 20 63 38 56 38H46" fill="none" stroke="#fdfbf6" strokeWidth="7" />
-        <ellipse cx="23" cy="7" rx="23" ry="6" fill="#4a2c17" />
-        <g stroke="#fffdfa" strokeWidth="3.4" strokeLinecap="round" fill="none">
-          <path data-new-year-steam d="M10 -2C4 -12 14 -18 8 -30" opacity="0.55" />
-          <path data-new-year-steam d="M23 -4C17 -16 27 -22 21 -36" opacity="0.62" />
-          <path data-new-year-steam d="M36 -2C30 -12 40 -18 34 -30" opacity="0.5" />
-        </g>
-      </g>
     </g>
   )
 }
@@ -582,21 +572,29 @@ export function NewYearScene() {
         {/* The cottage sits back on the middle drift, its lights above the door line */}
         <SnowHouse x={1306} y={674} scale={0.6} />
 
+        {/* Socks hung out on the light string, and the tree and its presents on the middle drift */}
+        <SceneCutout href="/UI/new-year/new-year-socks.png" x={330} y={606} width={64} aspect={675 / 1200} />
+
+        {/* The tree and its presents stand on the middle drift */}
+        <SceneCutout href="/UI/new-year/new-year-gifts.png" x={1092} y={706} width={214} aspect={675 / 1200} />
+
         {/* Firs and snowmen stand on the middle drift, before the front drift buries their feet */}
         <SnowFir x={120} y={676} scale={1} />
         <SnowFir x={1418} y={660} scale={0.66} />
         <SnowFir x={806} y={690} scale={0.62} />
         <Snowman x={566} y={648} scale={0.92} />
-        <Snowman x={300} y={676} scale={0.62} />
+        <Snowman x={244} y={672} scale={0.58} />
 
         <path
           d="M0 762C200 732 380 770 580 756C780 742 980 776 1180 754C1320 738 1390 760 1440 750V900H0V762Z"
           fill="url(#new-year-drift-front)"
         />
 
-        {/* Sweets and a hot drink resting on the near bank. Painted after the front drift because
-            that drift is opaque and buried them when they sat behind it */}
-        <SnowTreats x={640} y={730} scale={1.05} />
+        {/* The cut-out treats rest on the near bank. Painted after the front drift because that
+            drift is opaque and would otherwise bury them */}
+        <SceneCutout href="/UI/new-year/cinnamon-roll-with-coffee.png" x={452} y={786} width={132} aspect={736 / 676} />
+        <SceneCutout href="/UI/new-year/milka cinnamon.png" x={606} y={792} width={116} aspect={736 / 981} />
+        <SceneCutout href="/UI/new-year/new-year-mandarines.png" x={742} y={790} width={150} aspect={2121 / 1414} />
 
         <rect width="1440" height="900" fill="url(#new-year-vignette)" />
       </svg>

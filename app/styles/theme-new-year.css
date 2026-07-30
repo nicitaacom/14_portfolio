@@ -328,6 +328,31 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Cut-out ornaments ───────────────────────────────────────────────────────────
+   The photographed props with their backgrounds removed. A first pass hung a hat and a pair of
+   socks off every panel, which put an ornament on top of half the headings on the page — so these
+   are deliberate and few: the hat perches on a project card, the socks hang off the photo strip.
+   Decoration only: no pointer events, and nothing sits over a line of text */
+
+:root[data-theme="new-year"] .site-card.pipe-frame::before {
+  background: url("/UI/new-year/new-year-hat.png") no-repeat center / contain;
+  content: "";
+  height: 66px;
+  left: -18px;
+  pointer-events: none;
+  position: absolute;
+  top: -30px;
+  transform: rotate(-18deg);
+  width: 66px;
+  z-index: 7;
+}
+
+@media (max-width: 767px) {
+  :root[data-theme="new-year"] .site-card.pipe-frame::before {
+    display: none;
+  }
+}
+
 /* ── Photo strip ─────────────────────────────────────────────────────────────────
    Six reference photographs cut into slanted panels with snow-white gaps between them. The slice
    is skewed and the photograph inside it is skewed back by the same angle, so the cut is diagonal
@@ -432,6 +457,23 @@
   display: block;
   height: auto;
   width: 100%;
+}
+
+/* She listens on headphones, which is the whole idea of the control she sits on */
+.new-year-jazz-listener {
+  bottom: 58%;
+  height: auto;
+  pointer-events: none;
+  position: absolute;
+  right: 74%;
+  width: 96px;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .new-year-jazz-listener {
+    display: none;
+  }
 }
 
 /* Sits over the sleeve's lower band, inside the record art */
