@@ -354,36 +354,35 @@
   }
 }
 
-/* A bar of chocolate held out at the left of the booking control. The label is pushed to the
-   right end and the control reserves padding on the left, so the bar has its own room instead of
-   sitting on top of the words. The file name has a space in it, so the URL carries %20 */
-:root[data-theme="new-year"] .new-year-treat-control {
-  justify-content: flex-end;
-  overflow: visible;
-  padding-inline-start: 6.25rem;
+/* The booking row: a bar of chocolate held out on the left, the control pushed to the right end.
+   The bar is the row's own ::before rather than anything inside the control, so it never shares a
+   box with the label and the control keeps its normal padding. Outside this theme the row is a
+   plain block and the control sits where it always did. The file name has a space, hence %20 */
+:root[data-theme="new-year"] .new-year-cta-row {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  width: 100%;
 }
 
-:root[data-theme="new-year"] .new-year-treat-control::after {
+:root[data-theme="new-year"] .new-year-cta-row::before {
   background: url("/UI/new-year/milka%20cinnamon.png") no-repeat left center / contain;
   content: "";
   filter: drop-shadow(0 6px 6px rgb(2 10 7 / 0.45));
-  height: 132px;
-  left: -14px;
-  pointer-events: none;
-  position: absolute;
-  top: -48px;
-  transform: rotate(-9deg);
-  width: 100px;
-  z-index: 6;
+  flex: none;
+  height: 148px;
+  /* Shifted with a transform so the row's height and the control's position stay put */
+  transform: translate(-10px, -30px) rotate(-7deg);
+  width: 112px;
 }
 
 @media (max-width: 767px) {
-  :root[data-theme="new-year"] .new-year-treat-control {
+  :root[data-theme="new-year"] .new-year-cta-row {
     justify-content: center;
-    padding-inline-start: 1.5rem;
   }
 
-  :root[data-theme="new-year"] .new-year-treat-control::after {
+  :root[data-theme="new-year"] .new-year-cta-row::before {
     display: none;
   }
 }
