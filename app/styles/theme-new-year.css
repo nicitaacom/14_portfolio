@@ -363,6 +363,9 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+  /* Without this the control lands exactly on the panel's inner edge at every width, and its
+     drop shadow spills across the border so it reads as hanging outside the card */
+  padding-inline-end: 0.85rem;
   width: 100%;
 }
 
