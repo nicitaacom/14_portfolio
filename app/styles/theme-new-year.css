@@ -7,6 +7,11 @@
   /* Warm snow, never pure white */
   --secondary: 40deg 30% 96%;
   --secondary-foreground: 150deg 12% 74%;
+  /* The sampled crimson. It is a surface colour here — velvet control faces, trim, the garland
+     and the progress fill — and it measures 7.7:1 against the warm-snow label that sits on it.
+     Known limit: as a TEXT colour on a dark surface it tops out at 4.18:1 even over pure black,
+     so `text-cta` reads 2.8:1 on the panel wash. Anything set in it needs to be large or needs
+     a lighter crimson; see dev_readme-ui-new-year.md */
   --cta: 354deg 78% 48%;
   --cta-tooltip: 354deg 82% 58%;
   --steel: 162deg 30% 18%;
@@ -17,12 +22,14 @@
   --pipe: 154deg 14% 58%;
   --blueprint: 164deg 40% 16%;
   --room: 164deg 46% 4%;
-  /* 66% rather than 62%: measured against the pine panel, 62% gives 4.32:1 and misses
-     the 4.5:1 text floor. This also keeps it clear of --cta at 48% */
-  --danger: 354deg 84% 66%;
-  --info: 196deg 42% 62%;
-  --success: 150deg 52% 44%;
-  --warning: 38deg 92% 60%;
+  /* All four are lifted well above the values the references suggest, because they are used as
+     TEXT on the pine wash. Measured against the painted panel they clear the 4.5:1 floor with
+     room to spare — 6.3:1 danger, 6.9:1 success, 8.7:1 warning, 7.5:1 info at the median, and
+     4.9:1 at the wash's brightest 5%. Darkening any of them puts that floor at risk */
+  --danger: 354deg 86% 76%;
+  --info: 196deg 46% 70%;
+  --success: 150deg 48% 58%;
+  --warning: 38deg 94% 66%;
 
   /* Named substances, so the gradient stops below stay legible */
   --new-year-room: #04150f;
@@ -40,7 +47,7 @@
 
   /* Paper grain as an inline feTurbulence tile — the same mechanism as the workshop wall
      filter, packed into a background layer so any surface can take it */
-  --new-year-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  --new-year-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   /* Cable knit. Two diagonals crossing at ±56deg make the braid lattice and a vertical rib
      sits under them. Wool is genuinely a repeat, so a repeat is the honest material here —
      the system contract's warning about stripe layers is about rolled sheet metal */
@@ -84,14 +91,14 @@
      wash proportional to the surface, so a small control and a full board read as the
      same material. No repeating stripe layers — those read as rolled or brushed metal */
   --theme-navbar-background: radial-gradient(120% 180% at 84% -40%, rgb(200 26 48 / 0.2), transparent 62%),
-    radial-gradient(90% 160% at 12% -30%, rgb(29 92 64 / 0.42), transparent 58%),
+    radial-gradient(90% 160% at 12% -30%, rgb(29 92 64 / 0.34), transparent 58%),
     linear-gradient(180deg, rgb(248 246 242 / 0.07), transparent 46%), linear-gradient(168deg, #0d3324, #061a12 82%);
-  --theme-board-background: radial-gradient(140% 120% at 18% -12%, rgb(29 92 64 / 0.5), transparent 60%),
+  --theme-board-background: radial-gradient(140% 120% at 18% -12%, rgb(29 92 64 / 0.36), transparent 60%),
     radial-gradient(120% 130% at 96% 8%, rgb(200 26 48 / 0.14), transparent 58%),
     linear-gradient(180deg, rgb(248 246 242 / 0.05), transparent 40%), linear-gradient(158deg, #0b2c1f, #051710 84%);
-  --theme-panel-background: radial-gradient(130% 120% at 82% -18%, rgb(248 246 242 / 0.14), transparent 54%),
-    radial-gradient(120% 140% at 10% 4%, rgb(29 92 64 / 0.46), transparent 62%),
-    radial-gradient(90% 120% at 100% 96%, rgb(200 26 48 / 0.13), transparent 56%),
+  --theme-panel-background: radial-gradient(130% 120% at 82% -18%, rgb(248 246 242 / 0.09), transparent 54%),
+    radial-gradient(120% 140% at 10% 4%, rgb(29 92 64 / 0.32), transparent 62%),
+    radial-gradient(90% 120% at 100% 96%, rgb(200 26 48 / 0.11), transparent 56%),
     linear-gradient(158deg, #0e3526, #05170f 82%);
   --theme-inset-background: linear-gradient(180deg, #04150f, #0c2c20);
   /* The crimson velvet control. The snow sheen is capped at 0.12 alpha: above that the
@@ -109,10 +116,10 @@
     #b9a37a 95%,
     #efe7d7
   );
-  --theme-project-background: radial-gradient(130% 120% at 76% -10%, rgb(29 92 64 / 0.44), transparent 58%),
+  --theme-project-background: radial-gradient(130% 120% at 76% -10%, rgb(29 92 64 / 0.32), transparent 58%),
     radial-gradient(110% 130% at 8% 96%, rgb(200 26 48 / 0.12), transparent 56%),
     linear-gradient(180deg, rgb(248 246 242 / 0.05), transparent 40%), linear-gradient(160deg, #0c2f21, #05160f 82%);
-  --theme-project-info-background: radial-gradient(120% 130% at 14% -8%, rgb(29 92 64 / 0.3), transparent 58%),
+  --theme-project-info-background: radial-gradient(120% 130% at 14% -8%, rgb(29 92 64 / 0.24), transparent 58%),
     linear-gradient(150deg, #082219, #04120c);
   /* Frosted pane: translucent snow over the pine well, so the field reads as glass */
   --theme-input-background: linear-gradient(
@@ -123,12 +130,12 @@
     ),
     linear-gradient(180deg, #072016, #0d2e21);
   --theme-modal-frame-background: linear-gradient(138deg, #ede5d5 0 2%, #c8b38c 9%, #0f3526 26%, #04130d 76%, #a8916a);
-  --theme-modal-surface-background: radial-gradient(120% 130% at 50% -16%, rgb(248 246 242 / 0.16), transparent 54%),
-    radial-gradient(110% 120% at 88% 92%, rgb(200 26 48 / 0.14), transparent 58%),
+  --theme-modal-surface-background: radial-gradient(120% 130% at 50% -16%, rgb(248 246 242 / 0.11), transparent 54%),
+    radial-gradient(110% 120% at 88% 92%, rgb(200 26 48 / 0.11), transparent 58%),
     linear-gradient(152deg, #0e3626, #05170f 82%);
-  --theme-appointment-background: radial-gradient(110% 90% at 50% -6%, rgb(29 92 64 / 0.44), transparent 58%),
+  --theme-appointment-background: radial-gradient(110% 90% at 50% -6%, rgb(29 92 64 / 0.34), transparent 58%),
     linear-gradient(180deg, #072117, #030d09);
-  --theme-appointment-modal-background: radial-gradient(120% 130% at 22% -8%, rgb(248 246 242 / 0.15), transparent 54%),
+  --theme-appointment-modal-background: radial-gradient(120% 130% at 22% -8%, rgb(248 246 242 / 0.11), transparent 54%),
     radial-gradient(100% 120% at 92% 96%, rgb(200 26 48 / 0.13), transparent 56%),
     linear-gradient(150deg, #0d3325, #04140e 84%);
   /* Candlelight amber pooled behind the pine — the third light source of the references */
@@ -252,9 +259,9 @@
 /* The signature control, taken from the santa-hat reference: a crimson velvet face with a
    scalloped snow-fur cuff along the bottom edge in place of a hard bevel, and an amber rim
    that lights on hover. Every button in the app inherits this.
-   The velvet sheen is held at 0.12 alpha in the token block and the label is pinned to
-   #fff8f0 — together they measure 4.69:1 on the lightest part of the face, which clears the
-   4.5:1 text floor. Raising either one drops it under */
+   The velvet sheen is held at 0.12 alpha in the token block and the label is pinned to #fff8f0.
+   Measured off the painted control that pair reads 7.7:1 at the median and 5.2:1 over the
+   sheened top edge, both clear of the 4.5:1 text floor. Raising the sheen eats that margin */
 :root[data-theme="new-year"] .plaque,
 :root[data-theme="new-year"] .site-control.plaque,
 :root[data-theme="new-year"] .appointment-choice {
