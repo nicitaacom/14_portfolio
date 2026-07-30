@@ -731,6 +731,27 @@
   transform: none;
 }
 
+/* Project titles are finger-written into snow, the way the drawn-in-snow reference reads. The tag
+   stops being paper here and becomes a small snow field: cool white, lit from the upper left.
+   The letters are the grooves, so they take a dark slate rather than a literal pale-blue shadow —
+   a true groove colour measures about 2.6:1 on snow and would be unreadable. This slate keeps the
+   carved read and measures close to 7:1. The two text shadows are the groove walls: a dark rim on
+   the lit side, a bright rim of piled snow on the other */
+:root[data-theme="new-year"] .project-paper-tab {
+  background: var(--new-year-grain), radial-gradient(120% 150% at 28% -30%, #ffffff, transparent 62%),
+    linear-gradient(158deg, #f4f8fa, #dde5eb);
+  border: 1px solid rgb(255 255 255 / 0.9);
+  box-shadow:
+    0 4px 10px rgb(2 10 7 / 0.42),
+    inset 0 1px 0 #ffffff,
+    inset 0 -2px 4px rgb(139 163 180 / 0.32);
+  color: #3c505d !important;
+  letter-spacing: 0.03em;
+  text-shadow:
+    -1px -1px 1px rgb(96 122 140 / 0.55),
+    1px 1px 0 rgb(255 255 255 / 0.95);
+}
+
 /* Every other tag is cut from the gingham cloth instead of the paper stock */
 :root[data-theme="new-year"] .site-label:nth-child(odd) {
   background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #fefcf6, #efe9db);
