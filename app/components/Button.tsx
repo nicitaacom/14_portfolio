@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
 
 import { HalloweenRequestHand } from "@/components/Halloween/HalloweenRequestHand"
+import { NewYearRequestLever } from "@/components/NewYear/NewYearRequestLever"
 import { useCurrentLocale } from "@/locales/client"
 import { localizeHref } from "@/locales/helpers"
 
@@ -42,6 +43,10 @@ export function Button({
       `halloween-request-control ${
         isCompactRequestControl ? "halloween-request-control-compact" : "halloween-request-control-standard"
       }`,
+    isRequestControl &&
+      `new-year-request-control ${
+        isCompactRequestControl ? "new-year-request-control-compact" : "new-year-request-control-standard"
+      }`,
     className,
   )
 
@@ -75,9 +80,16 @@ export function Button({
           onClick?.()
         }}
         {...props}>
-        {isRequestControl ? <span className="halloween-request-content">{children}</span> : children}
+        {isRequestControl ? (
+          <span className="halloween-request-content new-year-request-content">{children}</span>
+        ) : (
+          children
+        )}
         {isRequestControl && (
-          <HalloweenRequestHand compact={isCompactRequestControl} engaged={requestPending || requestPulse} />
+          <>
+            <HalloweenRequestHand compact={isCompactRequestControl} engaged={requestPending || requestPulse} />
+            <NewYearRequestLever compact={isCompactRequestControl} engaged={requestPending || requestPulse} />
+          </>
         )}
       </button>
     )
