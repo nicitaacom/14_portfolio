@@ -76,15 +76,16 @@ Knit and gingham are repeats on purpose. The warning in `dev_readme-ui-system.md
 
 ### Components
 
-| Component                    | Renders                      | Notes                                                                                                                                                                                                                                       |
-| ---------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NewYearScene`               | the backdrop                 | Canvas snow in three parallax depths with two-period wind drift, SVG snowfield (three banked drifts, two snowmen, snow-laden firs, a lit cottage, chocolate and a steaming mug, a light string of bulbs), GSAP bauble sway, steam and bokeh |
-| `NewYearJazzPlayer`          | bottom-right, all pages      | SVG record and tone arm over a Canvas level meter. Click plays; the meter is driven by a real WebAudio analyser and falls back to an idle wave. Track goes at `public/new-year-jazz.mp3`                                                    |
-| `NewYearRequestLever`        | buttons with `requestAction` | red-mittened hand on a candy-cane lever, pivots on its gate                                                                                                                                                                                 |
-| `NewYearProjectOrnament`     | each project card            | bauble that swings on hover only — no idle loop, so a page of cards costs nothing at rest                                                                                                                                                   |
-| `NewYearBookingLoadingScene` | the booking wait             | snow globe: SVG dome and plinth, Canvas snow inside, GSAP rock-and-settle                                                                                                                                                                   |
-| `NewYearFireworksEvent`      | randomly, over the town      | Canvas particles with gravity and drag, GSAP flash at each shell                                                                                                                                                                            |
-| navbar garland               | the repo strip               | a light string sagging across it, bulbs twinkling out of phase, parallax off the scroll position                                                                                                                                            |
+| Component                    | Renders                      | Notes                                                                                                                                                                                                                                                            |
+| ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NewYearScene`               | the backdrop                 | Canvas snow in three parallax depths with two-period wind drift, SVG snowfield (three banked drifts, two snowmen, snow-laden firs, a lit cottage, chocolate and a steaming mug, a light string of bulbs), GSAP bauble sway, steam and bokeh                      |
+| `NewYearFilmStrip`           | home, above the projects     | Six of the reference photographs cut into slanted panels with snow-white gaps. Each panel is skewed and its photograph skewed back by the same angle, so the cut is diagonal and the picture stays upright. Uses direct image tags, not `next/image` — see below |
+| `NewYearJazzPlayer`          | bottom-right, all pages      | SVG record and tone arm over a Canvas level meter. Click plays; the meter is driven by a real WebAudio analyser and falls back to an idle wave. Track goes at `public/new-year-jazz.mp3`                                                                         |
+| `NewYearRequestLever`        | buttons with `requestAction` | red-mittened hand on a candy-cane lever, pivots on its gate                                                                                                                                                                                                      |
+| `NewYearProjectOrnament`     | each project card            | bauble that swings on hover only — no idle loop, so a page of cards costs nothing at rest                                                                                                                                                                        |
+| `NewYearBookingLoadingScene` | the booking wait             | snow globe: SVG dome and plinth, Canvas snow inside, GSAP rock-and-settle                                                                                                                                                                                        |
+| `NewYearFireworksEvent`      | randomly, over the town      | Canvas particles with gravity and drag, GSAP flash at each shell                                                                                                                                                                                                 |
+| navbar garland               | the repo strip               | a light string sagging across it, bulbs twinkling out of phase, parallax off the scroll position                                                                                                                                                                 |
 
 `NewYearRequestLever` reuses the plumbing class names the Halloween hand introduced on the
 button, and adds `new-year-request-control` / `new-year-request-content` beside them. Both sets
@@ -124,6 +125,18 @@ is a contrast regression, not a style tweak.
 Current state: warm-snow body text 13.2:1, muted text 7.9:1, all four semantic colours between
 6.3:1 and 8.7:1, the plaque label 7.7:1, tag ink 8.4:1. At the wash's brightest 5% the tightest
 is 4.9:1, still clear of the floor.
+
+### The photo strip uses direct image tags
+
+`next/image` issued requests for only three of the six frames. The other three kept a correct `src`, a full
+`srcset`, a real 254x230 layout box and `loading="eager"`, and were still never fetched — no request, no failure,
+nothing in the network log. The files themselves are fine: all six return 200 raw and through the optimiser at
+every width, and all six decode when opened directly. Something about `fill` inside a skewed, clipped panel loses
+them. These are six fixed decorative photographs, so the optimiser buys almost nothing, and the direct tag is
+reliable. The `@next/next/no-img-element` rule is suppressed on that one line with the reason written above it.
+
+Reference photographs live in `public/UI/new-year/references/`. The cut-outs at `public/UI/new-year/` are separate
+and are not used by the strip.
 
 ### Verified in a real browser
 
