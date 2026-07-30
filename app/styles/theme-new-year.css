@@ -543,12 +543,19 @@
   height: 9px;
 }
 
-/* Candy cane fill. The stripe angle is 45deg and the period is 10px so the crawl advances
-   exactly one period per cycle: 10px / cos(45deg) = 14.142px of travel along x */
+/* Candy ribbon fill. At full-width desktop the first cut of this was solid white against solid
+   crimson at 5px, which read as a barcode butted onto the garland dots rather than as a ribbon.
+   The white is now translucent over a crimson body, the period is wider and the angle shallower,
+   and a glow softens the join. The crawl still advances exactly one period per cycle:
+   14px / cos(30deg) = 16.166px of travel along x */
 :root[data-theme="new-year"] .hazard-rail-progress {
-  animation: new-year-candy-crawl 1.6s linear infinite;
-  background: repeating-linear-gradient(45deg, #fdfbf6 0 5px, hsl(var(--cta)) 5px 10px);
-  box-shadow: 0 0 11px hsl(var(--cta) / 0.55);
+  animation: new-year-candy-crawl 2.2s linear infinite;
+  background: repeating-linear-gradient(30deg, rgb(255 253 250 / 0.5) 0 7px, transparent 7px 14px),
+    linear-gradient(90deg, hsl(var(--cta) / 0.85), hsl(var(--cta)));
+  border-radius: 999px;
+  box-shadow:
+    0 0 10px hsl(var(--cta) / 0.5),
+    inset 0 1px 0 rgb(255 253 250 / 0.35);
 }
 
 /* The Work / Projects switcher: an unselected tab is a knitted well and the selected one is
@@ -649,6 +656,6 @@
 
 @keyframes new-year-candy-crawl {
   to {
-    background-position-x: 14.142px;
+    background-position-x: 16.166px;
   }
 }

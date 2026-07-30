@@ -102,55 +102,122 @@ export const NavbarWaves = forwardRef<NavbarWavesHandle>(function NavbarWaves(_,
       return
     }
 
-    /* A string of lights sagging across the repo strip. The cord is a parabola rather than a
-       true catenary — at this width-to-sag ratio the two are within a pixel of each other.
-       Scroll slides the whole string sideways, and each bulb keeps its colour and twinkle
-       phase as it travels because both are keyed to its absolute index on the string, not to
-       its slot in the draw loop */
+    /* The repo strip for this theme. Every other theme fills it with a grid and two sine traces;
+       a single light string left most of the band empty at desktop widths, so this paints a whole
+       snowy night: a bank of snow along the bottom, distant firs behind it, two light strings at
+       different depths and falling snow over the top. Each layer takes the scroll at its own rate,
+       which is what gives the band depth. */
     if (theme === "new-year") {
-      const parallax = scrollPositionRef.current * 0.06
       const time = performance.now()
-      const cordTop = height * 0.16
-      const sag = height * 0.34
-      const shift = parallax % GARLAND_BULB_SPACING
-      const wrapCount = Math.floor(parallax / GARLAND_BULB_SPACING)
-      const cordY = (x: number) => {
-        const position = Math.min(1, Math.max(0, x / width))
-        return cordTop + sag * 4 * position * (1 - position)
-      }
+      const scroll = scrollPositionRef.current
 
-      context.beginPath()
-      for (let x = -GARLAND_BULB_SPACING; x <= width + GARLAND_BULB_SPACING; x += 6) {
-        const y = cordY(x)
-        if (x === -GARLAND_BULB_SPACING) context.moveTo(x, y)
-        else context.lineTo(x, y)
-      }
-      context.strokeStyle = "rgba(217, 195, 151, 0.32)"
-      context.lineWidth = 1.4
-      context.stroke()
-
-      for (let x = -GARLAND_BULB_SPACING; x <= width + GARLAND_BULB_SPACING; x += GARLAND_BULB_SPACING) {
-        const bulbX = x - shift
-        const anchorY = cordY(bulbX)
-        const bulbIndex = x / GARLAND_BULB_SPACING + wrapCount
-        const colour = GARLAND_BULB_COLOURS[Math.abs(bulbIndex) % GARLAND_BULB_COLOURS.length]
-        const twinkle = 0.55 + 0.45 * Math.sin(time * 0.0016 + bulbIndex * 1.9)
+      /* Bulbs keep their colour and twinkle phase as the string travels, because both are keyed to
+         an absolute index on the string rather than to a slot in the draw loop */
+      const drawLightString = (
+        topRatio: number,
+        sagRatio: number,
+        spacing: number,
+        bulbRadius: number,
+        scrollRate: number,
+        alpha: number,
+      ) => {
+        const parallax = scroll * scrollRate
+        const shift = parallax % spacing
+        const wrapCount = Math.floor(parallax / spacing)
+        const cordTop = height * topRatio
+        const sag = height * sagRatio
+        const cordY = (x: number) => {
+          const position = Math.min(1, Math.max(0, x / width))
+          return cordTop + sag * 4 * position * (1 - position)
+        }
 
         context.beginPath()
-        context.moveTo(bulbX, anchorY)
-        context.lineTo(bulbX, anchorY + 4.5)
-        context.strokeStyle = "rgba(217, 195, 151, 0.34)"
-        context.lineWidth = 1.2
+        for (let x = -spacing; x <= width + spacing; x += 6) {
+          const y = cordY(x)
+          if (x === -spacing) context.moveTo(x, y)
+          else context.lineTo(x, y)
+        }
+        context.strokeStyle = `rgba(217, 195, 151, ${0.3 * alpha})`
+        context.lineWidth = 1.4
         context.stroke()
 
-        context.beginPath()
-        context.arc(bulbX, anchorY + 8.5, 8.5, 0, Math.PI * 2)
-        context.fillStyle = `rgba(${colour}, ${0.1 * twinkle})`
-        context.fill()
+        for (let x = -spacing; x <= width + spacing; x += spacing) {
+          const bulbX = x - shift
+          const anchorY = cordY(bulbX)
+          const bulbIndex = x / spacing + wrapCount
+          const colour = GARLAND_BULB_COLOURS[Math.abs(bulbIndex) % GARLAND_BULB_COLOURS.length]
+          const twinkle = 0.55 + 0.45 * Math.sin(time * 0.0016 + bulbIndex * 1.9)
 
+          context.beginPath()
+          context.moveTo(bulbX, anchorY)
+          context.lineTo(bulbX, anchorY + bulbRadius * 1.5)
+          context.strokeStyle = `rgba(217, 195, 151, ${0.32 * alpha})`
+          context.lineWidth = 1.2
+          context.stroke()
+
+          const glowY = anchorY + bulbRadius * 2.8
+          context.beginPath()
+          context.arc(bulbX, glowY, bulbRadius * 2.9, 0, Math.PI * 2)
+          context.fillStyle = `rgba(${colour}, ${0.1 * twinkle * alpha})`
+          context.fill()
+
+          context.beginPath()
+          context.arc(bulbX, glowY, bulbRadius, 0, Math.PI * 2)
+          context.fillStyle = `rgba(${colour}, ${(0.42 + 0.34 * twinkle) * alpha})`
+          context.fill()
+        }
+      }
+
+      const bankTop = height * 0.82
+
+      /* Distant firs, behind the snow bank and drifting at a quarter of the scroll rate */
+      const firParallax = (scroll * 0.015) % 260
+      for (let index = -1; index < Math.ceil(width / 260) + 1; index += 1) {
+        const firX = index * 260 - firParallax + 130
+        const firHeight = height * (index % 2 === 0 ? 0.4 : 0.31)
+        const halfWidth = firHeight * 0.42
         context.beginPath()
-        context.arc(bulbX, anchorY + 8.5, 3.1, 0, Math.PI * 2)
-        context.fillStyle = `rgba(${colour}, ${0.42 + 0.34 * twinkle})`
+        context.moveTo(firX, bankTop - firHeight)
+        context.lineTo(firX + halfWidth, bankTop + 4)
+        context.lineTo(firX - halfWidth, bankTop + 4)
+        context.closePath()
+        context.fillStyle = "rgba(16, 52, 37, 0.85)"
+        context.fill()
+        context.beginPath()
+        context.moveTo(firX - halfWidth * 0.62, bankTop - firHeight * 0.34)
+        context.quadraticCurveTo(firX, bankTop - firHeight * 0.46, firX + halfWidth * 0.62, bankTop - firHeight * 0.34)
+        context.strokeStyle = "rgba(253, 251, 246, 0.4)"
+        context.lineWidth = 3
+        context.lineCap = "round"
+        context.stroke()
+      }
+
+      /* The bank of snow the whole strip sits on */
+      context.beginPath()
+      context.moveTo(-4, height + 4)
+      for (let x = -4; x <= width + 4; x += 18) {
+        context.lineTo(x, bankTop + Math.sin(x * 0.008 + 0.6) * 5)
+      }
+      context.lineTo(width + 4, height + 4)
+      context.closePath()
+      context.fillStyle = "rgba(247, 244, 236, 0.9)"
+      context.fill()
+
+      drawLightString(0.1, 0.16, 64, 2.2, 0.03, 0.6)
+      drawLightString(0.24, 0.3, 52, 3.1, 0.06, 1)
+
+      /* Falling snow over everything. The index drives both the column and the phase, so the field
+         reads as scattered rather than as a marching row */
+      for (let index = 0; index < 46; index += 1) {
+        const columnSeed = (index * 0.6180339887) % 1
+        const drift = Math.sin(time * 0.0004 + index * 1.7) * 14
+        const flakeX = columnSeed * width + drift
+        const fallSpan = height * 0.94
+        const flakeY = ((index * 0.317 + time * 0.000045) % 1) * fallSpan
+        const flakeRadius = index % 5 === 0 ? 1.9 : index % 3 === 0 ? 1.4 : 0.9
+        context.beginPath()
+        context.arc(flakeX, flakeY, flakeRadius, 0, Math.PI * 2)
+        context.fillStyle = `rgba(255, 253, 250, ${index % 5 === 0 ? 0.78 : 0.5})`
         context.fill()
       }
 
