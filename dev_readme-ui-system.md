@@ -58,8 +58,10 @@ rivets and tilted labels — they are its signature, not a shared default.
   JSX uses one. Theme overrides live in the theme CSS files. A utility class is specificity `(0,1,0)` and loses to
   `:root[data-theme="x"] .y` at `(0,3,0)`, so a variant would need `!important` on every class.
 - **Against material tokens standing in for semantic scales.** See below — this was a real bug.
-- **Against raster art for theme ornaments.** Reference images in `public/UI/` are shape reference only; production
-  visuals are CSS, SVG, Canvas, Framer Motion, GSAP.
+- **Against raster art for theme _ornaments_.** Anything that behaves — a control, a scene, an event, a spinner —
+  is CSS, SVG, Canvas, Framer Motion, GSAP, never a bitmap. Flat editorial artwork is a separate case: New Year
+  ships a strip of the reference photographs as a deliberate design element, and that is fine. The line is that a
+  photograph may illustrate, but it may never stand in for a component that has states.
 
 ### Material tokens vs semantic scales
 
@@ -85,6 +87,32 @@ surface (control faces, trim, arrows) and an accent that `text-cta` sets type in
 a good fill and a poor text colour: New Year's crimson `#da1b2e` measures 7.7:1 under warm-snow label text and
 2.8:1 as text on the panel wash, and no dark background can lift it past 4.18:1. When a theme picks a dark `--cta`,
 check `text-cta` separately from the fills, and expect to need a second lighter token for text.
+
+### Never set `position` unconditionally in a theme file
+
+These files are unlayered, so every declaration in them outranks anything Tailwind emits inside `@layer utilities`.
+For colour that is the whole point. For `position` it is a trap: a bare
+
+```
+  :root[data-theme="x"] .machine-face { position: relative; }
+```
+
+beats the `absolute` utility on `<div class="machine-face absolute ...">` and drags that element back into normal
+flow. In New Year this inflated the navbar bezel around the language menu from 44px to 280px, and it also caught a
+`laptop:sticky` board and a `plaque absolute` control in a modal — the element still looks right in isolation, so the
+damage shows up as a container that is suddenly the wrong size somewhere else.
+
+If a theme needs a positioned box — for a `::after` ornament, or to anchor an absolutely-positioned child — put the
+`position` in its own rule and exclude anything a utility already positions:
+
+```
+  :root[data-theme="x"] .workbench-board:not([class*="absolute"]):not([class*="fixed"]):not([class*="sticky"]) {
+    position: relative;
+  }
+```
+
+The substring form is deliberate: it also catches responsive variants such as `laptop:sticky`, which a bare
+`:not(.sticky)` would miss. The same caution applies to `display`, `overflow` and `z-index`.
 
 ### Measuring contrast on a theme
 
