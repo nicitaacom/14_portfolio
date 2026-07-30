@@ -1,6 +1,8 @@
 export default {
   common: {
     portfolio: "Portfolio",
+    playJazz: "Weihnachtsjazz abspielen",
+    pauseJazz: "Weihnachtsjazz pausieren",
     bookAppointment: "Termin buchen",
     moreInfo: "Mehr Infos",
     stack: "Stack",

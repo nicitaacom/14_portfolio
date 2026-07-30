@@ -1,6 +1,8 @@
 export default {
   common: {
     portfolio: "Портфолио",
+    playJazz: "Включить новогодний джаз",
+    pauseJazz: "Остановить новогодний джаз",
     bookAppointment: "Записаться на встречу",
     moreInfo: "Подробнее",
     stack: "Стек",

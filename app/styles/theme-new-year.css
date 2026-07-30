@@ -331,6 +331,90 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Jazz player ─────────────────────────────────────────────────────────────────
+   A record sleeve parked in the bottom-left corner. It is a real button, so it takes pointer
+   events and keyboard focus while everything else in the seasonal layer stays inert. Drop the
+   track at public/new-year-jazz.mp3 and the disc starts turning on click */
+
+/* Bottom right: the account avatar already sits in the bottom-left corner */
+.new-year-jazz-player {
+  bottom: clamp(12px, 2vw, 26px);
+  position: fixed;
+  right: clamp(12px, 2vw, 26px);
+  z-index: 40;
+}
+
+.new-year-jazz-control {
+  background: var(--new-year-grain), var(--theme-panel-background);
+  border: 1px solid rgb(217 195 151 / 0.4);
+  border-radius: 14px;
+  box-shadow:
+    0 14px 28px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.22);
+  cursor: pointer;
+  display: block;
+  padding: 8px;
+  position: relative;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  width: clamp(120px, 12vw, 168px);
+}
+
+.new-year-jazz-control:hover {
+  box-shadow:
+    0 0 0 2px rgb(247 178 59 / 0.5),
+    0 16px 30px var(--new-year-shadow),
+    0 0 20px rgb(247 178 59 / 0.24);
+  transform: translateY(-2px);
+}
+
+.new-year-jazz-control:focus-visible {
+  outline: 2px solid hsl(var(--cta));
+  outline-offset: 3px;
+}
+
+.new-year-jazz-art {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+/* Sits over the sleeve's lower band, inside the record art */
+.new-year-jazz-meter {
+  bottom: 16%;
+  height: 18%;
+  left: 12%;
+  pointer-events: none;
+  position: absolute;
+  width: 62%;
+}
+
+.new-year-jazz-state {
+  color: #fff8f0;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  position: absolute;
+  right: 14%;
+  text-shadow: 0 1px 2px rgb(2 10 7 / 0.7);
+  top: 16%;
+}
+
+.new-year-jazz-state-missing {
+  color: hsl(var(--secondary-foreground));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .new-year-jazz-control {
+    transition: none;
+  }
+
+  .new-year-jazz-control:hover {
+    transform: none;
+  }
+}
+
 /* ── Fireworks ───────────────────────────────────────────────────────────────────
    The midnight event. Particles are drawn with the lighter composite so overlapping sparks add
    up the way real ones do, and the flash is a soft radial parked at the shell that fired it */

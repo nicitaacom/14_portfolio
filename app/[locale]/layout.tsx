@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar/Navbar"
 import { WorkbenchWall } from "@/components/WorkbenchWall"
 import { HalloweenGraveEvent } from "@/components/Halloween/HalloweenGraveEvent"
 import { NewYearFireworksEvent } from "@/components/NewYear/NewYearFireworksEvent"
+import { NewYearJazzPlayer } from "@/components/NewYear/NewYearJazzPlayer"
 import { UTMTracker } from "@/utm-stats/UTMTracker"
 import { I18nProviderClient } from "@/locales/client"
 import { isLocale } from "@/locales/helpers"
@@ -35,6 +36,7 @@ export default async function LocaleLayout({
           <HalloweenGraveEvent />
           <Navbar />
           <UTMTracker userId={`14-${nanoid()}`} />
+          <NewYearJazzPlayer />
           <Layout>{children}</Layout>
         </div>
       </div>
