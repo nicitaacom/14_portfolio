@@ -2,16 +2,23 @@
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react"
 
+import { useReducedMotion } from "framer-motion"
+
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 
 export interface NavbarWavesHandle {
   setScrollPosition: (scrollPosition: number) => void
 }
 
+const GARLAND_BULB_SPACING = 52
+/* A four-colour string in the order they come on a real one */
+const GARLAND_BULB_COLOURS = ["200, 26, 48", "247, 178, 59", "255, 250, 240", "29, 120, 80"]
+
 export const NavbarWaves = forwardRef<NavbarWavesHandle>(function NavbarWaves(_, ref) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const scrollPositionRef = useRef(0)
   const theme = useSiteTheme()
+  const reducedMotion = useReducedMotion()
 
   const drawWaves = useCallback(() => {
     const canvas = canvasRef.current
@@ -89,6 +96,61 @@ export const NavbarWaves = forwardRef<NavbarWavesHandle>(function NavbarWaves(_,
         context.beginPath()
         context.arc(x, y, index % 4 === 0 ? 1.6 : 1, 0, Math.PI * 2)
         context.fillStyle = index % 4 === 0 ? "rgba(255, 120, 25, 0.28)" : "rgba(169, 215, 159, 0.18)"
+        context.fill()
+      }
+
+      return
+    }
+
+    /* A string of lights sagging across the repo strip. The cord is a parabola rather than a
+       true catenary — at this width-to-sag ratio the two are within a pixel of each other.
+       Scroll slides the whole string sideways, and each bulb keeps its colour and twinkle
+       phase as it travels because both are keyed to its absolute index on the string, not to
+       its slot in the draw loop */
+    if (theme === "new-year") {
+      const parallax = scrollPositionRef.current * 0.06
+      const time = performance.now()
+      const cordTop = height * 0.16
+      const sag = height * 0.34
+      const shift = parallax % GARLAND_BULB_SPACING
+      const wrapCount = Math.floor(parallax / GARLAND_BULB_SPACING)
+      const cordY = (x: number) => {
+        const position = Math.min(1, Math.max(0, x / width))
+        return cordTop + sag * 4 * position * (1 - position)
+      }
+
+      context.beginPath()
+      for (let x = -GARLAND_BULB_SPACING; x <= width + GARLAND_BULB_SPACING; x += 6) {
+        const y = cordY(x)
+        if (x === -GARLAND_BULB_SPACING) context.moveTo(x, y)
+        else context.lineTo(x, y)
+      }
+      context.strokeStyle = "rgba(217, 195, 151, 0.32)"
+      context.lineWidth = 1.4
+      context.stroke()
+
+      for (let x = -GARLAND_BULB_SPACING; x <= width + GARLAND_BULB_SPACING; x += GARLAND_BULB_SPACING) {
+        const bulbX = x - shift
+        const anchorY = cordY(bulbX)
+        const bulbIndex = x / GARLAND_BULB_SPACING + wrapCount
+        const colour = GARLAND_BULB_COLOURS[Math.abs(bulbIndex) % GARLAND_BULB_COLOURS.length]
+        const twinkle = 0.55 + 0.45 * Math.sin(time * 0.0016 + bulbIndex * 1.9)
+
+        context.beginPath()
+        context.moveTo(bulbX, anchorY)
+        context.lineTo(bulbX, anchorY + 4.5)
+        context.strokeStyle = "rgba(217, 195, 151, 0.34)"
+        context.lineWidth = 1.2
+        context.stroke()
+
+        context.beginPath()
+        context.arc(bulbX, anchorY + 8.5, 8.5, 0, Math.PI * 2)
+        context.fillStyle = `rgba(${colour}, ${0.1 * twinkle})`
+        context.fill()
+
+        context.beginPath()
+        context.arc(bulbX, anchorY + 8.5, 3.1, 0, Math.PI * 2)
+        context.fillStyle = `rgba(${colour}, ${0.42 + 0.34 * twinkle})`
         context.fill()
       }
 
@@ -182,6 +244,59 @@ export const NavbarWaves = forwardRef<NavbarWavesHandle>(function NavbarWaves(_,
 
     return () => resizeObserver.disconnect()
   }, [drawWaves])
+
+  /* Every other theme draws this canvas only on scroll and on resize. The bulbs twinkle on a
+       clock instead, so the New Year branch needs a frame loop of its own — held at about
+       24fps because the twinkle period is measured in seconds, and stopped whenever a modal is
+       open, the tab is hidden or the visitor asked for reduced motion. Under reduced motion the
+       string still paints once from the effect above, so the lights are lit but still */
+  useEffect(() => {
+    if (theme !== "new-year") return
+
+    let animationFrame = 0
+    let lastDrawTime = 0
+    let isRunning = false
+
+    const isGarlandPaused = () =>
+      Boolean(reducedMotion) || document.hidden || document.body.classList.contains("modal-open")
+
+    const step = (time: number) => {
+      if (!isRunning) return
+      if (time - lastDrawTime >= 42) {
+        lastDrawTime = time
+        drawWaves()
+      }
+      animationFrame = requestAnimationFrame(step)
+    }
+
+    const startGarland = () => {
+      if (isRunning || isGarlandPaused()) return
+      isRunning = true
+      animationFrame = requestAnimationFrame(step)
+    }
+
+    const stopGarland = () => {
+      isRunning = false
+      cancelAnimationFrame(animationFrame)
+    }
+
+    const syncGarlandState = () => {
+      if (isGarlandPaused()) stopGarland()
+      else startGarland()
+    }
+
+    syncGarlandState()
+
+    const bodyObserver = new MutationObserver(syncGarlandState)
+    bodyObserver.observe(document.body, { attributeFilter: ["class"], attributes: true })
+    document.addEventListener("visibilitychange", syncGarlandState)
+
+    return () => {
+      stopGarland()
+      bodyObserver.disconnect()
+      document.removeEventListener("visibilitychange", syncGarlandState)
+    }
+  }, [drawWaves, reducedMotion, theme])
 
   return <canvas ref={canvasRef} className="navbar-wave-canvas" aria-hidden="true" />
 })
