@@ -142,91 +142,27 @@
     linear-gradient(180deg, #0b2e20, #030f0a 74%);
 }
 
-/* Wide soft blooms standing in for the watercolour bleed of the reference paintings:
-   one fir, one crimson, drifting past each other */
-.new-year-aurora {
-  border-radius: 50%;
-  filter: blur(64px);
-  height: 32rem;
-  opacity: 0.2;
-  position: absolute;
-  width: 72rem;
-}
+/* ── Scene ───────────────────────────────────────────────────────────────────────
+   The room the whole system sits in: a window onto a snowing street, fir boughs reaching in
+   at the corners, a light string across the window head and candles on the sills. Snow is a
+   Canvas layer over the SVG, and every motion in here is driven from NewYearScene */
 
-.new-year-aurora-one {
-  animation: new-year-aurora-drift 13s ease-in-out infinite alternate;
-  background: var(--new-year-fir);
-  left: -22rem;
-  top: -19rem;
-  transform: rotate(-12deg);
-}
-
-.new-year-aurora-two {
-  animation: new-year-aurora-drift 18s ease-in-out infinite alternate-reverse;
-  background: var(--new-year-crimson);
-  right: -30rem;
-  top: 2rem;
-  transform: rotate(18deg);
-}
-
-.new-year-snow {
-  inset: -120px 0 0;
-  position: absolute;
-}
-
-.new-year-snow-back {
-  animation: new-year-snowfall 18s linear infinite;
-  background-image: radial-gradient(circle, rgb(248 246 242 / 0.66) 0 1.4px, transparent 1.9px),
-    radial-gradient(circle, rgb(248 246 242 / 0.48) 0 1.2px, transparent 1.7px);
-  background-position:
-    20px 10px,
-    90px 70px;
-  background-size:
-    120px 120px,
-    170px 170px;
-}
-
-.new-year-snow-front {
-  animation: new-year-snowfall 11s linear infinite;
-  background-image: radial-gradient(circle, rgb(255 253 250 / 0.9) 0 2px, transparent 2.6px),
-    radial-gradient(circle, rgb(248 246 242 / 0.74) 0 1.7px, transparent 2.2px);
-  background-position:
-    40px 30px,
-    130px 95px;
-  background-size:
-    210px 210px,
-    270px 270px;
-}
-
-.new-year-star {
-  animation: new-year-star-turn 24s linear infinite;
-  opacity: 0.22;
-  position: absolute;
-  stroke: var(--new-year-snow);
-  stroke-linecap: round;
-  stroke-width: 1.2;
-  width: min(18vw, 170px);
-}
-
-.new-year-star-left {
-  left: 3vw;
-  top: 11vh;
-}
-
-.new-year-star-right {
-  animation-direction: reverse;
-  bottom: 7vh;
-  right: 4vw;
-}
-
-.new-year-frost {
-  background:
-    linear-gradient(135deg, rgb(248 246 242 / 0.13), transparent 13%) top left / 44% 28% no-repeat,
-    linear-gradient(225deg, rgb(248 246 242 / 0.1), transparent 13%) top right / 40% 24% no-repeat,
-    linear-gradient(45deg, rgb(248 246 242 / 0.08), transparent 12%) bottom left / 35% 22% no-repeat,
-    radial-gradient(ellipse at center, transparent 36%, rgb(3 14 9 / 0.72) 100%);
+.new-year-scene {
+  background: var(--new-year-room);
   inset: 0;
+  isolation: isolate;
+  overflow: clip;
   position: absolute;
+}
+
+.new-year-interior-svg {
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Snow falls in front of the room, so the canvas sits over the SVG */
+.new-year-snow-canvas {
+  z-index: 2;
 }
 
 /* ── Materials ───────────────────────────────────────────────────────────────────
@@ -550,29 +486,5 @@
 @keyframes new-year-candy-crawl {
   to {
     background-position-x: 14.142px;
-  }
-}
-
-@keyframes new-year-snowfall {
-  from {
-    transform: translate3d(0, -120px, 0);
-  }
-  to {
-    transform: translate3d(36px, 120px, 0);
-  }
-}
-
-@keyframes new-year-aurora-drift {
-  from {
-    transform: translate3d(-4%, 0, 0) rotate(-12deg);
-  }
-  to {
-    transform: translate3d(12%, 7%, 0) rotate(2deg);
-  }
-}
-
-@keyframes new-year-star-turn {
-  to {
-    transform: rotate(360deg);
   }
 }

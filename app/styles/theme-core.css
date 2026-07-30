@@ -536,18 +536,12 @@ body {
 
 .halloween-web,
 .halloween-bats,
-.halloween-fog,
-.new-year-aurora,
-.new-year-snow,
-.new-year-star {
+.halloween-fog {
   will-change: transform;
 }
 
 body.modal-open .halloween-web,
-body.modal-open .halloween-fog,
-body.modal-open .new-year-aurora,
-body.modal-open .new-year-snow,
-body.modal-open .new-year-star {
+body.modal-open .halloween-fog {
   animation-play-state: paused;
 }
 
@@ -555,10 +549,7 @@ body.modal-open .new-year-star {
   .theme-backdrop,
   .halloween-web,
   .halloween-bats,
-  .halloween-fog,
-  .new-year-aurora,
-  .new-year-snow,
-  .new-year-star {
+  .halloween-fog {
     animation: none !important;
     transition: none;
   }

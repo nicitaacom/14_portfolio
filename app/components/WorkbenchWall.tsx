@@ -1,4 +1,5 @@
 import { HalloweenScene } from "@/components/Halloween/HalloweenScene"
+import { NewYearScene } from "@/components/NewYear/NewYearScene"
 
 export function WorkbenchWall() {
   return (
@@ -75,19 +76,7 @@ export function WorkbenchWall() {
       </div>
 
       <div className="theme-backdrop theme-backdrop-new-year">
-        <div className="new-year-aurora new-year-aurora-one" />
-        <div className="new-year-aurora new-year-aurora-two" />
-        <div className="new-year-snow new-year-snow-back" />
-        <div className="new-year-snow new-year-snow-front" />
-        <svg className="new-year-star new-year-star-left" viewBox="0 0 120 120" fill="none">
-          <path d="M60 8V112M8 60H112M23 23L97 97M97 23L23 97" />
-          <circle cx="60" cy="60" r="19" />
-        </svg>
-        <svg className="new-year-star new-year-star-right" viewBox="0 0 120 120" fill="none">
-          <path d="M60 8V112M8 60H112M23 23L97 97M97 23L23 97" />
-          <circle cx="60" cy="60" r="19" />
-        </svg>
-        <div className="new-year-frost" />
+        <NewYearScene />
       </div>
     </div>
   )
