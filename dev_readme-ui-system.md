@@ -11,7 +11,9 @@ how a theme is built, what a theme owns, when a theme is finished — lives here
 
 The failure this prevents: a theme that only remaps colour variables. It keeps every rivet, every brushed-metal
 stripe, every gear and every crooked workshop label from Crazy Mechanics, and reads as Crazy Mechanics wearing a
-different palette. New Year was in exactly that state — 3 component overrides against Halloween's 112.
+different palette. New Year was in exactly that state — 3 component overrides against Halloween's 112. It now
+ships 73 theme-scoped overrides, its own material vocabulary and five bespoke components; see
+`dev_readme-ui-new-year.md`, the second theme to earn its own notes.
 
 ### The three layers
 
@@ -20,7 +22,7 @@ different palette. New Year was in exactly that state — 3 component overrides 
         ▲                            .workbench-board .machine-panel .plaque .tape-label ...
         │ reads
         │
-  :root[data-theme="new-year"]  ──►  --theme-panel-background: <ice gradient>
+  :root[data-theme="new-year"]  ──►  --theme-panel-background: <watercolour wash>
     in app/styles/theme-<name>.css    --theme-fastener-opacity: 0
         │
         │ then, ONLY for shape work that lives outside the token set
@@ -37,14 +39,14 @@ motif — not for colour.
 
 ### Token contract
 
-| Token | Drives | Set it to 0 / none when |
-| --- | --- | --- |
-| `--theme-fastener-opacity` | `.navbar-rivet`, `.machine-panel::before`, `.project-wood-body::before` | the theme has no rivets |
-| `--theme-hardware-opacity` | `.navbar-plate::before`, `.lever-gate::before`, `.modal-frame-hardware` | the theme has no bevel hardware |
-| `--theme-label-rotation` | `.tape-label`, `.paper-tab`, `.modal-title-label`, tooltips | labels are not stuck-on tape |
-| `--theme-radius` | every themed surface | — |
-| `--theme-trim` / `--theme-trim-strong` | borders across all surfaces | — |
-| `--theme-*-background` | board, panel, inset, control, label, frame, project, input, modal, appointment surfaces | — |
+| Token                                  | Drives                                                                                  | Set it to 0 / none when         |
+| -------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------- |
+| `--theme-fastener-opacity`             | `.navbar-rivet`, `.machine-panel::before`, `.project-wood-body::before`                 | the theme has no rivets         |
+| `--theme-hardware-opacity`             | `.navbar-plate::before`, `.lever-gate::before`, `.modal-frame-hardware`                 | the theme has no bevel hardware |
+| `--theme-label-rotation`               | `.tape-label`, `.paper-tab`, `.modal-title-label`, tooltips                             | labels are not stuck-on tape    |
+| `--theme-radius`                       | every themed surface                                                                    | —                               |
+| `--theme-trim` / `--theme-trim-strong` | borders across all surfaces                                                             | —                               |
+| `--theme-*-background`                 | board, panel, inset, control, label, frame, project, input, modal, appointment surfaces | —                               |
 
 Halloween and New Year both set the first three to `0` / `0deg`. Crazy Mechanics is the only theme that wants
 rivets and tilted labels — they are its signature, not a shared default.
@@ -78,6 +80,28 @@ Same rule for `--danger` / `--warning` / `--info` / `--success`: a theme may ret
 surfaces, but must not repurpose them. A theme that leaves them unset inherits the industrial defaults — which is
 how New Year ended up with hazard-yellow and fire-engine-red bars on an ice palette.
 
+`--cta` is the case where the material/semantic split bites hardest, because theme-core uses it as **both** a
+surface (control faces, trim, arrows) and an accent that `text-cta` sets type in. A saturated dark material makes
+a good fill and a poor text colour: New Year's crimson `#da1b2e` measures 7.7:1 under warm-snow label text and
+2.8:1 as text on the panel wash, and no dark background can lift it past 4.18:1. When a theme picks a dark `--cta`,
+check `text-cta` separately from the fills, and expect to need a second lighter token for text.
+
+### Measuring contrast on a theme
+
+Eyeballing a gradient does not work, and neither does computing a ratio from the token values: a wash of layered
+radials plus a grain tile sits far above its own darkest stop, so a colour chosen against the base measures much
+worse where it actually lands. New Year's panel median came out roughly four times the luminance of its base pine.
+
+Measure the painted pixels instead. What worked, with no dev server involved:
+
+1. Render one surface at a time, filling a fixed box, with the theme CSS linked and `data-theme` stamped on `:root`.
+2. Screenshot it in headless Chromium at a known window size.
+3. Decode the PNG and sample a grid inside the box, asserting that no page background leaks into the window — a
+   viewport shorter than the image will otherwise feed it background pixels and quietly flatter the result.
+4. Report the median and the brightest 5%, and test every text and glyph pair against both.
+
+Skip the top edge band if the theme dusts snow or a highlight along it; that is decoration, not a text substrate.
+
 ### Adding or finishing a theme
 
 1. Add the months to `app/consts/THEME_MONTHS.ts`. Invalid or double-assigned months resolve to the default theme.
@@ -93,12 +117,20 @@ how New Year ended up with hazard-yellow and fire-engine-red bars on an ice pale
 Walk the page and look for these. Each one is Crazy Mechanics vocabulary surviving into another theme:
 
 - rivets or fastener dots in panel corners
-- `repeating-linear-gradient` stripe layers in a background token — that is rolled or brushed sheet metal
+- `repeating-linear-gradient` stripe layers in a background token — that is rolled or brushed sheet metal, unless
+  the theme's own material genuinely repeats (New Year's knit and gingham do, and say so in a comment)
 - diagonal hazard tape
 - gears
 - labels tilted a fraction of a degree
 - brushed-chrome nameplates with a hard bevel
 - steel / brass / workshop-brick colour surviving in a theme that has no workshop
+
+Bespoke components are what separates a system from a skin. The set worth having, both themes that have gone the
+distance ship all of it: a backdrop scene, a control ornament on the request button, a per-card ornament, a
+replacement for the booking-wait scene, and a random ambient event. Every one of them needs its own copy of the
+`body.modal-open` and `prefers-reduced-motion` guards, and a `gsap.context()` or a cancelled frame loop on unmount.
+The one exception is a scene rendered _inside_ a modal — the booking wait — which must not test `modal-open` at
+all, since that class is set for the whole time it is on screen.
 
 Then confirm: `pnpm lint`, `npx tsc --noEmit`, `git diff --check`, and
 `document.body.scrollWidth === document.documentElement.clientWidth` at 390, 624 and 1440 px.
