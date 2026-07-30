@@ -4,6 +4,7 @@ const config: Config = {
   content: ["./app/**/*.{tsx,mdx}"],
   theme: {
     fontFamily: {
+      holiday: ["var(--font-holiday)", "Georgia", "serif"],
       primary: ["var(--font-inter)", "Inter", "sans-serif"],
       typewriter: ["var(--font-typewriter)", "monospace"],
     },

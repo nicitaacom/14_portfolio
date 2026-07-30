@@ -8,7 +8,7 @@ import { HalloweenGraveEvent } from "@/components/Halloween/HalloweenGraveEvent"
 import { UTMTracker } from "@/utm-stats/UTMTracker"
 import { I18nProviderClient } from "@/locales/client"
 import { isLocale } from "@/locales/helpers"
-import { inter, specialElite } from "@/fonts"
+import { fraunces, inter, specialElite } from "@/fonts"
 
 export const dynamic = "force-dynamic"
 
@@ -25,7 +25,7 @@ export default async function LocaleLayout({
 
   return (
     <I18nProviderClient locale={locale}>
-      <div className={`${inter.variable} ${specialElite.variable} relative isolate`}>
+      <div className={`${inter.variable} ${specialElite.variable} ${fraunces.variable} relative isolate`}>
         <WorkbenchWall />
         <div className="relative z-10">
           <HalloweenGraveEvent />

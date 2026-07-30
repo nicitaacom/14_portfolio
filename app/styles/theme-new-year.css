@@ -388,6 +388,19 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Typography ──────────────────────────────────────────────────────────────────
+   One warm serif for the painted-letterform surfaces: headings and gift tags. Body copy
+   stays Inter, which is the same split Halloween draws with its typewriter face */
+:root[data-theme="new-year"] h1,
+:root[data-theme="new-year"] h2,
+:root[data-theme="new-year"] h3,
+:root[data-theme="new-year"] .appointment-loading-title,
+:root[data-theme="new-year"] .switch-tab-label {
+  font-family: var(--font-holiday), Georgia, serif;
+  font-variation-settings: "SOFT" 40;
+  letter-spacing: 0.01em;
+}
+
 /* Paper gift tag: warm off-white stock, a punched eyelet, a gold hairline and pine ink */
 :root[data-theme="new-year"] .paper-tab,
 :root[data-theme="new-year"] .project-paper-tab,
@@ -402,6 +415,10 @@
     0 4px 11px rgb(2 10 7 / 0.4),
     inset 0 1px 0 rgb(255 255 255 / 0.9);
   color: #16352a !important;
+  font-family: var(--font-holiday), Georgia, serif;
+  font-variation-settings: "SOFT" 40;
+  font-weight: 600;
+  letter-spacing: 0.015em;
   transform: none;
 }
 
