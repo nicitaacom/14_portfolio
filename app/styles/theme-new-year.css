@@ -1,83 +1,131 @@
 :root[data-theme="new-year"] {
-  --primary: 215deg 34% 9%;
-  --primary-foreground: 213deg 29% 15%;
-  --secondary: 204deg 36% 94%;
-  --secondary-foreground: 207deg 20% 76%;
-  --cta: 192deg 100% 70%;
-  --cta-tooltip: 192deg 100% 70%;
-  --steel: 210deg 24% 25%;
-  --steel-deep: 216deg 38% 8%;
-  --wood: 214deg 22% 18%;
-  --brass: 199deg 30% 68%;
-  --paper: 204deg 37% 91%;
-  --pipe: 205deg 24% 71%;
-  --blueprint: 211deg 45% 28%;
-  --room: 220deg 48% 5%;
-  --danger: 352deg 88% 68%;
-  --info: 205deg 92% 70%;
-  --success: 158deg 55% 58%;
-  --warning: 43deg 92% 68%;
+  /* Deep pine, warm snow and crimson, sampled from the watercolour references.
+     Amber is the fourth colour and stands for candlelight — it appears as glow only,
+     never as a surface fill */
+  --primary: 162deg 54% 8%;
+  --primary-foreground: 162deg 40% 13%;
+  /* Warm snow, never pure white */
+  --secondary: 40deg 30% 96%;
+  --secondary-foreground: 150deg 12% 74%;
+  --cta: 354deg 78% 48%;
+  --cta-tooltip: 354deg 82% 58%;
+  --steel: 162deg 30% 18%;
+  --steel-deep: 164deg 44% 6%;
+  --wood: 150deg 20% 13%;
+  --brass: 40deg 46% 72%;
+  --paper: 40deg 34% 94%;
+  --pipe: 154deg 14% 58%;
+  --blueprint: 164deg 40% 16%;
+  --room: 164deg 46% 4%;
+  /* 66% rather than 62%: measured against the pine panel, 62% gives 4.32:1 and misses
+     the 4.5:1 text floor. This also keeps it clear of --cta at 48% */
+  --danger: 354deg 84% 66%;
+  --info: 196deg 42% 62%;
+  --success: 150deg 52% 44%;
+  --warning: 38deg 92% 60%;
 
-  --theme-trim: hsl(var(--brass) / 0.44);
-  --theme-trim-strong: hsl(var(--cta) / 0.66);
-  --theme-top-edge: rgb(223 249 255 / 0.2);
-  --theme-shadow: rgb(0 5 15 / 0.74);
-  /* Ice and glass have no rivets, no bevel hardware and no crooked workshop tape */
+  /* Named substances, so the gradient stops below stay legible */
+  --new-year-room: #04150f;
+  --new-year-pine: #0a2a1e;
+  --new-year-pine-raised: #123d2c;
+  --new-year-fir: #1d5c40;
+  --new-year-snow: #f8f6f2;
+  --new-year-snow-dim: #e6e0d4;
+  --new-year-crimson: #c81a30;
+  --new-year-crimson-deep: #8b0f1f;
+  --new-year-crimson-light: #e84257;
+  --new-year-amber: #f7b23b;
+  --new-year-gold: #d9c397;
+  --new-year-shadow: rgb(2 10 7 / 0.72);
+
+  --theme-trim: rgb(217 195 151 / 0.34);
+  --theme-trim-strong: hsl(var(--cta) / 0.62);
+  --theme-top-edge: rgb(248 246 242 / 0.16);
+  --theme-shadow: var(--new-year-shadow);
+  /* Watercolour paper and knit wool have no rivets, no bevel hardware and no
+     crooked workshop tape */
   --theme-fastener-opacity: 0;
   --theme-hardware-opacity: 0;
   --theme-label-rotation: 0deg;
   --theme-radius: 13px;
-  /* Every surface is a sheet of lit ice: a cold sheen off the top edge over a deep blue body.
-     No repeating stripe layers — those read as rolled or brushed metal */
-  --theme-navbar-background: radial-gradient(circle at 70% -30%, hsl(var(--cta) / 0.17), transparent 36%),
-    linear-gradient(180deg, rgb(224 250 255 / 0.11), transparent 52%),
-    linear-gradient(160deg, #22384e, #0a1525 78%);
-  --theme-board-background: radial-gradient(circle at 20% -10%, rgb(222 250 255 / 0.17), transparent 34%),
-    linear-gradient(180deg, rgb(224 250 255 / 0.08), transparent 44%),
-    linear-gradient(155deg, #263d51, #0a1421);
-  --theme-panel-background: radial-gradient(circle at 82% -16%, hsl(var(--cta) / 0.18), transparent 38%),
-    linear-gradient(180deg, rgb(232 252 255 / 0.09), transparent 46%),
-    linear-gradient(155deg, #2c4459, #0a1423);
-  --theme-inset-background: linear-gradient(180deg, #06101c, #16293a);
-  --theme-control-background: linear-gradient(180deg, rgb(232 252 255 / 0.24), transparent 44%, rgb(0 10 27 / 0.3)),
-    linear-gradient(150deg, #32506a, #0b1828);
-  --theme-label-background: linear-gradient(180deg, rgb(255 255 255 / 0.7), transparent 42%),
-    linear-gradient(150deg, #f4fcff, #c8e2f0);
-  --theme-frame-background: linear-gradient(140deg, #e2f7fb, #5f8399 26%, #0a1726 76%, #a8d2db);
-  --theme-project-background: radial-gradient(circle at 74% -10%, rgb(226 250 255 / 0.16), transparent 34%),
-    linear-gradient(180deg, rgb(223 248 255 / 0.07), transparent 42%),
-    linear-gradient(160deg, #253d51, #081321 76%);
-  --theme-project-info-background: radial-gradient(circle at 12% -8%, hsl(var(--cta) / 0.12), transparent 36%),
-    linear-gradient(150deg, #1a2f41, #07101c);
-  --theme-input-background: linear-gradient(180deg, #06101c, #16283a);
-  --theme-modal-frame-background: linear-gradient(135deg, #d4ecf3, #4d6f83 28%, #0a1726 74%, #8fbcc7);
-  --theme-modal-surface-background: radial-gradient(circle at 50% -14%, rgb(226 251 255 / 0.2), transparent 44%),
-    linear-gradient(150deg, #263f53, #081321);
-  --theme-appointment-background: radial-gradient(circle at 50% -6%, rgb(211 249 255 / 0.19), transparent 38%),
-    linear-gradient(180deg, #0f2236, #040b15);
-  --theme-appointment-modal-background: radial-gradient(circle at 22% -8%, rgb(226 252 255 / 0.21), transparent 36%),
-    linear-gradient(150deg, #2a4457, #07111f);
-  --theme-loading-background: radial-gradient(circle at 50% 35%, hsl(var(--cta) / 0.18), transparent 32%),
-    linear-gradient(180deg, #071524, #01040a);
+
+  /* Every surface is a watercolour bleed: wide soft-edged radials of pine and crimson
+     over a pine body, with a snow lip off the top edge. Percentage-sized radials keep the
+     wash proportional to the surface, so a small control and a full board read as the
+     same material. No repeating stripe layers — those read as rolled or brushed metal */
+  --theme-navbar-background: radial-gradient(120% 180% at 84% -40%, rgb(200 26 48 / 0.2), transparent 62%),
+    radial-gradient(90% 160% at 12% -30%, rgb(29 92 64 / 0.42), transparent 58%),
+    linear-gradient(180deg, rgb(248 246 242 / 0.07), transparent 46%), linear-gradient(168deg, #0d3324, #061a12 82%);
+  --theme-board-background: radial-gradient(140% 120% at 18% -12%, rgb(29 92 64 / 0.5), transparent 60%),
+    radial-gradient(120% 130% at 96% 8%, rgb(200 26 48 / 0.14), transparent 58%),
+    linear-gradient(180deg, rgb(248 246 242 / 0.05), transparent 40%), linear-gradient(158deg, #0b2c1f, #051710 84%);
+  --theme-panel-background: radial-gradient(130% 120% at 82% -18%, rgb(248 246 242 / 0.14), transparent 54%),
+    radial-gradient(120% 140% at 10% 4%, rgb(29 92 64 / 0.46), transparent 62%),
+    radial-gradient(90% 120% at 100% 96%, rgb(200 26 48 / 0.13), transparent 56%),
+    linear-gradient(158deg, #0e3526, #05170f 82%);
+  --theme-inset-background: linear-gradient(180deg, #04150f, #0c2c20);
+  /* The crimson velvet control. The snow sheen is capped at 0.12 alpha: above that the
+     lightened top edge drops warm-snow label text under 4.5:1 */
+  --theme-control-background: linear-gradient(180deg, rgb(255 246 238 / 0.12), transparent 34%, rgb(58 4 12 / 0.34)),
+    linear-gradient(178deg, #c81a30, #8b0f1f);
+  --theme-label-background: linear-gradient(180deg, rgb(255 255 255 / 0.6), transparent 44%),
+    linear-gradient(152deg, #f7f2e6, #e2d8c4);
+  --theme-frame-background: linear-gradient(
+    142deg,
+    #f3ede0 0 2%,
+    #d9c397 8%,
+    #123d2c 24%,
+    #05170f 78%,
+    #b9a37a 95%,
+    #efe7d7
+  );
+  --theme-project-background: radial-gradient(130% 120% at 76% -10%, rgb(29 92 64 / 0.44), transparent 58%),
+    radial-gradient(110% 130% at 8% 96%, rgb(200 26 48 / 0.12), transparent 56%),
+    linear-gradient(180deg, rgb(248 246 242 / 0.05), transparent 40%), linear-gradient(160deg, #0c2f21, #05160f 82%);
+  --theme-project-info-background: radial-gradient(120% 130% at 14% -8%, rgb(29 92 64 / 0.3), transparent 58%),
+    linear-gradient(150deg, #082219, #04120c);
+  /* Frosted pane: translucent snow over the pine well, so the field reads as glass */
+  --theme-input-background: linear-gradient(
+      180deg,
+      rgb(248 246 242 / 0.1),
+      rgb(248 246 242 / 0.04) 46%,
+      rgb(4 21 15 / 0.5)
+    ),
+    linear-gradient(180deg, #072016, #0d2e21);
+  --theme-modal-frame-background: linear-gradient(138deg, #ede5d5 0 2%, #c8b38c 9%, #0f3526 26%, #04130d 76%, #a8916a);
+  --theme-modal-surface-background: radial-gradient(120% 130% at 50% -16%, rgb(248 246 242 / 0.16), transparent 54%),
+    radial-gradient(110% 120% at 88% 92%, rgb(200 26 48 / 0.14), transparent 58%),
+    linear-gradient(152deg, #0e3626, #05170f 82%);
+  --theme-appointment-background: radial-gradient(110% 90% at 50% -6%, rgb(29 92 64 / 0.44), transparent 58%),
+    linear-gradient(180deg, #072117, #030d09);
+  --theme-appointment-modal-background: radial-gradient(120% 130% at 22% -8%, rgb(248 246 242 / 0.15), transparent 54%),
+    radial-gradient(100% 120% at 92% 96%, rgb(200 26 48 / 0.13), transparent 56%),
+    linear-gradient(150deg, #0d3325, #04140e 84%);
+  /* Candlelight amber pooled behind the pine — the third light source of the references */
+  --theme-loading-background: radial-gradient(circle at 50% 36%, rgb(247 178 59 / 0.14), transparent 34%),
+    radial-gradient(circle at 50% 40%, rgb(29 92 64 / 0.4), transparent 52%), linear-gradient(180deg, #061a12, #010705);
 }
 
 .theme-backdrop-new-year {
-  background: radial-gradient(circle at 50% -12%, rgb(198 246 255 / 0.22), transparent 38%),
-    linear-gradient(180deg, #112a43, #040915 72%);
+  background: radial-gradient(120% 90% at 50% -14%, rgb(248 246 242 / 0.16), transparent 52%),
+    radial-gradient(100% 120% at 92% 30%, rgb(200 26 48 / 0.16), transparent 58%),
+    linear-gradient(180deg, #0b2e20, #030f0a 74%);
 }
 
+/* Wide soft blooms standing in for the watercolour bleed of the reference paintings:
+   one fir, one crimson, drifting past each other */
 .new-year-aurora {
   border-radius: 50%;
   filter: blur(64px);
   height: 32rem;
-  opacity: 0.18;
+  opacity: 0.2;
   position: absolute;
   width: 72rem;
 }
 
 .new-year-aurora-one {
   animation: new-year-aurora-drift 13s ease-in-out infinite alternate;
-  background: #65d9ef;
+  background: var(--new-year-fir);
   left: -22rem;
   top: -19rem;
   transform: rotate(-12deg);
@@ -85,7 +133,7 @@
 
 .new-year-aurora-two {
   animation: new-year-aurora-drift 18s ease-in-out infinite alternate-reverse;
-  background: #8c83ff;
+  background: var(--new-year-crimson);
   right: -30rem;
   top: 2rem;
   transform: rotate(18deg);
@@ -98,8 +146,8 @@
 
 .new-year-snow-back {
   animation: new-year-snowfall 18s linear infinite;
-  background-image: radial-gradient(circle, rgb(230 250 255 / 0.68) 0 1.4px, transparent 1.9px),
-    radial-gradient(circle, rgb(230 250 255 / 0.5) 0 1.2px, transparent 1.7px);
+  background-image: radial-gradient(circle, rgb(248 246 242 / 0.66) 0 1.4px, transparent 1.9px),
+    radial-gradient(circle, rgb(248 246 242 / 0.48) 0 1.2px, transparent 1.7px);
   background-position:
     20px 10px,
     90px 70px;
@@ -110,8 +158,8 @@
 
 .new-year-snow-front {
   animation: new-year-snowfall 11s linear infinite;
-  background-image: radial-gradient(circle, rgb(245 253 255 / 0.9) 0 2px, transparent 2.6px),
-    radial-gradient(circle, rgb(229 250 255 / 0.76) 0 1.7px, transparent 2.2px);
+  background-image: radial-gradient(circle, rgb(255 253 250 / 0.9) 0 2px, transparent 2.6px),
+    radial-gradient(circle, rgb(248 246 242 / 0.74) 0 1.7px, transparent 2.2px);
   background-position:
     40px 30px,
     130px 95px;
@@ -124,7 +172,7 @@
   animation: new-year-star-turn 24s linear infinite;
   opacity: 0.22;
   position: absolute;
-  stroke: #dff9ff;
+  stroke: var(--new-year-snow);
   stroke-linecap: round;
   stroke-width: 1.2;
   width: min(18vw, 170px);
@@ -143,33 +191,33 @@
 
 .new-year-frost {
   background:
-    linear-gradient(135deg, rgb(225 251 255 / 0.13), transparent 13%) top left / 44% 28% no-repeat,
-    linear-gradient(225deg, rgb(225 251 255 / 0.1), transparent 13%) top right / 40% 24% no-repeat,
-    linear-gradient(45deg, rgb(225 251 255 / 0.08), transparent 12%) bottom left / 35% 22% no-repeat,
-    radial-gradient(ellipse at center, transparent 36%, rgb(0 7 18 / 0.72) 100%);
+    linear-gradient(135deg, rgb(248 246 242 / 0.13), transparent 13%) top left / 44% 28% no-repeat,
+    linear-gradient(225deg, rgb(248 246 242 / 0.1), transparent 13%) top right / 40% 24% no-repeat,
+    linear-gradient(45deg, rgb(248 246 242 / 0.08), transparent 12%) bottom left / 35% 22% no-repeat,
+    radial-gradient(ellipse at center, transparent 36%, rgb(3 14 9 / 0.72) 100%);
   inset: 0;
   position: absolute;
 }
 
-/* Frosted panes rather than brushed chrome nameplates */
+/* Warm paper rather than brushed chrome nameplates */
 :root[data-theme="new-year"] .paper-tab,
 :root[data-theme="new-year"] .project-paper-tab,
 :root[data-theme="new-year"] .site-label,
 :root[data-theme="new-year"] .tape-label,
 :root[data-theme="new-year"] .modal-title-label {
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.82), transparent 48%),
-    linear-gradient(155deg, #e4f4fc, #a7cade);
-  border: 1px solid rgb(247 253 255 / 0.72);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.68), transparent 48%),
+    linear-gradient(155deg, #f7f2e6, #ddd2bb);
+  border: 1px solid rgb(217 195 151 / 0.72);
   border-radius: 10px;
   box-shadow:
-    0 4px 11px rgb(0 8 20 / 0.46),
+    0 4px 11px rgb(2 10 7 / 0.46),
     inset 0 1px 0 rgb(255 255 255 / 0.9);
   transform: none;
 }
 
 :root[data-theme="new-year"] .navbar-status-light {
-  background: radial-gradient(circle at 45% 32%, white, #8eeaff 36%, #246d8a 70%, #071420);
-  box-shadow: 0 0 11px rgb(111 227 255 / 0.58);
+  background: radial-gradient(circle at 45% 32%, #fff7ec, var(--new-year-amber) 34%, #b4571a 70%, #2c1206);
+  box-shadow: 0 0 11px rgb(247 178 59 / 0.6);
 }
 
 /* A garland of baubles strung on a cord — diagonal hazard tape is workshop vocabulary */
@@ -178,12 +226,12 @@
   background:
     radial-gradient(circle at 9px 5.5px, hsl(var(--cta)) 0 2.4px, transparent 2.9px) 0 0 / 36px 9px repeat-x,
     radial-gradient(circle at 27px 5.5px, hsl(var(--warning)) 0 2.4px, transparent 2.9px) 0 0 / 36px 9px repeat-x,
-    linear-gradient(180deg, transparent 24%, rgb(206 236 247 / 0.42) 26% 36%, transparent 38%);
+    linear-gradient(180deg, transparent 24%, rgb(217 195 151 / 0.5) 26% 36%, transparent 38%);
   height: 9px;
 }
 
 :root[data-theme="new-year"] .hazard-rail-progress {
-  background: linear-gradient(90deg, hsl(var(--info) / 0.55), hsl(var(--cta)));
+  background: linear-gradient(90deg, hsl(var(--success) / 0.6), hsl(var(--cta)));
   box-shadow: 0 0 11px hsl(var(--cta) / 0.6);
 }
 
@@ -198,8 +246,8 @@
 }
 
 :root[data-theme="new-year"] .appointment-loading-gear-rim {
-  fill: #8baab8;
-  stroke: rgb(224 250 255 / 0.82);
+  fill: #7d9a8b;
+  stroke: rgb(248 246 242 / 0.82);
 }
 
 @keyframes new-year-garland-crawl {
