@@ -328,6 +328,63 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Photo strip ─────────────────────────────────────────────────────────────────
+   Six reference photographs cut into slanted panels with snow-white gaps between them. The slice
+   is skewed and the photograph inside it is skewed back by the same angle, so the cut is diagonal
+   while the picture stays upright. The strip is a touch wider than its column so the slanted ends
+   run off both edges instead of leaving triangles of background */
+
+.new-year-film-strip {
+  background: linear-gradient(180deg, #fdfaf3, #ece7db);
+  border: 1px solid rgb(217 195 151 / 0.4);
+  border-radius: 18px;
+  box-shadow:
+    0 18px 36px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 255 255 / 0.7);
+  display: flex;
+  gap: 10px;
+  height: clamp(132px, 17vw, 232px);
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.new-year-film-slice {
+  flex: 1 1 0;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+  transform: skewX(-12deg);
+}
+
+/* The first and last panels reach past the rounded corners so no background shows through */
+.new-year-film-slice:first-child {
+  margin-left: -6%;
+  padding-left: 6%;
+}
+
+.new-year-film-slice:last-child {
+  margin-right: -6%;
+  padding-right: 6%;
+}
+
+.new-year-film-photo {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  transform: skewX(12deg) scale(1.24);
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  /* Six slanted panels are too thin to read on a phone, so the last two step out */
+  .new-year-film-slice:nth-child(n + 5) {
+    display: none;
+  }
+}
+
 /* ── Jazz player ─────────────────────────────────────────────────────────────────
    A record sleeve parked in the bottom-left corner. It is a real button, so it takes pointer
    events and keyboard focus while everything else in the seasonal layer stays inert. Drop the

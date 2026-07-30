@@ -12,6 +12,7 @@ import { ProjectsSwitcher } from "@/components/ProjectsSwitcher"
 import { Footer } from "@/components/Footer"
 import { hours } from "@/data/hours-and-applications"
 import { Button } from "@/components/Button"
+import { NewYearFilmStrip } from "@/components/NewYear/NewYearFilmStrip"
 import { useScopedI18n } from "@/locales/client"
 
 type Tab = "offer" | "story" | "whyme"
@@ -180,6 +181,7 @@ export function HomePageView() {
         </div>
 
         <div className="flex w-full max-w-[80vw] flex-col gap-xl">
+          <NewYearFilmStrip />
           <ProjectsSwitcher />
         </div>
       </div>
