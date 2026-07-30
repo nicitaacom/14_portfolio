@@ -11,6 +11,7 @@ import { useScopedI18n } from "@/locales/client"
 import { limitProjectStack } from "@/utils/limitProjectStack"
 import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
 import { HalloweenProjectSkull } from "@/components/Halloween/HalloweenProjectSkull"
+import { NewYearProjectOrnament } from "@/components/NewYear/NewYearProjectOrnament"
 
 interface ProjectProps {
   figmaUrl?: string
@@ -50,6 +51,7 @@ export function Project({
     <div className="site-card pipe-frame relative w-full tablet:h-[720px] h-[784px]">
       <HalloweenFrameOrnaments variant="project" />
       <HalloweenProjectSkull />
+      <NewYearProjectOrnament />
       <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px] p-[10px]">
         <div className="project-header shrink-0">
           <span className="project-paper-tab truncate">{projectName}</span>

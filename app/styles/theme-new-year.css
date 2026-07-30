@@ -324,6 +324,33 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Card ornament ───────────────────────────────────────────────────────────────
+   A bauble hanging over the top edge of each project card. It sits clear of the header row
+   and only the glass itself takes pointer events, so nothing under it loses a click. There is
+   no idle loop: the swing runs on hover only, which keeps a page of cards at zero cost */
+
+.new-year-project-ornament {
+  display: none;
+}
+
+:root[data-theme="new-year"] .new-year-project-ornament {
+  display: block;
+  filter: drop-shadow(0 6px 6px rgb(2 10 7 / 0.55));
+  height: 96px;
+  overflow: visible;
+  pointer-events: none;
+  position: absolute;
+  right: 28px;
+  top: -8px;
+  width: 54px;
+  z-index: 6;
+}
+
+:root[data-theme="new-year"] .new-year-project-ornament-hit {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 /* ── Request lever ───────────────────────────────────────────────────────────────
    The counterpart to the Halloween hand: a red-mittened hand on a candy-cane lever, on a
    button that names a request action. It is absolutely positioned inside the control, so the
