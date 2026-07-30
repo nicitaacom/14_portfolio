@@ -76,18 +76,37 @@ Knit and gingham are repeats on purpose. The warning in `dev_readme-ui-system.md
 
 ### Components
 
-| Component                    | Renders                      | Notes                                                                                                                                                                   |
-| ---------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NewYearScene`               | the backdrop                 | Canvas snow in three parallax depths with two-period wind drift, SVG interior (window on a snowing town, fir boughs, light string, candles), GSAP bauble sway and bokeh |
-| `NewYearRequestLever`        | buttons with `requestAction` | red-mittened hand on a candy-cane lever, pivots on its gate                                                                                                             |
-| `NewYearProjectOrnament`     | each project card            | bauble that swings on hover only — no idle loop, so a page of cards costs nothing at rest                                                                               |
-| `NewYearBookingLoadingScene` | the booking wait             | snow globe: SVG dome and plinth, Canvas snow inside, GSAP rock-and-settle                                                                                               |
-| `NewYearFireworksEvent`      | randomly, over the town      | Canvas particles with gravity and drag, GSAP flash at each shell                                                                                                        |
-| navbar garland               | the repo strip               | a light string sagging across it, bulbs twinkling out of phase, parallax off the scroll position                                                                        |
+| Component                    | Renders                      | Notes                                                                                                                                                                                                  |
+| ---------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `NewYearScene`               | the backdrop                 | Canvas snow in three parallax depths with two-period wind drift, SVG snowfield (three banked drifts, two snowmen, four snow-laden firs, a light string of bulbs), GSAP bauble sway and bokeh breathing |
+| `NewYearRequestLever`        | buttons with `requestAction` | red-mittened hand on a candy-cane lever, pivots on its gate                                                                                                                                            |
+| `NewYearProjectOrnament`     | each project card            | bauble that swings on hover only — no idle loop, so a page of cards costs nothing at rest                                                                                                              |
+| `NewYearBookingLoadingScene` | the booking wait             | snow globe: SVG dome and plinth, Canvas snow inside, GSAP rock-and-settle                                                                                                                              |
+| `NewYearFireworksEvent`      | randomly, over the town      | Canvas particles with gravity and drag, GSAP flash at each shell                                                                                                                                       |
+| navbar garland               | the repo strip               | a light string sagging across it, bulbs twinkling out of phase, parallax off the scroll position                                                                                                       |
 
 `NewYearRequestLever` reuses the plumbing class names the Halloween hand introduced on the
 button, and adds `new-year-request-control` / `new-year-request-content` beside them. Both sets
 are theme-scoped, so only one is ever live.
+
+### Where the backdrop is actually visible
+
+Two things cost a first pass at this scene most of its artwork, both worth knowing before moving
+anything in the viewBox:
+
+- **The navbar plate covers the top of the scene.** At 1440x900 it takes the first ~280px, so
+  anything above viewBox y≈300 is never seen. A set of fir boughs and six baubles were hung in
+  the top corners and not one of them ever rendered on screen.
+- **The bottom of the viewBox is cropped.** The backdrop is `100dvh`, which measured ~815px against
+  a 900px viewBox, and `preserveAspectRatio="xMidYMax slice"` anchors the bottom — so the content
+  is shifted up and viewBox y≈815–900 falls outside the box. Drifts may run to y=900 so no crop
+  exposes an edge, but nothing that must be seen belongs below y≈800.
+- **A phone-width viewport slices to the middle.** At 390px wide only viewBox x≈525–915 survives,
+  so the snowmen sit near the centre rather than in the corners.
+
+The usable band is roughly viewBox y 300–800, and the centre in x. Measure it rather than assume:
+screenshot the running page, then read the pixel column at an x clear of the panels to find where
+the backdrop starts and stops painting.
 
 ### Contrast — measured, not estimated
 
