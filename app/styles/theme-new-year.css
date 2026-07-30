@@ -38,6 +38,36 @@
   --new-year-gold: #d9c397;
   --new-year-shadow: rgb(2 10 7 / 0.72);
 
+  /* Paper grain as an inline feTurbulence tile — the same mechanism as the workshop wall
+     filter, packed into a background layer so any surface can take it */
+  --new-year-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Cable knit. Two diagonals crossing at ±56deg make the braid lattice and a vertical rib
+     sits under them. Wool is genuinely a repeat, so a repeat is the honest material here —
+     the system contract's warning about stripe layers is about rolled sheet metal */
+  --new-year-knit: repeating-linear-gradient(56deg, rgb(248 246 242 / 0.045) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(-56deg, rgb(248 246 242 / 0.045) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(90deg, rgb(248 246 242 / 0.035) 0 3px, transparent 3px 10px),
+    repeating-linear-gradient(0deg, rgb(2 10 7 / 0.14) 0 2px, transparent 2px 8px);
+  /* Red gingham, from the tablecloth reference: two perpendicular translucent crimson bands
+     whose overlap darkens itself, which is what gingham physically is */
+  --new-year-gingham: repeating-linear-gradient(0deg, rgb(200 26 48 / 0.16) 0 5px, transparent 5px 10px),
+    repeating-linear-gradient(90deg, rgb(200 26 48 / 0.16) 0 5px, transparent 5px 10px);
+  /* Snow crust for a top lip, and the scalloped fur cuff for a bottom edge */
+  --new-year-crust: radial-gradient(circle at 5px -1px, rgb(255 253 250 / 0.5) 0 4px, transparent 4.6px) 0 0 / 10px 6px
+    repeat-x;
+  --new-year-fur: radial-gradient(circle at 6px 9px, rgb(255 253 250 / 0.94) 0 4.6px, transparent 5.1px) 0 100% / 12px
+      10px repeat-x,
+    linear-gradient(180deg, transparent, rgb(255 253 250 / 0.92)) 0 100% / 100% 6px no-repeat;
+  /* The punched eyelet of a gift tag. It sits in the top-left corner inside the label's own
+     padding box so it never lands on a glyph */
+  --new-year-eyelet: radial-gradient(
+      circle at 6px 6px,
+      rgb(4 21 15 / 0.8) 0 2.4px,
+      rgb(184 154 96 / 0.9) 2.4px 3.6px,
+      transparent 4.1px
+    )
+    0 0 / 100% 100% no-repeat;
+
   --theme-trim: rgb(217 195 151 / 0.34);
   --theme-trim-strong: hsl(var(--cta) / 0.62);
   --theme-top-edge: rgb(248 246 242 / 0.16);
@@ -199,20 +229,186 @@
   position: absolute;
 }
 
-/* Warm paper rather than brushed chrome nameplates */
+/* ── Materials ───────────────────────────────────────────────────────────────────
+   Crazy Mechanics is steel and brass. Halloween is stone and bone. This system is
+   watercolour paper, cable knit, red gingham, snow crust, frosted glass and crimson
+   velvet. Everything below is shape work that lives outside the token set */
+
+/* The board is a knitted panel: the knit lattice sits over the pine wash */
+:root[data-theme="new-year"] .workbench-board {
+  background: var(--new-year-knit), var(--theme-board-background);
+  border: 1px solid rgb(217 195 151 / 0.28);
+  border-radius: 16px;
+  box-shadow:
+    0 18px 40px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.22);
+  position: relative;
+}
+
+/* Panels are a watercolour wash with paper grain over it: wide soft-edged radials from the
+   token block, no hard edge anywhere, then the grain tile on top */
+:root[data-theme="new-year"] .machine-panel,
+:root[data-theme="new-year"] .machine-face,
+:root[data-theme="new-year"] .admin-rack section,
+:root[data-theme="new-year"] .admin-rack article,
+:root[data-theme="new-year"] .auth-panel {
+  background: var(--new-year-grain), var(--theme-panel-background);
+  border: 1px solid rgb(217 195 151 / 0.26);
+  border-radius: 16px;
+  box-shadow:
+    0 18px 40px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.2);
+  position: relative;
+}
+
+/* Snow settles on the top edge of every raised surface */
+:root[data-theme="new-year"] .machine-panel::after,
+:root[data-theme="new-year"] .workbench-board::after {
+  background: radial-gradient(circle at 7px 0, rgb(255 253 250 / 0.46) 0 5px, transparent 5.6px) 0 0 / 14px 8px repeat-x;
+  content: "";
+  height: 8px;
+  inset: 0 0 auto;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+/* Insets take a soft snow lip instead of the dark machined bevel */
+:root[data-theme="new-year"] .machine-bezel,
+:root[data-theme="new-year"] .machine-slot,
+:root[data-theme="new-year"] .navbar-bezel,
+:root[data-theme="new-year"] .navbar-repo-wavefield,
+:root[data-theme="new-year"] .appointment-choice-icon {
+  background: var(--new-year-crust), var(--theme-inset-background);
+  border: 1px solid rgb(217 195 151 / 0.26);
+  border-radius: 11px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 253 250 / 0.46),
+    inset 0 5px 12px rgb(2 10 7 / 0.5);
+}
+
+/* Frosted pane: etched frost in two corners over the glass field */
+:root[data-theme="new-year"] .site-input,
+:root[data-theme="new-year"] .workshop-input,
+:root[data-theme="new-year"] .workshop-input:focus,
+:root[data-theme="new-year"] .lever-gate {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.16), transparent 18%) 0 0 / 42% 48% no-repeat,
+    linear-gradient(225deg, rgb(255 253 250 / 0.13), transparent 16%) 100% 0 / 38% 42% no-repeat,
+    var(--theme-input-background);
+  border: 1px solid rgb(248 246 242 / 0.22);
+  border-radius: 11px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 253 250 / 0.3),
+    inset 0 6px 14px rgb(2 10 7 / 0.4);
+}
+
+:root[data-theme="new-year"] .site-input:focus,
+:root[data-theme="new-year"] .workshop-input:focus {
+  border-color: hsl(var(--cta) / 0.8);
+  box-shadow:
+    inset 0 1px 0 rgb(255 253 250 / 0.3),
+    inset 0 6px 14px rgb(2 10 7 / 0.4),
+    0 0 0 2px hsl(var(--cta) / 0.24),
+    0 0 15px rgb(200 26 48 / 0.2);
+}
+
+/* The signature control, taken from the santa-hat reference: a crimson velvet face with a
+   scalloped snow-fur cuff along the bottom edge in place of a hard bevel, and an amber rim
+   that lights on hover. Every button in the app inherits this.
+   The velvet sheen is held at 0.12 alpha in the token block and the label is pinned to
+   #fff8f0 — together they measure 4.69:1 on the lightest part of the face, which clears the
+   4.5:1 text floor. Raising either one drops it under */
+:root[data-theme="new-year"] .plaque,
+:root[data-theme="new-year"] .site-control.plaque,
+:root[data-theme="new-year"] .appointment-choice {
+  background: var(--new-year-fur), var(--theme-control-background);
+  border: 1px solid rgb(255 246 238 / 0.36);
+  border-radius: 13px;
+  box-shadow:
+    0 4px 0 rgb(94 8 20 / 0.9),
+    0 10px 18px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 246 238 / 0.28);
+  color: #fff8f0 !important;
+  position: relative;
+  text-shadow: 0 1px 2px rgb(52 3 10 / 0.72);
+  transition:
+    box-shadow 160ms ease,
+    transform 120ms ease,
+    filter 200ms ease;
+}
+
+:root[data-theme="new-year"] .plaque:hover,
+:root[data-theme="new-year"] .site-control.plaque:hover,
+:root[data-theme="new-year"] .appointment-choice:hover {
+  box-shadow:
+    0 0 0 2px rgb(247 178 59 / 0.55),
+    0 4px 0 rgb(94 8 20 / 0.9),
+    0 12px 22px var(--new-year-shadow),
+    0 0 20px rgb(247 178 59 / 0.26),
+    inset 0 1px 0 rgb(255 246 238 / 0.28);
+  filter: brightness(1.05) saturate(1.04);
+  transform: translateY(-2px);
+}
+
+:root[data-theme="new-year"] .plaque:active,
+:root[data-theme="new-year"] .site-control.plaque:active,
+:root[data-theme="new-year"] .appointment-choice:active {
+  box-shadow:
+    0 1px 0 rgb(94 8 20 / 0.9),
+    0 4px 8px var(--new-year-shadow),
+    inset 0 3px 6px rgb(52 3 10 / 0.4);
+  transform: translateY(2px);
+}
+
+/* An icon control whose border states its meaning needs a different face: a crimson glyph on
+   crimson velvet measures near 1:1. These take the pine panel wash instead, so
+   text-cta / text-danger / text-success still drive the glyph and stay readable */
+:root[data-theme="new-year"] .site-control.plaque.border-cta,
+:root[data-theme="new-year"] .site-control.plaque.border-danger,
+:root[data-theme="new-year"] .site-control.plaque.border-success {
+  background: var(--new-year-grain), var(--theme-panel-background);
+  box-shadow:
+    0 4px 0 rgb(4 21 15 / 0.9),
+    0 10px 18px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.2);
+  color: hsl(var(--secondary)) !important;
+  text-shadow: 0 1px 2px rgb(2 10 7 / 0.6);
+}
+
+:root[data-theme="new-year"] .site-control.plaque.border-cta {
+  border-color: hsl(var(--cta));
+}
+
+:root[data-theme="new-year"] .site-control.plaque.border-danger {
+  border-color: hsl(var(--danger));
+}
+
+:root[data-theme="new-year"] .site-control.plaque.border-success {
+  border-color: hsl(var(--success));
+}
+
+/* Paper gift tag: warm off-white stock, a punched eyelet, a gold hairline and pine ink */
 :root[data-theme="new-year"] .paper-tab,
 :root[data-theme="new-year"] .project-paper-tab,
 :root[data-theme="new-year"] .site-label,
 :root[data-theme="new-year"] .tape-label,
 :root[data-theme="new-year"] .modal-title-label {
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.68), transparent 48%),
+  background: var(--new-year-eyelet), linear-gradient(180deg, rgb(255 255 255 / 0.6), transparent 46%),
     linear-gradient(155deg, #f7f2e6, #ddd2bb);
-  border: 1px solid rgb(217 195 151 / 0.72);
+  border: 1px solid rgb(184 154 96 / 0.5);
   border-radius: 10px;
   box-shadow:
-    0 4px 11px rgb(2 10 7 / 0.46),
+    0 4px 11px rgb(2 10 7 / 0.4),
     inset 0 1px 0 rgb(255 255 255 / 0.9);
+  color: #16352a !important;
   transform: none;
+}
+
+/* Every other tag is cut from the gingham cloth instead of the paper stock */
+:root[data-theme="new-year"] .site-label:nth-child(odd) {
+  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #f9f4ea, #e6dcc8);
+  border-color: rgb(200 26 48 / 0.42);
 }
 
 :root[data-theme="new-year"] .navbar-status-light {
@@ -230,17 +426,95 @@
   height: 9px;
 }
 
+/* Candy cane fill. The stripe angle is 45deg and the period is 10px so the crawl advances
+   exactly one period per cycle: 10px / cos(45deg) = 14.142px of travel along x */
 :root[data-theme="new-year"] .hazard-rail-progress {
-  background: linear-gradient(90deg, hsl(var(--success) / 0.6), hsl(var(--cta)));
-  box-shadow: 0 0 11px hsl(var(--cta) / 0.6);
+  animation: new-year-candy-crawl 1.6s linear infinite;
+  background: repeating-linear-gradient(45deg, #fdfbf6 0 5px, hsl(var(--cta)) 5px 10px);
+  box-shadow: 0 0 11px hsl(var(--cta) / 0.55);
 }
 
-:root[data-theme="new-year"] body.modal-open .hazard-rail {
+/* The Work / Projects switcher: an unselected tab is a knitted well and the selected one is
+   the velvet control, so the state reads from material as well as colour */
+:root[data-theme="new-year"] .switch-tab {
+  background: var(--new-year-knit), var(--theme-inset-background);
+  border: 1px solid rgb(217 195 151 / 0.24);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 253 250 / 0.3),
+    inset 0 4px 10px rgb(2 10 7 / 0.5);
+}
+
+:root[data-theme="new-year"] .switch-tab-active {
+  background: var(--new-year-fur), var(--theme-control-background);
+  border-color: rgb(255 246 238 / 0.42);
+  box-shadow:
+    0 0 0 2px rgb(247 178 59 / 0.4),
+    0 12px 22px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 246 238 / 0.28);
+}
+
+/* Snow along the top of each project card, over a gold hairline */
+:root[data-theme="new-year"] .project-header {
+  background:
+    radial-gradient(circle at 7px 0, rgb(255 253 250 / 0.4) 0 5px, transparent 5.6px) 0 0 / 14px 7px repeat-x,
+    linear-gradient(180deg, rgb(255 253 250 / 0.12), transparent 62%);
+  border-bottom: 1px solid rgb(217 195 151 / 0.44);
+}
+
+/* Progress track: a frosted channel holding the candy fill */
+:root[data-theme="new-year"] .site-progress {
+  background: var(--theme-inset-background);
+  border: 1px solid rgb(248 246 242 / 0.2);
+  border-radius: 999px;
+  padding: 2px;
+}
+
+:root[data-theme="new-year"] .site-progress > div {
+  border-radius: 999px;
+  box-shadow:
+    0 0 9px currentColor,
+    inset 0 1px 0 rgb(255 253 250 / 0.3);
+}
+
+/* Card and modal frames are gift-paper edges: a gold ribbon hairline around the pine body */
+:root[data-theme="new-year"] .site-card.pipe-frame {
+  background: var(--theme-frame-background);
+  border: 0;
+  border-radius: 20px;
+  box-shadow:
+    0 24px 44px var(--new-year-shadow),
+    0 0 0 2px rgb(217 195 151 / 0.34);
+  padding: 12px;
+}
+
+:root[data-theme="new-year"] .site-modal.modal-frame {
+  background: var(--theme-modal-frame-background);
+  border: 0;
+  border-radius: 22px;
+  box-shadow:
+    0 28px 68px var(--new-year-shadow),
+    0 0 0 2px rgb(217 195 151 / 0.38);
+  padding: 14px;
+}
+
+:root[data-theme="new-year"] .modal-frame-surface {
+  background: var(--new-year-grain), var(--theme-modal-surface-background);
+  border: 1px solid rgb(217 195 151 / 0.26);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 253 250 / 0.2),
+    inset 0 4px 13px rgb(2 10 7 / 0.5);
+}
+
+:root[data-theme="new-year"] body.modal-open .hazard-rail,
+:root[data-theme="new-year"] body.modal-open .hazard-rail-progress {
   animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root[data-theme="new-year"] .hazard-rail {
+  :root[data-theme="new-year"] .hazard-rail,
+  :root[data-theme="new-year"] .hazard-rail-progress {
     animation: none;
   }
 }
@@ -253,6 +527,12 @@
 @keyframes new-year-garland-crawl {
   to {
     background-position-x: 36px, 36px, 0;
+  }
+}
+
+@keyframes new-year-candy-crawl {
+  to {
+    background-position-x: 14.142px;
   }
 }
 
