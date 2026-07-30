@@ -324,6 +324,48 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Snow globe ──────────────────────────────────────────────────────────────────
+   The booking wait. The interior SVG paints first, the snow canvas sits over it and the glass
+   and plinth paint last. The snow layer is placed by percentage rather than pixels so it stays
+   locked to the glass at any width: the globe circle is centred at 210 / 420 across and
+   200 / 470 down of the viewBox, with a radius of 160 / 420 of the width */
+
+:root[data-theme="new-year"] .new-year-booking-loading-screen {
+  background: var(--theme-loading-background);
+}
+
+.new-year-globe-snow {
+  border-radius: 50%;
+  left: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 42.553%;
+  transform: translate(-50%, -50%);
+  width: 76.19%;
+  z-index: 2;
+}
+
+.new-year-globe-snow::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.new-year-globe-snow canvas {
+  inset: 0;
+  position: absolute;
+}
+
+.new-year-globe-shell {
+  pointer-events: none;
+  z-index: 3;
+}
+
+:root[data-theme="new-year"] .new-year-booking-status {
+  color: hsl(var(--secondary));
+}
+
 /* ── Card ornament ───────────────────────────────────────────────────────────────
    A bauble hanging over the top edge of each project card. It sits clear of the header row
    and only the glass itself takes pointer events, so nothing under it loses a click. There is

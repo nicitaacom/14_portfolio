@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 
 import { HalloweenBookingLoadingScene } from "@/components/Halloween/HalloweenBookingLoadingScene"
+import { NewYearBookingLoadingScene } from "@/components/NewYear/NewYearBookingLoadingScene"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { useScopedI18n } from "@/locales/client"
 
@@ -455,6 +456,7 @@ export function BookingLoadingScene() {
   const theme = useSiteTheme()
 
   if (theme === "halloween") return <HalloweenBookingLoadingScene />
+  if (theme === "new-year") return <NewYearBookingLoadingScene />
 
   return <CrazyMechanicsBookingLoadingScene />
 }
