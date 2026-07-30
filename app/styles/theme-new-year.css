@@ -455,8 +455,25 @@
   top: 16%;
 }
 
-.new-year-jazz-state-missing {
-  color: hsl(var(--secondary-foreground));
+/* The embedded player sits above the sleeve and stays visible while it runs: the terms covering
+   the embed do not allow it to be hidden or reduced below 200x200 */
+.new-year-jazz-frame {
+  background: #04150f;
+  border: 1px solid rgb(217 195 151 / 0.4);
+  border-radius: 12px;
+  box-shadow: 0 16px 32px var(--new-year-shadow);
+  margin-bottom: 8px;
+  overflow: hidden;
+  width: clamp(260px, 26vw, 340px);
+}
+
+.new-year-jazz-frame iframe {
+  aspect-ratio: 16 / 10;
+  border: 0;
+  display: block;
+  height: auto;
+  min-height: 200px;
+  width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {

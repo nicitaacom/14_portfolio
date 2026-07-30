@@ -8,79 +8,34 @@ import gsap from "gsap"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { useScopedI18n } from "@/locales/client"
 
-/* Drop the track in at this path and the record picks it up. Audio extensions are already excluded
-   from the locale middleware, so it is served straight from public/ */
-const JAZZ_TRACK_SRC = "/new-year-jazz.mp3"
+/* The lo-fi christmas playlist this plays, on the privacy-preserving host.
+   The embed stays visible at 200x200 or larger: YouTube's terms do not allow the player to be
+   hidden or the audio to be separated from the video, so the record reveals a real player rather
+   than streaming the sound out of a frame nobody can see. */
+const JAZZ_VIDEO_ID = "Sw95YCoxwjQ"
+const JAZZ_PLAYLIST_ID = "PLhaOvy5XSZ0OGsCALneUyAd0ti5mOtJLQ"
+const JAZZ_EMBED_SRC =
+  `https://www.youtube-nocookie.com/embed/${JAZZ_VIDEO_ID}` +
+  `?list=${JAZZ_PLAYLIST_ID}&autoplay=1&rel=0&modestbranding=1`
 
 /* Bars drawn across the sleeve. Few enough to read as a level meter rather than a spectrogram */
 const BAR_COUNT = 28
-const FFT_SIZE = 128
 
 export function NewYearJazzPlayer() {
   const theme = useSiteTheme()
   const reduceMotion = useReducedMotion()
   const t = useScopedI18n("common")
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isUnavailable, setIsUnavailable] = useState(false)
 
-  const audioRef = useRef<HTMLAudioElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const discRef = useRef<SVGGElement>(null)
   const armRef = useRef<SVGGElement>(null)
-  const analyserRef = useRef<AnalyserNode | null>(null)
-  const audioContextRef = useRef<AudioContext | null>(null)
 
-  /* The graph is built on the first click, because a context created before a user gesture starts
-     suspended and browsers keep it that way */
-  const connectAnalyser = useCallback(() => {
-    const audio = audioRef.current
-    if (!audio || analyserRef.current) return
+  const toggle = useCallback(() => setIsPlaying(playing => !playing), [])
 
-    const AudioContextConstructor =
-      window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
-    if (!AudioContextConstructor) return
-
-    try {
-      const audioContext = new AudioContextConstructor()
-      const source = audioContext.createMediaElementSource(audio)
-      const analyser = audioContext.createAnalyser()
-      analyser.fftSize = FFT_SIZE
-      source.connect(analyser)
-      analyser.connect(audioContext.destination)
-      audioContextRef.current = audioContext
-      analyserRef.current = analyser
-    } catch {
-      /* No analyser is not fatal: the meter falls back to a resting idle wave */
-      analyserRef.current = null
-    }
-  }, [])
-
-  const toggle = useCallback(async () => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    if (isPlaying) {
-      audio.pause()
-      setIsPlaying(false)
-      return
-    }
-
-    connectAnalyser()
-    await audioContextRef.current?.resume().catch(() => undefined)
-
-    try {
-      await audio.play()
-      setIsPlaying(true)
-      setIsUnavailable(false)
-    } catch {
-      /* Most often the track has not been added yet */
-      setIsPlaying(false)
-      setIsUnavailable(true)
-    }
-  }, [connectAnalyser, isPlaying])
-
-  /* The meter. While playing it reads the analyser; at rest it breathes a low idle wave so the
-     control still looks alive without burning frames on silence */
+  /* The meter. The track plays inside a cross-origin frame, so its samples are not readable from
+     here and there is no analyser to attach — these bars are a synthetic level, moving while the
+     player is open and settling to a low idle wave when it is closed. */
   useEffect(() => {
     if (theme !== "new-year") return
 
@@ -93,7 +48,6 @@ export function NewYearJazzPlayer() {
     let width = 0
     let height = 0
     let animationFrame = 0
-    const levels = new Uint8Array(FFT_SIZE / 2)
 
     const resizeCanvas = () => {
       const bounds = canvas.getBoundingClientRect()
@@ -107,14 +61,16 @@ export function NewYearJazzPlayer() {
 
     const drawMeter = (time: number) => {
       context.clearRect(0, 0, width, height)
-      const analyser = analyserRef.current
-      if (isPlaying && analyser) analyser.getByteFrequencyData(levels)
-
       const barWidth = width / BAR_COUNT
+
       for (let index = 0; index < BAR_COUNT; index += 1) {
-        const sampled = isPlaying && analyser ? levels[Math.floor((index / BAR_COUNT) * levels.length)] / 255 : 0
+        /* Three sine terms of different periods so the row never marches in step */
+        const swing =
+          Math.sin(time * 0.006 + index * 0.7) * 0.3 +
+          Math.sin(time * 0.011 + index * 1.9) * 0.22 +
+          Math.sin(time * 0.003 + index * 0.31) * 0.18
         const idle = 0.12 + Math.sin(time * 0.0015 + index * 0.5) * 0.06
-        const level = Math.max(idle, sampled)
+        const level = isPlaying ? Math.min(1, 0.32 + Math.abs(swing)) : idle
         const barHeight = Math.max(2, level * height)
 
         context.fillStyle =
@@ -138,7 +94,7 @@ export function NewYearJazzPlayer() {
     }
   }, [isPlaying, reduceMotion, theme])
 
-  /* The disc turns only while the track runs, and the arm swings onto the record with it */
+  /* The disc turns only while the player is open, and the arm swings onto the record with it */
   useEffect(() => {
     const disc = discRef.current
     const arm = armRef.current
@@ -166,16 +122,22 @@ export function NewYearJazzPlayer() {
     return () => animationContext.revert()
   }, [isPlaying, reduceMotion, theme])
 
-  useEffect(() => {
-    return () => {
-      audioContextRef.current?.close().catch(() => undefined)
-    }
-  }, [])
-
   if (theme !== "new-year") return null
 
   return (
     <div className="new-year-jazz-player">
+      {isPlaying && (
+        <div className="new-year-jazz-frame">
+          <iframe
+            src={JAZZ_EMBED_SRC}
+            title={t("playJazz")}
+            allow="autoplay; encrypted-media; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      )}
+
       <button
         type="button"
         className="new-year-jazz-control"
@@ -215,14 +177,10 @@ export function NewYearJazzPlayer() {
         {/* The level meter sits in the sleeve's lower band */}
         <canvas ref={canvasRef} className="new-year-jazz-meter" aria-hidden="true" />
 
-        <span
-          className={`new-year-jazz-state ${isUnavailable ? "new-year-jazz-state-missing" : ""}`}
-          aria-hidden="true">
-          {isUnavailable ? "—" : isPlaying ? "❙❙" : "▶"}
+        <span className="new-year-jazz-state" aria-hidden="true">
+          {isPlaying ? "❙❙" : "▶"}
         </span>
       </button>
-
-      <audio ref={audioRef} src={JAZZ_TRACK_SRC} loop preload="none" onEnded={() => setIsPlaying(false)} />
     </div>
   )
 }
