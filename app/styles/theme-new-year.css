@@ -380,6 +380,13 @@
   width: 112px;
 }
 
+@media (min-width: 768px) {
+  :root[data-theme="new-year"] .new-year-cta-row > .site-control {
+    align-self: flex-start;
+    margin-block-start: 1.5rem;
+  }
+}
+
 @media (max-width: 767px) {
   :root[data-theme="new-year"] .new-year-cta-row {
     justify-content: center;
