@@ -57,8 +57,8 @@
     repeating-linear-gradient(0deg, rgb(2 10 7 / 0.14) 0 2px, transparent 2px 8px);
   /* Red gingham, from the tablecloth reference: two perpendicular translucent crimson bands
      whose overlap darkens itself, which is what gingham physically is */
-  --new-year-gingham: repeating-linear-gradient(0deg, rgb(200 26 48 / 0.16) 0 5px, transparent 5px 10px),
-    repeating-linear-gradient(90deg, rgb(200 26 48 / 0.16) 0 5px, transparent 5px 10px);
+  --new-year-gingham: repeating-linear-gradient(0deg, rgb(200 26 48 / 0.09) 0 5px, transparent 5px 10px),
+    repeating-linear-gradient(90deg, rgb(200 26 48 / 0.09) 0 5px, transparent 5px 10px);
   /* Snow crust for a top lip, and the scalloped fur cuff for a bottom edge */
   --new-year-crust: radial-gradient(circle at 5px -1px, rgb(255 253 250 / 0.5) 0 4px, transparent 4.6px) 0 0 / 10px 6px
     repeat-x;
@@ -508,7 +508,7 @@
 :root[data-theme="new-year"] .tape-label,
 :root[data-theme="new-year"] .modal-title-label {
   background: var(--new-year-eyelet), linear-gradient(180deg, rgb(255 255 255 / 0.6), transparent 46%),
-    linear-gradient(155deg, #f7f2e6, #ddd2bb);
+    linear-gradient(155deg, #fdfaf3, #ebe4d5);
   border: 1px solid rgb(184 154 96 / 0.5);
   border-radius: 10px;
   box-shadow:
@@ -524,7 +524,7 @@
 
 /* Every other tag is cut from the gingham cloth instead of the paper stock */
 :root[data-theme="new-year"] .site-label:nth-child(odd) {
-  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #f9f4ea, #e6dcc8);
+  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #fefcf6, #efe9db);
   border-color: rgb(200 26 48 / 0.42);
 }
 

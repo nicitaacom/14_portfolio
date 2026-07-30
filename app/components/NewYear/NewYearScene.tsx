@@ -26,41 +26,91 @@ interface SnowLayer {
 /* Three depths. `fall` is normalised height per millisecond, so a near flake crosses the
    viewport in about 9s and a far one in about 22s regardless of how tall the window is */
 const LAYER_SPECS = [
-  { count: 44, minRadius: 0.6, spread: 0.5, fall: 0.0000455, windScale: 0.35, opacity: 0.34, halo: false },
-  { count: 30, minRadius: 1.2, spread: 0.7, fall: 0.0000714, windScale: 0.62, opacity: 0.55, halo: false },
-  { count: 16, minRadius: 2.2, spread: 1.1, fall: 0.000111, windScale: 1, opacity: 0.8, halo: true },
+  { count: 60, minRadius: 0.9, spread: 0.7, fall: 0.0000455, windScale: 0.35, opacity: 0.5, halo: false },
+  { count: 42, minRadius: 1.6, spread: 1, fall: 0.0000714, windScale: 0.62, opacity: 0.72, halo: false },
+  { count: 22, minRadius: 2.6, spread: 1.5, fall: 0.000111, windScale: 1, opacity: 0.95, halo: true },
 ]
 
-/* Points sampled off the catenary the bulb string hangs on. The x values are evenly spaced
-   because the quadratic's three x controls are, so only y needs the curve: 140 + 184t(1-t) */
+/* Points sampled off the catenary the bulb string hangs on, from M60 440 Q720 600 1380 440.
+   The x values are evenly spaced because the quadratic's three x controls are, so only y needs
+   the curve: 440 + 320t(1-t) */
 const BULBS = [
-  { x: 496, y: 156.6 },
-  { x: 552, y: 169.4 },
-  { x: 608, y: 178.6 },
-  { x: 664, y: 184.2 },
-  { x: 720, y: 186 },
-  { x: 776, y: 184.2 },
-  { x: 832, y: 178.6 },
-  { x: 888, y: 169.4 },
-  { x: 944, y: 156.6 },
-]
-
-/* Lit windows in the far town. Kept dim: the town is across the street, not in the room */
-const TOWN_LIGHTS = [
-  { x: 524, y: 404 },
-  { x: 566, y: 382 },
-  { x: 614, y: 368 },
-  { x: 660, y: 400 },
-  { x: 712, y: 376 },
-  { x: 754, y: 408 },
-  { x: 800, y: 384 },
-  { x: 846, y: 406 },
-  { x: 896, y: 374 },
-  { x: 938, y: 406 },
+  { x: 166, y: 464 },
+  { x: 304, y: 488 },
+  { x: 443, y: 506 },
+  { x: 581, y: 517 },
+  { x: 720, y: 520 },
+  { x: 859, y: 517 },
+  { x: 997, y: 506 },
+  { x: 1136, y: 488 },
+  { x: 1274, y: 464 },
 ]
 
 function isAmbientMotionPaused(reducedMotion: boolean | null) {
   return Boolean(reducedMotion) || document.hidden || document.body.classList.contains("modal-open")
+}
+
+/* Three stacked balls on a drift, a crimson scarf and a top hat. Local origin is the centre of
+   the bottom ball, so placing one is a matter of putting that point on the snow line */
+function Snowman({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <ellipse cx="0" cy="50" rx="74" ry="13" fill="#b9b2a2" fillOpacity="0.4" />
+
+      <ellipse cx="0" cy="0" rx="62" ry="58" fill="#fbf8f2" stroke="#d9d2c3" strokeOpacity="0.55" strokeWidth="2" />
+      <ellipse cx="0" cy="-84" rx="45" ry="42" fill="#fdfbf6" stroke="#d9d2c3" strokeOpacity="0.55" strokeWidth="2" />
+      <ellipse cx="0" cy="-148" rx="32" ry="31" fill="#fffdfa" stroke="#d9d2c3" strokeOpacity="0.5" strokeWidth="2" />
+
+      {/* Twig arms */}
+      <path
+        d="M-44 -92L-98 -118M-98 -118L-116 -126M-98 -118L-102 -100M44 -92L98 -116M98 -116L116 -124M98 -116L102 -98"
+        stroke="#6b4a2a"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+
+      {/* Scarf over the neck, with a tail hanging down the front */}
+      <path d="M-41 -119Q0 -104 41 -119L41 -106Q0 -91 -41 -106Z" fill="#c81a30" />
+      <path d="M27 -111L47 -64L29 -59L15 -105Z" fill="#a9142a" />
+
+      <circle cx="-11" cy="-154" r="4.4" fill="#23190f" />
+      <circle cx="11" cy="-154" r="4.4" fill="#23190f" />
+      <path d="M3 -147L27 -141L3 -136Z" fill="#e07a29" />
+      <g fill="#23190f">
+        <circle cx="-13" cy="-137" r="2" />
+        <circle cx="-6.5" cy="-133" r="2" />
+        <circle cx="0" cy="-132" r="2" />
+        <circle cx="6.5" cy="-133" r="2" />
+        <circle cx="13" cy="-137" r="2" />
+        <circle cx="0" cy="-98" r="4.6" />
+        <circle cx="0" cy="-80" r="4.6" />
+        <circle cx="0" cy="-62" r="4.6" />
+      </g>
+
+      {/* Top hat, straight off the snowman reference */}
+      <path d="M-25 -178V-214H25V-178Z" fill="#1b2a23" />
+      <path d="M-25 -186H25V-178H-25Z" fill="#c81a30" />
+      <path d="M-41 -179H41V-171H-41Z" fill="#1b2a23" />
+    </g>
+  )
+}
+
+/* A snow-laden fir standing on the drift */
+function SnowFir({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <rect x="-8" y="-10" width="16" height="34" fill="#5a3a22" />
+      <path d="M0 -196L54 -108H-54Z" fill="#1d5c40" />
+      <path d="M0 -152L68 -52H-68Z" fill="#194f37" />
+      <path d="M0 -104L82 10H-82Z" fill="#123d2c" />
+      <g stroke="#fdfbf6" strokeWidth="7" strokeLinecap="round" fill="none" strokeOpacity="0.92">
+        <path d="M-54 -108Q0 -120 54 -108" />
+        <path d="M-68 -52Q0 -66 68 -52" />
+        <path d="M-82 10Q0 -6 82 10" />
+      </g>
+      <circle cx="0" cy="-196" r="7" fill="#fffdfa" />
+    </g>
+  )
 }
 
 function createLayers(): SnowLayer[] {
@@ -210,7 +260,6 @@ export function NewYearScene() {
 
     const animationContext = gsap.context(() => {
       if (reducedMotion) {
-        gsap.set("[data-new-year-flame]", { opacity: 0.92, scaleY: 1 })
         gsap.set("[data-new-year-bauble]", { rotation: 0 })
         gsap.set("[data-new-year-bokeh]", { opacity: 0.3 })
         return
@@ -234,17 +283,6 @@ export function NewYearScene() {
             yoyo: true,
           },
         )
-      })
-      gsap.to("[data-new-year-flame]", {
-        opacity: 0.62,
-        scaleX: 0.86,
-        scaleY: 1.14,
-        transformOrigin: "50% 100%",
-        duration: 0.19,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-        stagger: 0.07,
       })
       gsap.to("[data-new-year-bokeh]", {
         opacity: 0.46,
@@ -312,15 +350,19 @@ export function NewYearScene() {
             <stop offset="0.54" stopColor="#071e15" />
             <stop offset="1" stopColor="#03110b" />
           </linearGradient>
-          {/* The one place a cold hue belongs: the night outside the glass */}
-          <linearGradient id="new-year-night" x1="720" y1="86" x2="720" y2="478" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#1d3f4d" />
-            <stop offset="0.62" stopColor="#16303a" />
-            <stop offset="1" stopColor="#12262d" />
+          {/* The drifts are the white mass of the whole system, so they are near-opaque snow
+              rather than a wash. Back to front, each one a little brighter */}
+          <linearGradient id="new-year-drift-back" x1="720" y1="600" x2="720" y2="900" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#eee9dc" />
+            <stop offset="1" stopColor="#dcd6c7" />
           </linearGradient>
-          <linearGradient id="new-year-drift" x1="720" y1="700" x2="720" y2="900" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#f4f1e8" stopOpacity="0.17" />
-            <stop offset="1" stopColor="#f4f1e8" stopOpacity="0.05" />
+          <linearGradient id="new-year-drift-mid" x1="720" y1="660" x2="720" y2="900" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#f8f5ec" />
+            <stop offset="1" stopColor="#e9e4d7" />
+          </linearGradient>
+          <linearGradient id="new-year-drift-front" x1="720" y1="720" x2="720" y2="900" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#fffefa" />
+            <stop offset="1" stopColor="#f3eee2" />
           </linearGradient>
           <radialGradient id="new-year-bauble-red" cx="0" cy="0" r="1" gradientTransform="translate(-8 -9) scale(34)">
             <stop stopColor="#f4566a" />
@@ -339,8 +381,8 @@ export function NewYearScene() {
             r="1"
             gradientTransform="translate(720 400) scale(980 720)">
             <stop stopColor="#03110b" stopOpacity="0" />
-            <stop offset="0.7" stopColor="#03110b" stopOpacity="0" />
-            <stop offset="1" stopColor="#03110b" stopOpacity="0.62" />
+            <stop offset="0.78" stopColor="#03110b" stopOpacity="0" />
+            <stop offset="1" stopColor="#03110b" stopOpacity="0.34" />
           </radialGradient>
           <filter id="new-year-bokeh-blur" x="-160%" y="-160%" width="420%" height="420%">
             <feGaussianBlur stdDeviation="17" />
@@ -348,72 +390,23 @@ export function NewYearScene() {
           <filter id="new-year-bulb-blur" x="-160%" y="-160%" width="420%" height="420%">
             <feGaussianBlur stdDeviation="6" />
           </filter>
-          <clipPath id="new-year-window-clip">
-            <rect x="474" y="92" width="492" height="380" rx="11" />
-          </clipPath>
         </defs>
 
         <rect width="1440" height="900" fill="url(#new-year-room)" />
 
-        {/* Window onto the street: cold glass, a dim town, snow on the far roofs */}
-        <g>
-          <rect x="468" y="86" width="504" height="392" rx="14" fill="url(#new-year-night)" />
-          <g clipPath="url(#new-year-window-clip)">
-            <path
-              d="M474 472V402H512V376H556V408H604V360H626L648 332L670 360H692V394H742V368H790V400H836V372H884V402H930V376H966V472H474Z"
-              fill="#0d2028"
-              fillOpacity="0.92"
-            />
-            {TOWN_LIGHTS.map(light => (
-              <rect
-                key={`${light.x}-${light.y}`}
-                x={light.x}
-                y={light.y}
-                width="9"
-                height="12"
-                rx="2"
-                fill="#f7b23b"
-                fillOpacity="0.44"
-              />
-            ))}
-            <path
-              d="M474 452C556 438 634 448 720 440C806 432 892 446 966 436V472H474V452Z"
-              fill="#e8e4d8"
-              fillOpacity="0.2"
-            />
-          </g>
-          <path
-            d="M720 86V478M468 282H972"
-            stroke="#e8dfcd"
-            strokeOpacity="0.34"
-            strokeWidth="9"
-            strokeLinecap="round"
-          />
-          <rect
-            x="468"
-            y="86"
-            width="504"
-            height="392"
-            rx="14"
-            stroke="#efe7d7"
-            strokeOpacity="0.46"
-            strokeWidth="13"
-          />
-        </g>
-
-        {/* Amber pooling on the floor below the sill — the room's own light, never a fill */}
+        {/* A low warm glow across the snow, so the amber still reads as the third light source */}
         <ellipse
           data-new-year-window-pool
-          cx="720"
-          cy="470"
-          rx="520"
-          ry="380"
+          cx="640"
+          cy="640"
+          rx="620"
+          ry="240"
           fill="url(#new-year-pool)"
           opacity="0.5"
         />
 
         {/* Fairy-light string sagging across the window head */}
-        <path d="M440 140Q720 232 1000 140" stroke="#d9c397" strokeOpacity="0.5" strokeWidth="3" />
+        <path d="M60 440Q720 600 1380 440" stroke="#d9c397" strokeOpacity="0.55" strokeWidth="3" />
         {BULBS.map(bulb => (
           <g key={bulb.x}>
             <circle
@@ -437,87 +430,47 @@ export function NewYearScene() {
           </g>
         ))}
 
-        {/* Fir boughs reaching in from the top corners, straight from the watercolour */}
-        <g stroke="#1d5c40" strokeWidth="7" strokeLinecap="round" transform="translate(-30 -24)">
-          <path d="M0 0C90 26 180 62 300 104" strokeWidth="9" />
-          <path d="M40 12L18 44M40 12L62 40M78 26L54 60M78 26L100 54M118 40L92 74M118 40L140 68M158 55L132 88M158 55L180 82M198 70L172 102M198 70L220 96M238 85L212 116M238 85L260 110M276 98L250 128M276 98L296 122" />
+        {/* Three baubles hung off the same string. The old set hung from the top corners, where the
+            navbar plate covered them at every width. data-pivot is the knot, in user-space units */}
+        <g data-new-year-bauble data-pivot="443 506">
+          <path d="M443 506V544" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
+          <rect x="437" y="542" width="12" height="9" rx="2" fill="#d9c397" />
+          <circle cx="443" cy="572" r="22" fill="url(#new-year-bauble-red)" />
+          <circle cx="435" cy="563" r="6" fill="#ffe3e6" fillOpacity="0.5" />
         </g>
-        <g stroke="#123d2c" strokeWidth="6" strokeLinecap="round" transform="translate(-40 46)">
-          <path d="M0 0C74 18 138 44 212 74" strokeWidth="8" />
-          <path d="M34 9L16 36M34 9L54 32M70 21L50 50M70 21L90 44M108 36L86 64M108 36L128 58M146 51L124 78M146 51L166 72M184 64L164 90" />
+        <g data-new-year-bauble data-pivot="720 520">
+          <path d="M720 520V554" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.2" />
+          <circle cx="720" cy="570" r="15" fill="url(#new-year-bauble-red)" />
+          <circle cx="715" cy="565" r="4.2" fill="#ffe3e6" fillOpacity="0.5" />
         </g>
-        <g stroke="#1d5c40" strokeWidth="7" strokeLinecap="round" transform="translate(1470 -24) scale(-1 1)">
-          <path d="M0 0C90 26 180 62 300 104" strokeWidth="9" />
-          <path d="M40 12L18 44M40 12L62 40M78 26L54 60M78 26L100 54M118 40L92 74M118 40L140 68M158 55L132 88M158 55L180 82M198 70L172 102M198 70L220 96M238 85L212 116M238 85L260 110M276 98L250 128M276 98L296 122" />
-        </g>
-
-        {/* Baubles. data-pivot is the knot the string hangs from, in user-space units */}
-        <g data-new-year-bauble data-pivot="118 96">
-          <path d="M118 96V140" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
-          <rect x="112" y="138" width="12" height="9" rx="2" fill="#d9c397" />
-          <circle cx="118" cy="168" r="22" fill="url(#new-year-bauble-red)" />
-          <circle cx="110" cy="159" r="6" fill="#ffe3e6" fillOpacity="0.5" />
-        </g>
-        <g data-new-year-bauble data-pivot="212 132">
-          <path d="M212 132V170" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
-          <rect x="207" y="168" width="10" height="8" rx="2" fill="#d9c397" />
-          <circle cx="212" cy="192" r="16" fill="url(#new-year-bauble-red)" />
-          <circle cx="206" cy="186" r="4.5" fill="#ffe3e6" fillOpacity="0.5" />
-        </g>
-        <g data-new-year-bauble data-pivot="58 62">
-          <path d="M58 62V98" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.2" />
-          <circle cx="58" cy="114" r="13" fill="url(#new-year-bauble-red)" />
-          <circle cx="53" cy="109" r="3.6" fill="#ffe3e6" fillOpacity="0.5" />
-        </g>
-        <g data-new-year-bauble data-pivot="1322 96">
-          <path d="M1322 96V140" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
-          <rect x="1316" y="138" width="12" height="9" rx="2" fill="#d9c397" />
-          <circle cx="1322" cy="168" r="22" fill="url(#new-year-bauble-red)" />
-          <circle cx="1314" cy="159" r="6" fill="#ffe3e6" fillOpacity="0.5" />
-        </g>
-        <g data-new-year-bauble data-pivot="1228 132">
-          <path d="M1228 132V170" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
-          <circle cx="1228" cy="192" r="16" fill="url(#new-year-bauble-red)" />
-          <circle cx="1222" cy="186" r="4.5" fill="#ffe3e6" fillOpacity="0.5" />
-        </g>
-        <g data-new-year-bauble data-pivot="1382 62">
-          <path d="M1382 62V98" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.2" />
-          <circle cx="1382" cy="114" r="13" fill="url(#new-year-bauble-red)" />
-          <circle cx="1377" cy="109" r="3.6" fill="#ffe3e6" fillOpacity="0.5" />
+        <g data-new-year-bauble data-pivot="997 506">
+          <path d="M997 506V540" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
+          <rect x="992" y="538" width="10" height="8" rx="2" fill="#d9c397" />
+          <circle cx="997" cy="564" r="18" fill="url(#new-year-bauble-red)" />
+          <circle cx="991" cy="558" r="4.7" fill="#ffe3e6" fillOpacity="0.5" />
         </g>
 
-        {/* Snow banked along the bottom, and a candle on the sill at each side */}
+        {/* The snow itself: three banked drifts, back to front. This is where the white lives */}
         <path
-          d="M0 812C168 776 322 806 486 792C690 774 852 802 1024 788C1190 774 1320 792 1440 776V900H0V812Z"
-          fill="url(#new-year-drift)"
+          d="M0 632C150 596 300 638 470 620C650 602 820 642 1000 616C1180 590 1320 628 1440 604V900H0V632Z"
+          fill="url(#new-year-drift-back)"
+        />
+        <path
+          d="M0 694C180 658 340 696 520 680C700 664 880 700 1060 678C1240 656 1350 690 1440 672V900H0V694Z"
+          fill="url(#new-year-drift-mid)"
         />
 
-        <g transform="translate(148 700)">
-          <rect x="0" y="26" width="26" height="92" rx="7" fill="#f3ecdc" fillOpacity="0.86" />
-          <path data-new-year-flame d="M13 30C-2 17 8 6 16 0C19 13 30 18 13 30Z" fill="#f7b23b" />
-          <circle
-            data-new-year-bokeh
-            cx="13"
-            cy="16"
-            r="26"
-            fill="#f7b23b"
-            opacity="0.3"
-            filter="url(#new-year-bokeh-blur)"
-          />
-        </g>
-        <g transform="translate(1268 726)">
-          <rect x="0" y="26" width="22" height="76" rx="6" fill="#f3ecdc" fillOpacity="0.8" />
-          <path data-new-year-flame d="M11 29C-2 17 7 6 14 0C17 12 27 17 11 29Z" fill="#f7b23b" />
-          <circle
-            data-new-year-bokeh
-            cx="11"
-            cy="15"
-            r="22"
-            fill="#f7b23b"
-            opacity="0.28"
-            filter="url(#new-year-bokeh-blur)"
-          />
-        </g>
+        {/* Firs and snowmen stand on the middle drift, before the front drift buries their feet */}
+        <SnowFir x={120} y={676} scale={1} />
+        <SnowFir x={1352} y={664} scale={0.84} />
+        <SnowFir x={806} y={690} scale={0.62} />
+        <Snowman x={566} y={648} scale={0.92} />
+        <Snowman x={300} y={676} scale={0.62} />
+
+        <path
+          d="M0 762C200 732 380 770 580 756C780 742 980 776 1180 754C1320 738 1390 760 1440 750V900H0V762Z"
+          fill="url(#new-year-drift-front)"
+        />
 
         <rect width="1440" height="900" fill="url(#new-year-vignette)" />
       </svg>
