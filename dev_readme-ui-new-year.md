@@ -76,16 +76,16 @@ Knit and gingham are repeats on purpose. The warning in `dev_readme-ui-system.md
 
 ### Components
 
-| Component                    | Renders                      | Notes                                                                                                                                                                                                                                                            |
-| ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NewYearScene`               | the backdrop                 | Canvas snow in three parallax depths with two-period wind drift, SVG snowfield (three banked drifts, two snowmen, snow-laden firs, a lit cottage, chocolate and a steaming mug, a light string of bulbs), GSAP bauble sway, steam and bokeh                      |
-| `NewYearFilmStrip`           | home, above the projects     | Six of the reference photographs cut into slanted panels with snow-white gaps. Each panel is skewed and its photograph skewed back by the same angle, so the cut is diagonal and the picture stays upright. Uses direct image tags, not `next/image` — see below |
-| `NewYearJazzPlayer`          | bottom-right, all pages      | SVG record and tone arm over a Canvas level meter. Click plays; the meter is driven by a real WebAudio analyser and falls back to an idle wave. Track goes at `public/new-year-jazz.mp3`                                                                         |
-| `NewYearRequestLever`        | buttons with `requestAction` | red-mittened hand on a candy-cane lever, pivots on its gate                                                                                                                                                                                                      |
-| `NewYearProjectOrnament`     | each project card            | bauble that swings on hover only — no idle loop, so a page of cards costs nothing at rest                                                                                                                                                                        |
-| `NewYearBookingLoadingScene` | the booking wait             | snow globe: SVG dome and plinth, Canvas snow inside, GSAP rock-and-settle                                                                                                                                                                                        |
-| `NewYearFireworksEvent`      | randomly, over the town      | Canvas particles with gravity and drag, GSAP flash at each shell                                                                                                                                                                                                 |
-| navbar garland               | the repo strip               | a light string sagging across it, bulbs twinkling out of phase, parallax off the scroll position                                                                                                                                                                 |
+| Component                    | Renders                      | Notes                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NewYearScene`               | the backdrop                 | Canvas snow in three parallax depths with two-period wind drift, SVG snowfield (three banked drifts, two snowmen, snow-laden firs, a lit cottage, chocolate and a steaming mug, a light string of bulbs), GSAP bauble sway, steam and bokeh                                                                                                    |
+| `NewYearFilmStrip`           | home and appointment         | Reference photographs cut into slanted panels with snow-white gaps. Each panel is skewed and its photograph skewed back by the same angle, so the cut is diagonal and the picture stays upright. `variant` picks the set: outdoors and people on home, indoors and treats on appointment. Uses direct image tags, not `next/image` — see below |
+| `NewYearJazzPlayer`          | bottom-right, all pages      | SVG record and tone arm over a Canvas level meter. Click reveals the embedded lo-fi playlist and starts the disc turning — see the note below on why the embed is visible                                                                                                                                                                      |
+| `NewYearRequestLever`        | buttons with `requestAction` | red-mittened hand on a candy-cane lever, pivots on its gate                                                                                                                                                                                                                                                                                    |
+| `NewYearProjectOrnament`     | each project card            | bauble that swings on hover only — no idle loop, so a page of cards costs nothing at rest                                                                                                                                                                                                                                                      |
+| `NewYearBookingLoadingScene` | the booking wait             | snow globe: SVG dome and plinth, Canvas snow inside, GSAP rock-and-settle                                                                                                                                                                                                                                                                      |
+| `NewYearFireworksEvent`      | randomly, over the town      | Canvas particles with gravity and drag, GSAP flash at each shell                                                                                                                                                                                                                                                                               |
+| navbar garland               | the repo strip               | a light string sagging across it, bulbs twinkling out of phase, parallax off the scroll position                                                                                                                                                                                                                                               |
 
 `NewYearRequestLever` reuses the plumbing class names the Halloween hand introduced on the
 button, and adds `new-year-request-control` / `new-year-request-content` beside them. Both sets
@@ -126,6 +126,24 @@ Current state: warm-snow body text 13.2:1, muted text 7.9:1, all four semantic c
 6.3:1 and 8.7:1, the plaque label 7.7:1, tag ink 8.4:1. At the wash's brightest 5% the tightest
 is 4.9:1, still clear of the floor.
 
+### Why the jazz embed stays visible
+
+The player streams a lo-fi playlist from an embedded frame rather than a file in `public/`. Two
+constraints shaped it, and both are in the terms covering that embed:
+
+- **The player may not be hidden**, and may not be shrunk below 200x200. So the record is a toggle
+  that reveals a real player above it, not a control that pipes sound out of a frame nobody sees.
+- **Audio may not be separated from the video.** Stripping the track out for audio-only playback,
+  or proxying it, is not an option regardless of how it is implemented.
+
+A knock-on effect: the frame is cross-origin, so its samples are not readable and there is no
+analyser to attach. The level meter is therefore a synthetic level — three sine terms of different
+periods so the row never marches in step — that moves while the player is open and settles to a low
+idle wave when it is closed. It is decoration, not a reading of the audio, and the component says so.
+
+If a licensed track ever lands in `public/`, an `<audio>` element with a real WebAudio analyser is
+the better build and the meter can then show the actual signal.
+
 ### The photo strip uses direct image tags
 
 `next/image` issued requests for only three of the six frames. The other three kept a correct `src`, a full
@@ -149,7 +167,7 @@ Driven with Playwright against the running dev server, not read off screenshots:
 | snow canvas animates at rest                                                  | yes                                                                                       |
 | snow canvas stops on `body.modal-open`, resumes on close                      | yes                                                                                       |
 | snow canvas under `prefers-reduced-motion`                                    | frozen, but one still frame is drawn so snow is present                                   |
-| jazz control label, `aria-pressed`, missing-track path                        | labelled, toggles, shows a dash and does not throw                                        |
+| jazz control label, `aria-pressed`, embed on click                            | labelled, toggles, reveals a 338x211 player on youtube-nocookie                           |
 | `new-year:fireworks` test hook                                                | mounts the burst                                                                          |
 | every New Year node unmounted under the other three themes                    | scene / jazz / lever / ornament all 0                                                     |
 | panel background per theme                                                    | knit for New Year, green wash for Halloween, wood for Crazy Mechanics, violet for default |
