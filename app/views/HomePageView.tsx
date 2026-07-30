@@ -173,7 +173,7 @@ export function HomePageView() {
                 </div>
               )}
 
-              <Button className="mt-md w-fit px-[1.5rem]" href="/appointment">
+              <Button className="new-year-treat-control mt-md w-fit px-[1.5rem]" href="/appointment">
                 {commonT("bookAppointment")} <GrSchedule />
               </Button>
             </div>

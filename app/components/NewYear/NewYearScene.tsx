@@ -593,7 +593,6 @@ export function NewYearScene() {
         {/* The cut-out treats rest on the near bank. Painted after the front drift because that
             drift is opaque and would otherwise bury them */}
         <SceneCutout href="/UI/new-year/cinnamon-roll-with-coffee.png" x={452} y={786} width={132} aspect={736 / 676} />
-        <SceneCutout href="/UI/new-year/milka cinnamon.png" x={606} y={792} width={116} aspect={736 / 981} />
         <SceneCutout href="/UI/new-year/new-year-mandarines.png" x={742} y={790} width={150} aspect={2121 / 1414} />
 
         <rect width="1440" height="900" fill="url(#new-year-vignette)" />

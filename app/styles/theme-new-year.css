@@ -354,6 +354,33 @@
   }
 }
 
+/* A bar of chocolate propped against the booking control. The file name has a space in it, so the
+   URL carries %20. `overflow: visible` lets it lean past the control's own box, and the guarded
+   position rule above already gives .plaque the positioned box this hangs off */
+:root[data-theme="new-year"] .new-year-treat-control {
+  overflow: visible;
+}
+
+:root[data-theme="new-year"] .new-year-treat-control::after {
+  background: url("/UI/new-year/milka%20cinnamon.png") no-repeat center / contain;
+  content: "";
+  filter: drop-shadow(0 5px 5px rgb(2 10 7 / 0.45));
+  height: 96px;
+  pointer-events: none;
+  position: absolute;
+  right: -52px;
+  top: -34px;
+  transform: rotate(13deg);
+  width: 74px;
+  z-index: 6;
+}
+
+@media (max-width: 767px) {
+  :root[data-theme="new-year"] .new-year-treat-control::after {
+    display: none;
+  }
+}
+
 /* ── Photo strip ─────────────────────────────────────────────────────────────────
    Six reference photographs cut into slanted panels with snow-white gaps between them. The slice
    is skewed and the photograph inside it is skewed back by the same angle, so the cut is diagonal
