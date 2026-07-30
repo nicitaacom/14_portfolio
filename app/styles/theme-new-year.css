@@ -354,28 +354,35 @@
   }
 }
 
-/* A bar of chocolate propped against the booking control. The file name has a space in it, so the
-   URL carries %20. `overflow: visible` lets it lean past the control's own box, and the guarded
-   position rule above already gives .plaque the positioned box this hangs off */
+/* A bar of chocolate held out at the left of the booking control. The label is pushed to the
+   right end and the control reserves padding on the left, so the bar has its own room instead of
+   sitting on top of the words. The file name has a space in it, so the URL carries %20 */
 :root[data-theme="new-year"] .new-year-treat-control {
+  justify-content: flex-end;
   overflow: visible;
+  padding-inline-start: 6.25rem;
 }
 
 :root[data-theme="new-year"] .new-year-treat-control::after {
-  background: url("/UI/new-year/milka%20cinnamon.png") no-repeat center / contain;
+  background: url("/UI/new-year/milka%20cinnamon.png") no-repeat left center / contain;
   content: "";
-  filter: drop-shadow(0 5px 5px rgb(2 10 7 / 0.45));
-  height: 96px;
+  filter: drop-shadow(0 6px 6px rgb(2 10 7 / 0.45));
+  height: 132px;
+  left: -14px;
   pointer-events: none;
   position: absolute;
-  right: -52px;
-  top: -34px;
-  transform: rotate(13deg);
-  width: 74px;
+  top: -48px;
+  transform: rotate(-9deg);
+  width: 100px;
   z-index: 6;
 }
 
 @media (max-width: 767px) {
+  :root[data-theme="new-year"] .new-year-treat-control {
+    justify-content: center;
+    padding-inline-start: 1.5rem;
+  }
+
   :root[data-theme="new-year"] .new-year-treat-control::after {
     display: none;
   }
