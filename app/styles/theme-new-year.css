@@ -324,6 +324,35 @@
   border-color: hsl(var(--success));
 }
 
+/* ── Fireworks ───────────────────────────────────────────────────────────────────
+   The midnight event. Particles are drawn with the lighter composite so overlapping sparks add
+   up the way real ones do, and the flash is a soft radial parked at the shell that fired it */
+
+.new-year-fireworks-event {
+  contain: layout paint;
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+}
+
+.new-year-fireworks-canvas {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.new-year-fireworks-flash {
+  background: radial-gradient(
+    circle at var(--flash-x, 50%) var(--flash-y, 40%),
+    rgb(255 236 200 / 0.85),
+    rgb(247 178 59 / 0.28) 24%,
+    transparent 46%
+  );
+  inset: 0;
+  position: absolute;
+}
+
 /* ── Snow globe ──────────────────────────────────────────────────────────────────
    The booking wait. The interior SVG paints first, the snow canvas sits over it and the glass
    and plinth paint last. The snow layer is placed by percentage rather than pixels so it stays
