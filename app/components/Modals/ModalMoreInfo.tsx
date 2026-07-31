@@ -10,7 +10,7 @@ import { RiDiscordLine } from "react-icons/ri"
 import { FiCalendar, FiUsers, FiFileText, FiExternalLink, FiLayers } from "react-icons/fi"
 import { useScopedI18n } from "@/locales/client"
 import { NewYearModalStillLife } from "@/components/NewYear/NewYearModalStillLife"
-import { NewYearSnowText } from "@/components/NewYear/NewYearSnowText"
+import { NewYearSnowParticleField } from "@/components/NewYear/NewYearSnowParticleField"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 
 export interface Collaborator {
@@ -115,7 +115,7 @@ export function ModalMoreInfo({
                   {theme === "new-year" ? (
                     <>
                       <span className="sr-only">{label}</span>
-                      <NewYearSnowText text={label} />
+                      <NewYearSnowParticleField seedText={label} />
                     </>
                   ) : (
                     label
@@ -127,7 +127,7 @@ export function ModalMoreInfo({
                   {theme === "new-year" ? (
                     <>
                       <span className="sr-only">{label}</span>
-                      <NewYearSnowText text={label} />
+                      <NewYearSnowParticleField seedText={label} />
                     </>
                   ) : (
                     label
@@ -135,6 +135,9 @@ export function ModalMoreInfo({
                 </>
               )}
             </h1>
+            <span className="new-year-modal-2026-art" aria-hidden="true">
+              <span className="new-year-modal-2026-center" />
+            </span>
           </div>
         </header>
 

@@ -1345,11 +1345,12 @@
   transform: translateX(-50%);
 }
 
-:root[data-theme="new-year"] .new-year-snow-text {
+:root[data-theme="new-year"] .new-year-snow-particle-field {
   display: block;
   filter: drop-shadow(0 2px 4px rgb(0 8 14 / 0.48));
-  max-width: min(70vw, 760px);
-  object-fit: contain;
+  height: 100%;
+  max-width: min(72vw, 620px);
+  object-fit: fill;
   object-position: left center;
 }
 
@@ -1451,7 +1452,111 @@
   box-shadow:
     inset 0 1px 0 rgb(226 246 255 / 0.12),
     0 8px 22px rgb(0 6 12 / 0.28);
-  padding: 1.2rem 4rem 1.2rem 1.25rem;
+  height: 64px;
+  max-height: 64px;
+  min-height: 64px;
+  padding: 0 4rem 0 0;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-header > .relative {
+  align-items: stretch;
+  flex-direction: row;
+  gap: clamp(0.5rem, 1.5vw, 1.25rem);
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-header h1 {
+  flex-shrink: 1;
+  height: 100%;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-header h1 > a {
+  height: 100%;
+}
+
+.new-year-modal-2026-art {
+  display: none;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art {
+  display: block;
+  bottom: 0;
+  left: 0;
+  min-width: 150px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: -4rem;
+  top: 0;
+  z-index: 1;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::before,
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::after {
+  background-image: url("/UI/new-year/new-year-2026.jpeg");
+  background-repeat: no-repeat;
+  background-size: 335% 100%;
+  content: "";
+  bottom: 0;
+  opacity: 0.36;
+  position: absolute;
+  top: 0;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::before {
+  background-position: left center;
+  left: 0;
+  right: calc(50% + 66px);
+  -webkit-mask-image: linear-gradient(90deg, #000 0 72%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0 72%, transparent 100%);
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::after {
+  background-position: right center;
+  left: calc(50% + 66px);
+  right: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 28% 100%);
+  mask-image: linear-gradient(90deg, transparent, #000 28% 100%);
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center {
+  bottom: 0;
+  filter: brightness(0.78) saturate(0.82);
+  left: 50%;
+  opacity: 0.88;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%) skewX(-3deg);
+  width: 137px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 32%, #000 68%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 32%, #000 68%, transparent);
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::before,
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::after {
+  background: url("/UI/new-year/new-year-2026.jpeg") center / 100% 100% no-repeat;
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::before {
+  filter: blur(3.2px);
+  opacity: 0.207;
+  transform: scale(1.025);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%, #000 65%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 35%, #000 65%, transparent);
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::after {
+  opacity: 0.76;
+  -webkit-mask-image: linear-gradient(90deg, transparent 8%, #000 42%, #000 58%, transparent 92%);
+  mask-image: linear-gradient(90deg, transparent 8%, #000 42%, #000 58%, transparent 92%);
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-header::after {
@@ -1471,6 +1576,14 @@
   font-weight: 750;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 10px rgb(0 7 13 / 0.48);
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-header h1 a svg {
+  transition: opacity 180ms ease;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-header h1 a:hover svg {
+  opacity: 1;
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-header-wash {
@@ -1852,7 +1965,7 @@
 :root[data-theme="new-year"] .new-year-modal-still-life .new-year-modal-mandarins {
   bottom: -38px;
   left: -6px;
-  opacity: 0.87;
+  opacity: 0.7;
   right: auto;
   transform: rotate(4deg);
   width: clamp(138px, 17vw, 204px);
@@ -1860,7 +1973,11 @@
 
 @media (max-width: 767px) {
   :root[data-theme="new-year"] .project-more-info-modal .project-modal-header {
-    padding: 1rem 3.5rem 1rem 1rem;
+    padding: 0 3.5rem 0 0;
+  }
+
+  :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art {
+    right: -3.5rem;
   }
 
   :root[data-theme="new-year"] .new-year-modal-coffee {
