@@ -2136,6 +2136,44 @@
   transform: rotate(var(--new-year-bell-lean, 0deg)) scale(0.96);
 }
 
+/* The chimney stands 75px clear of the modal's top edge, and the backdrop centres the modal, so
+   the room above it is half of whatever the viewport has spare. At the 90vh the base sets that
+   is 5vh a side — under 75px on any screen shorter than 1500px, which cut the stack off at the
+   top of the window. Capping the height leaves 95px above instead, and the min() keeps the 90vh
+   ceiling on the tall screens where it was never the binding limit */
+:root[data-theme="new-year"] .project-more-info-modal {
+  /* Named once and reused below. The sticky column has to stay inside this, and stating the
+     same figure twice is what let the two drift apart and put the column past the modal */
+  --project-modal-height: min(90vh, calc(100dvh - 190px));
+
+  max-height: var(--project-modal-height);
+}
+
+/* The sticky column's own ceiling is measured off the viewport, and the base picked 14rem to
+   sit just inside a modal of 90vh. Shortening the modal by another 190px leaves that figure
+   taller than the space it has, so the column would run past the bottom of the scroller and be
+   clipped rather than scrolling. 21rem is the same sum against the shorter modal: the 190px
+   taken off the frame plus the header and padding between it and this column. Inside the same
+   query as the class it overrides, so the stacked layout below 1024px keeps its natural height */
+@media (min-width: 1024px) {
+  :root[data-theme="new-year"] .project-more-info-modal .project-modal-aside {
+    /* Measured off the modal rather than the viewport, so it tracks whatever the modal actually
+       resolves to. The 11rem is what sits between the two: the frame padding, the header, and
+       this column's own top offset and bottom gap */
+    max-height: calc(var(--project-modal-height) - 11rem);
+    /* Scrolled to the end, the last card would otherwise sit flush on the cut edge and read as
+       clipped rather than finished. The gap belongs on the scroller so it scrolls past too */
+    padding-bottom: 1.25rem;
+  }
+}
+
+/* Flex children shrink below their own content by default, and this column has a ceiling — so
+   the cards were squeezed, and the task card hides what overflows it, which cut its text off
+   mid-sentence. Held at their natural height the column scrolls instead of squashing them */
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-aside > * {
+  flex-shrink: 0;
+}
+
 :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-chimney {
   filter: drop-shadow(0 9px 9px rgb(0 5 10 / 0.44));
   height: 84px;

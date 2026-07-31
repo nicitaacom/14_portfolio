@@ -143,7 +143,7 @@ export function ModalMoreInfo({
 
         <main className="modal-scroll hide-scrollbar flex-1 overflow-y-auto px-sm pb-sm pt-0 tablet:px-md tablet:pb-md tablet:pt-0">
           <div className="grid items-start gap-sm laptop:grid-cols-[380px_minmax(0,1fr)]">
-            <aside className="flex h-fit self-start flex-col gap-y-sm laptop:sticky laptop:top-sm laptop:z-10 laptop:max-h-[calc(100dvh-14rem)] laptop:overflow-y-auto laptop:self-start">
+            <aside className="project-modal-aside flex h-fit self-start flex-col gap-y-sm laptop:sticky laptop:top-sm laptop:z-10 laptop:max-h-[calc(100dvh-14rem)] laptop:overflow-y-auto laptop:self-start">
               {notice}
 
               {taskLabel && (
