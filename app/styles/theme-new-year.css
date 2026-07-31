@@ -1484,6 +1484,13 @@
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art {
+  background: linear-gradient(
+    90deg,
+    transparent calc(50% - 340px),
+    rgb(239 247 250 / 0.46) calc(50% - 112px),
+    rgb(246 250 252 / 0.58) calc(50% + 112px),
+    transparent calc(50% + 340px)
+  );
   display: block;
   bottom: 0;
   left: 0;
@@ -1511,22 +1518,23 @@
 :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::before {
   background-position: left center;
   left: 0;
-  right: calc(50% + 66px);
-  -webkit-mask-image: linear-gradient(90deg, #000 0 72%, transparent 100%);
-  mask-image: linear-gradient(90deg, #000 0 72%, transparent 100%);
+  right: calc(50% - 38px);
+  -webkit-mask-image: linear-gradient(90deg, #000 0 calc(100% - 260px), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0 calc(100% - 260px), transparent 100%);
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::after {
   background-position: right center;
-  left: calc(50% + 66px);
+  left: calc(50% + 38px);
   right: 0;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 28% 100%);
-  mask-image: linear-gradient(90deg, transparent, #000 28% 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 260px 100%);
+  mask-image: linear-gradient(90deg, transparent, #000 260px 100%);
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center {
   bottom: 0;
-  filter: brightness(0.78) saturate(0.82);
+  filter: brightness(0.78) saturate(0.82) drop-shadow(-8px 0 7px rgb(237 246 250 / 0.55))
+    drop-shadow(8px 0 7px rgb(237 246 250 / 0.55));
   left: 50%;
   opacity: 0.88;
   position: absolute;
@@ -1591,7 +1599,30 @@
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .modal-scroll {
+  isolation: isolate;
   padding-top: 0.9rem;
+  position: relative;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .modal-scroll::before {
+  background: url("/UI/new-year/references/new-year-30.jpg") center 42% / cover no-repeat;
+  bottom: 0;
+  content: "";
+  filter: brightness(0.78) saturate(0.68);
+  opacity: 0.46;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 68%;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%);
+  mask-image: linear-gradient(90deg, transparent, #000 30%);
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .modal-scroll > * {
+  position: relative;
+  z-index: 1;
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-section {
