@@ -65,7 +65,9 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
         </div>
         {userId && (
           <>
-            <div className="hidden desktop:inline-flex h-[calc(66px-24px)] mt-[12px] border-r-2 border-brass/40"></div>
+            {/* The row already centres its items, so the old top margin only pushed this one down
+                by that much. Height alone leaves it centred at any navbar height */}
+            <div className="hidden desktop:inline-flex h-[calc(66px-24px)] border-r-2 border-brass/40"></div>
             <div className="navbar-bezel">
               <AdminDropdown isGMLive={is_live_call} />
             </div>
