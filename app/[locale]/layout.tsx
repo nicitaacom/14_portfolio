@@ -29,8 +29,9 @@ export default async function LocaleLayout({
     <I18nProviderClient locale={locale}>
       <div className={`${inter.variable} ${specialElite.variable} ${fraunces.variable} relative isolate`}>
         <WorkbenchWall />
-        {/* Sits between the backdrop and the content layer, so the shells burst over the town
-            in the scene rather than over the interface */}
+        {/* Fixed and lifted over the content layer in theme-new-year.css, so the shells read as
+            sky seen through the room at any scroll position rather than being covered by
+            whichever page is open */}
         <NewYearFireworksEvent />
         <div className="relative z-10">
           <HalloweenGraveEvent />

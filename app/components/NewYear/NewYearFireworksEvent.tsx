@@ -10,9 +10,12 @@ import { useSiteTheme } from "@/hooks/useSiteTheme"
 type FireworksPhase = "idle" | "burst" | "fading"
 
 const INITIAL_EVENT_DELAY = { min: 16_000, max: 28_000 }
-const REPEAT_EVENT_DELAY = { min: 70_000, max: 120_000 }
+const REPEAT_EVENT_DELAY = { min: 40_000, max: 60_000 }
 const BURST_DURATION = { min: 4_500, max: 6_500 }
-const BURST_FADE_MS = 900
+/* How long the closing shells are given to finish on their own before the display is reset
+   regardless. Only a backstop — normally the canvas reports the sky empty well inside this,
+   and the longest a shell needs is its climb plus the longest spark life */
+const MAX_SETTLE_MS = 8_000
 const RETRY_DELAY = 10_000
 const SHELL_INTERVAL = { min: 420, max: 980 }
 
@@ -23,6 +26,15 @@ const SHELL_COLOURS = ["255, 90, 108", "247, 178, 59", "255, 253, 250", "126, 21
 const GRAVITY = 0.00028
 const DRAG = 0.9986
 
+/* Where the shells open, as a fraction of viewport height measured from the top — the band of
+   sky above the tallest thing the page draws. Stated as a target the rocket is aimed at rather
+   than left to a fuse timer, so the burst lands in the same part of the sky on a phone and on
+   a tall desktop screen instead of wherever the climb happened to run out */
+const BURST_ALTITUDE = { min: 0.1, max: 0.38 }
+/* Enough overshoot in the launch speed that the shell is still climbing when it reaches its
+   target, so it opens on the way up rather than stalling into it */
+const CLIMB_MARGIN = 1.06
+
 interface Rocket {
   x: number
   y: number
@@ -30,7 +42,7 @@ interface Rocket {
   velocityX: number
   velocityY: number
   colour: string
-  fuse: number
+  targetY: number
 }
 
 interface Spark {
@@ -61,6 +73,10 @@ export function NewYearFireworksEvent() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const flashRef = useRef<HTMLDivElement>(null)
   const scheduleBurstFinishRef = useRef<(() => void) | null>(null)
+  /* Read per frame instead of captured, so the draw loop survives the change from launching to
+     letting the sky clear */
+  const isLaunchingRef = useRef(false)
+  const handleBurstSettledRef = useRef<(() => void) | null>(null)
 
   /* Held true across the fade so the particles keep falling while the burst bows out, rather
      than the canvas unmounting mid-flight */
@@ -99,12 +115,23 @@ export function NewYearFireworksEvent() {
       schedule(beginEvent, delay)
     }
 
+    /* Launching stops here and nothing else does. The shells already climbing still open, and
+       their sparks still burn down, because the canvas reports back when the sky is empty */
     const finishEvent = () => {
       updatePhase("fading")
+      /* A backstop in case that report never arrives, so the display always resets */
       schedule(() => {
+        if (currentPhase !== "fading") return
         updatePhase("idle")
         scheduleNextEvent()
-      }, BURST_FADE_MS)
+      }, MAX_SETTLE_MS)
+    }
+
+    handleBurstSettledRef.current = () => {
+      if (currentPhase !== "fading") return
+      clearTimers()
+      updatePhase("idle")
+      scheduleNextEvent()
     }
 
     function beginEvent() {
@@ -159,12 +186,18 @@ export function NewYearFireworksEvent() {
     return () => {
       isMounted = false
       scheduleBurstFinishRef.current = null
+      handleBurstSettledRef.current = null
       clearTimers()
       bodyObserver.disconnect()
       document.removeEventListener("visibilitychange", cancelWhileUnavailable)
       window.removeEventListener("new-year:fireworks", triggerForPreview)
     }
   }, [reducedMotion, theme])
+
+  /* Kept in a ref so the draw loop can read it without being rebuilt when it changes */
+  useEffect(() => {
+    isLaunchingRef.current = phase === "burst"
+  }, [phase])
 
   useEffect(() => {
     if (phase !== "burst") return
@@ -185,9 +218,9 @@ export function NewYearFireworksEvent() {
     let animationFrame = 0
     let lastFrameTime = performance.now()
     let nextShellAt = performance.now() + 120
+    let hasReportedSettled = false
     const rockets: Rocket[] = []
     const sparks: Spark[] = []
-    const isLaunching = phase === "burst"
     /* The flash tweens are created one per shell, so they are recorded on a context and the
        whole set is reverted together when the burst ends */
     const flashContext = gsap.context(() => {})
@@ -209,20 +242,20 @@ export function NewYearFireworksEvent() {
       flash.style.setProperty("--flash-x", `${x}px`)
       flash.style.setProperty("--flash-y", `${y}px`)
       flashContext.add(() => {
-        gsap.fromTo(flash, { opacity: 0.2 }, { opacity: 0, duration: 0.5, ease: "power2.out", overwrite: true })
+        gsap.fromTo(flash, { opacity: 0.34 }, { opacity: 0, duration: 0.5, ease: "power2.out", overwrite: true })
       })
     }
 
     const explode = (rocket: Rocket) => {
-      const sparkCount = 58 + Math.floor(Math.random() * 34)
-      const power = 0.13 + Math.random() * 0.08
+      const sparkCount = 78 + Math.floor(Math.random() * 42)
+      const power = 0.16 + Math.random() * 0.1
 
       for (let index = 0; index < sparkCount; index += 1) {
         const angle = (index / sparkCount) * Math.PI * 2 + Math.random() * 0.14
         /* Square-rooting a uniform sample spreads the sparks evenly over the disc instead of
            bunching them at the rim, which is what a real shell looks like */
         const speed = power * Math.sqrt(Math.random()) * (0.55 + Math.random() * 0.65)
-        const maxLife = randomBetween(900, 1700)
+        const maxLife = randomBetween(1100, 2000)
 
         sparks.push({
           x: rocket.x,
@@ -233,7 +266,7 @@ export function NewYearFireworksEvent() {
           velocityY: Math.sin(angle) * speed,
           life: maxLife,
           maxLife,
-          size: 0.9 + Math.random() * 1.5,
+          size: 1.2 + Math.random() * 1.8,
           colour: Math.random() < 0.18 ? pickColour() : rocket.colour,
         })
       }
@@ -243,14 +276,20 @@ export function NewYearFireworksEvent() {
 
     const launchShell = () => {
       const x = randomBetween(width * 0.12, width * 0.88)
+      const launchY = height + 8
+      const targetY = height * randomBetween(BURST_ALTITUDE.min, BURST_ALTITUDE.max)
+      /* The speed that just reaches the target under this gravity, plus the margin. Solving for
+         it here is what keeps the burst height honest at any viewport size */
+      const climbSpeed = Math.sqrt(2 * GRAVITY * (launchY - targetY)) * CLIMB_MARGIN
+
       rockets.push({
         x,
-        y: height + 8,
-        previousY: height + 8,
+        y: launchY,
+        previousY: launchY,
         velocityX: randomBetween(-0.03, 0.03),
-        velocityY: -randomBetween(0.4, 0.56),
+        velocityY: -climbSpeed,
         colour: pickColour(),
-        fuse: randomBetween(900, 1400),
+        targetY,
       })
     }
 
@@ -258,7 +297,7 @@ export function NewYearFireworksEvent() {
       const elapsed = Math.min(time - lastFrameTime, 40)
       lastFrameTime = time
 
-      if (isLaunching && time >= nextShellAt) {
+      if (isLaunchingRef.current && time >= nextShellAt) {
         launchShell()
         if (Math.random() < 0.3) launchShell()
         nextShellAt = time + randomBetween(SHELL_INTERVAL.min, SHELL_INTERVAL.max)
@@ -274,16 +313,17 @@ export function NewYearFireworksEvent() {
         rocket.velocityY += GRAVITY * elapsed
         rocket.x += rocket.velocityX * elapsed
         rocket.y += rocket.velocityY * elapsed
-        rocket.fuse -= elapsed
 
         context.beginPath()
         context.moveTo(rocket.x, rocket.previousY)
         context.lineTo(rocket.x, rocket.y)
-        context.lineWidth = 2.2
-        context.strokeStyle = `rgba(${rocket.colour}, 0.85)`
+        context.lineWidth = 2.6
+        context.strokeStyle = `rgba(${rocket.colour}, 0.95)`
         context.stroke()
 
-        if (rocket.velocityY >= 0 || rocket.fuse <= 0) {
+        /* Reaching the target opens the shell. The stall check is the backstop for a rocket
+           that loses its climb early, so none of them ever fall back down unopened */
+        if (rocket.y <= rocket.targetY || rocket.velocityY >= 0) {
           explode(rocket)
           rockets.splice(index, 1)
         }
@@ -309,11 +349,23 @@ export function NewYearFireworksEvent() {
         context.moveTo(spark.previousX, spark.previousY)
         context.lineTo(spark.x, spark.y)
         context.lineWidth = spark.size
-        context.strokeStyle = `rgba(${spark.colour}, ${fade * 0.9})`
+        context.strokeStyle = `rgba(${spark.colour}, ${fade})`
         context.stroke()
       }
 
       context.globalCompositeOperation = "source-over"
+
+      /* Once launching has stopped and the last spark has burnt out there is nothing left to
+         draw, so the display reports itself finished and the loop ends. Waiting for this rather
+         than for a timer is what lets the closing shells play all the way out */
+      if (!isLaunchingRef.current && rockets.length === 0 && sparks.length === 0) {
+        if (!hasReportedSettled) {
+          hasReportedSettled = true
+          handleBurstSettledRef.current?.()
+        }
+        return
+      }
+
       animationFrame = requestAnimationFrame(drawFrame)
     }
 
@@ -329,7 +381,11 @@ export function NewYearFireworksEvent() {
       resizeObserver.disconnect()
       flashContext.revert()
     }
-  }, [isBurstVisible, phase])
+    /* phase is deliberately absent. The rockets and sparks live in this effect, so listing it
+       would rebuild them as empty arrays the moment launching stops and wipe every shell still
+       in the air. Launching is read from a ref per frame instead, which lets one canvas span
+       the whole display from first launch to last spark */
+  }, [isBurstVisible])
 
   if (theme !== "new-year" || reducedMotion) return null
 
@@ -341,8 +397,11 @@ export function NewYearFireworksEvent() {
           aria-hidden="true"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          /* The layer holds full opacity for the whole display and leaves on an empty canvas,
+             so this exit has nothing left to dim. It stays only to cover the backstop path,
+             where the reset can arrive with sparks still on screen */
           exit={{ opacity: 0 }}
-          transition={{ duration: phase === "fading" ? BURST_FADE_MS / 1000 : 0.4, ease: "easeOut" }}>
+          transition={{ duration: 0.4, ease: "easeOut" }}>
           <div ref={flashRef} className="new-year-fireworks-flash" style={{ opacity: 0 }} />
           <canvas ref={canvasRef} className="new-year-fireworks-canvas" />
         </motion.div>
