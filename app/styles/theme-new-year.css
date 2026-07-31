@@ -592,12 +592,11 @@
   contain: layout paint;
   inset: 0;
   pointer-events: none;
+  /* No z-index on purpose. The layer mounts after WorkbenchWall and before the site's z-index
+     10 content, so it paints over the backdrop and under the whole interface — the shells read
+     as sky behind the room. Putting it above the content instead makes them burst over panels
+     and type, which is not what this is for */
   position: fixed;
-  /* Above the site's z-index 10 content layer. Below that the interface painted over the whole
-     display and only the strip of sky past the end of the page content showed any of it. Safe
-     to put on top: the layer takes no pointer events, and NewYearFireworksEvent already stands
-     the display down whenever body has the modal-open class, so nothing bursts over a modal */
-  z-index: 11;
 }
 
 .new-year-fireworks-canvas {
