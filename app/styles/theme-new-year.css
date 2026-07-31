@@ -2641,9 +2641,13 @@
     0 6px 14px rgb(3 12 20 / 0.26);
 }
 
-:root[data-theme="new-year"] .appointment-picker-icon {
-  background: #081723;
-  border-color: rgb(188 215 226 / 0.24);
+/* The icon sits inside a control that is already a framed box, so giving it its own fill, border
+   and full radius drew a second box inside the first. Stripped back to the glyph alone */
+:root[data-theme="new-year"] .appointment-picker-icon,
+:root[data-theme="new-year"] .site-picker-trigger-icon {
+  background: none;
+  border: 0;
+  border-radius: 0;
 }
 
 :root[data-theme="new-year"] .appointment-picker-option {
@@ -3094,4 +3098,22 @@
   to {
     background-position-x: 28px, 0;
   }
+}
+
+/* ── Dropdown radius ─────────────────────────────────────────────────────────────
+   One value across every part of every dropdown. These had drifted to three: 6px on the navbar
+   triggers and menus, 10px on their options and on the timezone trigger, and 11px on the
+   appointment pickers — near enough to look like a mistake rather than a choice when two sit
+   side by side. 8px is the reduced figure, and it is last in the file so it settles the ones
+   that state their own radius earlier */
+:root[data-theme="new-year"] .site-picker-trigger,
+:root[data-theme="new-year"] .site-picker-menu,
+:root[data-theme="new-year"] .site-picker-option,
+:root[data-theme="new-year"] .site-admin-trigger,
+:root[data-theme="new-year"] .site-admin-menu,
+:root[data-theme="new-year"] .site-admin-option,
+:root[data-theme="new-year"] .appointment-picker-trigger,
+:root[data-theme="new-year"] .appointment-picker-menu,
+:root[data-theme="new-year"] .appointment-picker-option {
+  border-radius: 8px;
 }

@@ -54,7 +54,7 @@ export function LanguageDropdown() {
         onClick={() => setIsOpen(prevState => !prevState)}
         type="button">
         <div className="flex min-w-0 items-center gap-xs">
-          <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border border-brass/40 bg-steel-deep">
+          <span className="site-picker-trigger-icon flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border border-brass/40 bg-steel-deep">
             <TbWorld className="text-brass" size={13} />
           </span>
           <span className="truncate text-sm text-secondary">{t(currentLanguage.code)}</span>
