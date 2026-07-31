@@ -83,10 +83,11 @@ surfaces, but must not repurpose them. A theme that leaves them unset inherits t
 how New Year ended up with hazard-yellow and fire-engine-red bars on an ice palette.
 
 `--cta` is the case where the material/semantic split bites hardest, because theme-core uses it as **both** a
-surface (control faces, trim, arrows) and an accent that `text-cta` sets type in. A saturated dark material makes
-a good fill and a poor text colour: New Year's crimson `#da1b2e` measures 7.7:1 under warm-snow label text and
-2.8:1 as text on the panel wash, and no dark background can lift it past 4.18:1. When a theme picks a dark `--cta`,
-check `text-cta` separately from the fills, and expect to need a second lighter token for text.
+surface (control faces, trim, arrows) and an accent. A saturated dark material makes a good fill and a poor text
+colour: New Year's crimson `#da1b2e` measures 7.7:1 under warm-snow label text and 2.8:1 as text on the panel wash,
+and no dark background can lift it past 4.18:1. `--cta-text` therefore aliases `--cta` by default and may be
+overridden by a theme for small accent text. New Year keeps the sampled crimson surface and sets a lighter
+`--cta-text`. Check the text token separately from every fill.
 
 ### Never set `position` unconditionally in a theme file
 
@@ -162,3 +163,6 @@ all, since that class is set for the whole time it is on screen.
 
 Then confirm: `pnpm lint`, `npx tsc --noEmit`, `git diff --check`, and
 `document.body.scrollWidth === document.documentElement.clientWidth` at 390, 624 and 1440 px.
+Also visit the home, appointment, authentication, admin and not-found routes. A complete system
+must cover navigation, footer, modal, picker, toast, empty and loading states rather than ending
+at the primary page.
