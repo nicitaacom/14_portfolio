@@ -70,13 +70,13 @@ export function HomePageView() {
             />
           </ul>
 
-          <div className="machine-panel flex h-[520px] w-full max-w-[650px] flex-col p-md desktop:text-start">
+          <div className="new-year-home-panel machine-panel flex h-[520px] w-full max-w-[650px] flex-col p-md desktop:text-start">
             <h1 data-text="WEB Frontend developer" className="text-shadow text-lg before:text-secondary">
               {t("role")}
             </h1>
             <p className="text-sm font-bold text-secondary-foreground/60">nicitaacom</p>
 
-            <div className="mt-md flex gap-md border-b border-primary-foreground">
+            <div className="new-year-home-tabs mt-md flex gap-md border-b border-primary-foreground">
               {tabs.map(({ key, label }) => (
                 <button
                   key={key}
@@ -92,7 +92,7 @@ export function HomePageView() {
               ))}
             </div>
 
-            <div className="mt-md flex min-h-0 flex-1 flex-col justify-between text-md font-bold text-secondary-foreground">
+            <div className="new-year-home-body mt-md flex min-h-0 flex-1 flex-col justify-between text-md font-bold text-secondary-foreground">
               {activeTab === "story" ? (
                 <div className="leading-relaxed">
                   <b>{t("story.startedLabel")}</b> {t("story.startedText")}
@@ -125,13 +125,13 @@ export function HomePageView() {
                   <p className="pl-xs text-xs italic text-secondary-foreground/50">{t("whyme.note")}</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-xs text-start">
+                <div className="new-year-audience-list flex flex-col gap-xs text-start">
                   {audiences.map(({ key, label, items }) => (
-                    <div key={key} className="machine-bezel overflow-hidden">
+                    <div key={key} className="new-year-audience-card machine-bezel overflow-hidden">
                       <button
                         onClick={() => setOpenAudience(key)}
                         className={twMerge(
-                          "flex w-full items-center justify-between px-md py-sm text-xs font-bold uppercase tracking-widest transition-colors duration-200",
+                          "new-year-audience-trigger flex w-full items-center justify-between px-md py-sm text-xs font-bold uppercase tracking-widest transition-colors duration-200",
                           openAudience === key ? "text-cta" : "text-secondary-foreground/60 hover:text-secondary",
                         )}>
                         {label}
