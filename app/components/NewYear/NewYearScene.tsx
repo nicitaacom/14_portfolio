@@ -26,10 +26,27 @@ interface SnowLayer {
 /* Three depths. `fall` is normalised height per millisecond, so a near flake crosses the
    viewport in about 9s and a far one in about 22s regardless of how tall the window is */
 const LAYER_SPECS = [
-  { count: 60, minRadius: 0.9, spread: 0.7, fall: 0.0000455, windScale: 0.35, opacity: 0.5, halo: false },
-  { count: 42, minRadius: 1.6, spread: 1, fall: 0.0000714, windScale: 0.62, opacity: 0.72, halo: false },
-  { count: 22, minRadius: 2.6, spread: 1.5, fall: 0.000111, windScale: 1, opacity: 0.95, halo: true },
+  { count: 60, minRadius: 0.6, spread: 0.5, fall: 0.0000455, windScale: 0.35, opacity: 0.5, halo: false },
+  { count: 42, minRadius: 1, spread: 0.7, fall: 0.0000714, windScale: 0.62, opacity: 0.72, halo: false },
+  { count: 22, minRadius: 1.6, spread: 1, fall: 0.000111, windScale: 1, opacity: 0.95, halo: true },
 ]
+
+/* The fall runs 0 at the top of the viewport to 1 at the bottom. A flake eases in over the
+   first slice of that and dissolves through the last, so it is already at zero opacity both
+   where it is created and where it is recycled. That is what keeps one flake's life from
+   reading as a clip that restarts: nothing is ever seen appearing or being moved */
+const FADE_IN_BAND = 0.06
+/* The flake is gone by here rather than at the bottom edge, so the last of it goes out while it
+   is still on screen. Fading right up to the edge hides the whole effect behind whatever the
+   page happens to be drawing down there */
+const FADE_OUT_END = 0.94
+/* Thinning starts this far above that point — a little under halfway down the fall, so the
+   snow visibly loses weight as it descends rather than holding full strength and cutting out */
+const FADE_OUT_BAND = 0.5
+/* Above 1 the fall-off is weighted towards the end, so a flake dims slowly at first and then
+   drops away quickly near the bottom. A straight ramp reads as a uniform dimming of the whole
+   field instead of individual flakes settling out */
+const FADE_OUT_CURVE = 1.6
 
 /* A damped pendulum: each swing overshoots less than the one before it. Matches the set
    NewYearProjectOrnament swings its bauble through, so both read as the same weight of glass */
@@ -259,12 +276,24 @@ export function NewYearScene() {
           flake.y += layer.fall * elapsed
           flake.x += lateral
 
-          if (flake.y > 1.04) {
-            flake.y = -0.04
+          /* Sent back to the very top, where the fade below is holding it at zero opacity, so
+             it is never seen being moved. The old reset dropped it just above the frame at full
+             opacity and let it slide into view, which is the jump that made the whole field
+             read as one clip playing over again. A fresh sway phase on the way round stops the
+             same flake from tracing its own path a second time */
+          if (flake.y >= 1) {
+            flake.y = 0
             flake.x = Math.random()
+            flake.phase = Math.random() * Math.PI * 2
           }
           if (flake.x < -0.06) flake.x += 1.12
           if (flake.x > 1.06) flake.x -= 1.12
+
+          /* Full strength down to a little under halfway, then thinning away to nothing before
+             the bottom edge, so the snow settles out of sight instead of stopping at a line */
+          const settling = Math.min(1, Math.max(0, (FADE_OUT_END - flake.y) / FADE_OUT_BAND))
+          const fade = Math.min(1, flake.y / FADE_IN_BAND) * Math.pow(settling, FADE_OUT_CURVE)
+          if (fade <= 0) return
 
           const px = (flake.x + Math.sin(time * 0.0009 + flake.phase) * flake.sway) * width
           const py = flake.y * height
@@ -272,13 +301,13 @@ export function NewYearScene() {
           if (layer.halo) {
             context.beginPath()
             context.arc(px, py, flake.radius * 2.6, 0, Math.PI * 2)
-            context.fillStyle = `rgba(255, 253, 250, ${layer.opacity * 0.16})`
+            context.fillStyle = `rgba(255, 253, 250, ${layer.opacity * fade * 0.16})`
             context.fill()
           }
 
           context.beginPath()
           context.arc(px, py, flake.radius, 0, Math.PI * 2)
-          context.fillStyle = `rgba(255, 253, 250, ${layer.opacity})`
+          context.fillStyle = `rgba(255, 253, 250, ${layer.opacity * fade})`
           context.fill()
         })
       })
