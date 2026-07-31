@@ -487,8 +487,10 @@ export function NewYearScene() {
           opacity="0.5"
         />
 
-        {/* Fairy-light string sagging across the window head */}
-        <path d="M60 440Q720 600 1380 440" stroke="#d9c397" strokeOpacity="0.55" strokeWidth="3" />
+        {/* Fairy-light string sagging across the window head. Run to the viewBox edges (not a
+            few px short of them) so both ends read as continuing past the frame rather than
+            dangling in open sky with nothing there to hang from */}
+        <path d="M0 440Q720 600 1440 440" stroke="#d9c397" strokeOpacity="0.55" strokeWidth="3" />
         {BULBS.map(bulb => (
           <g key={bulb.x}>
             <circle
