@@ -3,6 +3,7 @@ export default {
     portfolio: "Портфоліо",
     playJazz: "Увімкнути новорічний джаз",
     pauseJazz: "Зупинити новорічний джаз",
+    enableAmbience: "Увімкнути атмосферу",
     bookAppointment: "Записатися на зустріч",
     moreInfo: "Детальніше",
     stack: "Стек",

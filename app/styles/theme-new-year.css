@@ -588,6 +588,123 @@
    The midnight event. Particles are drawn with the lighter composite so overlapping sparks add
    up the way real ones do, and the flash is a soft radial parked at the shell that fired it */
 
+/* ── Fireworks ambience toggle ───────────────────────────────────────────────────
+   Sits at the right of the navbar. The face is a night sky with one shell open in it, and the
+   shell only lights up once the sound is on, so the button states read at a glance rather than
+   needing a label */
+:root[data-theme="new-year"] .new-year-ambience-toggle {
+  align-items: center;
+  background: radial-gradient(circle at 50% 118%, rgb(33 59 78 / 0.9), #0b1c2b 72%);
+  border: 1px solid rgb(217 195 151 / 0.34);
+  border-radius: 9px;
+  box-shadow:
+    0 3px 8px rgb(2 10 7 / 0.42),
+    inset 0 1px 0 rgb(255 253 250 / 0.14);
+  display: inline-flex;
+  gap: 8px;
+  height: 34px;
+  justify-content: center;
+  padding: 0 12px;
+  position: relative;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+  white-space: nowrap;
+}
+
+:root[data-theme="new-year"] .new-year-ambience-toggle-label {
+  color: #e8dfc9;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+:root[data-theme="new-year"] .new-year-ambience-toggle[aria-pressed="true"] .new-year-ambience-toggle-label {
+  color: #ffe9bd;
+}
+
+/* Below this width the shell is kept and the wording dropped, since the navbar has no room for
+   it beside the language control. Clipped rather than display: none, so the text is still the
+   button's accessible name and a screen reader announces it at every width */
+@media (max-width: 1023px) {
+  :root[data-theme="new-year"] .new-year-ambience-toggle {
+    padding: 0;
+    width: 34px;
+  }
+
+  :root[data-theme="new-year"] .new-year-ambience-toggle-label {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+}
+
+:root[data-theme="new-year"] .new-year-ambience-toggle:hover {
+  border-color: rgb(247 178 59 / 0.6);
+}
+
+:root[data-theme="new-year"] .new-year-ambience-toggle[aria-pressed="true"] {
+  border-color: rgb(247 178 59 / 0.72);
+  box-shadow:
+    0 3px 8px rgb(2 10 7 / 0.42),
+    0 0 14px rgb(247 178 59 / 0.34),
+    inset 0 1px 0 rgb(255 253 250 / 0.14);
+}
+
+/* The shell itself: a bright core with six spokes off it, drawn as one conic sweep over a
+   radial so no extra elements are needed. Dim and still when off, lit and beating when on */
+:root[data-theme="new-year"] .new-year-ambience-toggle-burst {
+  background:
+    radial-gradient(circle, #fffdf6 0 14%, rgb(247 178 59 / 0.86) 26%, transparent 42%),
+    conic-gradient(
+      from 0deg,
+      rgb(255 214 130 / 0.9) 0 3deg,
+      transparent 3deg 57deg,
+      rgb(255 143 122 / 0.85) 60deg 63deg,
+      transparent 63deg 117deg,
+      rgb(255 214 130 / 0.9) 120deg 123deg,
+      transparent 123deg 177deg,
+      rgb(255 143 122 / 0.85) 180deg 183deg,
+      transparent 183deg 237deg,
+      rgb(255 214 130 / 0.9) 240deg 243deg,
+      transparent 243deg 297deg,
+      rgb(255 143 122 / 0.85) 300deg 303deg,
+      transparent 303deg 360deg
+    );
+  border-radius: 50%;
+  display: block;
+  height: 20px;
+  opacity: 0.44;
+  transition: opacity 220ms ease;
+  width: 20px;
+}
+
+:root[data-theme="new-year"] .new-year-ambience-toggle[aria-pressed="true"] .new-year-ambience-toggle-burst {
+  animation: new-year-ambience-burst 2.4s ease-in-out infinite;
+  opacity: 1;
+}
+
+@keyframes new-year-ambience-burst {
+  0%,
+  100% {
+    scale: 0.86;
+  }
+
+  46% {
+    scale: 1.06;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="new-year"] .new-year-ambience-toggle[aria-pressed="true"] .new-year-ambience-toggle-burst {
+    animation: none;
+  }
+}
+
 .new-year-fireworks-event {
   contain: layout paint;
   inset: 0;

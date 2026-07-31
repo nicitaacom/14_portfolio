@@ -3,6 +3,7 @@ export default {
     portfolio: "Portfolio",
     playJazz: "Włącz świąteczny jazz",
     pauseJazz: "Zatrzymaj świąteczny jazz",
+    enableAmbience: "Włącz atmosferę",
     bookAppointment: "Umów spotkanie",
     moreInfo: "Więcej informacji",
     stack: "Stack",

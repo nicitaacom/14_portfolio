@@ -3,6 +3,7 @@ export default {
     portfolio: "Портфолио",
     playJazz: "Включить новогодний джаз",
     pauseJazz: "Остановить новогодний джаз",
+    enableAmbience: "Включить атмосферу",
     bookAppointment: "Записаться на встречу",
     moreInfo: "Подробнее",
     stack: "Стек",

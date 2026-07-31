@@ -9,6 +9,7 @@ import { LanguageDropdown } from "./LanguageDropdown"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { localizePath } from "@/locales/helpers"
 import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
+import { EnableNYAmbience } from "@/components/NewYear/EnableNYAmbience"
 
 interface NavbarWithProgressProps {
   userId: string | undefined
@@ -57,6 +58,8 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
       </div>
       <NavbarProjects progress={progress} setScrollRef={setScrollRef} />
       <div className="flex items-center gap-x-sm pl-xs overflow-visible shrink-0 navbar-right-shadow">
+        {/* Renders nothing outside the New Year theme, so it takes no room in the other three */}
+        <EnableNYAmbience />
         <div className="navbar-bezel">
           <LanguageDropdown />
         </div>
