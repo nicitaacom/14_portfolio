@@ -858,14 +858,6 @@
   color: #d8eef7;
 }
 
-/* These links share the top-right corner with the card ornament, whose glass opts back into
-   pointer events for its hover swing at z-index 6. Positioning the links lifts them into the
-   same layer above it, so the bauble hangs behind the icons and every link stays clickable */
-:root[data-theme="new-year"] .project-header a {
-  position: relative;
-  z-index: 7;
-}
-
 :root[data-theme="new-year"] .site-card .machine-bezel {
   background: #030911;
   border-color: rgb(130 184 210 / 0.34);
