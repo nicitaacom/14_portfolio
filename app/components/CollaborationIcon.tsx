@@ -24,7 +24,7 @@ export function CollaborationIcon({
       title={name}
       aria-current={isSelected ? "true" : undefined}
       onClick={onClick}
-      className={`group flex w-full min-w-0 items-center gap-x-sm px-sm py-sm text-left transition-colors duration-200 ${
+      className={`collaboration-card group flex w-full min-w-0 items-center gap-x-sm px-sm py-sm text-left transition-colors duration-200 ${
         isSelected
           ? "bg-secondary-foreground/[0.06]"
           : "opacity-60 hover:bg-secondary-foreground/[0.035] hover:opacity-100"

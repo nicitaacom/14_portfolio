@@ -24,8 +24,8 @@ export function ProjectsSwitcher() {
   const homeT = useScopedI18n("home")
 
   return (
-    <>
-      <div className="mx-auto grid w-full max-w-[640px] grid-cols-2 gap-x-sm tablet:gap-x-md">
+    <section className="projects-gallery flex flex-col gap-xl">
+      <div className="projects-switcher mx-auto grid w-full max-w-[640px] grid-cols-2 gap-x-sm tablet:gap-x-md">
         <RadioButton
           label={t("work")}
           hint={projectTab === "work" ? t("tabShowing") : t("tabClickToView")}
@@ -70,6 +70,6 @@ export function ProjectsSwitcher() {
           <Project15 openModal={() => openModal("15MoreInfo")} />
         </>
       ) : null}
-    </>
+    </section>
   )
 }

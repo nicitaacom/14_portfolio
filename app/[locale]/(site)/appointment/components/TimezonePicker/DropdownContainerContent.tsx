@@ -14,7 +14,7 @@ export function DropdownContainerContent({
     <button
       type="button"
       className={twMerge(
-        "flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-brass/40 bg-steel px-sm text-left transition-colors duration-200",
+        "appointment-picker-trigger flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-brass/40 bg-steel px-sm text-left transition-colors duration-200",
         isShowDropdown && "border-cta/60 bg-cta/15",
       )}
       onClick={toggleDropdown}>

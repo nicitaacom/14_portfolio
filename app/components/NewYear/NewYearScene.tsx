@@ -455,9 +455,9 @@ export function NewYearScene() {
         fill="none">
         <defs>
           <linearGradient id="new-year-room" x1="720" y1="0" x2="720" y2="900" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#0c3123" />
-            <stop offset="0.54" stopColor="#071e15" />
-            <stop offset="1" stopColor="#03110b" />
+            <stop stopColor="#213b4e" />
+            <stop offset="0.54" stopColor="#1a2e41" />
+            <stop offset="1" stopColor="#0f1e30" />
           </linearGradient>
           {/* The drifts are the white mass of the whole system, so they are near-opaque snow
               rather than a wash. Back to front, each one a little brighter */}
@@ -489,9 +489,9 @@ export function NewYearScene() {
             cy="0"
             r="1"
             gradientTransform="translate(720 400) scale(980 720)">
-            <stop stopColor="#03110b" stopOpacity="0" />
-            <stop offset="0.78" stopColor="#03110b" stopOpacity="0" />
-            <stop offset="1" stopColor="#03110b" stopOpacity="0.34" />
+            <stop stopColor="#081522" stopOpacity="0" />
+            <stop offset="0.78" stopColor="#081522" stopOpacity="0" />
+            <stop offset="1" stopColor="#081522" stopOpacity="0.34" />
           </radialGradient>
           <filter id="new-year-bokeh-blur" x="-160%" y="-160%" width="420%" height="420%">
             <feGaussianBlur stdDeviation="17" />

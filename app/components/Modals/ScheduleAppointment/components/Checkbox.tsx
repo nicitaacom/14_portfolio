@@ -27,12 +27,12 @@ export function Checkbox({
       htmlFor={checkboxId}
       className={twMerge(
         "group relative flex cursor-pointer items-start gap-xs rounded-[12px] border border-brass/40 px-sm py-xs",
+        "appointment-check",
         "transition-colors duration-50 hover:bg-white/20",
         isChecked && "border-cta/60",
         disabled && "opacity-50 cursor-default pointer-events-none",
         className,
-      )}
-    >
+      )}>
       <div className="relative mt-[2px] inline-flex h-[22px] w-[22px] items-center justify-center">
         <input
           className="peer sr-only"
@@ -47,13 +47,9 @@ export function Checkbox({
             "flex h-[18px] w-[18px] items-center justify-center rounded-[5px] border border-brass/40 bg-primary",
             "transition-colors duration-50",
             isChecked && "border-cta bg-cta",
-          )}
-        >
+          )}>
           <BsCheckLg
-            className={twMerge(
-              "text-primary transition-opacity duration-50",
-              isChecked ? "opacity-100" : "opacity-0",
-            )}
+            className={twMerge("text-primary transition-opacity duration-50", isChecked ? "opacity-100" : "opacity-0")}
             size={14}
           />
         </span>

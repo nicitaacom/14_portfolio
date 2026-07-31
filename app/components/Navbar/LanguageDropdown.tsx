@@ -48,7 +48,7 @@ export function LanguageDropdown() {
     <div className="relative" ref={dropdownContainerRef}>
       <button
         className={twMerge(
-          "machine-face flex h-[38px] min-w-[176px] items-center justify-between gap-sm rounded-[6px] px-md transition-all duration-200 hover:border-cta/70 hover:brightness-110",
+          "site-picker-trigger machine-face flex h-[38px] min-w-[176px] items-center justify-between gap-sm rounded-[6px] px-md transition-all duration-200 hover:border-cta/70 hover:brightness-110",
           isOpen && "border-cta/70 brightness-110",
         )}
         onClick={() => setIsOpen(prevState => !prevState)}
@@ -69,7 +69,7 @@ export function LanguageDropdown() {
 
       <div
         className={twMerge(
-          "machine-face absolute left-0 top-[calc(100%+10px)] z-[120] min-w-full rounded-[6px] p-[6px] transition-all duration-200",
+          "site-picker-menu machine-face absolute left-0 top-[calc(100%+10px)] z-[120] min-w-full rounded-[6px] p-[6px] transition-all duration-200",
           isOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-[-8px] opacity-0 pointer-events-none",
         )}>
         <div className="flex flex-col gap-xs">
@@ -77,7 +77,7 @@ export function LanguageDropdown() {
             <button
               key={language.code}
               className={twMerge(
-                "machine-slot flex h-[38px] items-center justify-between gap-sm whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-200 hover:border-cta/60 hover:brightness-125",
+                "site-picker-option machine-slot flex h-[38px] items-center justify-between gap-sm whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-200 hover:border-cta/60 hover:brightness-125",
                 language.code === locale && "border-cta/70 brightness-125",
               )}
               onClick={() => changeLanguage(language.code)}

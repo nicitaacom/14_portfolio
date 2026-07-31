@@ -19,7 +19,7 @@ export function Toast() {
     <motion.div
       className={twMerge(
         // 100%-2% - its like paddings 1% for right and 1% for left
-        `fixed w-full max-w-[calc(100%-2%)] laptop:max-w-[30vw]
+        `site-toast site-toast-${status} fixed w-full max-w-[calc(100%-2%)] laptop:max-w-[30vw]
          left-[1%] laptop:left-auto right-[1%] bottom-[2%] border-[1px]
          bg-foreground flex gap-x-[4px] rounded-lg px-[4px] py-[2px] z-[7777]`,
         status === "success" && "border-success",
@@ -30,14 +30,14 @@ export function Toast() {
       initial={{ y: 200 }}
       animate={{ y: 0 }}
       exit={{ y: 200 }}>
-      <div className="flex items-center">
+      <div className="site-toast-icon flex items-center">
         {status === "success" && <AiOutlineCheckCircle className="text-success" size={32} />}
         {status === "error" && <BiErrorCircle className="text-danger" size={32} />}
         {status === "warning" && <IoMdWarning className="text-warning" size={32} />}
         {status === "info" && <CiCircleInfo className="text-info" size={32} />}
       </div>
       <div className="flex flex-col w-full">
-        <div className={`text-title font-bold`}>
+        <div className="site-toast-title text-title font-bold">
           <h1 className="whitespace-pre-line">
             {title
               ? title
@@ -50,7 +50,7 @@ export function Toast() {
                     : t("defaultInfoTitle")}
           </h1>
         </div>
-        <div className="text-subTitle whitespace-pre-line">
+        <div className="site-toast-body text-subTitle whitespace-pre-line">
           {subTitle ? (
             subTitle
           ) : status === "error" ? (

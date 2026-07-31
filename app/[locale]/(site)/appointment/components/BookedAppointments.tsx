@@ -59,9 +59,9 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
   }
 
   return (
-    <div className="workbench-board mx-auto w-full max-w-[680px] p-[6px] laptop:sticky laptop:top-[6rem] laptop:max-w-none">
+    <div className="appointment-bookings-board workbench-board mx-auto w-full max-w-[680px] p-[6px] laptop:sticky laptop:top-[6rem] laptop:max-w-none">
       <div className="machine-panel p-sm">
-        <div className="mb-xs">
+        <div className="appointment-bookings-heading mb-xs">
           <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-secondary">
             {t("scheduledAppointments")}
           </p>
@@ -72,12 +72,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
 
         <ul className="flex flex-col gap-xs">
           {!booked_appointments.length && (
-            <li className="machine-bezel px-sm py-sm text-sm leading-relaxed text-secondary-foreground">
+            <li className="appointment-empty-card machine-bezel relative px-sm py-sm text-sm leading-relaxed text-secondary-foreground">
               {t("noAppointments")}
             </li>
           )}
           {booked_appointments.map(booked_appointment => (
-            <li className="machine-bezel flex min-w-0 flex-col gap-xs px-sm py-sm" key={booked_appointment.id}>
+            <li
+              className="appointment-booking-card machine-bezel flex min-w-0 flex-col gap-xs px-sm py-sm"
+              key={booked_appointment.id}>
               <div className="flex flex-col gap-xs">
                 {editingAppointmentId === booked_appointment.id ? (
                   <div className="flex flex-col gap-y-xs">

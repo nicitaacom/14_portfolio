@@ -186,20 +186,22 @@ export function AuthPageClient() {
   }, [passwordStatus])
 
   return (
-    <div className="min-h-[calc(100vh-72px)] flex items-center justify-center px-md">
+    <div className="auth-page-shell min-h-[calc(100vh-72px)] flex items-center justify-center px-md">
       <div className="auth-panel machine-panel w-full max-w-[460px] p-lg flex flex-col gap-md">
         <AuthHeader errorMessage={errorMessage} />
 
-        <input
-          type="password"
-          value={password}
-          onChange={event => changePassword(event.target.value)}
-          placeholder={t("passwordPlaceholder")}
-          className="workshop-input w-full px-sm py-xs text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground focus:border-cta"
-        />
-        <div className="min-h-[20px] flex items-center gap-xs text-sm">
-          {isCheckingPassword && <LoadingSpinner />}
-          <p className={passwordStatusClassName}>{passwordStatusText}</p>
+        <div className="auth-key-field">
+          <input
+            type="password"
+            value={password}
+            onChange={event => changePassword(event.target.value)}
+            placeholder={t("passwordPlaceholder")}
+            className="workshop-input w-full px-sm py-xs text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground focus:border-cta"
+          />
+          <div className="auth-status min-h-[20px] flex items-center gap-xs text-sm">
+            {isCheckingPassword && <LoadingSpinner />}
+            <p className={passwordStatusClassName}>{passwordStatusText}</p>
+          </div>
         </div>
 
         <Button
@@ -208,7 +210,7 @@ export function AuthPageClient() {
           disabled={!isPasswordVerified || isCheckingPassword || isSigningIn}
           requestAction
           requestPending={isSigningIn}
-          className="w-full">
+          className="auth-submit w-full">
           <>
             {!isSigningIn && <FiGithub size={16} />}
             {isSigningIn ? t("redirecting") : t("signInWithGithub")}

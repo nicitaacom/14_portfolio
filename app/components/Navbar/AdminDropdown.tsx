@@ -34,10 +34,10 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
   useCloseOnClickOutside(dropdownContainerRef, closeDropdown)
 
   return (
-    <div className="relative flex w-[132px] justify-center" ref={dropdownContainerRef}>
+    <div className="site-admin-picker relative flex w-[132px] justify-center" ref={dropdownContainerRef}>
       <button
         className={twMerge(
-          "machine-face relative flex h-[36px] w-[132px] items-center justify-center rounded-[6px] px-sm transition-all duration-300 hover:border-cta hover:brightness-110",
+          "site-admin-trigger machine-face relative flex h-[36px] w-[132px] items-center justify-center rounded-[6px] px-sm transition-all duration-300 hover:border-cta hover:brightness-110",
           isShowDropdown && "border-cta brightness-110",
         )}
         onClick={toggleDropdown}
@@ -53,19 +53,19 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
 
       <div
         className={twMerge(
-          "machine-face absolute left-1/2 top-[calc(100%+14px)] z-[120] w-[214px] -translate-x-[58%] rounded-[6px] p-xs",
+          "site-admin-menu machine-face absolute left-1/2 top-[calc(100%+14px)] z-[120] w-[214px] -translate-x-[58%] rounded-[6px] p-xs",
           isShowDropdown
             ? "visible opacity-100 transition-all duration-300"
             : "invisible opacity-0 transition-all duration-300",
         )}>
         <div className="flex flex-col gap-xs">
-          <div className="machine-slot flex justify-center rounded-[10px] border border-transparent px-sm py-xs">
+          <div className="site-admin-option machine-slot flex justify-center rounded-[10px] border border-transparent px-sm py-xs">
             <GMCheckbox isGMLive={isGMLive} />
           </div>
 
           <Link
             href={localizePath("/admin-dashboard", locale)}
-            className="machine-slot flex h-[36px] items-center justify-center whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-300 hover:border-cta hover:brightness-125">
+            className="site-admin-option machine-slot flex h-[36px] items-center justify-center whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-300 hover:border-cta hover:brightness-125">
             {t("openAdminDashboard")}
           </Link>
         </div>

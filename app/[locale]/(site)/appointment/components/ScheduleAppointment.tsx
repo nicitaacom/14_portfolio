@@ -45,11 +45,11 @@ export function ScheduleAppointment() {
   }, [])
 
   return (
-    <div className="workbench-board w-full p-[6px]">
+    <div className="appointment-calendar-board workbench-board w-full p-[6px]">
       <div className="appointment-schedule-panel machine-panel mx-auto w-full max-w-[680px] p-sm tablet:p-md">
         <div className="flex w-full min-w-0 flex-col gap-sm">
           <div className="grid gap-sm min-[900px]:grid-cols-[minmax(0,1fr)_220px] min-[900px]:items-start">
-            <div className="min-w-0">
+            <div className="appointment-calendar-heading min-w-0">
               <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-secondary/75">{t("bookACall")}</p>
               <div className="mt-xs flex flex-wrap items-baseline gap-x-sm gap-y-[2px]">
                 <h2 className="text-[1.35rem] font-bold leading-tight text-secondary">{t("pickYourDay")}</h2>
@@ -63,13 +63,13 @@ export function ScheduleAppointment() {
               </p>
             </div>
 
-            <div className="grid w-full grid-cols-1 gap-xs min-[520px]:grid-cols-2 min-[900px]:flex min-[900px]:flex-col">
+            <div className="appointment-picker-group grid w-full grid-cols-1 gap-xs min-[520px]:grid-cols-2 min-[900px]:flex min-[900px]:flex-col">
               <TimeZonePicker />
               <TimePicker />
             </div>
           </div>
 
-          <div className="machine-bezel min-w-0 overflow-hidden px-xs pb-xs">
+          <div className="appointment-calendar-shell machine-bezel min-w-0 overflow-hidden px-xs pb-xs">
             <Calendar
               onChange={setSelectedDate}
               value={selectedDate}
@@ -81,7 +81,7 @@ export function ScheduleAppointment() {
           </div>
 
           <Button
-            className="h-[40px] w-full px-md py-0 text-sm font-bold text-secondary tablet:w-fit tablet:self-end"
+            className="appointment-primary-action h-[40px] w-full px-md py-0 text-sm font-bold text-secondary tablet:w-fit tablet:self-end"
             onClick={() => openModal("Appointment")}>
             {t("continueToBooking")}
           </Button>

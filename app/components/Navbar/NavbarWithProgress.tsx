@@ -44,7 +44,7 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
 
   return (
     <nav
-      className="site-navbar navbar-plate relative w-full flex justify-between transition-[height] gap-x-sm duration-[600ms]
+      className="site-navbar navbar-plate new-year-navbar-shell relative w-full flex justify-between transition-[height] gap-x-sm duration-[600ms]
       px-md text-secondary overflow-visible">
       <HalloweenFrameOrnaments variant="navbar" />
       <div className="navbar-left-shadow flex items-center pr-md line">

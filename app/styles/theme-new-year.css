@@ -13,6 +13,7 @@
      so `text-cta` reads 2.8:1 on the panel wash. Anything set in it needs to be large or needs
      a lighter crimson; see dev_readme-ui-new-year.md */
   --cta: 354deg 78% 48%;
+  --cta-text: 354deg 82% 68%;
   --cta-tooltip: 354deg 82% 58%;
   --steel: 162deg 30% 18%;
   --steel-deep: 164deg 44% 6%;
@@ -32,7 +33,7 @@
   --warning: 38deg 94% 66%;
 
   /* Named substances, so the gradient stops below stay legible */
-  --new-year-room: #04150f;
+  --new-year-room: #0f1e30;
   --new-year-pine: #0a2a1e;
   --new-year-pine-raised: #123d2c;
   --new-year-fir: #1d5c40;
@@ -144,9 +145,9 @@
 }
 
 .theme-backdrop-new-year {
-  background: radial-gradient(120% 90% at 50% -14%, rgb(248 246 242 / 0.16), transparent 52%),
-    radial-gradient(100% 120% at 92% 30%, rgb(200 26 48 / 0.16), transparent 58%),
-    linear-gradient(180deg, #0b2e20, #030f0a 74%);
+  background: radial-gradient(120% 90% at 50% -14%, rgb(248 246 242 / 0.12), transparent 52%),
+    radial-gradient(100% 120% at 92% 30%, rgb(200 26 48 / 0.08), transparent 58%),
+    linear-gradient(180deg, #213b4e, #0f1e30 74%);
 }
 
 /* ── Scene ───────────────────────────────────────────────────────────────────────
@@ -328,70 +329,47 @@
   border-color: hsl(var(--success));
 }
 
-/* ── Cut-out ornaments ───────────────────────────────────────────────────────────
-   The photographed props with their backgrounds removed. A first pass hung a hat and a pair of
-   socks off every panel, which put an ornament on top of half the headings on the page — so these
-   are deliberate and few: snow settles on the corner of a project card, the socks hang in the scene.
-   Decoration only: no pointer events, and nothing sits over a line of text */
-
-:root[data-theme="new-year"] .site-card.pipe-frame::before {
-  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20170%20130%27%3E%20%3Cpath%20d%3D%27M0%200H166C150%2013%20140%2017%20124%2021C106%2026%2092%2022%2078%2033C63%2045%2058%2057%2048%2071C39%2084%2030%2088%2020%2099C12%20108%208%20114%200%20124Z%27%20fill%3D%27%23fbf8f2%27%2F%3E%20%3Cpath%20d%3D%27M0%200H128C114%2010%20104%2013%2090%2019C74%2026%2063%2027%2051%2039C39%2051%2034%2063%2026%2076C19%2087%2013%2093%200%20108Z%27%20fill%3D%27%23ffffff%27%20opacity%3D%270.7%27%2F%3E%20%3Cg%20fill%3D%27%23fbf8f2%27%3E%20%3Ccircle%20cx%3D%27120%27%20cy%3D%2722%27%20r%3D%279%27%2F%3E%3Ccircle%20cx%3D%2796%27%20cy%3D%2727%27%20r%3D%277%27%2F%3E%3Ccircle%20cx%3D%2772%27%20cy%3D%2738%27%20r%3D%278%27%2F%3E%20%3Ccircle%20cx%3D%2752%27%20cy%3D%2758%27%20r%3D%277%27%2F%3E%3Ccircle%20cx%3D%2736%27%20cy%3D%2780%27%20r%3D%278%27%2F%3E%3Ccircle%20cx%3D%2718%27%20cy%3D%27102%27%20r%3D%277%27%2F%3E%20%3C%2Fg%3E%20%3Cpath%20d%3D%27M166%200C150%2013%20140%2017%20124%2021C106%2026%2092%2022%2078%2033C63%2045%2058%2057%2048%2071C39%2084%2030%2088%2020%2099C12%20108%208%20114%200%20124%27%20fill%3D%27none%27%20stroke%3D%27%23d5cfc0%27%20stroke-opacity%3D%270.55%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%2F%3E%20%3C%2Fsvg%3E")
-    no-repeat left top / contain;
-  content: "";
-  filter: drop-shadow(0 3px 3px rgb(2 10 7 / 0.34));
-  height: 74px;
-  left: -5px;
-  pointer-events: none;
-  position: absolute;
-  top: -5px;
-  width: 98px;
-  z-index: 7;
-}
-
-@media (max-width: 767px) {
-  :root[data-theme="new-year"] .site-card.pipe-frame::before {
-    display: none;
-  }
-}
-
 /* The booking row: a bar of chocolate held out on the left, the control pushed to the right end.
    The bar is the row's own ::before rather than anything inside the control, so it never shares a
    box with the label and the control keeps its normal padding. Outside this theme the row is a
    plain block and the control sits where it always did. The file name has a space, hence %20 */
 :root[data-theme="new-year"] .new-year-cta-row {
-  align-items: center;
-  display: flex;
+  display: grid;
   gap: 1rem;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 3.75rem;
   /* Without this the control lands exactly on the panel's inner edge at every width, and its
      drop shadow spills across the border so it reads as hanging outside the card */
   padding-inline-end: 0.85rem;
   width: 100%;
 }
 
+:root[data-theme="new-year"] .new-year-home-panel {
+  overflow: hidden;
+}
+
 :root[data-theme="new-year"] .new-year-cta-row::before {
+  align-self: end;
   background: url("/UI/new-year/milka%20cinnamon.png") no-repeat left center / contain;
   content: "";
   filter: drop-shadow(0 6px 6px rgb(2 10 7 / 0.45));
-  flex: none;
+  grid-column: 1;
+  grid-row: 1;
   height: 148px;
+  justify-self: start;
   /* Shifted with a transform so the row's height and the control's position stay put */
-  transform: translate(-10px, -30px) rotate(-7deg);
+  transform: translate(-3px, -14px) rotate(-3deg) scale(1.32);
   width: 112px;
 }
 
-@media (min-width: 768px) {
-  :root[data-theme="new-year"] .new-year-cta-row > .site-control {
-    align-self: flex-start;
-    margin-block-start: 1.5rem;
-  }
+:root[data-theme="new-year"] .new-year-cta-row > .site-control {
+  align-self: end;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
 }
 
 @media (max-width: 767px) {
-  :root[data-theme="new-year"] .new-year-cta-row {
-    justify-content: center;
-  }
-
   :root[data-theme="new-year"] .new-year-cta-row::before {
     display: none;
   }
@@ -482,6 +460,7 @@
     transform 200ms ease,
     box-shadow 200ms ease;
   width: clamp(120px, 12vw, 168px);
+  z-index: 1;
 }
 
 .new-year-jazz-control:hover {
@@ -505,13 +484,13 @@
 
 /* She listens on headphones, which is the whole idea of the control she sits on */
 .new-year-jazz-listener {
-  bottom: 58%;
+  bottom: calc(58% + 40px);
   height: auto;
+  left: calc(74% - 40px);
   pointer-events: none;
   position: absolute;
-  right: 74%;
   width: 96px;
-  z-index: 1;
+  z-index: 0;
 }
 
 @media (max-width: 767px) {
@@ -793,10 +772,14 @@
 
 /* The band the name is written across, with the snow banked a little deeper along its foot */
 :root[data-theme="new-year"] .project-header {
-  background: radial-gradient(120% 220% at 18% -60%, #ffffff, transparent 62%),
-    linear-gradient(180deg, rgb(255 255 255 / 0.7), rgb(214 227 237 / 0.62));
-  border-bottom: 1px solid rgb(255 255 255 / 0.85);
-  box-shadow: inset 0 -6px 10px rgb(150 176 197 / 0.28);
+  background: var(--new-year-grain), radial-gradient(90% 240% at 13% -85%, #ffffff 0 38%, transparent 70%),
+    radial-gradient(70% 180% at 78% -95%, rgb(255 255 255 / 0.8) 0 34%, transparent 72%),
+    linear-gradient(172deg, #fbfdfe, #dce7ee);
+  border-bottom: 1px solid rgb(174 197 213 / 0.68);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -7px 12px rgb(132 161 183 / 0.24),
+    0 2px 5px rgb(84 112 132 / 0.18);
 }
 
 /* The name itself: no tag, no border, no eyelet — just the groove a finger left behind. The two
@@ -805,17 +788,18 @@
   background: none;
   border: 0;
   box-shadow: none;
-  color: #3a4e5b !important;
-  font-family: var(--font-holiday), Georgia, serif;
-  font-size: 1.06rem;
-  font-variation-settings: "SOFT" 40;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  padding: 4px 2px;
+  color: rgb(66 91 108 / 0.82) !important;
+  filter: blur(0.12px);
+  font-family: var(--font-typewriter), monospace;
+  font-size: 1.08rem;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  padding: 4px 3px;
   text-shadow:
-    -1px -1px 1px rgb(88 116 136 / 0.5),
-    1px 1px 0 rgb(255 255 255 / 0.95),
-    0 2px 3px rgb(255 255 255 / 0.6);
+    -1px -1px 1px rgb(79 107 127 / 0.7),
+    1px 1px 1px rgb(255 255 255 / 0.98),
+    2px 2px 3px rgb(255 255 255 / 0.72),
+    -2px -2px 3px rgb(99 130 151 / 0.2);
   transform: none;
 }
 
@@ -895,14 +879,6 @@
     inset 0 1px 0 rgb(255 246 238 / 0.28);
 }
 
-/* Snow along the top of each project card, over a gold hairline */
-:root[data-theme="new-year"] .project-header {
-  background:
-    radial-gradient(circle at 7px 0, rgb(255 253 250 / 0.4) 0 5px, transparent 5.6px) 0 0 / 14px 7px repeat-x,
-    linear-gradient(180deg, rgb(255 253 250 / 0.12), transparent 62%);
-  border-bottom: 1px solid rgb(217 195 151 / 0.44);
-}
-
 /* Progress track: a frosted channel holding the candy fill */
 :root[data-theme="new-year"] .site-progress {
   background: var(--theme-inset-background);
@@ -963,6 +939,1159 @@
 :root[data-theme="new-year"] .appointment-loading-gear-rim {
   fill: #7d9a8b;
   stroke: rgb(248 246 242 / 0.82);
+}
+
+/* ── Complete system shell ───────────────────────────────────────────────────────
+   The scene is the cold blue exterior. Interface surfaces belong to the warm room:
+   pine, knit, paper, crimson velvet and small pools of candlelight. */
+
+:root[data-theme="new-year"] .text-cta {
+  color: hsl(var(--cta-text));
+}
+
+:root[data-theme="new-year"] [class~="text-cta/40"] {
+  color: hsl(var(--cta-text) / 0.62);
+}
+
+:root[data-theme="new-year"] .hover\:text-cta:hover,
+:root[data-theme="new-year"] .group:hover .group-hover\:text-cta {
+  color: hsl(var(--cta-text));
+}
+
+:root[data-theme="new-year"] ::selection {
+  background: hsl(var(--cta) / 0.72);
+  color: var(--new-year-snow);
+}
+
+:root[data-theme="new-year"] :where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--new-year-gold);
+  outline-offset: 3px;
+}
+
+:root[data-theme="new-year"] {
+  scrollbar-color: var(--new-year-crimson) #081b2b;
+  scrollbar-width: thin;
+}
+
+:root[data-theme="new-year"] *::-webkit-scrollbar {
+  height: 9px;
+  width: 9px;
+}
+
+:root[data-theme="new-year"] *::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #10293a, #081723);
+}
+
+:root[data-theme="new-year"] *::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--new-year-crimson-light), var(--new-year-crimson-deep));
+  border: 2px solid #0d2232;
+  border-radius: 999px;
+}
+
+:root[data-theme="new-year"] .site-navbar {
+  background: var(--new-year-grain), radial-gradient(100% 180% at 10% -80%, rgb(247 178 59 / 0.16), transparent 58%),
+    radial-gradient(100% 180% at 92% -70%, rgb(200 26 48 / 0.13), transparent 62%),
+    linear-gradient(170deg, #123d2c, #061a12 78%);
+  border: 1px solid rgb(217 195 151 / 0.32);
+  border-radius: 0 0 20px 20px;
+  box-shadow:
+    0 16px 34px rgb(2 10 7 / 0.68),
+    inset 0 1px 0 rgb(255 253 250 / 0.2);
+}
+
+:root[data-theme="new-year"] .site-navbar::after {
+  background: var(--new-year-fur);
+  bottom: -4px;
+  content: "";
+  height: 9px;
+  inset-inline: 12px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 4;
+}
+
+:root[data-theme="new-year"] .navbar-left-shadow::after,
+:root[data-theme="new-year"] .navbar-right-shadow::before {
+  display: none;
+}
+
+:root[data-theme="new-year"] .navbar-engraved {
+  color: var(--new-year-snow-dim);
+  font-family: var(--font-holiday), Georgia, serif;
+  letter-spacing: 0.015em;
+  text-shadow:
+    0 1px 2px rgb(2 10 7 / 0.9),
+    0 0 12px rgb(247 178 59 / 0.1);
+}
+
+:root[data-theme="new-year"] .navbar-repo-wavefield {
+  background: linear-gradient(180deg, rgb(248 246 242 / 0.04), transparent 48%), var(--new-year-knit),
+    linear-gradient(180deg, #08241a, #04150f);
+  border-color: rgb(217 195 151 / 0.24);
+}
+
+:root[data-theme="new-year"] .navbar-repo-wavefield .machine-slot {
+  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #f8f3e8, #ddd3c1);
+  border-color: rgb(200 26 48 / 0.28);
+  border-radius: 8px;
+  box-shadow:
+    0 3px 7px rgb(2 10 7 / 0.42),
+    inset 0 1px 0 rgb(255 255 255 / 0.7);
+  color: #17372b;
+  font-family: var(--font-holiday), Georgia, serif;
+}
+
+:root[data-theme="new-year"] .site-picker-trigger,
+:root[data-theme="new-year"] .site-picker-menu {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.14), transparent 20%) 0 0 / 45% 55% no-repeat,
+    var(--new-year-grain),
+    linear-gradient(155deg, #102f36, #071923);
+  border-color: rgb(188 215 226 / 0.3);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    0 10px 24px rgb(3 12 20 / 0.5);
+}
+
+:root[data-theme="new-year"] .site-picker-option {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent), linear-gradient(160deg, #0b2b2c, #061b20);
+  border-color: rgb(217 195 151 / 0.16);
+}
+
+.new-year-footer-ornaments {
+  display: none;
+}
+
+:root[data-theme="new-year"] .site-footer {
+  margin-inline: auto;
+  max-width: min(1180px, 92vw);
+  padding-top: 48px;
+}
+
+:root[data-theme="new-year"] .site-footer-controls {
+  background: var(--new-year-grain), radial-gradient(100% 180% at 50% -80%, rgb(247 178 59 / 0.13), transparent 62%),
+    var(--new-year-knit), linear-gradient(155deg, #0c3022, #04150f);
+  border: 1px solid rgb(217 195 151 / 0.3);
+  border-radius: 18px;
+  box-shadow:
+    0 20px 38px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.17);
+  max-width: none;
+  padding: 20px;
+}
+
+:root[data-theme="new-year"] .new-year-footer-ornaments {
+  display: block;
+  inset: 0 0 auto;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+:root[data-theme="new-year"] .new-year-footer-candle {
+  background: linear-gradient(90deg, #e6e0d4, #fffaf0 48%, #cfc6b5);
+  border-radius: 5px 5px 2px 2px;
+  box-shadow:
+    0 9px 18px rgb(2 10 7 / 0.45),
+    0 0 24px rgb(247 178 59 / 0.28);
+  height: 42px;
+  left: 34px;
+  position: absolute;
+  top: 13px;
+  width: 22px;
+}
+
+:root[data-theme="new-year"] .new-year-footer-candle::before {
+  background: radial-gradient(circle at 50% 62%, #fff7d0 0 22%, #f7b23b 23% 62%, #c75b1b 64% 100%);
+  border-radius: 70% 30% 60% 40%;
+  box-shadow: 0 0 18px rgb(247 178 59 / 0.72);
+  content: "";
+  height: 17px;
+  left: 7px;
+  position: absolute;
+  top: -16px;
+  transform: rotate(8deg);
+  width: 10px;
+}
+
+:root[data-theme="new-year"] .new-year-footer-sprig {
+  background: repeating-linear-gradient(25deg, transparent 0 7px, #1d5c40 8px 12px, transparent 13px 19px),
+    repeating-linear-gradient(-25deg, transparent 0 8px, #164a35 9px 13px, transparent 14px 20px),
+    linear-gradient(90deg, transparent 48%, #8b6542 49% 53%, transparent 54%);
+  height: 48px;
+  left: 66px;
+  position: absolute;
+  top: 4px;
+  transform: rotate(82deg);
+  width: 84px;
+}
+
+:root[data-theme="new-year"] .new-year-footer-mandarin {
+  background: radial-gradient(circle at 38% 28%, #ffd273 0 8%, #f28a18 32%, #bc4b0b 100%);
+  border-radius: 50%;
+  box-shadow:
+    -16px 8px 0 -3px #dc6f10,
+    0 8px 16px rgb(2 10 7 / 0.5);
+  height: 31px;
+  left: 126px;
+  position: absolute;
+  top: 23px;
+  width: 31px;
+}
+
+:root[data-theme="new-year"] .tooltiptext,
+:root[data-theme="new-year"] .tooltiptext-t,
+:root[data-theme="new-year"] .tooltiptext-b,
+:root[data-theme="new-year"] .tooltiptext-l,
+:root[data-theme="new-year"] .tooltiptext-r {
+  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #fcf8ef, #e5dccb);
+  border: 1px solid rgb(184 154 96 / 0.5);
+  border-radius: 10px;
+  box-shadow:
+    0 12px 24px rgb(2 10 7 / 0.5),
+    inset 0 1px 0 rgb(255 255 255 / 0.78);
+  color: #15382b;
+  font-family: var(--font-inter), Inter, sans-serif;
+}
+
+:root[data-theme="new-year"] .tooltiptext *,
+:root[data-theme="new-year"] .tooltiptext-t *,
+:root[data-theme="new-year"] .tooltiptext-b *,
+:root[data-theme="new-year"] .tooltiptext-l *,
+:root[data-theme="new-year"] .tooltiptext-r * {
+  color: #15382b;
+}
+
+:root[data-theme="new-year"] .new-year-jazz-control {
+  width: clamp(96px, 9vw, 126px);
+}
+
+:root[data-theme="new-year"] .new-year-jazz-listener {
+  width: 72px;
+}
+
+:root[data-theme="new-year"] .new-year-jazz-frame {
+  background: #081723;
+  border-color: rgb(188 215 226 / 0.32);
+  max-width: calc(100vw - 24px);
+  width: clamp(260px, 24vw, 320px);
+}
+
+@media (max-width: 767px) {
+  :root[data-theme="new-year"] .site-footer {
+    padding-top: 36px;
+  }
+
+  :root[data-theme="new-year"] .site-footer-controls {
+    max-width: 92vw;
+    padding: 14px;
+  }
+
+  :root[data-theme="new-year"] .new-year-footer-candle {
+    left: 24px;
+  }
+
+  :root[data-theme="new-year"] .new-year-footer-sprig {
+    left: 50px;
+  }
+
+  :root[data-theme="new-year"] .new-year-footer-mandarin {
+    left: 106px;
+  }
+
+  :root[data-theme="new-year"] .new-year-jazz-control {
+    width: 88px;
+  }
+}
+
+/* ── Home and projects ───────────────────────────────────────────────────────────
+   The home composition reads as objects collected on a holiday table: a knitted gift list,
+   a pine greeting card, an editorial photo strip and snow-covered project folios. */
+
+:root[data-theme="new-year"] .new-year-home-panel {
+  background: var(--new-year-grain), radial-gradient(120% 100% at 88% -18%, rgb(247 178 59 / 0.11), transparent 54%),
+    radial-gradient(100% 110% at 4% 100%, rgb(33 59 78 / 0.36), transparent 58%),
+    linear-gradient(158deg, #123d2c, #05170f 82%);
+  border-color: rgb(217 195 151 / 0.36);
+  box-shadow:
+    0 22px 46px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.2);
+}
+
+:root[data-theme="new-year"] .new-year-home-panel > h1 {
+  color: var(--new-year-snow);
+  text-shadow:
+    0 2px 3px rgb(2 10 7 / 0.8),
+    0 0 20px rgb(247 178 59 / 0.08);
+}
+
+:root[data-theme="new-year"] .new-year-home-tabs {
+  border-color: rgb(217 195 151 / 0.24);
+  gap: clamp(0.8rem, 3vw, 1.5rem);
+}
+
+:root[data-theme="new-year"] .new-year-home-tabs button {
+  color: var(--new-year-snow-dim);
+  font-family: var(--font-holiday), Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+:root[data-theme="new-year"] .new-year-home-tabs button.border-cta {
+  border-color: hsl(var(--cta-text));
+  color: hsl(var(--cta-text));
+  text-shadow: 0 0 12px rgb(232 66 87 / 0.2);
+}
+
+:root[data-theme="new-year"] .new-year-home-body {
+  color: #c4d0c9;
+}
+
+:root[data-theme="new-year"] .new-year-audience-card {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.08), transparent 22%) 0 0 / 50% 60% no-repeat,
+    linear-gradient(165deg, #0b2d23, #061b18);
+  border-color: rgb(217 195 151 / 0.28);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 253 250 / 0.12),
+    0 5px 12px rgb(2 10 7 / 0.26);
+}
+
+:root[data-theme="new-year"] .new-year-audience-card:nth-child(even) {
+  background: var(--new-year-gingham), linear-gradient(165deg, #12392b, #071d16);
+}
+
+:root[data-theme="new-year"] .new-year-audience-trigger {
+  min-height: 44px;
+  position: relative;
+}
+
+:root[data-theme="new-year"] .new-year-audience-trigger::before {
+  background: radial-gradient(circle, #061a12 0 35%, #d9c397 37% 58%, transparent 61%);
+  content: "";
+  height: 10px;
+  margin-inline-end: 9px;
+  width: 10px;
+}
+
+:root[data-theme="new-year"] .projects-switcher {
+  filter: drop-shadow(0 14px 24px rgb(3 12 20 / 0.34));
+}
+
+:root[data-theme="new-year"] .switch-tab-marker {
+  border-color: rgb(217 195 151 / 0.5);
+  box-shadow: inset 0 2px 5px rgb(2 10 7 / 0.48);
+}
+
+:root[data-theme="new-year"] .switch-tab-active .switch-tab-marker {
+  background: radial-gradient(circle at 38% 30%, #fff7ec 0 9%, #f7b23b 12% 36%, #c81a30 38% 100%);
+  border-color: rgb(255 246 238 / 0.7);
+  box-shadow:
+    0 0 14px rgb(247 178 59 / 0.38),
+    inset 0 1px 0 rgb(255 255 255 / 0.4);
+}
+
+:root[data-theme="new-year"] .site-card.pipe-frame {
+  background: var(--new-year-grain), radial-gradient(100% 100% at 8% 0, rgb(217 195 151 / 0.22), transparent 42%),
+    radial-gradient(90% 110% at 100% 100%, rgb(200 26 48 / 0.12), transparent 54%),
+    linear-gradient(145deg, #123d2c, #04150f 78%);
+  border: 1px solid rgb(217 195 151 / 0.42);
+  box-shadow:
+    0 24px 44px var(--new-year-shadow),
+    0 0 0 2px rgb(217 195 151 / 0.18),
+    inset 0 1px 0 rgb(248 246 242 / 0.13);
+}
+
+/* ── Holiday album modals ──────────────────────────────────────────────────────── */
+
+:root[data-theme="new-year"] .site-modal-backdrop {
+  backdrop-filter: blur(7px);
+  background: radial-gradient(circle at 50% 15%, rgb(33 59 78 / 0.38), transparent 46%), rgb(4 14 22 / 0.88);
+}
+
+:root[data-theme="new-year"] .site-modal.modal-frame {
+  background: var(--new-year-grain),
+    linear-gradient(90deg, transparent 46%, rgb(200 26 48 / 0.28) 46% 54%, transparent 54%),
+    linear-gradient(145deg, #173f30, #04150f 76%);
+  border: 1px solid rgb(217 195 151 / 0.45);
+}
+
+:root[data-theme="new-year"] .site-modal-surface {
+  background: var(--new-year-grain), radial-gradient(120% 90% at 12% -15%, rgb(247 178 59 / 0.1), transparent 55%),
+    radial-gradient(100% 120% at 100% 100%, rgb(33 59 78 / 0.28), transparent 58%),
+    linear-gradient(152deg, #103427, #061a12 82%);
+}
+
+:root[data-theme="new-year"] .modal-title-label {
+  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #fffaf1, #e8dfcf);
+  border-color: rgb(200 26 48 / 0.42);
+  border-radius: 9px;
+  color: #17372b !important;
+  font-family: var(--font-holiday), Georgia, serif;
+  letter-spacing: 0.06em;
+  transform: translateX(-50%);
+}
+
+:root[data-theme="new-year"] .site-modal-close {
+  border-radius: 50%;
+}
+
+:root[data-theme="new-year"] .project-modal-header {
+  background:
+    radial-gradient(circle at 7px 0, rgb(255 253 250 / 0.35) 0 5px, transparent 5.6px) 0 0 / 14px 7px repeat-x,
+    linear-gradient(180deg, rgb(248 246 242 / 0.08), transparent 72%);
+  border-color: rgb(217 195 151 / 0.36);
+}
+
+:root[data-theme="new-year"] .project-modal-header-wash {
+  background: radial-gradient(circle at top left, rgb(247 178 59 / 0.13), transparent 48%);
+}
+
+:root[data-theme="new-year"] .project-modal-section {
+  background: var(--new-year-knit), radial-gradient(120% 160% at 12% -55%, rgb(248 246 242 / 0.09), transparent 56%),
+    linear-gradient(155deg, #0c3024, #04150f);
+  border-color: rgb(217 195 151 / 0.28);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 rgb(248 246 242 / 0.12),
+    inset 0 5px 13px rgb(2 10 7 / 0.32),
+    0 6px 15px rgb(2 10 7 / 0.32);
+}
+
+:root[data-theme="new-year"] .project-modal-section-header {
+  background: var(--new-year-gingham), linear-gradient(180deg, rgb(248 246 242 / 0.08), transparent);
+  border-color: rgb(217 195 151 / 0.26);
+}
+
+:root[data-theme="new-year"] .collaboration-card {
+  border-radius: 10px;
+}
+
+:root[data-theme="new-year"] .collaboration-card[aria-current="true"] {
+  background: var(--new-year-gingham), rgb(248 246 242 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(217 195 151 / 0.24);
+}
+
+:root[data-theme="new-year"] .project-modal-footer {
+  background: var(--new-year-knit), linear-gradient(180deg, rgb(248 246 242 / 0.04), rgb(4 21 15 / 0.45));
+  border-color: rgb(217 195 151 / 0.32);
+}
+
+:root[data-theme="new-year"] .project-modal-action {
+  background: var(--new-year-fur), var(--theme-control-background) !important;
+  border-color: rgb(255 246 238 / 0.36) !important;
+  box-shadow:
+    0 4px 0 rgb(94 8 20 / 0.9),
+    0 10px 18px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 246 238 / 0.28) !important;
+}
+
+/* ── Appointment invitation desk ─────────────────────────────────────────────────
+   The page combines the indoor references into one reserved editorial area, then puts the
+   functional calendar and invitation list on the same pine-and-paper desk. */
+
+:root[data-theme="new-year"] .appointment-rack {
+  background: radial-gradient(100% 80% at 50% 0, rgb(33 59 78 / 0.28), transparent 62%),
+    linear-gradient(180deg, rgb(15 30 48 / 0.62), rgb(5 18 27 / 0.76));
+}
+
+:root[data-theme="new-year"] .appointment-page-shell {
+  max-width: 1040px;
+  padding-bottom: 7rem;
+}
+
+:root[data-theme="new-year"] .new-year-appointment-editorial {
+  display: grid;
+  gap: 1rem;
+}
+
+.new-year-appointment-still-life {
+  background: var(--new-year-grain), radial-gradient(90% 100% at 18% 10%, rgb(247 178 59 / 0.13), transparent 58%),
+    linear-gradient(165deg, #123d2c, #061a12);
+  border: 1px solid rgb(217 195 151 / 0.36);
+  border-radius: 18px;
+  box-shadow:
+    0 18px 38px var(--new-year-shadow),
+    inset 0 1px 0 rgb(255 253 250 / 0.17);
+  height: clamp(210px, 25vw, 248px);
+  overflow: hidden;
+  position: relative;
+}
+
+.new-year-appointment-window {
+  background: radial-gradient(circle at 16% 18%, rgb(255 255 255 / 0.8) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 76% 28%, rgb(255 255 255 / 0.58) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 56% 68%, rgb(255 255 255 / 0.66) 0 1px, transparent 1.8px),
+    linear-gradient(180deg, #213b4e, #0f1e30);
+  border: 7px solid #e6ddcb;
+  border-bottom-width: 11px;
+  border-radius: 11px;
+  box-shadow:
+    inset 0 0 32px rgb(5 16 27 / 0.7),
+    0 5px 13px rgb(2 10 7 / 0.36);
+  inset: 18px 18px 45%;
+  overflow: hidden;
+  position: absolute;
+}
+
+.new-year-appointment-window::before,
+.new-year-appointment-window::after {
+  background: rgb(230 221 203 / 0.88);
+  content: "";
+  position: absolute;
+}
+
+.new-year-appointment-window::before {
+  bottom: 0;
+  left: 49%;
+  top: 0;
+  width: 5px;
+}
+
+.new-year-appointment-window::after {
+  height: 5px;
+  inset-inline: 0;
+  top: 48%;
+}
+
+.new-year-appointment-window-star {
+  background: #fffdfa;
+  border-radius: 50%;
+  box-shadow: 0 0 9px rgb(255 255 255 / 0.68);
+  height: 3px;
+  position: absolute;
+  width: 3px;
+}
+
+.new-year-appointment-window-star-one {
+  left: 23%;
+  top: 22%;
+}
+
+.new-year-appointment-window-star-two {
+  right: 21%;
+  top: 18%;
+}
+
+.new-year-appointment-window-star-three {
+  right: 34%;
+  top: 66%;
+}
+
+.new-year-appointment-table {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.08), transparent 20%),
+    repeating-linear-gradient(90deg, rgb(68 41 24 / 0.12) 0 2px, transparent 2px 44px),
+    linear-gradient(180deg, #8a5938, #4b2d1d);
+  bottom: 0;
+  height: 48%;
+  inset-inline: 0;
+  position: absolute;
+}
+
+.new-year-appointment-gifts,
+.new-year-appointment-coffee,
+.new-year-appointment-mandarins {
+  height: auto;
+  pointer-events: none;
+  position: absolute;
+  user-select: none;
+}
+
+.new-year-appointment-gifts {
+  bottom: -47px;
+  filter: drop-shadow(0 9px 8px rgb(2 10 7 / 0.45));
+  right: 11%;
+  transform: rotate(7deg);
+  width: clamp(78px, 10vw, 112px);
+}
+
+.new-year-appointment-coffee {
+  bottom: -24px;
+  filter: drop-shadow(0 9px 8px rgb(2 10 7 / 0.48));
+  left: 7%;
+  transform: rotate(-4deg);
+  width: clamp(122px, 16vw, 176px);
+}
+
+.new-year-appointment-mandarins {
+  bottom: -28px;
+  filter: drop-shadow(0 8px 7px rgb(2 10 7 / 0.4));
+  left: 42%;
+  transform: rotate(2deg);
+  width: clamp(145px, 18vw, 210px);
+}
+
+.new-year-appointment-candle {
+  background: linear-gradient(90deg, #ded5c3, #fffaf0 48%, #c9bea9);
+  border-radius: 5px 5px 2px 2px;
+  bottom: 16px;
+  box-shadow:
+    0 7px 13px rgb(2 10 7 / 0.44),
+    0 0 22px rgb(247 178 59 / 0.3);
+  height: 48px;
+  position: absolute;
+  right: 4%;
+  width: 24px;
+}
+
+.new-year-appointment-candle::before {
+  background: radial-gradient(circle at 50% 62%, #fff7d0 0 22%, #f7b23b 23% 62%, #c75b1b 64% 100%);
+  border-radius: 70% 30% 60% 40%;
+  box-shadow: 0 0 18px rgb(247 178 59 / 0.72);
+  content: "";
+  height: 18px;
+  left: 7px;
+  position: absolute;
+  top: -17px;
+  transform: rotate(7deg);
+  width: 10px;
+}
+
+:root[data-theme="new-year"] .appointment-calendar-board,
+:root[data-theme="new-year"] .appointment-bookings-board {
+  background: linear-gradient(90deg, transparent 0 48%, rgb(200 26 48 / 0.16) 48% 52%, transparent 52%),
+    var(--new-year-knit), var(--theme-board-background);
+  border-color: rgb(217 195 151 / 0.36);
+  border-radius: 18px;
+}
+
+:root[data-theme="new-year"] .appointment-schedule-panel {
+  background: var(--new-year-grain), radial-gradient(120% 100% at 90% -10%, rgb(247 178 59 / 0.1), transparent 58%),
+    linear-gradient(158deg, #123d2c, #061a12);
+}
+
+:root[data-theme="new-year"] .appointment-calendar-heading h2,
+:root[data-theme="new-year"] .appointment-bookings-heading > p:first-child {
+  color: var(--new-year-snow);
+  font-family: var(--font-holiday), Georgia, serif;
+}
+
+:root[data-theme="new-year"] .appointment-calendar-shell {
+  background: var(--new-year-grain), radial-gradient(120% 130% at 18% -22%, #ffffff, transparent 58%),
+    linear-gradient(155deg, #f7f1e5, #d9d2c5);
+  border: 1px solid rgb(184 154 96 / 0.52);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.92),
+    0 8px 18px rgb(2 10 7 / 0.34);
+  padding: 7px;
+}
+
+:root[data-theme="new-year"] .react-calendar {
+  color: #17372b;
+}
+
+:root[data-theme="new-year"] .react-calendar__navigation {
+  background: var(--new-year-gingham), rgb(255 255 255 / 0.32);
+  border-bottom: 1px solid rgb(184 154 96 / 0.4);
+  border-radius: 10px 10px 7px 7px;
+}
+
+:root[data-theme="new-year"] .react-calendar__navigation__label {
+  color: #17372b;
+  font-family: var(--font-holiday), Georgia, serif;
+  font-weight: 700;
+}
+
+:root[data-theme="new-year"] .react-calendar__navigation__arrow {
+  color: var(--new-year-crimson-deep);
+}
+
+:root[data-theme="new-year"] .react-calendar__navigation__arrow:hover {
+  background: rgb(200 26 48 / 0.12);
+}
+
+:root[data-theme="new-year"] .react-calendar__month-view__weekdays__weekday {
+  color: #7f1828;
+  font-family: var(--font-holiday), Georgia, serif;
+  font-weight: 700;
+}
+
+:root[data-theme="new-year"] .react-calendar__month-view__days {
+  gap: 3px 0;
+}
+
+:root[data-theme="new-year"] .react-calendar__month-view__days__day {
+  border: 1px solid rgb(23 55 43 / 0.1);
+  color: #17372b;
+  font-weight: 650;
+}
+
+:root[data-theme="new-year"] .react-calendar__month-view__days__day:hover {
+  background: rgb(200 26 48 / 0.12);
+  border-color: rgb(200 26 48 / 0.28);
+}
+
+:root[data-theme="new-year"] .react-calendar__tile--now {
+  box-shadow: inset 0 0 0 2px rgb(184 125 25 / 0.72);
+}
+
+:root[data-theme="new-year"] .react-calendar__tile--active,
+:root[data-theme="new-year"] .react-calendar__tile--active:hover {
+  background: linear-gradient(180deg, var(--new-year-crimson-light), var(--new-year-crimson-deep)) !important;
+  border-color: rgb(255 246 238 / 0.62);
+  box-shadow:
+    0 3px 7px rgb(94 8 20 / 0.28),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+  color: #fff8f0;
+}
+
+:root[data-theme="new-year"] .react-calendar__tile:disabled {
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.34), transparent 28%), rgb(110 135 148 / 0.12);
+  color: rgb(23 55 43 / 0.42);
+}
+
+:root[data-theme="new-year"] .appointment-picker-trigger,
+:root[data-theme="new-year"] .appointment-picker-menu {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.15), transparent 20%) 0 0 / 45% 55% no-repeat,
+    var(--new-year-grain),
+    linear-gradient(155deg, #15384a, #091c2a);
+  border-color: rgb(188 215 226 / 0.32);
+  border-radius: 11px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    inset 0 5px 12px rgb(3 12 20 / 0.35),
+    0 6px 14px rgb(3 12 20 / 0.26);
+}
+
+:root[data-theme="new-year"] .appointment-picker-icon {
+  background: #081723;
+  border-color: rgb(188 215 226 / 0.24);
+}
+
+:root[data-theme="new-year"] .appointment-picker-option {
+  border: 1px solid transparent;
+  color: var(--new-year-snow-dim);
+}
+
+:root[data-theme="new-year"] .appointment-picker-option:hover {
+  background: rgb(188 215 226 / 0.09);
+  border-color: rgb(188 215 226 / 0.2);
+}
+
+:root[data-theme="new-year"] .appointment-bookings-board > .machine-panel {
+  background: var(--new-year-grain), radial-gradient(130% 110% at 88% -18%, rgb(247 178 59 / 0.09), transparent 58%),
+    linear-gradient(158deg, #0e3528, #061a12);
+}
+
+:root[data-theme="new-year"] .appointment-empty-card {
+  background: var(--new-year-eyelet), var(--new-year-gingham), linear-gradient(155deg, #f9f4e9, #ddd4c4);
+  border-color: rgb(184 154 96 / 0.46);
+  box-shadow:
+    0 7px 15px rgb(2 10 7 / 0.32),
+    inset 0 1px 0 rgb(255 255 255 / 0.72);
+  color: #17372b;
+  min-height: 112px;
+  padding: 2.5rem 1rem 1rem;
+}
+
+:root[data-theme="new-year"] .appointment-empty-card::before {
+  color: var(--new-year-crimson-deep);
+  content: "✦";
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+  left: 1rem;
+  position: absolute;
+  top: 0.65rem;
+}
+
+:root[data-theme="new-year"] .appointment-booking-card {
+  background: var(--new-year-gingham), linear-gradient(160deg, #123b2d, #071d16);
+  border-color: rgb(217 195 151 / 0.3);
+}
+
+@media (min-width: 1024px) {
+  :root[data-theme="new-year"] .appointment-workspace {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+
+  :root[data-theme="new-year"] .new-year-appointment-editorial {
+    grid-template-columns: minmax(300px, 0.42fr) minmax(0, 1fr);
+  }
+
+  :root[data-theme="new-year"] .new-year-appointment-editorial .new-year-film-strip {
+    height: 100%;
+    min-height: 210px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root[data-theme="new-year"] .appointment-page-shell {
+    padding-bottom: 5.5rem;
+  }
+
+  .new-year-appointment-still-life {
+    height: 205px;
+  }
+
+  .new-year-appointment-gifts {
+    right: 6%;
+  }
+
+  .new-year-appointment-mandarins {
+    left: 37%;
+  }
+
+  .new-year-appointment-candle {
+    display: none;
+  }
+}
+
+/* Booking flow: an opened invitation with frosted controls and knitted detail cards */
+:root[data-theme="new-year"] .appointment-modal-backdrop {
+  backdrop-filter: blur(8px);
+  background: radial-gradient(circle at 50% 16%, rgb(33 59 78 / 0.52), transparent 48%), rgb(4 14 22 / 0.9);
+}
+
+:root[data-theme="new-year"] .appointment-modal-surface,
+:root[data-theme="new-year"] .appointment-rust-background {
+  background: var(--new-year-grain), radial-gradient(120% 100% at 18% -18%, rgb(247 178 59 / 0.11), transparent 58%),
+    radial-gradient(90% 120% at 100% 100%, rgb(33 59 78 / 0.3), transparent 58%),
+    linear-gradient(152deg, #103528, #05170f 84%);
+}
+
+:root[data-theme="new-year"] .appointment-modal-surface {
+  border: 1px solid rgb(217 195 151 / 0.32);
+  border-radius: 15px;
+  box-shadow:
+    inset 0 1px 0 rgb(248 246 242 / 0.17),
+    inset 0 -4px 12px rgb(2 10 7 / 0.38);
+}
+
+:root[data-theme="new-year"] .appointment-rust-background {
+  opacity: 0.45;
+}
+
+:root[data-theme="new-year"] .appointment-modal-header {
+  border-color: rgb(217 195 151 / 0.32);
+}
+
+:root[data-theme="new-year"] .appointment-modal-header::before {
+  background: var(--new-year-crust);
+  content: "";
+  height: 7px;
+  inset: -12px 0 auto;
+  opacity: 0.72;
+  pointer-events: none;
+  position: absolute;
+}
+
+:root[data-theme="new-year"] .appointment-modal-header h1 {
+  color: var(--new-year-snow);
+  font-family: var(--font-holiday), Georgia, serif;
+}
+
+:root[data-theme="new-year"] .appointment-channel-badge,
+:root[data-theme="new-year"] .appointment-summary-card,
+:root[data-theme="new-year"] .appointment-check,
+:root[data-theme="new-year"] .appointment-details-panel {
+  background: var(--new-year-knit), radial-gradient(100% 160% at 12% -60%, rgb(248 246 242 / 0.09), transparent 58%),
+    linear-gradient(155deg, #0d3326, #061a12);
+  border-color: rgb(217 195 151 / 0.28);
+  border-radius: 11px;
+  box-shadow:
+    inset 0 1px 0 rgb(248 246 242 / 0.11),
+    0 5px 12px rgb(2 10 7 / 0.24);
+}
+
+:root[data-theme="new-year"] .appointment-check:hover {
+  background: var(--new-year-gingham), linear-gradient(155deg, #123c2d, #071e16);
+}
+
+:root[data-theme="new-year"] .appointment-note-input {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.14), transparent 20%) 0 0 / 44% 55% no-repeat,
+    linear-gradient(155deg, #15384a, #091c2a);
+  border-color: rgb(188 215 226 / 0.3);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 0 5px 12px rgb(3 12 20 / 0.36);
+}
+
+:root[data-theme="new-year"] .appointment-choice {
+  background: var(--new-year-fur),
+    linear-gradient(180deg, rgb(255 246 238 / 0.12), transparent 34%, rgb(58 4 12 / 0.34)),
+    linear-gradient(178deg, #c81a30, #8b0f1f);
+}
+
+:root[data-theme="new-year"] .appointment-choice-icon {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.13), transparent 22%) 0 0 / 50% 60% no-repeat,
+    linear-gradient(155deg, #15384a, #091c2a);
+  border-color: rgb(188 215 226 / 0.3);
+}
+
+/* ── Secondary routes and system states ─────────────────────────────────────────
+   Admin tools stay dense and practical, while authentication, empty states and notices
+   borrow the smaller objects from the references: invitations, seals and gift tags. */
+
+:root[data-theme="new-year"] .auth-page-shell {
+  background: radial-gradient(circle at 50% 35%, rgb(247 178 59 / 0.1), transparent 24%),
+    radial-gradient(70% 70% at 50% 0, rgb(33 59 78 / 0.28), transparent 68%);
+  padding-bottom: 5rem;
+  padding-top: 3rem;
+}
+
+:root[data-theme="new-year"] .auth-panel {
+  background: var(--new-year-grain),
+    linear-gradient(135deg, transparent 0 48%, rgb(217 195 151 / 0.09) 48% 50%, transparent 50%),
+    linear-gradient(225deg, transparent 0 48%, rgb(217 195 151 / 0.09) 48% 50%, transparent 50%),
+    radial-gradient(120% 130% at 16% -16%, rgb(29 92 64 / 0.35), transparent 58%),
+    linear-gradient(155deg, #0d3326, #05170f);
+  border-color: rgb(217 195 151 / 0.4);
+  padding-top: 3.25rem;
+}
+
+:root[data-theme="new-year"] .auth-panel::before {
+  background: var(--new-year-fur), linear-gradient(180deg, var(--new-year-crimson-light), var(--new-year-crimson-deep));
+  border: 1px solid rgb(255 246 238 / 0.36);
+  border-radius: 8px 8px 11px 11px;
+  box-shadow:
+    0 4px 0 rgb(94 8 20 / 0.8),
+    0 8px 16px rgb(2 10 7 / 0.35);
+  content: "";
+  height: 28px;
+  left: 50%;
+  position: absolute;
+  top: -10px;
+  transform: translateX(-50%);
+  width: 42%;
+}
+
+:root[data-theme="new-year"] .auth-header {
+  padding-right: 4.5rem;
+}
+
+:root[data-theme="new-year"] .auth-title {
+  color: var(--new-year-snow);
+  font-family: var(--font-holiday), Georgia, serif;
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+}
+
+:root[data-theme="new-year"] .auth-seal {
+  align-items: center;
+  background: radial-gradient(circle at 38% 30%, rgb(255 255 255 / 0.22), transparent 28%),
+    linear-gradient(155deg, var(--new-year-crimson-light), var(--new-year-crimson-deep));
+  border: 2px solid rgb(217 195 151 / 0.54);
+  border-radius: 50%;
+  box-shadow:
+    0 5px 12px rgb(2 10 7 / 0.42),
+    inset 0 0 0 4px rgb(94 8 20 / 0.3);
+  color: var(--new-year-snow);
+  display: flex;
+  font-family: var(--font-holiday), Georgia, serif;
+  font-size: 1.35rem;
+  height: 54px;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: -0.5rem;
+  transform: rotate(7deg);
+  width: 54px;
+}
+
+:root[data-theme="new-year"] .auth-seal::before {
+  content: "N";
+}
+
+:root[data-theme="new-year"] .auth-key-field {
+  background: rgb(3 14 22 / 0.28);
+  border: 1px solid rgb(188 215 226 / 0.12);
+  border-radius: 13px;
+  display: block;
+  padding: 0.5rem;
+}
+
+:root[data-theme="new-year"] .auth-status {
+  margin-top: 0.35rem;
+  padding-inline: 0.25rem;
+}
+
+:root[data-theme="new-year"] .auth-error {
+  background: rgb(200 26 48 / 0.12);
+  border: 1px solid rgb(232 66 87 / 0.3);
+  border-radius: 9px;
+  padding: 0.5rem 0.65rem;
+}
+
+:root[data-theme="new-year"] .auth-submit {
+  min-height: 46px;
+}
+
+:root[data-theme="new-year"] .site-admin-trigger,
+:root[data-theme="new-year"] .site-admin-menu {
+  background: var(--new-year-knit), linear-gradient(155deg, #12384a, #081b29);
+  border-color: rgb(188 215 226 / 0.28);
+}
+
+:root[data-theme="new-year"] .site-admin-menu {
+  box-shadow:
+    0 18px 34px rgb(3 12 20 / 0.58),
+    inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+
+:root[data-theme="new-year"] .site-admin-option {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.08), transparent 22%) 0 0 / 45% 60% no-repeat,
+    linear-gradient(155deg, #0c2e22, #061912);
+}
+
+:root[data-theme="new-year"] .site-admin-option:hover {
+  background: var(--new-year-gingham), linear-gradient(155deg, #123b2d, #071d16);
+  border-color: rgb(217 195 151 / 0.34);
+}
+
+:root[data-theme="new-year"] .admin-rack {
+  background: radial-gradient(70% 60% at 50% 0, rgb(33 59 78 / 0.3), transparent 70%),
+    linear-gradient(180deg, rgb(4 14 22 / 0.16), rgb(4 14 22 / 0.48));
+  padding-bottom: 6rem;
+}
+
+:root[data-theme="new-year"] .admin-rack .machine-panel,
+:root[data-theme="new-year"] .admin-rack section,
+:root[data-theme="new-year"] .admin-rack article {
+  border-color: rgb(217 195 151 / 0.28);
+}
+
+:root[data-theme="new-year"] .admin-rack h1,
+:root[data-theme="new-year"] .admin-rack h2,
+:root[data-theme="new-year"] .admin-rack h3 {
+  color: var(--new-year-snow);
+  font-family: var(--font-holiday), Georgia, serif;
+}
+
+:root[data-theme="new-year"] .admin-rack .bg-steel {
+  background: var(--new-year-gingham), radial-gradient(120% 130% at 16% -20%, rgb(29 92 64 / 0.3), transparent 58%),
+    linear-gradient(155deg, #10372a, #071d16) !important;
+}
+
+:root[data-theme="new-year"] .admin-rack .bg-steel-deep {
+  background:
+    linear-gradient(135deg, rgb(255 253 250 / 0.09), transparent 20%) 0 0 / 40% 54% no-repeat,
+    linear-gradient(155deg, #15384a, #081a27) !important;
+}
+
+:root[data-theme="new-year"] .admin-rack .plaque {
+  border-radius: 9px;
+}
+
+:root[data-theme="new-year"] .admin-rack .animate-pulse {
+  background: linear-gradient(90deg, #10293a, #214b60, #10293a) !important;
+  opacity: 0.72;
+}
+
+:root[data-theme="new-year"] .admin-rack button:hover,
+:root[data-theme="new-year"] .admin-rack a:hover {
+  border-color: rgb(232 66 87 / 0.54);
+}
+
+:root[data-theme="new-year"] .admin-dashboard-scrollbar {
+  scrollbar-color: rgb(217 195 151 / 0.58) rgb(4 20 15 / 0.7);
+  scrollbar-width: thin;
+}
+
+:root[data-theme="new-year"] .site-toast {
+  --new-year-toast-ribbon: var(--new-year-crimson);
+  background: var(--new-year-eyelet), var(--new-year-grain), linear-gradient(155deg, #fbf6ec, #ddd2bf);
+  border-color: rgb(184 154 96 / 0.72) !important;
+  border-radius: 4px 13px 13px 4px;
+  box-shadow:
+    0 14px 30px rgb(3 12 20 / 0.55),
+    inset 0 1px 0 rgb(255 255 255 / 0.84);
+  color: #17372b;
+  gap: 0.65rem;
+  min-height: 74px;
+  overflow: hidden;
+  padding: 0.75rem 0.9rem 0.75rem 1.1rem;
+}
+
+:root[data-theme="new-year"] .site-toast::before {
+  background: var(--new-year-toast-ribbon);
+  content: "";
+  inset: 0 auto 0 0;
+  position: absolute;
+  width: 6px;
+}
+
+:root[data-theme="new-year"] .site-toast-success {
+  --new-year-toast-ribbon: #358f61;
+}
+
+:root[data-theme="new-year"] .site-toast-error {
+  --new-year-toast-ribbon: var(--new-year-crimson);
+}
+
+:root[data-theme="new-year"] .site-toast-warning {
+  --new-year-toast-ribbon: #b87d19;
+}
+
+:root[data-theme="new-year"] .site-toast-info {
+  --new-year-toast-ribbon: #477f9d;
+}
+
+:root[data-theme="new-year"] .site-toast-icon {
+  background: rgb(23 55 43 / 0.07);
+  border: 1px solid rgb(23 55 43 / 0.13);
+  border-radius: 50%;
+  flex: 0 0 42px;
+  justify-content: center;
+}
+
+:root[data-theme="new-year"] .site-toast-title {
+  color: #17372b;
+  font-family: var(--font-holiday), Georgia, serif;
+}
+
+:root[data-theme="new-year"] .site-toast-body {
+  color: #4c6259;
+  font-size: 0.82rem;
+}
+
+:root[data-theme="new-year"] .site-toast-body a {
+  color: #8b0f1f;
+  font-weight: 700;
+}
+
+:root[data-theme="new-year"] .site-not-found {
+  background: radial-gradient(circle at 50% 42%, rgb(247 178 59 / 0.1), transparent 28%),
+    radial-gradient(70% 70% at 50% 0, rgb(33 59 78 / 0.28), transparent 70%);
+}
+
+:root[data-theme="new-year"] .site-not-found-card {
+  align-items: center;
+  background: var(--new-year-eyelet), var(--new-year-grain), linear-gradient(155deg, #fbf6ec, #ddd2bf);
+  border-color: rgb(184 154 96 / 0.58);
+  color: #17372b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: min(320px, 86vw);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+}
+
+:root[data-theme="new-year"] .site-not-found-card::after {
+  background: var(--new-year-crust);
+  content: "";
+  height: 7px;
+  inset: 0 0 auto;
+  pointer-events: none;
+  position: absolute;
+}
+
+:root[data-theme="new-year"] .site-not-found-mark {
+  color: var(--new-year-crimson-deep);
+  display: block;
+  font-family: var(--font-holiday), Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+:root[data-theme="new-year"] .site-not-found-card h1 {
+  color: #17372b;
+  font-family: var(--font-holiday), Georgia, serif;
 }
 
 @keyframes new-year-garland-crawl {

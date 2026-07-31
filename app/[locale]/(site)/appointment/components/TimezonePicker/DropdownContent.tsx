@@ -56,7 +56,7 @@ export function DropdownContent({
   return (
     <div
       className={twMerge(
-        "absolute left-0 top-[calc(100%+6px)] w-full rounded-[12px] border border-brass/40 bg-steel-deep p-xs shadow-[0_18px_36px_rgba(0,0,0,0.34)]",
+        "appointment-picker-menu absolute left-0 top-[calc(100%+6px)] w-full rounded-[12px] border border-brass/40 bg-steel-deep p-xs shadow-[0_18px_36px_rgba(0,0,0,0.34)]",
         isShowDropdown
           ? "visible translate-y-0 opacity-100 transition-all duration-200"
           : "invisible translate-y-[-8px] opacity-0 transition-all duration-200",
@@ -75,7 +75,7 @@ export function DropdownContent({
           <button
             type="button"
             className={twMerge(
-              "flex w-full items-center justify-between gap-xs rounded-[9px] px-sm py-xs text-left text-sm font-medium transition-all duration-200",
+              "appointment-picker-option flex w-full items-center justify-between gap-xs rounded-[9px] px-sm py-xs text-left text-sm font-medium transition-all duration-200",
               index > 0 && "mt-[2px]",
               isHover
                 ? hover === timezone && "bg-steel text-secondary-foreground"

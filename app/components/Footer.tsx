@@ -13,8 +13,13 @@ export function Footer() {
   const t = useScopedI18n("common")
 
   return (
-    <footer className="mb-lg mt-auto">
-      <div className="relative grid grid-cols-2 min-[882px]:flex gap-y-md max-w-[80vw] mx-auto justify-center gap-x-md">
+    <footer className="site-footer relative mb-lg mt-auto">
+      <div className="new-year-footer-ornaments" aria-hidden="true">
+        <span className="new-year-footer-candle" />
+        <span className="new-year-footer-sprig" />
+        <span className="new-year-footer-mandarin" />
+      </div>
+      <div className="site-footer-controls relative mx-auto grid max-w-[80vw] grid-cols-2 justify-center gap-x-md gap-y-md min-[882px]:flex">
         <Button href="https://t.me/nicitaacom" target="_blank">
           {t("telegram")} <PiTelegramLogoBold />
         </Button>

@@ -50,8 +50,7 @@ export function TimePicker() {
   }, [disableAllToday, selectedTimezone])
 
   useEffect(() => {
-    const targetDate =
-      selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
+    const targetDate = selectedDate && !Array.isArray(selectedDate) ? selectedDate : new Date()
     const dateKey = moment(targetDate).format("YYYY-MM-DD")
 
     fetch(`/api/bookings/taken-slots?date=${dateKey}`)
@@ -71,7 +70,7 @@ export function TimePicker() {
         }
       })
       .catch(() => setTakenSlotsMSK([]))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate])
 
   function mouseHover(index: string) {
@@ -100,12 +99,12 @@ export function TimePicker() {
       <button
         type="button"
         className={twMerge(
-          "flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-brass/40 bg-steel px-sm text-left transition-colors duration-200",
+          "appointment-picker-trigger flex h-[40px] w-full items-center justify-between gap-xs rounded-[10px] border border-brass/40 bg-steel px-sm text-left transition-colors duration-200",
           showDropdown && "border-cta/60 bg-cta/15",
         )}
         onClick={() => setShowDropdown(!showDropdown)}>
         <div className="flex min-w-0 items-center gap-xs">
-          <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[7px] border border-brass/40 bg-steel-deep">
+          <span className="appointment-picker-icon flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[7px] border border-brass/40 bg-steel-deep">
             <BiTimeFive className="text-cta" size={15} />
           </span>
           <span className="truncate text-sm font-medium text-secondary">{t("timeLabel", { time: selectedTime })}</span>
@@ -124,7 +123,7 @@ export function TimePicker() {
 
       <div
         className={twMerge(
-          "absolute left-0 top-[calc(100%+6px)] z-20 w-full rounded-[12px] border border-brass/40 bg-steel-deep p-xs shadow-[0_18px_36px_rgba(0,0,0,0.34)]",
+          "appointment-picker-menu absolute left-0 top-[calc(100%+6px)] z-20 w-full rounded-[12px] border border-brass/40 bg-steel-deep p-xs shadow-[0_18px_36px_rgba(0,0,0,0.34)]",
           showDropdown
             ? "visible translate-y-0 opacity-100 transition-all duration-200"
             : "invisible translate-y-[-8px] opacity-0 transition-all duration-200",
@@ -144,7 +143,7 @@ export function TimePicker() {
               <button
                 type="button"
                 className={twMerge(
-                  "flex w-full items-center justify-between rounded-[11px] px-md py-sm text-left text-sm font-medium transition-all duration-200",
+                  "appointment-picker-option flex w-full items-center justify-between rounded-[11px] px-md py-sm text-left text-sm font-medium transition-all duration-200",
                   time.time !== convertedTimePicker[0].time && "mt-[2px]",
                   isTimeDisabled
                     ? "cursor-not-allowed bg-steel-deep text-secondary/30"

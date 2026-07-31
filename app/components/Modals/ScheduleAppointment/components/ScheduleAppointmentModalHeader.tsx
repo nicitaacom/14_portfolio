@@ -34,7 +34,7 @@ export function ScheduleAppointmentModalHeader() {
     ) : null
 
   return (
-    <div className="flex w-full flex-col gap-xs border-b border-brass/40 pb-sm">
+    <div className="appointment-modal-header relative flex w-full flex-col gap-xs border-b border-brass/40 pb-sm">
       {step !== "step-1" ? (
         <PrevStepButton disabled={step === "step-3"} />
       ) : (
@@ -47,7 +47,7 @@ export function ScheduleAppointmentModalHeader() {
         <div className="flex flex-wrap items-center gap-xs">
           <h1 className="text-lg font-bold text-secondary">{headerText}</h1>
           {channelBadge && (
-            <div className="flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-full border border-brass/40 px-xs py-[3px] text-xs text-secondary-foreground">
+            <div className="appointment-channel-badge flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-full border border-brass/40 px-xs py-[3px] text-xs text-secondary-foreground">
               {channelBadge}
             </div>
           )}

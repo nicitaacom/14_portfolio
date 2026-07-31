@@ -158,7 +158,7 @@ export function Step2({ onBookingStateChange }: Step2Props) {
         step === "step-1" ? "" : "pt-sm",
       )}
       onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center gap-xs rounded-[12px] border border-brass/40 px-sm py-xs">
+      <div className="appointment-summary-card flex items-center gap-xs rounded-[12px] border border-brass/40 px-sm py-xs">
         <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full border border-cta/40 bg-cta/10">
           {channelIcon}
         </div>
@@ -204,7 +204,7 @@ export function Step2({ onBookingStateChange }: Step2Props) {
         </label>
         <textarea
           id="appointmentNote"
-          className="min-h-[104px] rounded-[10px] border border-secondary-foreground/40 bg-primary-foreground/15 px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-secondary-foreground"
+          className="appointment-note-input min-h-[104px] rounded-[10px] border border-secondary-foreground/40 bg-primary-foreground/15 px-sm py-sm text-secondary outline-none transition-colors duration-300 placeholder:text-secondary-foreground/55 focus:border-secondary-foreground"
           value={appointmentNote}
           onChange={e => setAppointmentNote(e.target.value)}
           placeholder={t("notePlaceholder")}
