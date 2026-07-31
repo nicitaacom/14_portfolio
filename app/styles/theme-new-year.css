@@ -650,9 +650,11 @@
 }
 
 /* ── Card ornament ───────────────────────────────────────────────────────────────
-   A bauble hanging over the top edge of each project card. It sits clear of the header row
-   and only the glass itself takes pointer events, so nothing under it loses a click. There is
-   no idle loop: the swing runs on hover only, which keeps a page of cards at zero cost */
+   A bauble hanging over the top edge of each project card. It hangs from the right so it stays
+   off the project-name tab, which starts at the left edge of the header and grows with the
+   name until it truncates. Only the glass itself takes pointer events, so nothing under it
+   loses a click. There is no idle loop: the swing runs on hover only, which keeps a page of
+   cards at zero cost */
 
 .new-year-project-ornament {
   display: none;
@@ -666,7 +668,7 @@
   pointer-events: none;
   position: absolute;
   right: 28px;
-  top: -56px;
+  top: -4px;
   width: 54px;
   z-index: 6;
 }
@@ -844,6 +846,14 @@
 :root[data-theme="new-year"] .project-header a,
 :root[data-theme="new-year"] .project-header svg {
   color: #d8eef7;
+}
+
+/* These links share the top-right corner with the card ornament, whose glass opts back into
+   pointer events for its hover swing at z-index 6. Positioning the links lifts them into the
+   same layer above it, so the bauble hangs behind the icons and every link stays clickable */
+:root[data-theme="new-year"] .project-header a {
+  position: relative;
+  z-index: 7;
 }
 
 :root[data-theme="new-year"] .site-card .machine-bezel {
