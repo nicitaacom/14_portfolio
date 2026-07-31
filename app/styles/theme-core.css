@@ -206,6 +206,19 @@ body {
     inset 0 1px 0 var(--theme-top-edge);
 }
 
+/* The seasonal backdrop (WorkbenchWall) is `position: fixed` with `z-index: 0`, which makes it a
+   positioned layer of the root stacking context. Per the CSS stacking order, any positioned
+   layer paints above in-flow, non-positioned boxes regardless of DOM order — so without their
+   own stacking context, these two boards render behind the backdrop's artwork wherever a tree or
+   bough happens to fall at the same screen position, even though the backdrop mounts first in
+   the DOM. Moving them into the root's positioned layer (they come later in the DOM, so they
+   then win the tie) keeps them above it. */
+.workbench-board:not([class*="absolute"]):not([class*="fixed"]):not([class*="sticky"]),
+.machine-panel:not([class*="absolute"]):not([class*="fixed"]):not([class*="sticky"]) {
+  position: relative;
+  z-index: 1;
+}
+
 /* Work / Projects switcher — the unselected tab reads as a sunken slot, the
    selected one as the lit raised control, so the state is obvious in every theme. */
 
