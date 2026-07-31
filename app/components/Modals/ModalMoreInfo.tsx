@@ -176,7 +176,10 @@ export function ModalMoreInfo({
                 </section>
               )}
 
-              <section className="project-modal-section rounded-[3px] border border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--steel-deep)/0.74),hsl(var(--wood)/0.35))] p-sm shadow-[inset_0_3px_6px_rgb(0_0_0/0.5),inset_0_1px_0_rgb(255_255_255/0.06),0_2px_3px_rgb(0_0_0/0.3)]">
+              {/* project-modal-collaboration marks this card as the one that never takes a photo.
+                  The New Year theme hands the aside's photos out by position, and this card is
+                  the only one whose place in the column moves with whatever the project defines */}
+              <section className="project-modal-section project-modal-collaboration rounded-[3px] border border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--steel-deep)/0.74),hsl(var(--wood)/0.35))] p-sm shadow-[inset_0_3px_6px_rgb(0_0_0/0.5),inset_0_1px_0_rgb(255_255_255/0.06),0_2px_3px_rgb(0_0_0/0.3)]">
                 <div className="mb-sm flex items-center gap-x-sm text-xs font-bold uppercase tracking-[0.14em] text-secondary-foreground/45">
                   <FiUsers size={15} />
                   <span>{t("collaboration")}</span>
@@ -205,7 +208,7 @@ export function ModalMoreInfo({
               </div>
 
               {selected && (
-                <div className="p-md text-secondary-foreground/70">
+                <div className="project-modal-contribution-body p-md text-secondary-foreground/70">
                   <DescriptionContent description={selected.description} />
                 </div>
               )}

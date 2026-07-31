@@ -1916,9 +1916,12 @@
   border-color: rgb(133 206 237 / 0.38);
 }
 
+/* The only card in this column without a photo of its own, which left it looking unfinished
+   beside the task, stack and deadline cards. Takes the gifts the task card used to show, so the new card at the top of the column is dressed like the rest:
+   photo on the right, a wash over the left holding it back so the text stays readable */
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-notice {
-  background: linear-gradient(145deg, rgb(18 46 62 / 0.92), rgb(7 23 35 / 0.96));
   border-color: rgb(255 113 133 / 0.4);
+  position: relative;
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-notice p {
@@ -1931,19 +1934,12 @@
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-task {
-  background-clip: padding-box;
-  background-image: linear-gradient(90deg, rgb(8 25 38 / 0.98) 0 56%, rgb(8 25 38 / 0.78) 74%, transparent 100%),
-    url("/UI/new-year/new-year-gifts.png");
-  background-position:
-    0 0,
-    100% calc(42% - 1px);
-  background-repeat: no-repeat;
-  background-size:
-    100% 100%,
-    190px auto;
-  min-height: 154px;
-  overflow: hidden;
-  padding-right: 5.25rem;
+  /* Pushed 80px below the card's own bottom edge on purpose. The lower third of this photo is
+     unlit floor, and against a card this dark it reads as nothing at all — so 100% on its own
+     put the file's bottom on the card's bottom while the tree still appeared to float above it.
+     80px is the measured height of that unlit band once the photo is drawn 190px wide, so
+     sending it past the edge crops the part that was never visible and lands the tree on the
+     bottom. new-year-coffee.png needs none of this: its content runs to its last row */
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-task p {
@@ -1952,19 +1948,6 @@
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-stack {
-  background-clip: padding-box;
-  background-image: linear-gradient(90deg, rgb(8 25 38 / 0.98) 0 56%, rgb(8 25 38 / 0.78) 74%, transparent 100%),
-    url("/UI/new-year/new-year-fireplace.png");
-  background-position:
-    0 0,
-    100% -10px;
-  background-repeat: no-repeat;
-  background-size:
-    100% 100%,
-    168px auto;
-  min-height: 146px;
-  overflow: hidden;
-  padding-right: 5.25rem;
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-stack p {
@@ -1973,19 +1956,6 @@
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-deadline {
-  background-clip: padding-box;
-  background-image: linear-gradient(90deg, rgb(8 25 38 / 0.999) 0 52%, rgb(8 25 38 / 0.93) 72%, transparent 94%),
-    url("/UI/new-year/new-year-coffee.png");
-  background-position:
-    0 0,
-    calc(100% - 1px) calc(50% + 4px);
-  background-repeat: no-repeat;
-  background-size:
-    100% 100%,
-    178px auto;
-  min-height: 108px;
-  overflow: hidden;
-  padding-right: 5.25rem;
   position: relative;
 }
 
@@ -2019,31 +1989,19 @@
    force `cover` to zoom in on a sliver of the photo for a long project and spill an ugly, barely
    readable strip past the card; capping the band keeps the same crop at any content length. */
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution {
-  position: relative;
+  /* The photo is a background layer on the card, not a pseudo-element over it. A background is
+     painted on the element's own box, so it neither scrolls with the content inside the card nor
+     needs anything positioned on top of it, and it sits behind every child by definition. The
+     gradient above it in the stack is the dimming: near solid on the left where the text runs,
+     thinning to the right so the frost reads through */
+  background:
+    linear-gradient(90deg, rgb(8 25 38 / 0.97) 0 18%, rgb(8 25 38 / 0.82) 44%, rgb(8 25 38 / 0.5) 78%, rgb(8 25 38 / 0.42) 100%),
+    url("/UI/new-year/references/new-year-30.jpg") right center / cover no-repeat,
+    var(--new-year-knit),
+    linear-gradient(155deg, #0c3024, #04150f);
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution::before {
-  /* `cover` over the whole card, which is object-fit: cover in background form: the photo is
-     scaled until it fills both axes and whatever runs past an edge is cropped. That is what
-     leaves no gap on any card, whatever height its content gives it. The earlier fixed band
-     stopped at 440px, so a taller card showed bare panel below the photo */
-  background: url("/UI/new-year/references/new-year-30.jpg") right center / cover no-repeat;
-  content: "";
-  filter: brightness(0.82) saturate(0.7);
-  inset: 0;
-  opacity: 0.5;
-  pointer-events: none;
-  position: absolute;
-  z-index: 0;
-  /* The photo spans the full width again, so the fade spans it too — no mask sizing needed */
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%);
-  mask-image: linear-gradient(90deg, transparent, #000 45%);
-}
 
-:root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution > * {
-  position: relative;
-  z-index: 1;
-}
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-section-header {
   background: linear-gradient(100deg, rgb(38 83 105 / 0.58), rgb(9 27 40 / 0.4));
@@ -2182,7 +2140,12 @@
        bottom gap. The earlier 11rem left the footer out, so this column came out taller than the
        area holding it — which made the modal scroll as well, even on a project whose right-hand
        column has nothing to scroll */
-    max-height: calc(var(--project-modal-height) - 14rem);
+    max-height: calc(var(--project-modal-height) - 11rem);
+    /* The base offsets this column 12px from the top of the scroller for its sticky position.
+       That offset applies at rest too, so before any scrolling the column already sat 12px
+       below the card beside it and the two rows of cards started at different heights. Pinned
+       flush instead, so both columns begin on the same line */
+    top: 0;
     /* Scrolled to the end, the last card would otherwise sit flush on the cut edge and read as
        clipped rather than finished. The gap belongs on the scroller so it scrolls past too */
     padding-bottom: 1.25rem;
@@ -3131,4 +3094,93 @@
 :root[data-theme="new-year"] .appointment-picker-menu,
 :root[data-theme="new-year"] .appointment-picker-option {
   border-radius: 8px;
+}
+
+/* ── Contribution card scroll ────────────────────────────────────────────────────
+   The card holds its own scroll instead of riding the modal's. Capped at the height of the
+   scrolling area — the modal less its frame padding, header and footer — so the card never
+   grows past what is on screen and its "What I've done" heading no longer travels up under
+   the modal header on a long project */
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(var(--project-modal-height) - 11rem);
+}
+
+/* The heading stays put: it is the label for what is moving below it */
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution .project-modal-section-header {
+  flex-shrink: 0;
+}
+
+/* Everything under the heading scrolls. min-height 0 is what lets a flex child shrink below its
+   content so the overflow actually engages, and the bars are hidden the same way the modal's own
+   scroller hides them — the movement itself shows there is more to read */
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Aside photos by position ────────────────────────────────────────────────────
+   Keyed to where a card sits in the column rather than to which card it is. A project without
+   a notice or without a deadline shifts every card up, and the run of photos should read the
+   same way down every modal.
+
+   Collaboration never takes one, and that is stated by class rather than by counting. It is the
+   only card here whose place moves with what the project defines: a project with no task and no
+   stack would put it in the first three, and a rule that only counted would have handed it a
+   photo. Excluding it by name holds whatever the column turns out to be.
+
+   Each vertical offset is measured, not picked: gifts and fireplace both end in a stretch of
+   unlit pixels that disappears against a card this dark, so sending the file that far past the
+   bottom edge crops what was never visible and lands the subject on the edge. Coffee runs to
+   its last row and needs no offset */
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-aside > *:nth-child(-n + 3):not(.project-modal-collaboration) {
+  background-clip: padding-box;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  padding-right: 5.25rem;
+  position: relative;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-aside > *:nth-child(1):not(.project-modal-collaboration) {
+  background-image: linear-gradient(90deg, rgb(8 25 38 / 0.98) 0 54%, rgb(8 25 38 / 0.88) 72%, transparent 96%),
+    url("/UI/new-year/new-year-gifts.png");
+  background-position:
+    0 0,
+    calc(100% - 2px) calc(100% + 46px);
+  background-size:
+    100% 100%,
+    150px auto;
+  min-height: 118px;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-aside > *:nth-child(2):not(.project-modal-collaboration) {
+  background-image: linear-gradient(90deg, rgb(8 25 38 / 0.98) 0 56%, rgb(8 25 38 / 0.78) 74%, transparent 100%),
+    url("/UI/new-year/new-year-fireplace.png");
+  background-position:
+    0 0,
+    100% calc(100% + 80px);
+  background-size:
+    100% 100%,
+    190px auto;
+  min-height: 154px;
+}
+
+:root[data-theme="new-year"] .project-more-info-modal .project-modal-aside > *:nth-child(3):not(.project-modal-collaboration) {
+  background-image: linear-gradient(90deg, rgb(8 25 38 / 0.999) 0 52%, rgb(8 25 38 / 0.93) 72%, transparent 94%),
+    url("/UI/new-year/new-year-coffee.png");
+  background-position:
+    0 0,
+    calc(100% - 1px) 100%;
+  background-size:
+    100% 100%,
+    168px auto;
+  min-height: 118px;
 }
