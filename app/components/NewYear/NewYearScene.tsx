@@ -210,6 +210,11 @@ export function NewYearScene() {
   const reducedMotion = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const sceneRef = useRef<HTMLDivElement>(null)
+  /* The flakes outlive the effect that draws them. Built inside it, every re-run would hand out
+     a fresh set of random positions and the whole field would jump at once — which is what any
+     change to reducedMotion or theme did, and what Fast Refresh does on every edit to this file
+     while the page is open. Held here, the snow keeps falling from wherever it had reached */
+  const layersRef = useRef<SnowLayer[] | null>(null)
 
   useEffect(() => {
     if (theme !== "new-year") return
@@ -226,7 +231,8 @@ export function NewYearScene() {
     let lastFrameTime = performance.now()
     let isRunning = false
 
-    const layers = createLayers()
+    layersRef.current ??= createLayers()
+    const layers = layersRef.current
 
     const resizeCanvas = () => {
       const bounds = canvas.getBoundingClientRect()
