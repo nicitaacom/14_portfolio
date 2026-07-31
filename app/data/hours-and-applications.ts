@@ -42,8 +42,8 @@ export const applications = {
     appointments: 41,
   },
   "07.2026": {
-    amount_applies: 8200,
-    appointments: 41,
+    amount_applies: 8820,
+    appointments: 45,
   },
   "06.2026": {
     amount_applies: 8200,
