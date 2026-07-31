@@ -20,13 +20,20 @@ export function NewYearProjectOrnament() {
   const swingControls = useAnimationControls()
   const instanceId = useId().replaceAll(":", "")
   const glassId = `new-year-ornament-glass-${instanceId}`
-  const triggerSwing = () => {
+  /* The side the pointer came in on decides which way it swings first. The bauble hangs below
+     the knot it turns around, so a positive angle sends it left — entering from the right
+     therefore flips the whole set of angles to send it right instead. Same rule as the
+     window-head baubles in NewYearScene, so both read the same way under the pointer */
+  const triggerSwing = (event: React.MouseEvent<SVGCircleElement>) => {
     if (reduceMotion) return
+
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const swingDirection = event.clientX > bounds.left + bounds.width / 2 ? -1 : 1
 
     swingControls.stop()
     swingControls.set({ rotate: 0 })
     void swingControls.start({
-      rotate: SWING_KEYFRAMES,
+      rotate: SWING_KEYFRAMES.map(angle => angle * swingDirection),
       transition: { duration: 2.3, ease: "easeOut" },
     })
   }
