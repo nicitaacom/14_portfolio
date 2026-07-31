@@ -338,25 +338,6 @@ export function NewYearScene() {
         return
       }
 
-      /* One tween per bauble, so svgOrigin receives a literal user-space coordinate pair
-         rather than a function. svgOrigin is the one origin mechanism that ignores the
-         element's own bounding box, so a bauble swings from the knot its string is tied to
-         instead of orbiting its bbox corner. Each bauble states that knot in data-pivot */
-      sceneElement.querySelectorAll<SVGGElement>("[data-new-year-bauble]").forEach((bauble, index) => {
-        gsap.fromTo(
-          bauble,
-          { rotation: -3.2 },
-          {
-            rotation: 3.2,
-            svgOrigin: bauble.dataset.pivot ?? "0 0",
-            duration: 2.6,
-            delay: index * 0.42,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-          },
-        )
-      })
       gsap.to("[data-new-year-steam]", {
         y: -14,
         opacity: 0.1,
@@ -408,6 +389,95 @@ export function NewYearScene() {
       bodyObserver.disconnect()
       document.removeEventListener("visibilitychange", syncTimelineState)
       animationContext.revert()
+    }
+  }, [reducedMotion, theme])
+
+  /* The window-head baubles swing when the pointer crosses one rather than idling forever,
+     matching NewYearProjectOrnament's convention — a page that never gets a pointer near them
+     costs nothing at rest.
+
+     The crossing is measured against the balls' own geometry instead of being read from an
+     onPointerEnter, because a listener on these never fires. The scene is inside the fixed
+     z-index 0 backdrop, while the whole site's content sits in the single `.relative.z-10` div
+     that app/[locale]/layout.tsx puts around Navbar, NewYearJazzPlayer and Layout. That div's
+     box spans the viewport at the default pointer-events: auto, so wherever page content leaves
+     a gap for the backdrop to show through, it still takes the hit and nothing reaches the
+     circle. Letting the event through would mean setting it, Layout, Footer and the modal shell
+     every project modal shares to pointer-events: none, then re-opting-in every real control
+     site-wide — a lot of blast radius for a decorative swing. Comparing coordinates gets the
+     same result without leaving this file.
+
+     The trade-off is that the swing also fires when opaque content covers a bauble, where it is
+     hidden anyway — it is never wrong on screen, only sometimes wasted. */
+  useEffect(() => {
+    const sceneElement = sceneRef.current
+    if (theme !== "new-year" || reducedMotion || !sceneElement) return
+
+    const baubles = Array.from(sceneElement.querySelectorAll<SVGGElement>("[data-new-year-bauble]")).flatMap(
+      group => {
+        const ball = group.querySelector<SVGCircleElement>(".new-year-scene-bauble-hit")
+        return ball ? [{ group, ball, centerX: 0, centerY: 0, radius: 0, isPointerInside: false }] : []
+      },
+    )
+    if (baubles.length === 0) return
+
+    /* Resolved through the root SVG's own screen matrix rather than the ball's bounding rect:
+       the ball rides inside the group GSAP rotates, so a rect read mid-swing would return the
+       displaced position and the hit region would chase the animation it just started. The root
+       matrix ignores descendant transforms, so this always describes the bauble at rest. The
+       viewBox is sliced with a preserved aspect ratio, so one axis scale covers the radius */
+    const measureBaubles = () => {
+      baubles.forEach(bauble => {
+        const matrix = bauble.ball.ownerSVGElement?.getScreenCTM()
+        if (!matrix) return
+
+        const x = bauble.ball.cx.baseVal.value
+        const y = bauble.ball.cy.baseVal.value
+        bauble.centerX = matrix.a * x + matrix.c * y + matrix.e
+        bauble.centerY = matrix.b * x + matrix.d * y + matrix.f
+        bauble.radius = bauble.ball.r.baseVal.value * matrix.a
+      })
+    }
+
+    const handlePointerMove = (event: PointerEvent) => {
+      baubles.forEach(bauble => {
+        const dx = event.clientX - bauble.centerX
+        const dy = event.clientY - bauble.centerY
+        const isPointerInside = dx * dx + dy * dy <= bauble.radius * bauble.radius
+
+        /* Only the crossing into the ball starts a swing, so resting the pointer on one lets the
+           tween finish instead of restarting it on every sub-pixel move the mouse reports */
+        if (isPointerInside && !bauble.isPointerInside) {
+          gsap.fromTo(
+            bauble.group,
+            { rotation: 9 },
+            {
+              rotation: 0,
+              /* svgOrigin is the one origin mechanism that ignores the element's own bounding
+                 box, so the bauble swings from the knot its cord is tied to (data-pivot)
+                 instead of orbiting its bbox corner */
+              svgOrigin: bauble.group.dataset.pivot ?? "0 0",
+              duration: 1.7,
+              ease: "elastic.out(1, 0.42)",
+              /* A quick re-entry restarts the swing cleanly instead of stacking tweens */
+              overwrite: true,
+            },
+          )
+        }
+
+        bauble.isPointerInside = isPointerInside
+      })
+    }
+
+    measureBaubles()
+    /* The backdrop is fixed, so only a relayout moves these — scrolling leaves them in place */
+    const resizeObserver = new ResizeObserver(measureBaubles)
+    resizeObserver.observe(sceneElement)
+    window.addEventListener("pointermove", handlePointerMove, { passive: true })
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("pointermove", handlePointerMove)
     }
   }, [reducedMotion, theme])
 
@@ -515,22 +585,36 @@ export function NewYearScene() {
         ))}
 
         {/* Three baubles hung off the same string. The old set hung from the top corners, where the
-            navbar plate covered them at every width. data-pivot is the knot, in user-space units */}
+            navbar plate covered them at every width. data-pivot is the knot, in user-space units.
+            The swing is driven by the pointer-crossing effect above rather than by handlers here;
+            .new-year-scene-bauble-hit marks the ball whose geometry that effect measures. */}
         <g data-new-year-bauble data-pivot="443 506">
           <path d="M443 506V544" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
           <rect x="437" y="542" width="12" height="9" rx="2" fill="#d9c397" />
-          <circle cx="443" cy="572" r="22" fill="url(#new-year-bauble-red)" />
+          <circle
+            className="new-year-scene-bauble-hit"
+            cx="443"
+            cy="572"
+            r="22"
+            fill="url(#new-year-bauble-red)"
+          />
           <circle cx="435" cy="563" r="6" fill="#ffe3e6" fillOpacity="0.5" />
         </g>
         <g data-new-year-bauble data-pivot="720 520">
           <path d="M720 520V554" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.2" />
-          <circle cx="720" cy="570" r="15" fill="url(#new-year-bauble-red)" />
+          <circle className="new-year-scene-bauble-hit" cx="720" cy="570" r="15" fill="url(#new-year-bauble-red)" />
           <circle cx="715" cy="565" r="4.2" fill="#ffe3e6" fillOpacity="0.5" />
         </g>
         <g data-new-year-bauble data-pivot="997 506">
           <path d="M997 506V540" stroke="#d9c397" strokeOpacity="0.72" strokeWidth="2.5" />
           <rect x="992" y="538" width="10" height="8" rx="2" fill="#d9c397" />
-          <circle cx="997" cy="564" r="18" fill="url(#new-year-bauble-red)" />
+          <circle
+            className="new-year-scene-bauble-hit"
+            cx="997"
+            cy="564"
+            r="18"
+            fill="url(#new-year-bauble-red)"
+          />
           <circle cx="991" cy="558" r="4.7" fill="#ffe3e6" fillOpacity="0.5" />
         </g>
 

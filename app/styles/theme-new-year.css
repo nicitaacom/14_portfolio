@@ -168,6 +168,17 @@
   z-index: 1;
 }
 
+/* Marks the ball of each window-head bauble. NewYearScene measures this circle's own geometry
+   to decide when the pointer has crossed one, so the swing does not depend on the event
+   reaching the element — see the pointer-crossing effect there for why it rarely does. These
+   two declarations only take effect on the stretch of backdrop that page content leaves
+   uncovered; the ball is the sole part of the scene that opts back in, so nothing here takes a
+   click meant for page content */
+.new-year-scene-bauble-hit {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 /* Snow falls in front of the room, so the canvas sits over the SVG */
 .new-year-snow-canvas {
   z-index: 2;
