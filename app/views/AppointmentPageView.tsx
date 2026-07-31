@@ -2,7 +2,6 @@ import moment from "moment"
 import { cookies } from "next/headers"
 
 import supabaseAdmin from "@/libs/supabaseAdmin"
-import { NewYearAppointmentStillLife } from "@/components/NewYear/NewYearAppointmentStillLife"
 import { NewYearFilmStrip } from "@/components/NewYear/NewYearFilmStrip"
 import { ScheduleAppointment } from "../[locale]/(site)/appointment/components/ScheduleAppointment"
 import { ScheduleAppointmentModal } from "@/components/Modals/ScheduleAppointment/ScheduleAppointmentModal"
@@ -22,7 +21,6 @@ export async function AppointmentPageView() {
       <div className="appointment-page-shell mx-auto flex w-full max-w-[680px] flex-col gap-sm laptop:max-w-[920px]">
         <IsGMLive />
         <section className="new-year-appointment-editorial">
-          <NewYearAppointmentStillLife />
           <NewYearFilmStrip variant="appointment" />
         </section>
         <div className="appointment-workspace grid gap-sm laptop:grid-cols-[minmax(0,1fr)_300px] laptop:items-start">
