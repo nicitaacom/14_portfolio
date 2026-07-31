@@ -9,24 +9,42 @@ import { GrSchedule } from "react-icons/gr"
 import { Button } from "./Button"
 import { useScopedI18n } from "@/locales/client"
 
+/* Slices run the length of the rail and the one whole fruit closes it on the right, so the row
+   reads as a mandarin that has been cut rather than a repeated sticker. `mandarine` appears
+   exactly once and stays last for that reason */
 const FOOTER_ORNAMENT_PATTERN = [
-  "mandarin",
+  "slice",
   "candle",
-  "mandarin",
+  "slice",
+  "slice",
   "candle",
+  "slice",
+  "slice",
   "candle",
+  "slice",
+  "slice",
   "candle",
-  "mandarin",
+  "slice",
+  "slice",
   "candle",
-  "mandarin",
-  "mandarin",
-  "candle",
-  "mandarin",
-  "candle",
-  "candle",
-  "mandarin",
-  "candle",
+  "slice",
+  "mandarine",
 ] as const
+
+/* A slice's angle comes from its position rather than Math.random(): the server and the browser
+   both render this markup, and a value drawn at render time would differ between the two and
+   fail hydration. 47 and 61 share no factor, so stepping through the positions walks the whole
+   -30..30 range instead of settling into a short repeating run of similar angles */
+function sliceTilt(index: number) {
+  return ((index * 47) % 61) - 30
+}
+
+/* A negative delay starts a candle partway through its flicker, so the row is already out of
+   step on the first frame rather than lighting in unison and drifting apart later. Derived from
+   the position for the same reason the tilt is: both ends of the render have to agree */
+function candlePhase(index: number) {
+  return `-${(((index * 29) % 37) / 10).toFixed(2)}s`
+}
 
 export function Footer() {
   const t = useScopedI18n("common")
@@ -38,6 +56,13 @@ export function Footer() {
           <span
             key={`${ornament}-${index}`}
             className={`new-year-footer-ornament new-year-footer-${ornament}`}
+            style={
+              ornament === "slice"
+                ? ({ "--ornament-tilt": `${sliceTilt(index)}deg` } as React.CSSProperties)
+                : ornament === "candle"
+                  ? ({ "--candle-offset": candlePhase(index) } as React.CSSProperties)
+                  : undefined
+            }
           />
         ))}
       </div>
