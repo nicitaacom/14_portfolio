@@ -2553,6 +2553,24 @@
   }
 }
 
+@media (max-width: 1023px) {
+  /* Below the two-column split, .appointment-calendar-board and .appointment-bookings-board are
+     only ever a 6px pad around one .machine-panel, so their own border, shadow and snow lip from
+     .workbench-board duplicated the panel's framing right underneath it. Their own chrome is
+     dropped here so only the panel reads as the frame */
+  :root[data-theme="new-year"] .appointment-calendar-board,
+  :root[data-theme="new-year"] .appointment-bookings-board {
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  :root[data-theme="new-year"] .appointment-calendar-board::after,
+  :root[data-theme="new-year"] .appointment-bookings-board::after {
+    content: none;
+  }
+}
+
 @media (max-width: 767px) {
   :root[data-theme="new-year"] .appointment-page-shell {
     padding-bottom: 5.5rem;
