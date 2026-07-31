@@ -2177,9 +2177,12 @@
 @media (min-width: 1024px) {
   :root[data-theme="new-year"] .project-more-info-modal .project-modal-aside {
     /* Measured off the modal rather than the viewport, so it tracks whatever the modal actually
-       resolves to. The 11rem is what sits between the two: the frame padding, the header, and
-       this column's own top offset and bottom gap */
-    max-height: calc(var(--project-modal-height) - 11rem);
+       resolves to. The 14rem is everything between the two: the frame padding, the header, the
+       Discord and Telegram footer, the scroller's own padding, and this column's top offset and
+       bottom gap. The earlier 11rem left the footer out, so this column came out taller than the
+       area holding it — which made the modal scroll as well, even on a project whose right-hand
+       column has nothing to scroll */
+    max-height: calc(var(--project-modal-height) - 14rem);
     /* Scrolled to the end, the last card would otherwise sit flush on the cut edge and read as
        clipped rather than finished. The gap belongs on the scroller so it scrolls past too */
     padding-bottom: 1.25rem;
