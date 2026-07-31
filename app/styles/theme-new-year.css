@@ -2023,19 +2023,21 @@
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution::before {
-  background:
-    linear-gradient(180deg, transparent 55%, rgb(5 18 29 / 0.94) 100%),
-    url("/UI/new-year/references/new-year-30.jpg") center 30% / cover no-repeat;
+  /* `cover` over the whole card, which is object-fit: cover in background form: the photo is
+     scaled until it fills both axes and whatever runs past an edge is cropped. That is what
+     leaves no gap on any card, whatever height its content gives it. The earlier fixed band
+     stopped at 440px, so a taller card showed bare panel below the photo */
+  background: url("/UI/new-year/references/new-year-30.jpg") right center / cover no-repeat;
   content: "";
   filter: brightness(0.82) saturate(0.7);
-  height: 380px;
-  inset: 0 0 auto;
+  inset: 0;
   opacity: 0.5;
   pointer-events: none;
   position: absolute;
   z-index: 0;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%);
-  mask-image: linear-gradient(90deg, transparent, #000 30%);
+  /* The photo spans the full width again, so the fade spans it too — no mask sizing needed */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%);
+  mask-image: linear-gradient(90deg, transparent, #000 45%);
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .project-modal-contribution > * {
