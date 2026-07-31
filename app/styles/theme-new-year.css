@@ -217,7 +217,17 @@
 /* Snow settles on the top edge of every raised surface */
 :root[data-theme="new-year"] .machine-panel::after,
 :root[data-theme="new-year"] .workbench-board::after {
-  background: radial-gradient(circle at 7px 0, rgb(255 253 250 / 0.46) 0 5px, transparent 5.6px) 0 0 / 14px 8px repeat-x;
+  /* `round` rather than `repeat-x`: repeating at a fixed 14px tile leaves the last scallop cut
+     through the middle on any surface whose width is not a multiple of 14, which reads as the
+     snow stopping in mid-air short of the corner. `round` adjusts the tile so a whole number of
+     them spans the surface, so the line ends on a complete scallop at both ends */
+  background: radial-gradient(circle at 7px 0, rgb(255 253 250 / 0.46) 0 5px, transparent 5.6px) 0 0 / 14px 8px round
+    no-repeat;
+  /* Both surfaces are rounded 16px, and this strip is a straight full-width bar laid over the
+     top of them. Without a matching curve its ends run on past the point where the surface has
+     already turned the corner, so the outer scallops sit over nothing. Rounding the strip the
+     same way clips it back to the shape it is lying on */
+  border-radius: 16px 16px 0 0;
   content: "";
   height: 8px;
   inset: 0 0 auto;
