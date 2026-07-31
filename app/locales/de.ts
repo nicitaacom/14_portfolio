@@ -148,7 +148,7 @@ export default {
       confidentialEngagement: "Vertrauliches Projekt",
     },
     modal: {
-      label: "Vertrauliche Outreach- und Operations-Plattform",
+      label: "NDA",
       badge: "NDA",
       contributionTitle: "Was ich umgesetzt habe",
       task: "Sichere Outreach-Website für SMMA-Inhaber erstellt, die Geschäftsprozesse wie Cold-E-Mailing und E-Mail-Management automatisiert. Spart Geld bei teuren Abonnements wie GHL/Close/Instantly | Warmbox | Outscraper | ZeroBounce | Google Workspace/M365 | Twilio.",

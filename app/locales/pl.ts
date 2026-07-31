@@ -147,7 +147,7 @@ export default {
       confidentialEngagement: "Poufne zlecenie",
     },
     modal: {
-      label: "Poufna platforma outreach i operacyjna",
+      label: "NDA",
       badge: "NDA",
       contributionTitle: "Co zrobiłem",
       task: "Stworzyłem bezpieczną stronę do outreachu dla właścicieli SMMA, która automatyzuje procesy biznesowe, takie jak cold mailing i zarządzanie e-mailami. Oszczędza pieniądze na drogich subskrypcjach, takich jak GHL/Close/Instantly | Warmbox | Outscraper | ZeroBounce | Google Workspace/M365 | Twilio.",

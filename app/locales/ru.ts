@@ -147,7 +147,7 @@ export default {
       confidentialEngagement: "Конфиденциальный проект",
     },
     modal: {
-      label: "Конфиденциальная outreach- и operations-платформа",
+      label: "NDA",
       badge: "NDA",
       contributionTitle: "Что я сделал",
       task: "Создал защищённый сайт для аутрича владельцев SMMA, который автоматизирует бизнес-процессы, такие как холодная рассылка и управление электронной почтой. Помогает экономить на дорогих подписках GHL/Close/Instantly | Warmbox | Outscraper | ZeroBounce | Google Workspace/M365 | Twilio.",

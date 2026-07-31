@@ -146,7 +146,7 @@ export default {
       confidentialEngagement: "Confidential engagement",
     },
     modal: {
-      label: "Confidential outreach & operations platform",
+      label: "NDA",
       badge: "NDA",
       contributionTitle: "What I’ve done",
       task: "Created secure website for outreach for SMMA owners that allows to automate business processes such as cold emailing and email management. Saves money on expensive subscriptions such as GHL/Close/Instantly | warmbox | outscraper | zerobounce | Google workspace/M365 | twin",
