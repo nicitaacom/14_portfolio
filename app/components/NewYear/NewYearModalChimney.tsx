@@ -6,7 +6,6 @@ export function NewYearModalChimney() {
       <span className="new-year-modal-smoke new-year-modal-smoke-three" />
       <span className="new-year-modal-chimney-cap" />
       <span className="new-year-modal-chimney-stack" />
-      <span className="new-year-modal-chimney-snow" />
     </div>
   )
 }

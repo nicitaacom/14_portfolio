@@ -1864,57 +1864,69 @@
 
 :root[data-theme="new-year"] .new-year-modal-chimney-stack {
   background:
-    linear-gradient(90deg, transparent 0 48%, rgb(35 44 49 / 0.76) 48% 52%, transparent 52%) 0 0 / 100% 20px,
-    linear-gradient(90deg, transparent 0 23%, rgb(35 44 49 / 0.72) 23% 27%, transparent 27% 73%, rgb(35 44 49 / 0.72) 73% 77%, transparent 77%) 0 10px / 100% 20px,
-    repeating-linear-gradient(0deg, transparent 0 8px, rgb(27 36 42 / 0.82) 8px 10px),
-    linear-gradient(90deg, rgb(3 13 20 / 0.28), transparent 28% 68%, rgb(4 12 17 / 0.35)),
-    linear-gradient(0deg, #17384b 0%, #314956 25%, #59686f 55%, #879298 100%);
-  border: 1px solid rgb(190 210 219 / 0.46);
-  border-radius: 3px 3px 2px 2px;
-  bottom: 0;
-  box-shadow:
-    inset 4px 0 5px rgb(255 255 255 / 0.08),
-    inset -5px 0 7px rgb(0 4 7 / 0.3);
+    linear-gradient(90deg, transparent 0 45%, rgb(0 0 0 / 0.22) 45% 50%, rgb(255 255 255 / 0.1) 50% 55%, transparent 55%),
+    linear-gradient(0deg, #0c1f2d 0%, #14303f 16%, #223c46 32%, #37474d 48%, #4e5b60 64%, #637075 82%, #737f84 100%);
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-image: linear-gradient(
+      0deg,
+      rgb(172 222 241 / 0.56) 0%,
+      rgb(172 222 241 / 0.36) 20%,
+      rgb(205 221 228 / 0.34) 45%,
+      rgb(130 142 147 / 0.4) 100%
+    )
+    1;
+  border-radius: 3px 3px 1px 1px;
+  bottom: 1px;
+  box-shadow: 0 5px 7px rgb(0 7 11 / 0.3);
+  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
   height: 52px;
-  left: 12px;
+  left: 10px;
   position: absolute;
-  width: 34px;
+  width: 38px;
+}
+
+:root[data-theme="new-year"] .new-year-modal-chimney-stack::before {
+  background:
+    linear-gradient(90deg, transparent 0 49%, rgb(20 30 34 / 0.5) 49% 52%, transparent 52%) 0 4px / 100% 18px,
+    linear-gradient(90deg, transparent 0 23%, rgb(20 30 34 / 0.42) 23% 26%, transparent 26% 74%, rgb(20 30 34 / 0.42) 74% 77%, transparent 77%) 0 13px / 100% 18px,
+    repeating-linear-gradient(0deg, transparent 0 8px, rgb(16 26 30 / 0.4) 8px 9px);
+  content: "";
+  inset: 0;
+  mask-image: linear-gradient(0deg, transparent 0%, transparent 22%, black 48%, black 100%);
+  position: absolute;
 }
 
 :root[data-theme="new-year"] .new-year-modal-chimney-cap {
-  background: linear-gradient(180deg, #a7b3b8 0 20%, #68757c 38% 62%, #38434a 100%);
-  border: 1px solid rgb(225 238 243 / 0.54);
-  border-radius: 50% 50% 26% 26%;
-  bottom: 49px;
+  background: linear-gradient(180deg, #828e93 0 30%, #616e74 50% 70%, #3c484e 100%);
+  border: 1px solid rgb(229 240 244 / 0.4);
+  border-radius: 50% 50% 30% 30%;
+  bottom: 51px;
   box-shadow:
     0 4px 5px rgb(0 5 10 / 0.38),
-    inset 0 1px 0 rgb(255 255 255 / 0.4);
-  height: 11px;
-  left: 7px;
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 -2px 2px rgb(12 24 30 / 0.34);
+  height: 10px;
+  left: 5px;
   position: absolute;
-  width: 44px;
+  width: 48px;
   z-index: 2;
 }
 
-:root[data-theme="new-year"] .new-year-modal-chimney-snow {
-  background: linear-gradient(180deg, #fff 0 38%, #dcecf4 78%, #b8d2df);
-  border-radius: 50% 46% 44% 53%;
-  bottom: 57px;
-  box-shadow:
-    0 2px 3px rgb(77 120 141 / 0.38),
-    inset 0 1px 0 #fff;
-  height: 8px;
-  left: 6px;
+:root[data-theme="new-year"] .new-year-modal-chimney-cap::before {
+  background: radial-gradient(ellipse, #212d33 0 58%, #576368 62% 100%);
+  border-radius: 50%;
+  content: "";
+  height: 5px;
+  inset: 1px 5px auto;
   position: absolute;
-  transform: rotate(-2deg);
-  width: 46px;
-  z-index: 3;
 }
 
 :root[data-theme="new-year"] .new-year-modal-smoke {
   animation: new-year-modal-smoke-rise 3.2s ease-in-out infinite;
-  border-left: 3px solid rgb(224 241 248 / 0.5);
+  border-left: 2px solid rgb(224 241 248 / 0.46);
   border-radius: 50%;
+  filter: blur(0.6px);
   height: 27px;
   left: 27px;
   opacity: 0;
