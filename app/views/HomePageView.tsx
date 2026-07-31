@@ -131,11 +131,11 @@ export function HomePageView() {
                       <button
                         onClick={() => setOpenAudience(key)}
                         className={twMerge(
-                          "new-year-audience-trigger flex w-full items-center justify-between px-md py-sm text-xs font-bold uppercase tracking-widest transition-colors duration-200",
+                          "new-year-audience-trigger flex w-full items-center justify-start px-md py-sm text-start text-xs font-bold uppercase tracking-widest transition-colors duration-200",
                           openAudience === key ? "text-cta" : "text-secondary-foreground/60 hover:text-secondary",
                         )}>
                         {label}
-                        <span className="text-base">{openAudience === key ? "−" : "+"}</span>
+                        <span className="ml-auto text-base">{openAudience === key ? "−" : "+"}</span>
                       </button>
 
                       <AnimatePresence initial={false}>
