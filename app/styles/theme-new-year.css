@@ -1004,9 +1004,23 @@
   border-color: rgb(200 26 48 / 0.42);
 }
 
-:root[data-theme="new-year"] .navbar-status-light {
-  background: radial-gradient(circle at 45% 32%, #fff7ec, var(--new-year-amber) 34%, #b4571a 70%, #2c1206);
-  box-shadow: 0 0 11px rgb(247 178 59 / 0.6);
+/* Both navbar rivets are hidden rather than recoloured. They are a steel bolt with a screwdriver
+   slot cut across the head — a plate fastened to a frame, which is Crazy Mechanics vocabulary.
+   Nothing in this system is bolted to anything, so an amber version of one still read as
+   hardware borrowed from another theme */
+:root[data-theme="new-year"] .navbar-rivet {
+  display: none;
+}
+
+/* The language and Panel controls draw their own frame, so the bezel around them was a second
+   box drawn around the first. A recess holding a separate part is Crazy Mechanics thinking —
+   here the control is the object, so the bezel keeps its box for layout and gives up its
+   surface. Declared after the grouped inset rule above, which it overrides at equal weight */
+:root[data-theme="new-year"] .navbar-bezel {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /* A garland of baubles strung on a cord — diagonal hazard tape is workshop vocabulary */
@@ -1175,16 +1189,9 @@
     inset 0 1px 0 rgb(255 253 250 / 0.2);
 }
 
-:root[data-theme="new-year"] .site-navbar::after {
-  background: var(--new-year-fur);
-  bottom: -4px;
-  content: "";
-  height: 9px;
-  inset-inline: 12px;
-  pointer-events: none;
-  position: absolute;
-  z-index: 4;
-}
+/* No snow trim along the navbar. The strip was inset 12px from each end, so it began and ended
+   in mid-air rather than at the plate's corners, and read as a row that had been cut off. The
+   project cards are where snow settles in this theme */
 
 :root[data-theme="new-year"] .navbar-left-shadow::after,
 :root[data-theme="new-year"] .navbar-right-shadow::before {
