@@ -64,6 +64,24 @@ export function EnableNYAmbience() {
     return stopFade
   }, [isAmbienceOn, setIsAmbienceOn])
 
+  /* The loop attribute on the element is what normally restarts the track, and it never fires
+     `ended` while it works. This is the backstop for when it does not: a sixteen minute file
+     fetched in pieces rather than whole can reach its end before the seek back to the start is
+     possible, and a browser that gives up there leaves the button lit over silence. Seeking to
+     zero and playing again covers that, and costs nothing on the runs where `loop` did its job */
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    const restart = () => {
+      audio.currentTime = 0
+      void audio.play().catch(() => setIsAmbienceOn(false))
+    }
+
+    audio.addEventListener("ended", restart)
+    return () => audio.removeEventListener("ended", restart)
+  }, [setIsAmbienceOn])
+
   /* Leaving the theme takes the sound with it, so a visitor who switches away is not left with
      a soundtrack playing over a page that has no fireworks in it */
   useEffect(() => {
