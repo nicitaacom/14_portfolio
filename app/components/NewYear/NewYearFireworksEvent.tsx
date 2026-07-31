@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 
 import { useSiteTheme } from "@/hooks/useSiteTheme"
+import { useNewYearAmbience } from "@/store/useNewYearAmbience"
 
 type FireworksPhase = "idle" | "burst" | "fading"
 
@@ -20,8 +21,18 @@ const RETRY_DELAY = 10_000
 const SHELL_INTERVAL = { min: 420, max: 980 }
 
 /* Lifted off the surface palette: these sit against the night sky, where the 48% crimson and
-   44% fir of the token block read as mud */
-const SHELL_COLOURS = ["255, 90, 108", "247, 178, 59", "255, 253, 250", "126, 214, 168", "217, 195, 151"]
+   44% fir of the token block read as mud. Two blues are in the set because the sky behind them
+   is already blue — a shell has to sit well above that to register as its own colour, so both
+   are pushed light rather than picked from the deeper end of the theme */
+const SHELL_COLOURS = [
+  "255, 90, 108",
+  "247, 178, 59",
+  "255, 253, 250",
+  "126, 214, 168",
+  "217, 195, 151",
+  "124, 196, 255",
+  "96, 156, 255",
+]
 
 const GRAVITY = 0.00028
 const DRAG = 0.9986
@@ -34,6 +45,28 @@ const BURST_ALTITUDE = { min: 0.1, max: 0.38 }
 /* Enough overshoot in the launch speed that the shell is still climbing when it reaches its
    target, so it opens on the way up rather than stalling into it */
 const CLIMB_MARGIN = 1.06
+
+/* The settings for the display that runs while the ambience track is on. Everything here reads
+   as distance: shells open higher up and smaller, dimmer, with fewer and shorter-lived sparks,
+   at a lazier rate. There is no trail either — at this range the climb would not be visible,
+   only the flash at the top of it. Together these are what separate "somewhere across town"
+   from the close-up display that fires on its own every minute */
+/* The band starts below the navbar plate rather than at the very top of the viewport. The plate
+   is around 66px tall and the layer paints under it, so shells aimed higher than this open
+   behind it and are never seen — which at the old 5% floor was most of them on a short window */
+const DISTANT_ALTITUDE = { min: 0.15, max: 0.32 }
+/* 1.3x the rate, so the gaps are the old ones divided by 1.3 rather than a new pair of numbers */
+const DISTANT_SHELL_INTERVAL = { min: 850, max: 2_150 }
+/* A town does not fire at a steady rate for an hour. The distant display runs for a stretch,
+   goes quiet, then picks up again — without the quiet the even spacing is what gives it away as
+   a loop. Both are ranges rather than fixed lengths so the pattern never becomes countable */
+const DISTANT_RUN = { min: 8_000, max: 12_000 }
+const DISTANT_LULL = { min: 3_000, max: 6_000 }
+const DISTANT_SPARK_COUNT = { min: 42, max: 66 }
+const DISTANT_POWER = { min: 0.09, max: 0.14 }
+const DISTANT_SPARK_LIFE = { min: 850, max: 1_500 }
+const DISTANT_ALPHA = 0.72
+const DISTANT_FLASH_OPACITY = 0.16
 
 interface Rocket {
   x: number
@@ -77,6 +110,12 @@ export function NewYearFireworksEvent() {
      letting the sky clear */
   const isLaunchingRef = useRef(false)
   const handleBurstSettledRef = useRef<(() => void) | null>(null)
+  /* The navbar toggle drives this. Held in a ref for the same reason as isLaunchingRef: the draw
+     loop reads it every frame and rebuilding the effect would empty the sky */
+  const { isAmbienceOn } = useNewYearAmbience()
+  const isAmbienceOnRef = useRef(isAmbienceOn)
+  const previousAmbienceRef = useRef(isAmbienceOn)
+  const handleAmbienceChangeRef = useRef<((isOn: boolean) => void) | null>(null)
 
   /* Held true across the fade so the particles keep falling while the burst bows out, rather
      than the canvas unmounting mid-flight */
@@ -109,6 +148,13 @@ export function NewYearFireworksEvent() {
       timers.clear()
     }
     const scheduleNextEvent = (initial = false) => {
+      /* The distant display has no gaps to wait out — it runs for as long as the sound is on,
+         so the next event is the next frame rather than the next minute */
+      if (isAmbienceOnRef.current) {
+        schedule(beginEvent, 0)
+        return
+      }
+
       const delay = initial
         ? randomBetween(INITIAL_EVENT_DELAY.min, INITIAL_EVENT_DELAY.max)
         : randomBetween(REPEAT_EVENT_DELAY.min, REPEAT_EVENT_DELAY.max)
@@ -145,6 +191,10 @@ export function NewYearFireworksEvent() {
     }
 
     scheduleBurstFinishRef.current = () => {
+      /* Nothing to time while the ambience runs. The sky stays busy until the toggle is pressed
+         again, and that is what starts the wind-down instead */
+      if (isAmbienceOnRef.current) return
+
       schedule(
         () => {
           if (isUnavailable()) {
@@ -167,7 +217,11 @@ export function NewYearFireworksEvent() {
         return
       }
 
-      if (currentPhase === "idle" && timers.size === 0) schedule(beginEvent, RETRY_DELAY)
+      /* Coming back from a modal or a hidden tab picks the display straight back up while the
+         ambience is on, rather than leaving the sound running over an empty sky for ten seconds */
+      if (currentPhase === "idle" && timers.size === 0) {
+        schedule(beginEvent, isAmbienceOnRef.current ? 0 : RETRY_DELAY)
+      }
     }
 
     /* Test hook: dispatching new-year:fireworks on window starts a burst at once, so the
@@ -175,6 +229,16 @@ export function NewYearFireworksEvent() {
     const triggerForPreview = () => {
       clearTimers()
       beginEvent()
+    }
+
+    /* Pressing the navbar toggle either opens the distant display at once or begins winding the
+       running one down. Winding down goes through finishEvent rather than straight to idle, so
+       whatever is already in the air still opens and burns out */
+    handleAmbienceChangeRef.current = isOn => {
+      clearTimers()
+      if (isOn) beginEvent()
+      else if (currentPhase === "burst") finishEvent()
+      else scheduleNextEvent()
     }
 
     scheduleNextEvent(true)
@@ -187,6 +251,7 @@ export function NewYearFireworksEvent() {
       isMounted = false
       scheduleBurstFinishRef.current = null
       handleBurstSettledRef.current = null
+      handleAmbienceChangeRef.current = null
       clearTimers()
       bodyObserver.disconnect()
       document.removeEventListener("visibilitychange", cancelWhileUnavailable)
@@ -198,6 +263,16 @@ export function NewYearFireworksEvent() {
   useEffect(() => {
     isLaunchingRef.current = phase === "burst"
   }, [phase])
+
+  /* The ref is updated on every render, but the state machine is only told about real changes:
+     firing on mount would clear the opening delay and put a display on screen straight away */
+  useEffect(() => {
+    isAmbienceOnRef.current = isAmbienceOn
+    if (previousAmbienceRef.current === isAmbienceOn) return
+
+    previousAmbienceRef.current = isAmbienceOn
+    handleAmbienceChangeRef.current?.(isAmbienceOn)
+  }, [isAmbienceOn])
 
   useEffect(() => {
     if (phase !== "burst") return
@@ -219,6 +294,10 @@ export function NewYearFireworksEvent() {
     let lastFrameTime = performance.now()
     let nextShellAt = performance.now() + 120
     let hasReportedSettled = false
+    /* Only consulted while the ambience runs. quietUntil is when the current lull ends and
+       nextLullAt is when the next one starts, both stamped forward as each one is entered */
+    let quietUntil = 0
+    let nextLullAt = performance.now() + randomBetween(DISTANT_RUN.min, DISTANT_RUN.max)
     const rockets: Rocket[] = []
     const sparks: Spark[] = []
     /* The flash tweens are created one per shell, so they are recorded on a context and the
@@ -241,21 +320,30 @@ export function NewYearFireworksEvent() {
 
       flash.style.setProperty("--flash-x", `${x}px`)
       flash.style.setProperty("--flash-y", `${y}px`)
+      /* A shell across town lights the sky it is in, not the room you are standing in */
+      const peak = isAmbienceOnRef.current ? DISTANT_FLASH_OPACITY : 0.34
       flashContext.add(() => {
-        gsap.fromTo(flash, { opacity: 0.34 }, { opacity: 0, duration: 0.5, ease: "power2.out", overwrite: true })
+        gsap.fromTo(flash, { opacity: peak }, { opacity: 0, duration: 0.5, ease: "power2.out", overwrite: true })
       })
     }
 
     const explode = (rocket: Rocket) => {
-      const sparkCount = 78 + Math.floor(Math.random() * 42)
-      const power = 0.16 + Math.random() * 0.1
+      const isDistant = isAmbienceOnRef.current
+      const sparkCount = isDistant
+        ? Math.round(randomBetween(DISTANT_SPARK_COUNT.min, DISTANT_SPARK_COUNT.max))
+        : 78 + Math.floor(Math.random() * 42)
+      const power = isDistant
+        ? randomBetween(DISTANT_POWER.min, DISTANT_POWER.max)
+        : 0.16 + Math.random() * 0.1
 
       for (let index = 0; index < sparkCount; index += 1) {
         const angle = (index / sparkCount) * Math.PI * 2 + Math.random() * 0.14
         /* Square-rooting a uniform sample spreads the sparks evenly over the disc instead of
            bunching them at the rim, which is what a real shell looks like */
         const speed = power * Math.sqrt(Math.random()) * (0.55 + Math.random() * 0.65)
-        const maxLife = randomBetween(1100, 2000)
+        const maxLife = isDistant
+          ? randomBetween(DISTANT_SPARK_LIFE.min, DISTANT_SPARK_LIFE.max)
+          : randomBetween(1100, 2000)
 
         sparks.push({
           x: rocket.x,
@@ -266,7 +354,7 @@ export function NewYearFireworksEvent() {
           velocityY: Math.sin(angle) * speed,
           life: maxLife,
           maxLife,
-          size: 1.2 + Math.random() * 1.8,
+          size: isDistant ? 0.9 + Math.random() * 1 : 1.2 + Math.random() * 1.8,
           colour: Math.random() < 0.18 ? pickColour() : rocket.colour,
         })
       }
@@ -277,7 +365,8 @@ export function NewYearFireworksEvent() {
     const launchShell = () => {
       const x = randomBetween(width * 0.12, width * 0.88)
       const launchY = height + 8
-      const targetY = height * randomBetween(BURST_ALTITUDE.min, BURST_ALTITUDE.max)
+      const altitude = isAmbienceOnRef.current ? DISTANT_ALTITUDE : BURST_ALTITUDE
+      const targetY = height * randomBetween(altitude.min, altitude.max)
       /* The speed that just reaches the target under this gravity, plus the margin. Solving for
          it here is what keeps the burst height honest at any viewport size */
       const climbSpeed = Math.sqrt(2 * GRAVITY * (launchY - targetY)) * CLIMB_MARGIN
@@ -297,10 +386,22 @@ export function NewYearFireworksEvent() {
       const elapsed = Math.min(time - lastFrameTime, 40)
       lastFrameTime = time
 
-      if (isLaunchingRef.current && time >= nextShellAt) {
+      /* The run has gone on long enough, so the sky goes quiet for a few seconds and the next
+         lull is stamped for after that. Only the distant display does this — the close-up one
+         is short enough already that a gap in the middle would read as a stall */
+      if (isAmbienceOnRef.current && time >= nextLullAt && time >= quietUntil) {
+        quietUntil = time + randomBetween(DISTANT_LULL.min, DISTANT_LULL.max)
+        nextLullAt = quietUntil + randomBetween(DISTANT_RUN.min, DISTANT_RUN.max)
+      }
+
+      /* One shell at a time and a long wait between them while the ambience runs. Doubling up is
+         what makes the close-up display read as a finale, which is the opposite of the intent */
+      const interval = isAmbienceOnRef.current ? DISTANT_SHELL_INTERVAL : SHELL_INTERVAL
+      const isQuiet = isAmbienceOnRef.current && time < quietUntil
+      if (isLaunchingRef.current && !isQuiet && time >= nextShellAt) {
         launchShell()
-        if (Math.random() < 0.3) launchShell()
-        nextShellAt = time + randomBetween(SHELL_INTERVAL.min, SHELL_INTERVAL.max)
+        if (!isAmbienceOnRef.current && Math.random() < 0.3) launchShell()
+        nextShellAt = time + randomBetween(interval.min, interval.max)
       }
 
       context.clearRect(0, 0, width, height)
@@ -314,12 +415,16 @@ export function NewYearFireworksEvent() {
         rocket.x += rocket.velocityX * elapsed
         rocket.y += rocket.velocityY * elapsed
 
-        context.beginPath()
-        context.moveTo(rocket.x, rocket.previousY)
-        context.lineTo(rocket.x, rocket.y)
-        context.lineWidth = 2.6
-        context.strokeStyle = `rgba(${rocket.colour}, 0.95)`
-        context.stroke()
+        /* The climb is skipped entirely at distance. A rising trail is a close-up detail — from
+           across town the first thing anyone sees is the flash at the top of it */
+        if (!isAmbienceOnRef.current) {
+          context.beginPath()
+          context.moveTo(rocket.x, rocket.previousY)
+          context.lineTo(rocket.x, rocket.y)
+          context.lineWidth = 2.6
+          context.strokeStyle = `rgba(${rocket.colour}, 0.95)`
+          context.stroke()
+        }
 
         /* Reaching the target opens the shell. The stall check is the backstop for a rocket
            that loses its climb early, so none of them ever fall back down unopened */
@@ -344,7 +449,7 @@ export function NewYearFireworksEvent() {
         spark.x += spark.velocityX * elapsed
         spark.y += spark.velocityY * elapsed
 
-        const fade = spark.life / spark.maxLife
+        const fade = (spark.life / spark.maxLife) * (isAmbienceOnRef.current ? DISTANT_ALPHA : 1)
         context.beginPath()
         context.moveTo(spark.previousX, spark.previousY)
         context.lineTo(spark.x, spark.y)
