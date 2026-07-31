@@ -30,7 +30,8 @@ export function ModalContainer({
 }: ModalContainerProps) {
   const [showModal, setShowModal] = useState(isOpen)
   const theme = useSiteTheme()
-  const showNewYearCloseBell = theme === "new-year" && className?.includes("project-more-info-modal")
+  const showNewYearCloseBell = theme === "new-year"
+  const showNewYearChimney = showNewYearCloseBell && className?.includes("project-more-info-modal")
 
   /* onOpen - show modal - disable scroll and scrollbar - hide navbar - show bg */
   useEffect(() => {
@@ -91,7 +92,7 @@ export function ModalContainer({
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.25 }}
             {...modalHandler}>
-            {showNewYearCloseBell && <NewYearModalChimney />}
+            {showNewYearChimney && <NewYearModalChimney />}
             <HalloweenFrameOrnaments variant="modal" />
             <span aria-hidden="true" className="halloween-only halloween-modal-skull" />
             <div aria-hidden="true" className="modal-frame-hardware pointer-events-none absolute inset-[0] z-20">

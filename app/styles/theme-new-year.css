@@ -2067,7 +2067,7 @@
     inset 0 1px 0 rgb(255 229 233 / 0.28) !important;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .site-modal-close {
+:root[data-theme="new-year"] .site-modal .site-modal-close {
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -2082,7 +2082,7 @@
   z-index: 34;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .site-modal-close:active {
+:root[data-theme="new-year"] .site-modal .site-modal-close:active {
   cursor: grabbing;
 }
 
@@ -2106,7 +2106,7 @@
   width: 52px;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-close-bell {
+:root[data-theme="new-year"] .site-modal .new-year-modal-close-bell {
   display: block;
   filter: drop-shadow(0 7px 7px rgb(0 5 10 / 0.58));
   height: 66px;
@@ -2123,7 +2123,7 @@
 
 /* Grabbing keeps the lean, so the bell does not jump upright in the hand, and only the squeeze
    is added on top */
-:root[data-theme="new-year"] .project-more-info-modal .site-modal-close:active .new-year-modal-close-bell {
+:root[data-theme="new-year"] .site-modal .site-modal-close:active .new-year-modal-close-bell {
   transform: rotate(var(--new-year-bell-lean, 0deg)) scale(0.96);
 }
 
