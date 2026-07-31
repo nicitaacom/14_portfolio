@@ -2003,17 +2003,20 @@
   filter: drop-shadow(0 7px 7px rgb(0 5 10 / 0.58));
   height: 66px;
   overflow: visible;
+  /* NewYearModalPullClose sets --new-year-bell-lean to one angle for the left half of the
+     button and the opposite for the right half, so the lean has a direction instead of one
+     fixed hover pose. The origin is the knot at the top of the cord, so the body swings under
+     it like real weight, and it eases between the two poses rather than jumping */
+  transform: rotate(var(--new-year-bell-lean, 0deg));
   transform-origin: 50% 3px;
-  transition: transform 180ms ease;
+  transition: transform 150ms ease;
   width: 52px;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .site-modal-close:hover .new-year-modal-close-bell {
-  transform: rotate(7deg);
-}
-
+/* Grabbing keeps the lean, so the bell does not jump upright in the hand, and only the squeeze
+   is added on top */
 :root[data-theme="new-year"] .project-more-info-modal .site-modal-close:active .new-year-modal-close-bell {
-  transform: rotate(-8deg) scale(0.96);
+  transform: rotate(var(--new-year-bell-lean, 0deg)) scale(0.96);
 }
 
 :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-chimney {
