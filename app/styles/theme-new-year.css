@@ -446,9 +446,23 @@
   width: 100%;
 }
 
-@media (max-width: 767px) {
-  /* Six slanted panels are too thin to read on a phone, so the last two step out */
+@media (max-width: 1023px) {
+  /* Six slanted panels are too thin below the laptop split, so tablet keeps four */
   .new-year-film-slice:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Below tablet, mobile keeps three */
+  .new-year-film-slice:nth-child(n + 4) {
+    display: none;
+  }
+}
+
+@media (max-width: 414px) {
+  /* Below the 415px mobile split, keep only two */
+  .new-year-film-slice:nth-child(n + 3) {
     display: none;
   }
 }
