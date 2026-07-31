@@ -31,6 +31,10 @@ const LAYER_SPECS = [
   { count: 22, minRadius: 2.6, spread: 1.5, fall: 0.000111, windScale: 1, opacity: 0.95, halo: true },
 ]
 
+/* A damped pendulum: each swing overshoots less than the one before it. Matches the set
+   NewYearProjectOrnament swings its bauble through, so both read as the same weight of glass */
+const SWING_KEYFRAMES = [0, 9, -7, 5, -3, 1.6, 0]
+
 /* Points sampled off the catenary the bulb string hangs on, from M60 440 Q720 600 1380 440.
    The x values are evenly spaced because the quadratic's three x controls are, so only y needs
    the curve: 440 + 320t(1-t) */
@@ -448,21 +452,28 @@ export function NewYearScene() {
         /* Only the crossing into the ball starts a swing, so resting the pointer on one lets the
            tween finish instead of restarting it on every sub-pixel move the mouse reports */
         if (isPointerInside && !bauble.isPointerInside) {
-          gsap.fromTo(
-            bauble.group,
-            { rotation: 9 },
-            {
-              rotation: 0,
-              /* svgOrigin is the one origin mechanism that ignores the element's own bounding
-                 box, so the bauble swings from the knot its cord is tied to (data-pivot)
-                 instead of orbiting its bbox corner */
-              svgOrigin: bauble.group.dataset.pivot ?? "0 0",
-              duration: 1.7,
-              ease: "elastic.out(1, 0.42)",
-              /* A quick re-entry restarts the swing cleanly instead of stacking tweens */
-              overwrite: true,
+          /* The side the pointer came in on decides which way it swings first. The ball hangs
+             below the knot it turns around, so a positive angle sends it left — entering from
+             the right therefore flips the whole set of angles to send it right instead */
+          const swingDirection = dx > 0 ? -1 : 1
+
+          gsap.to(bauble.group, {
+            /* Every angle of the swing is stated, so the bauble travels out and back through
+               each one. A fromTo starting at the far angle would place it there in a single
+               frame and only ease the return, which reads as the bauble jumping rather than
+               being knocked. Same damped set of angles as NewYearProjectOrnament */
+            keyframes: {
+              rotation: SWING_KEYFRAMES.map(angle => angle * swingDirection),
+              easeEach: "sine.inOut",
             },
-          )
+            /* svgOrigin is the one origin mechanism that ignores the element's own bounding
+               box, so the bauble swings from the knot its cord is tied to (data-pivot)
+               instead of orbiting its bbox corner */
+            svgOrigin: bauble.group.dataset.pivot ?? "0 0",
+            duration: 2.3,
+            /* A quick re-entry restarts the swing cleanly instead of stacking tweens */
+            overwrite: true,
+          })
         }
 
         bauble.isPointerInside = isPointerInside
