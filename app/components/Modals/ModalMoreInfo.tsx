@@ -196,7 +196,7 @@ export function ModalMoreInfo({
               </section>
             </aside>
 
-            <section className="project-modal-section min-w-0 overflow-hidden rounded-[3px] border border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--steel-deep)/0.74),hsl(var(--wood)/0.35))] shadow-[inset_0_3px_6px_rgb(0_0_0/0.5),inset_0_1px_0_rgb(255_255_255/0.06),0_2px_3px_rgb(0_0_0/0.3)]">
+            <section className="project-modal-section project-modal-contribution min-w-0 overflow-hidden rounded-[3px] border border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--steel-deep)/0.74),hsl(var(--wood)/0.35))] shadow-[inset_0_3px_6px_rgb(0_0_0/0.5),inset_0_1px_0_rgb(255_255_255/0.06),0_2px_3px_rgb(0_0_0/0.3)]">
               <div className="project-modal-section-header flex min-h-[60px] items-center border-b border-brass/40 bg-[linear-gradient(to_bottom,hsl(var(--paper)/0.06),transparent)] px-md py-sm">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-cta">{resolvedContributionTitle}</p>
