@@ -137,8 +137,10 @@ function SnowHouse({ x, y, scale = 1 }: { x: number; y: number; scale?: number }
       <path d="M-132 -116L0 -206L132 -116L132 -108L0 -196L-132 -108Z" fill="#fffdfa" />
       <path d="M-132 -110Q-66 -122 0 -108Q66 -122 132 -110L132 -100Q66 -112 0 -98Q-66 -112 -132 -100Z" fill="#fdfbf6" />
 
-      {/* Chimney with its own cap of snow */}
-      <path d="M56 -168V-214H86V-186Z" fill="#7d5238" />
+      {/* Chimney with its own cap of snow. The roof's right slope passes under x 56-86 at
+          y -167.8 to -147.4 (0deg slope from the -206 ridge to the -116 eave); the bottom edge
+          sits at -140, past both, so the base is seated in the roof with no gap showing through */}
+      <path d="M56 -140V-214H86V-140Z" fill="#7d5238" />
       <path d="M54 -214H88V-206H54Z" fill="#fffdfa" />
 
       {/* Warm windows with muntins */}
