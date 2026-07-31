@@ -1,7 +1,12 @@
 export default function NotFound() {
   return (
-    <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg whitespace-nowrap">
-      Page not found
-    </h1>
+    <main className="site-not-found absolute inset-0 flex items-center justify-center px-md">
+      <div className="site-not-found-card relative">
+        <span className="site-not-found-mark hidden" aria-hidden="true">
+          404
+        </span>
+        <h1 className="text-lg whitespace-nowrap">Page not found</h1>
+      </div>
+    </main>
   )
 }
