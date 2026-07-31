@@ -1,8 +1,8 @@
 "use client"
 
-import { useId, useState } from "react"
+import { useId } from "react"
 
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, useAnimationControls, useReducedMotion } from "framer-motion"
 
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 
@@ -17,9 +17,19 @@ const SWING_KEYFRAMES = [0, 9, -7, 5, -3, 1.6, 0]
 export function NewYearProjectOrnament() {
   const theme = useSiteTheme()
   const reduceMotion = useReducedMotion()
-  const [isSwinging, setIsSwinging] = useState(false)
+  const swingControls = useAnimationControls()
   const instanceId = useId().replaceAll(":", "")
   const glassId = `new-year-ornament-glass-${instanceId}`
+  const triggerSwing = () => {
+    if (reduceMotion) return
+
+    swingControls.stop()
+    swingControls.set({ rotate: 0 })
+    void swingControls.start({
+      rotate: SWING_KEYFRAMES,
+      transition: { duration: 2.3, ease: "easeOut" },
+    })
+  }
 
   if (theme !== "new-year") return null
 
@@ -38,10 +48,8 @@ export function NewYearProjectOrnament() {
             children, which would resolve the origin against this group's own bbox corner and
             swing the bauble around a point outside itself */}
         <motion.g
-          initial={false}
-          animate={{ rotate: isSwinging && !reduceMotion ? SWING_KEYFRAMES : 0 }}
-          transition={reduceMotion ? { duration: 0 } : { duration: 2.3, ease: "easeOut" }}
-          onAnimationComplete={() => setIsSwinging(false)}
+          initial={{ rotate: 0 }}
+          animate={swingControls}
           style={{
             transformBox: "view-box",
             originX: `${ORNAMENT_PIVOT_X}px`,
@@ -59,7 +67,8 @@ export function NewYearProjectOrnament() {
             cy="68"
             r="19"
             fill={`url(#${glassId})`}
-            onMouseOver={() => setIsSwinging(true)}
+            onClick={triggerSwing}
+            onPointerEnter={triggerSwing}
           />
           <ellipse cx="20.5" cy="60.5" rx="5.5" ry="4" fill="#ffe3e6" fillOpacity="0.46" />
           <path

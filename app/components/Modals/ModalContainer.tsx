@@ -7,6 +7,9 @@ import { useSwipeable } from "react-swipeable"
 import { IoMdClose } from "react-icons/io"
 
 import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
+import { NewYearModalChimney } from "@/components/NewYear/NewYearModalChimney"
+import { NewYearModalPullClose } from "@/components/NewYear/NewYearModalPullClose"
+import { useSiteTheme } from "@/hooks/useSiteTheme"
 
 interface ModalContainerProps {
   isOpen: boolean
@@ -26,6 +29,8 @@ export function ModalContainer({
   title,
 }: ModalContainerProps) {
   const [showModal, setShowModal] = useState(isOpen)
+  const theme = useSiteTheme()
+  const showNewYearCloseBell = theme === "new-year" && className?.includes("project-more-info-modal")
 
   /* onOpen - show modal - disable scroll and scrollbar - hide navbar - show bg */
   useEffect(() => {
@@ -86,6 +91,7 @@ export function ModalContainer({
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.25 }}
             {...modalHandler}>
+            {showNewYearCloseBell && <NewYearModalChimney />}
             <HalloweenFrameOrnaments variant="modal" />
             <span aria-hidden="true" className="halloween-only halloween-modal-skull" />
             <div aria-hidden="true" className="modal-frame-hardware pointer-events-none absolute inset-[0] z-20">
@@ -107,19 +113,24 @@ export function ModalContainer({
               </div>
             </div>
             <div className="modal-frame-surface site-modal-surface relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1px] bg-[radial-gradient(ellipse_52%_10%_at_18%_14%,hsl(var(--paper)/0.13),transparent_68%),radial-gradient(ellipse_44%_9%_at_74%_67%,hsl(var(--paper)/0.1),transparent_68%),repeating-linear-gradient(1deg,hsl(var(--steel-deep)/0.2)_0_1px,transparent_1px_6px,hsl(var(--paper)/0.045)_7px_9px,transparent_10px_18px),linear-gradient(100deg,hsl(var(--wood)),hsl(var(--brass)/0.48)_48%,hsl(var(--wood)))] shadow-[inset_0_1px_0_rgb(255_255_255/0.13),inset_0_-2px_0_rgb(0_0_0/0.42)]">
-              {title && (
-                <div className="modal-title-label absolute left-1/2 top-[-2px] z-20 max-w-[60%] -translate-x-1/2 rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-[3px] font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)]">
+              {title && !showNewYearCloseBell && (
+                <div
+                  className="modal-title-label absolute left-1/2 top-[-2px] z-20 max-w-[60%] -translate-x-1/2 rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-[3px] font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)]">
                   {title}
                 </div>
               )}
-              <button
-                type="button"
-                aria-label="Close modal"
-                className="site-modal-close plaque absolute right-[10px] top-[10px] z-30 flex h-9 w-9 items-center justify-center !p-0 text-secondary-foreground/70 hover:text-secondary"
-                style={{ top: 10, right: 10, left: "auto", bottom: "auto" }}
-                onClick={closeModal}>
-                <IoMdClose size={34} />
-              </button>
+              {showNewYearCloseBell ? (
+                <NewYearModalPullClose ariaLabel="Close modal" onClose={closeModal} />
+              ) : (
+                <button
+                  type="button"
+                  aria-label="Close modal"
+                  className="site-modal-close plaque absolute right-[10px] top-[10px] z-30 flex h-9 w-9 items-center justify-center !p-0 text-secondary-foreground/70 hover:text-secondary"
+                  style={{ top: 10, right: 10, left: "auto", bottom: "auto" }}
+                  onClick={closeModal}>
+                  <IoMdClose size={34} />
+                </button>
+              )}
               {children}
             </div>
           </motion.div>

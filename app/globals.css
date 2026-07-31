@@ -9,6 +9,7 @@
   --secondary: 0deg 0% 87%;
   --secondary-foreground: 0deg 0% 77%;
   --cta: 277deg 100% 68%;
+  --cta-text: var(--cta);
   --cta-tooltip: 277deg 100% 68%; /* #c05cff */
 
   --info: 207deg 62% 51%;
@@ -32,6 +33,10 @@
   --pipe: 185deg 7% 66%;
   --blueprint: 210deg 25% 30%;
   --room: 260deg 33% 4%; /* the black room behind every page; the NDA scene keeps its own darker #09070d */
+}
+
+.auth-key-field {
+  display: contents;
 }
 
 @layer components {
@@ -926,7 +931,8 @@ div {
   }
   100% {
     opacity: 1;
-    transform: translate(calc(-50% + var(--tooltip-nudge, 24px)), calc(-100% - 10px)) rotate(var(--tooltip-rotation, -1.3deg));
+    transform: translate(calc(-50% + var(--tooltip-nudge, 24px)), calc(-100% - 10px))
+      rotate(var(--tooltip-rotation, -1.3deg));
   }
 }
 

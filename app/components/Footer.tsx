@@ -9,15 +9,37 @@ import { GrSchedule } from "react-icons/gr"
 import { Button } from "./Button"
 import { useScopedI18n } from "@/locales/client"
 
+const FOOTER_ORNAMENT_PATTERN = [
+  "mandarin",
+  "candle",
+  "mandarin",
+  "candle",
+  "candle",
+  "candle",
+  "mandarin",
+  "candle",
+  "mandarin",
+  "mandarin",
+  "candle",
+  "mandarin",
+  "candle",
+  "candle",
+  "mandarin",
+  "candle",
+] as const
+
 export function Footer() {
   const t = useScopedI18n("common")
 
   return (
     <footer className="site-footer relative mb-lg mt-auto">
       <div className="new-year-footer-ornaments" aria-hidden="true">
-        <span className="new-year-footer-candle" />
-        <span className="new-year-footer-sprig" />
-        <span className="new-year-footer-mandarin" />
+        {FOOTER_ORNAMENT_PATTERN.map((ornament, index) => (
+          <span
+            key={`${ornament}-${index}`}
+            className={`new-year-footer-ornament new-year-footer-${ornament}`}
+          />
+        ))}
       </div>
       <div className="site-footer-controls relative mx-auto grid max-w-[80vw] grid-cols-2 justify-center gap-x-md gap-y-md min-[882px]:flex">
         <Button href="https://t.me/nicitaacom" target="_blank">

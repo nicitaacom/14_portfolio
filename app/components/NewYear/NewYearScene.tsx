@@ -95,35 +95,6 @@ function Snowman({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) 
   )
 }
 
-/* Places one of the cut-out photographs in the scene. The anchor is the bottom centre of the
-   subject, so a prop is positioned by putting that point on the snow line, exactly like the drawn
-   figures. Width is given and height follows from the file's own aspect. */
-function SceneCutout({
-  href,
-  x,
-  y,
-  width,
-  aspect,
-}: {
-  href: string
-  x: number
-  y: number
-  width: number
-  aspect: number
-}) {
-  const height = width / aspect
-  return (
-    <image
-      href={href}
-      x={x - width / 2}
-      y={y - height}
-      width={width}
-      height={height}
-      preserveAspectRatio="xMidYMax meet"
-    />
-  )
-}
-
 /* A snow-laden fir standing on the drift */
 function SnowFir({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
   return (
@@ -572,12 +543,6 @@ export function NewYearScene() {
         {/* The cottage sits back on the middle drift, its lights above the door line */}
         <SnowHouse x={1306} y={674} scale={0.6} />
 
-        {/* Socks hung out on the light string, and the tree and its presents on the middle drift */}
-        <SceneCutout href="/UI/new-year/new-year-socks.png" x={330} y={606} width={64} aspect={675 / 1200} />
-
-        {/* The tree and its presents stand on the middle drift */}
-        <SceneCutout href="/UI/new-year/new-year-gifts.png" x={1092} y={706} width={214} aspect={675 / 1200} />
-
         {/* Firs and snowmen stand on the middle drift, before the front drift buries their feet */}
         <SnowFir x={120} y={676} scale={1} />
         <SnowFir x={1418} y={660} scale={0.66} />
@@ -589,11 +554,6 @@ export function NewYearScene() {
           d="M0 762C200 732 380 770 580 756C780 742 980 776 1180 754C1320 738 1390 760 1440 750V900H0V762Z"
           fill="url(#new-year-drift-front)"
         />
-
-        {/* The cut-out treats rest on the near bank. Painted after the front drift because that
-            drift is opaque and would otherwise bury them */}
-        <SceneCutout href="/UI/new-year/cinnamon-roll-with-coffee.png" x={452} y={786} width={132} aspect={736 / 676} />
-        <SceneCutout href="/UI/new-year/new-year-mandarines.png" x={742} y={790} width={150} aspect={2121 / 1414} />
 
         <rect width="1440" height="900" fill="url(#new-year-vignette)" />
       </svg>

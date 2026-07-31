@@ -9,7 +9,7 @@ export function NDANotice() {
   const t = useScopedI18n("ndaProject.notice")
 
   return (
-    <aside className="relative overflow-hidden rounded-md border border-cta/30 bg-cta/[0.065] p-sm">
+    <aside className="project-modal-notice relative overflow-hidden rounded-md border border-cta/30 bg-cta/[0.065] p-sm">
       <div className="relative flex items-start gap-x-sm">
         <div className="relative top-[2px] flex h-6 w-6 shrink-0 items-center justify-center text-cta">
           <FiLock size={15} />

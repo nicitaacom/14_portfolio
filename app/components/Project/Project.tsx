@@ -12,6 +12,7 @@ import { limitProjectStack } from "@/utils/limitProjectStack"
 import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
 import { HalloweenProjectSkull } from "@/components/Halloween/HalloweenProjectSkull"
 import { NewYearProjectOrnament } from "@/components/NewYear/NewYearProjectOrnament"
+import { NewYearProjectSnow } from "@/components/NewYear/NewYearProjectSnow"
 
 interface ProjectProps {
   figmaUrl?: string
@@ -139,6 +140,7 @@ export function Project({
           </Button>
         </div>
       </div>
+      <NewYearProjectSnow />
     </div>
   )
 }
