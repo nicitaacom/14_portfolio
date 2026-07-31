@@ -437,9 +437,13 @@
    events and keyboard focus while everything else in the seasonal layer stays inert. Drop the
    track at public/new-year-jazz.mp3 and the disc starts turning on click */
 
-/* Bottom right: the account avatar already sits in the bottom-left corner */
+/* Bottom right: the account avatar already sits in the bottom-left corner. Column flex so the
+   sleeve stretches to match the embed frame's width once it opens above it, instead of the two
+   sitting at two different widths. */
 .new-year-jazz-player {
   bottom: clamp(12px, 2vw, 26px);
+  display: flex;
+  flex-direction: column;
   position: fixed;
   right: clamp(12px, 2vw, 26px);
   z-index: 40;
@@ -454,6 +458,7 @@
     inset 0 1px 0 rgb(255 253 250 / 0.22);
   cursor: pointer;
   display: block;
+  min-height: 0;
   padding: 8px;
   position: relative;
   transition:
@@ -461,6 +466,23 @@
     box-shadow 200ms ease;
   width: clamp(120px, 12vw, 168px);
   z-index: 1;
+}
+
+/* Once the embed frame is open, the sleeve stretches to the same width instead of the two
+   rectangles sitting at a mismatched size. The resize is animated by the component's own
+   `layout` prop (framer-motion), not a CSS transition on width/aspect-ratio: aspect-ratio only
+   interpolates smoothly in some browsers, and a fixed target height would fight the auto height
+   this same rule removes. `layout` measures the real before/after box and transform-tweens
+   between them regardless of which CSS property produced the change, and does the same for the
+   nested `.new-year-jazz-art` so the record art scales down with it instead of clipping. A
+   shorter aspect ratio keeps this a slim now-playing bar rather than growing as tall as it is wide. */
+:root[data-theme="new-year"] .new-year-jazz-control.new-year-jazz-control-open {
+  aspect-ratio: 2.8 / 1;
+  width: 100%;
+}
+
+:root[data-theme="new-year"] .new-year-jazz-control.new-year-jazz-control-open .new-year-jazz-art {
+  height: 100%;
 }
 
 .new-year-jazz-control:hover {

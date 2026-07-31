@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { useReducedMotion } from "framer-motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 
 import { useSiteTheme } from "@/hooks/useSiteTheme"
@@ -124,30 +124,44 @@ export function NewYearJazzPlayer() {
 
   if (theme !== "new-year") return null
 
+  const sizeTransition = { duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] as const }
+
   return (
     <div className="new-year-jazz-player">
-      {isPlaying && (
-        <div className="new-year-jazz-frame">
-          <iframe
-            src={JAZZ_EMBED_SRC}
-            title={t("playJazz")}
-            allow="autoplay; encrypted-media; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
-        </div>
+      <AnimatePresence>
+        {isPlaying && (
+          <motion.div
+            key="jazz-frame"
+            className="new-year-jazz-frame"
+            initial={{ clipPath: "inset(0 0 0 100%)" }}
+            animate={{ clipPath: "inset(0 0 0 0%)" }}
+            exit={{ clipPath: "inset(0 0 0 100%)" }}
+            transition={sizeTransition}>
+            <iframe
+              src={JAZZ_EMBED_SRC}
+              title={t("playJazz")}
+              allow="autoplay; encrypted-media; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!isPlaying && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src="/UI/new-year/lofi-new-year-girl.png" alt="" className="new-year-jazz-listener" aria-hidden="true" />
       )}
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/UI/new-year/lofi-new-year-girl.png" alt="" className="new-year-jazz-listener" aria-hidden="true" />
-
-      <button
+      <motion.button
+        layout
+        transition={sizeTransition}
         type="button"
-        className="new-year-jazz-control"
+        className={`new-year-jazz-control${isPlaying ? " new-year-jazz-control-open" : ""}`}
         aria-label={isPlaying ? t("pauseJazz") : t("playJazz")}
         aria-pressed={isPlaying}
         onClick={toggle}>
-        <svg aria-hidden="true" viewBox="0 0 200 160" className="new-year-jazz-art">
+        <motion.svg layout transition={sizeTransition} aria-hidden="true" viewBox="0 0 200 160" className="new-year-jazz-art">
           {/* Sleeve */}
           <path d="M6 16H150C160 16 166 22 166 32V144C166 152 160 156 152 156H14C8 156 6 150 6 144Z" fill="#123d2c" />
           <path d="M6 16H150C160 16 166 22 166 32V44H6Z" fill="#0b2a1e" />
@@ -175,7 +189,7 @@ export function NewYearJazzPlayer() {
           {/* A sprig so the player belongs to the season */}
           <path d="M140 132q12-10 22-4" stroke="#1d5c40" strokeWidth="5" strokeLinecap="round" fill="none" />
           <circle cx="158" cy="126" r="5" fill="#c81a30" />
-        </svg>
+        </motion.svg>
 
         {/* The level meter sits in the sleeve's lower band */}
         <canvas ref={canvasRef} className="new-year-jazz-meter" aria-hidden="true" />
@@ -183,7 +197,7 @@ export function NewYearJazzPlayer() {
         <span className="new-year-jazz-state" aria-hidden="true">
           {isPlaying ? "❙❙" : "▶"}
         </span>
-      </button>
+      </motion.button>
     </div>
   )
 }
