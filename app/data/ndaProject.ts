@@ -74,6 +74,8 @@ export const ndaAchievements: NdaAchievements = {
   "Re-created publish buffer functionality in 8 hours (MVP) - this is my record": undefined,
   "Created support-outreach-tool-sdk and it's basically DB callers and state setters that would allow to supportSDK.sendMessage - supportSDK.createTicket stuff like that":
     undefined,
+  "Created new year and halloween themes for /scraper and /emails route": undefined,
+  "Wrote clean code because of eslint - fixed ~9-12k eslint warnings ~500 eslint errors in 19 days": undefined,
 }
 
 const pickAchievements = (...descriptions: string[]): NdaAchievements =>
@@ -99,6 +101,7 @@ export const ndaAchievementSections: NdaAchievementSections = {
     "Built email account stats dashboard tracking 20,000+ sent emails across 12+ domains — real-time animated charts, per-account/outreached/unsubscribed breakdown, goal tracking with % completion",
     'achieved near "golden ratio" on /emails and /dnc UX balance - reduced avg mouse travel path on /dnc by moving input section to top and on /emails by implementing keyboard hotkeys',
     "shipped full support ticket system in ~7 days — leveraged 5x prior builds, actual: enterprise-scale UI with sub-domain support panel, rate limit controls, drag & drop, Turnstile spam protection",
+    "Created new year and halloween themes for /scraper and /emails route",
   ),
   dialerCalling: pickAchievements(
     "Created GSM so that employees can call from laptop instead of phone using Kotlin",
@@ -148,5 +151,6 @@ export const ndaAchievementSections: NdaAchievementSections = {
     "scaled infra to 2 VPS — trigger: organic demand growth, zero downtime during transition",
     "Created setup for github actions (CI) - not CD please stop this was not CD there - and so it just builds on github actions and VPS just pulls docker image - so VPS is not under heavy load because of build so API requests not fail and keep speed so users more happy (yes Buffer?)",
     "Re-created publish buffer functionality in 8 hours (MVP) - this is my record",
+    "Wrote clean code because of eslint - fixed ~9-12k eslint warnings ~500 eslint errors in 19 days",
   ),
 }
