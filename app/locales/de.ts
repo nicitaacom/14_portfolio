@@ -133,7 +133,7 @@ export default {
     projectRizLabel: "Riz Admin-Dashboard",
     projectRizTask: "Ein UI im Admin-Dashboard hinzufügen, um Personen zu erstellen, zu aktualisieren und zu löschen.",
     projectRizCollaboration:
-      "- CMS für ein Dating-Startup mit React - Next.js - TypeScript - Tailwind - MongoDB erstellt\n- i18n EN/IT erstellt\n- Die Notwendigkeit von Nest.js beseitigt, indem Next.js für die Backend-Arbeit verwendet wurde",
+      "- 🗂️ CMS für ein Dating-Startup mit React - Next.js - TypeScript - Tailwind - MongoDB erstellt\n- 🌐 i18n EN/IT erstellt\n- ⚡ Die Notwendigkeit von Nest.js beseitigt, indem Next.js für die Backend-Arbeit verwendet wurde",
   },
   ndaProject: {
     preview: {
@@ -198,7 +198,7 @@ export default {
       label: "Nexgem Automatisierungsplattform",
       task: "Sichere Auth für eine n8n-Automatisierungsplattform bauen und eine Architektur für Chatbot-Automatisierungen entwerfen.",
       contribution:
-        "- Sichere Auth mit einer starken UI für eine n8n-Automatisierungsplattform erstellt\n- Architekturübersicht für Chatbot-Automatisierungen mit Copy-Paste-Widget erstellt",
+        "- 🔐 Sichere Auth mit einer starken UI für eine n8n-Automatisierungsplattform erstellt\n- 🧩 Architekturübersicht für Chatbot-Automatisierungen mit Copy-Paste-Widget erstellt",
     },
   },
   appointment: {

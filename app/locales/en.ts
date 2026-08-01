@@ -131,7 +131,7 @@ export default {
     projectRizLabel: "Riz admin dashboard",
     projectRizTask: "Add a UI in the admin dashboard to create, update, and delete people.",
     projectRizCollaboration:
-      "- Created CMS for startup about dating using React - Next.js - TypeScript - Tailwind - MongoDB\n- Created i18n EN/IT\n- Illuminated (removed) need in Nest.js by using Next.js for backend work",
+      "- 🗂️ Created CMS for startup about dating using React - Next.js - TypeScript - Tailwind - MongoDB\n- 🌐 Created i18n EN/IT\n- ⚡ Illuminated (removed) need in Nest.js by using Next.js for backend work",
   },
   ndaProject: {
     preview: {
@@ -195,7 +195,7 @@ export default {
       label: "Nexgem automation platform",
       task: "Build secure auth for an n8n automation platform and design the architecture for chatbot automations.",
       contribution:
-        "- Created secure auth with an awesome UI for the n8n automation platform\n- Created the architecture overview for chatbot automations with a copy-paste widget",
+        "- 🔐 Created secure auth with an awesome UI for the n8n automation platform\n- 🧩 Created the architecture overview for chatbot automations with a copy-paste widget",
     },
   },
   appointment: {

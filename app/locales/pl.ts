@@ -196,7 +196,7 @@ export default {
       label: "Platforma automatyzacji Nexgem",
       task: "Zbudować bezpieczne auth dla platformy automatyzacji n8n i zaprojektować architekturę automatyzacji chatbotów.",
       contribution:
-        "- Stworzyłem bezpieczne auth ze świetnym UI dla platformy automatyzacji n8n\n- Stworzyłem przegląd architektury automatyzacji chatbotów z widgetem kopiuj-wklej",
+        "- 🔐 Stworzyłem bezpieczne auth ze świetnym UI dla platformy automatyzacji n8n\n- 🧩 Stworzyłem przegląd architektury automatyzacji chatbotów z widgetem kopiuj-wklej",
     },
   },
   appointment: {
