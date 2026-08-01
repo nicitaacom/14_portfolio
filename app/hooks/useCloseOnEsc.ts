@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-export const useCloseOnClickEsc = (closeFn: () => void) => {
+export const useCloseOnEsc = (closeFn: () => void) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
