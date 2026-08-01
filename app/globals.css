@@ -310,6 +310,11 @@
     z-index: 1;
   }
 
+  .navbar-repo-scroll-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);
+  }
+
   .machine-face {
     background: linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep)));
     border: 1px solid hsl(var(--brass) / 0.35);
@@ -1472,30 +1477,8 @@ body.modal-open .gearset-reverse {
   position: relative;
   z-index: 2;
 }
-.navbar-right-shadow::before {
-  content: "";
-  position: absolute;
-  width: 112px;
-  height: 100%;
-  right: 100%;
-  top: 0;
-  background: linear-gradient(to left, hsl(var(--steel-deep) / 0.92), hsl(var(--wood) / 0.78) 38%, transparent);
-  z-index: 10;
-  pointer-events: none;
-}
 
 .navbar-left-shadow {
   position: relative;
   z-index: 2;
-}
-.navbar-left-shadow::after {
-  content: "";
-  position: absolute;
-  width: 80px;
-  height: 100%;
-  left: 100%;
-  top: 0;
-  background: linear-gradient(to right, hsl(var(--wood)), transparent);
-  z-index: 10;
-  pointer-events: none;
 }

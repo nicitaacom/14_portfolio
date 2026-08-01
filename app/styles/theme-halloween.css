@@ -468,10 +468,6 @@
   opacity: 1;
 }
 
-:root[data-theme="halloween"] .navbar-left-shadow::after,
-:root[data-theme="halloween"] .navbar-right-shadow::before {
-  background: linear-gradient(90deg, transparent, rgb(78 58 99 / 0.3), transparent);
-}
 
 :root[data-theme="halloween"] .navbar-bezel,
 :root[data-theme="halloween"] .navbar-repo-wavefield {

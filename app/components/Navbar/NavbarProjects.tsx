@@ -42,7 +42,7 @@ export function NavbarProjects({
     <div className="navbar-repo-wavefield relative isolate hidden desktop:flex flex-1 min-w-0 overflow-hidden pb-[6px]">
       <NavbarWaves ref={navbarWavesRef} />
       <div
-        className="relative z-[1] w-full overflow-x-hidden cursor-grab py-xs"
+        className="navbar-repo-scroll-mask relative z-[1] w-full overflow-x-hidden cursor-grab py-xs"
         ref={wrapperRef}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchDown}

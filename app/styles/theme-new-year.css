@@ -1213,15 +1213,6 @@
     inset 0 1px 0 rgb(255 253 250 / 0.2);
 }
 
-/* No snow trim along the navbar. The strip was inset 12px from each end, so it began and ended
-   in mid-air rather than at the plate's corners, and read as a row that had been cut off. The
-   project cards are where snow settles in this theme */
-
-:root[data-theme="new-year"] .navbar-left-shadow::after,
-:root[data-theme="new-year"] .navbar-right-shadow::before {
-  display: none;
-}
-
 :root[data-theme="new-year"] .navbar-engraved {
   color: var(--new-year-snow-dim);
   font-family: var(--font-holiday), Georgia, serif;
