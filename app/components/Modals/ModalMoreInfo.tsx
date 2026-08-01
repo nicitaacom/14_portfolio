@@ -7,18 +7,28 @@ import { CollaborationIcon } from "../CollaborationIcon"
 
 import { PiTelegramLogoBold } from "react-icons/pi"
 import { RiDiscordLine } from "react-icons/ri"
-import { FiCalendar, FiUsers, FiFileText, FiLayers } from "react-icons/fi"
+import { FiCalendar, FiUsers, FiFileText, FiLayers, FiArrowUpRight } from "react-icons/fi"
 import { useScopedI18n } from "@/locales/client"
 import { NewYearModalStillLife } from "@/components/NewYear/NewYearModalStillLife"
 import { NewYearSnowParticleField } from "@/components/NewYear/NewYearSnowParticleField"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { resolveNewYearGreetingImage } from "@/utils/resolveNewYearGreetingImage"
 
+// section name -> (achievement description -> optional proof link)
+export type GroupedAchievements = Record<string, Record<string, string | undefined>>
+
 export interface Collaborator {
   name?: string
   imgSrc?: string
   collaboratorUrl?: string
-  description: ReactNode
+  description: ReactNode | GroupedAchievements
+}
+
+function isGroupedAchievements(description: unknown): description is GroupedAchievements {
+  if (typeof description !== "object" || description === null || Array.isArray(description)) return false
+  return Object.values(description).every(
+    section => typeof section === "object" && section !== null && !Array.isArray(section),
+  )
 }
 
 interface ModalInfoProps {
@@ -35,7 +45,61 @@ interface ModalInfoProps {
   contributionTitle?: string
 }
 
-function DescriptionContent({ description }: { description: ReactNode }) {
+function formatAchievement(description: string) {
+  return description.charAt(0).toUpperCase() + description.slice(1)
+}
+
+function GroupedAchievementsContent({ description }: { description: GroupedAchievements }) {
+  const t = useScopedI18n("projectModal")
+
+  return (
+    <div className="flex flex-col gap-y-lg">
+      {Object.entries(description).map(([sectionTitle, achievements]) => (
+        <section key={sectionTitle} className="flex flex-col gap-y-sm">
+          <h2 className="text-sm font-bold tracking-wide text-secondary">{sectionTitle}</h2>
+          <div className="grid grid-cols-1 gap-sm">
+            {Object.entries(achievements).map(([achievementDescription, proofLink]) => (
+              <article
+                key={achievementDescription}
+                className="group flex items-start gap-sm rounded-md border border-secondary-foreground/10 bg-primary/35 p-sm transition-colors duration-200 hover:border-secondary-foreground/20">
+                <p className="min-w-0 flex-1 text-sm leading-relaxed text-secondary-foreground/75">
+                  {formatAchievement(achievementDescription)}
+                </p>
+                {proofLink && (
+                  <div className="flex shrink-0 justify-end">
+                    <Button
+                      aria-label={t("proofAriaLabel", { description: formatAchievement(achievementDescription) })}
+                      className="proof-control group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
+                      onClick={() =>
+                        window.open(
+                          proofLink.startsWith("http") ? proofLink : `https://${proofLink}`,
+                          "_blank",
+                          "noopener,noreferrer",
+                        )
+                      }
+                      type="button">
+                      <span className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111]">
+                        {t("proof")}
+                      </span>
+                      <FiArrowUpRight
+                        size={13}
+                        aria-hidden="true"
+                        className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111] group-hover/proof:translate-x-[2px] group-hover/proof:-translate-y-[2px]"
+                      />
+                    </Button>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+function DescriptionContent({ description }: { description: ReactNode | GroupedAchievements }) {
+  if (isGroupedAchievements(description)) return <GroupedAchievementsContent description={description} />
   if (typeof description !== "string") return <>{description}</>
 
   return (

@@ -5,6 +5,7 @@ import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"
 import { projectStacks } from "@/data/projectStacks"
+import { project26Achievements } from "@/data/project26Achievements"
 
 export default function ModalMoreInfo26() {
   const { isOpen, closeModal } = useModalsStore()
@@ -22,7 +23,7 @@ export default function ModalMoreInfo26() {
       collaborators={[
         {
           imgSrc: webAvatar.src,
-          description: t("project26Collaboration"),
+          description: project26Achievements,
         },
       ]}
     />

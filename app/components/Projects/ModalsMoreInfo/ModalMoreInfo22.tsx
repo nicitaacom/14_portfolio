@@ -4,6 +4,7 @@ import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
 import { projectStacks } from "@/data/projectStacks"
+import { project22Achievements } from "@/data/project22Achievements"
 
 export default function ModalMoreInfo22() {
   const { isOpen, closeModal } = useModalsStore()
@@ -19,7 +20,7 @@ export default function ModalMoreInfo22() {
       stack={projectStacks.project22}
       deadline="1 month"
       collaborators={[
-        { description: t("project22Owner") },
+        { description: project22Achievements },
         {
           name: "ottakist",
           imgSrc: "/collaborations/22_aer/ottakist.png",

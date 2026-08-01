@@ -102,6 +102,8 @@ export default {
   projectModal: {
     collaboration: "Collaboration",
     deadline: "Deadline",
+    proof: "Proof",
+    proofAriaLabel: "View proof for: {description}",
     projectTask: "Project task",
     projectStack: "Project stack",
     whatIDid: "What I did",
@@ -114,8 +116,6 @@ export default {
     project16Task: "Create a high-conversion restaurant site with booking and delivery options.",
     project16CollaborationLead: "Scroll in ModalMenu.tsx",
     project22Task: "Create a website that sells bags.",
-    project22Owner:
-      "Rest of the Figma design\n\nTeam leader:\nNotion organization\nPull request reviews\nTask assignment\n\nPages:\nroot - navbar + animations\n/ - whole page\n/products - dropdown\n/about - whole page",
     project22Ottakist:
       "Initial Figma design\n\nPull request reviews\nTask completion\n\nPages:\nroot - Tailwind setup\n/products - whole page\n/product - whole page",
     project22Arif:
@@ -126,8 +126,6 @@ export default {
     project24Task: "Create a dashboard with MUI.",
     project24Collaboration: "Whole site\n\nFunctionality:\nAdvanced dark mode\nAuth with Clerk",
     project26Task: "Create a full-stack restaurant website.",
-    project26Collaboration:
-      "- login / register functionality\n- custom support chat with USER / SUPPORT / ADMIN roles\n- admin panel where ADMIN can add / edit / delete food\n- PayPal payment setup\n- Supabase setup\n- order delivery flow with Google Maps API\n- CHEF dashboard setup\n- frontend and backend development\n- task organization in GitHub Projects\n- project documentation\n- scalability improvements",
     projectRizLabel: "Riz admin dashboard",
     projectRizTask: "Add a UI in the admin dashboard to create, update, and delete people.",
     projectRizCollaboration:
@@ -141,9 +139,6 @@ export default {
       description: "Private clients, domains, and code. Outcomes do not.",
       identityProtected: "Identity protected",
       outcomes: "{count} outcomes",
-    },
-    card: {
-      confidentialEngagement: "Confidential engagement",
     },
     modal: {
       label: "NDA",

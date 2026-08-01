@@ -104,6 +104,8 @@ export default {
   projectModal: {
     collaboration: "Zusammenarbeit",
     deadline: "Deadline",
+    proof: "Nachweis",
+    proofAriaLabel: "Nachweis ansehen für: {description}",
     projectTask: "Projektaufgabe",
     projectStack: "Projekt-Stack",
     whatIDid: "Was ich umgesetzt habe",
@@ -116,8 +118,6 @@ export default {
     project16Task: "Eine Restaurant-Website mit hoher Conversion, Buchungssystem und Lieferoption erstellen.",
     project16CollaborationLead: "Siehe in ModalMenu.tsx",
     project22Task: "Eine Website erstellen, die Taschen verkauft.",
-    project22Owner:
-      "Rest des Figma-Designs\n\nTeamleiter:\nNotion-Organisation\nPull-Request-Reviews\nAufgabenverteilung\n\nSeiten:\nroot - navbar + animations\n/ - komplette Seite\n/products - Dropdown\n/about - komplette Seite",
     project22Ottakist:
       "Ursprüngliches Figma-Design\n\nPull-Request-Reviews\nAufgabenbearbeitung\n\nSeiten:\nroot - Tailwind-Setup\n/products - komplette Seite\n/product - komplette Seite",
     project22Arif:
@@ -128,8 +128,6 @@ export default {
     project24Task: "Ein Dashboard mit MUI erstellen.",
     project24Collaboration: "Gesamte Website\n\nFunktionalität:\nFortgeschrittener dark mode\nAuth mit Clerk",
     project26Task: "Eine Full-Stack-Website für ein Restaurant erstellen.",
-    project26Collaboration:
-      "- Login / Registrierung\n- eigener support chat mit USER / SUPPORT / ADMIN Rollen\n- Admin-Panel, in dem ADMIN Essen hinzufügen / bearbeiten / löschen kann\n- PayPal-Zahlungsintegration\n- Supabase-Setup\n- Bestelllieferung mit Google Maps API\n- CHEF-Dashboard-Setup\n- Frontend- und Backend-Entwicklung\n- Aufgabenorganisation in GitHub Projects\n- Projektdokumentation\n- Verbesserungen der Skalierbarkeit",
     projectRizLabel: "Riz Admin-Dashboard",
     projectRizTask: "Ein UI im Admin-Dashboard hinzufügen, um Personen zu erstellen, zu aktualisieren und zu löschen.",
     projectRizCollaboration:

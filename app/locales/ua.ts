@@ -101,6 +101,8 @@ export default {
   projectModal: {
     collaboration: "Участь",
     deadline: "Термін",
+    proof: "Доказ",
+    proofAriaLabel: "Переглянути доказ: {description}",
     projectTask: "Завдання проєкту",
     projectStack: "Стек проєкту",
     whatIDid: "Що я зробив",
@@ -113,8 +115,6 @@ export default {
     project16Task: "Зробити ресторанний сайт із високою конверсією, бронюванням і доставкою.",
     project16CollaborationLead: "Дивись у ModalMenu.tsx",
     project22Task: "Зробити сайт, який продає сумки.",
-    project22Owner:
-      "Решта Figma-дизайну\n\nTeam lead:\nОрганізація в Notion\nРев'ю pull request\nПостановка задач\n\nСторінки:\nroot - navbar + animations\n/ - уся сторінка\n/products - dropdown\n/about - уся сторінка",
     project22Ottakist:
       "Початковий дизайн у Figma\n\nРев'ю pull request\nВиконання задач\n\nСторінки:\nroot - налаштування Tailwind\n/products - уся сторінка\n/product - уся сторінка",
     project22Arif:
@@ -125,8 +125,6 @@ export default {
     project24Task: "Зробити dashboard на MUI.",
     project24Collaboration: "Увесь сайт\n\nФункціональність:\nПросунутий dark mode\nAuth через Clerk",
     project26Task: "Зробити full-stack сайт для ресторану.",
-    project26Collaboration:
-      "- логін / реєстрація\n- кастомний support chat з ролями USER / SUPPORT / ADMIN\n- адмін-панель, де ADMIN може додавати / редагувати / видаляти їжу\n- налаштування оплати через PayPal\n- налаштування Supabase\n- логіка доставки замовлень через Google Maps API\n- налаштування CHEF dashboard\n- frontend і backend розробка\n- організація задач у GitHub Projects\n- документація проєкту\n- покращення масштабованості",
     projectRizLabel: "Адмін-панель Riz",
     projectRizTask: "Додати UI в admin dashboard для створення, оновлення та видалення людей.",
     projectRizCollaboration:

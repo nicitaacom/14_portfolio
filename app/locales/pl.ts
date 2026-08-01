@@ -103,6 +103,8 @@ export default {
   projectModal: {
     collaboration: "Współpraca",
     deadline: "Termin",
+    proof: "Dowód",
+    proofAriaLabel: "Zobacz dowód dla: {description}",
     projectTask: "Zadanie projektu",
     projectStack: "Stack projektu",
     whatIDid: "Co zrobiłem",
@@ -115,8 +117,6 @@ export default {
     project16Task: "Stworzyć restauracyjną stronę z wysoką konwersją, systemem rezerwacji i opcją dostawy.",
     project16CollaborationLead: "Zobacz w ModalMenu.tsx",
     project22Task: "Stworzyć stronę, która sprzedaje torby.",
-    project22Owner:
-      "Reszta projektu Figma\n\nTeam leader:\nOrganizacja w Notion\nReview pull requestów\nPrzydzielanie zadań\n\nStrony:\nroot - navbar + animations\n/ - cała strona\n/products - dropdown\n/about - cała strona",
     project22Ottakist:
       "Początkowy projekt Figma\n\nReview pull requestów\nRealizacja zadań\n\nStrony:\nroot - konfiguracja Tailwind\n/products - cała strona\n/product - cała strona",
     project22Arif:
@@ -127,8 +127,6 @@ export default {
     project24Task: "Stworzyć dashboard w MUI.",
     project24Collaboration: "Cała strona\n\nFunkcjonalność:\nZaawansowany dark mode\nAuth z Clerk",
     project26Task: "Stworzyć full-stackową stronę dla restauracji.",
-    project26Collaboration:
-      "- logowanie / rejestracja\n- własny support chat z rolami USER / SUPPORT / ADMIN\n- panel admina, w którym ADMIN może dodawać / edytować / usuwać jedzenie\n- konfiguracja płatności PayPal\n- konfiguracja Supabase\n- logika dostawy zamówień przez Google Maps API\n- konfiguracja CHEF dashboard\n- rozwój frontendu i backendu\n- organizacja zadań w GitHub Projects\n- dokumentacja projektu\n- poprawa skalowalności",
     projectRizLabel: "Panel administracyjny Riz",
     projectRizTask: "Dodać UI w admin dashboard do tworzenia, aktualizowania i usuwania osób.",
     projectRizCollaboration:
@@ -142,9 +140,6 @@ export default {
       description: "Klienci, domeny i kod pozostają poufne. Rezultaty nie.",
       identityProtected: "Tożsamość chroniona",
       outcomes: "{count} rezultatów",
-    },
-    card: {
-      confidentialEngagement: "Poufne zlecenie",
     },
     modal: {
       label: "NDA",
