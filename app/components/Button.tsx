@@ -81,7 +81,9 @@ export function Button({
         }}
         {...props}>
         {isRequestControl ? (
-          <span className="halloween-request-content new-year-request-content">{children}</span>
+          <span className="halloween-request-content new-year-request-content flex flex-row items-center justify-center gap-x-xs">
+            {children}
+          </span>
         ) : (
           children
         )}
