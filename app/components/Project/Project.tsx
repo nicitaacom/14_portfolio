@@ -46,7 +46,7 @@ export function Project({
   projectGroup,
 }: ProjectProps) {
   const t = useScopedI18n("common")
-  const previewClassName = "machine-bezel group relative block min-h-0 w-full flex-1 overflow-hidden"
+  const previewClassName = "machine-bezel border-0 group relative block min-h-0 w-full flex-1 overflow-hidden"
 
   return (
     <div className="site-card pipe-frame relative w-full tablet:h-[720px] h-[784px]">
