@@ -152,9 +152,11 @@ export function ModalMoreInfo({
   const t = useScopedI18n("projectModal")
   const commonT = useScopedI18n("common")
   const theme = useSiteTheme()
-  const resolvedContributionTitle = contributionTitle ?? t("whatIDid")
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selected = collaborators[selectedIndex]
+  const resolvedContributionTitle =
+    contributionTitle ??
+    (collaborators.length > 1 && selected?.name ? t("whatCollaboratorDid", { name: selected.name }) : t("whatIDid"))
   const newYearGreetingImage = useMemo(() => resolveNewYearGreetingImage(new Date().getFullYear()), [])
 
   return (

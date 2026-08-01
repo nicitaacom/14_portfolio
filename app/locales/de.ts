@@ -109,6 +109,7 @@ export default {
     projectTask: "Projektaufgabe",
     projectStack: "Projekt-Stack",
     whatIDid: "Was ich umgesetzt habe",
+    whatCollaboratorDid: "Was {name} umgesetzt hat",
     selectedContributorOutcomes: "Aufgaben und Ergebnisse der ausgewählten Person",
     similarSite: "Du willst eine ähnliche Website? Schreib mir:",
     wholeSite: "Gesamte Website",
