@@ -51,7 +51,7 @@ export function ScheduleAppointmentModal() {
   return (
     <ModalContainer
       className={twMerge(
-        "duration-300 w-[94vw] max-h-[88vh]",
+        "appointment-modal-frame duration-300 w-[94vw] max-h-[88vh]",
         step === "step-1" && "max-w-[620px]",
         step === "step-2" && "max-w-[660px]",
         step === "step-3" && "max-w-[620px]",

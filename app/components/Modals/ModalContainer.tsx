@@ -8,6 +8,7 @@ import { IoMdClose } from "react-icons/io"
 
 import { HalloweenFrameOrnaments } from "@/components/Halloween/HalloweenFrameOrnaments"
 import { NewYearModalChimney } from "@/components/NewYear/NewYearModalChimney"
+import { NewYearModalIce } from "@/components/NewYear/NewYearModalIce"
 import { NewYearModalPullClose } from "@/components/NewYear/NewYearModalPullClose"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 
@@ -32,6 +33,8 @@ export function ModalContainer({
   const theme = useSiteTheme()
   const showNewYearCloseBell = theme === "new-year"
   const showNewYearChimney = showNewYearCloseBell && className?.includes("project-more-info-modal")
+  /* Only the appointment modal is built out of ice - the album modals keep their wood frame */
+  const showNewYearIce = showNewYearCloseBell && className?.includes("appointment-modal-frame")
 
   /* onOpen - show modal - disable scroll and scrollbar - hide navbar - show bg */
   useEffect(() => {
@@ -93,6 +96,7 @@ export function ModalContainer({
             transition={{ duration: 0.25 }}
             {...modalHandler}>
             {showNewYearChimney && <NewYearModalChimney />}
+            {showNewYearIce && <NewYearModalIce />}
             <HalloweenFrameOrnaments variant="modal" />
             <span aria-hidden="true" className="halloween-only halloween-modal-skull" />
             <div aria-hidden="true" className="modal-frame-hardware pointer-events-none absolute inset-[0] z-20">
