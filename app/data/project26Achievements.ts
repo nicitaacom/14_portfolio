@@ -1,6 +1,20 @@
 import { GroupedAchievements } from "@/components/Modals/ModalMoreInfo"
 
 export const project26Achievements: GroupedAchievements = {
+  "🔴 Real-time": {
+    "Created custom support chat with USER / SUPPORT / ADMIN roles": undefined,
+  },
+  "💳 Payments": {
+    "Created card + Apple + Google + PayPal + MetaMask payment with MetaMask API + Stripe SDK": undefined,
+  },
+  "🔐 Auth": {
+    "Created OAuth with Google to keep security and simplify auth flow using Supabase SDK and GCP": undefined,
+    "Created role-based authentication system with Google and number verification using GCP and Twilio SDK":
+      undefined,
+  },
+  "⚡ Performance": {
+    "Increased performance up to 81/100 on mobile and 95/100 on desktop using Next.js SSR and ISR": undefined,
+  },
   "🎨 Frontend": {
     "Created reusable components using React and implemented state management using Zustand": undefined,
     "Created responsive website by using best practices such as DRY, SOLID, KISS": undefined,
@@ -21,17 +35,6 @@ export const project26Achievements: GroupedAchievements = {
     "Created Figma design and responsive website from that design (320px - 2560px)": undefined,
     "Designed UI/UX for whole site in Figma": undefined,
   },
-  "⚡ Performance": {
-    "Increased performance up to 81/100 on mobile and 95/100 on desktop using Next.js SSR and ISR": undefined,
-  },
-  "💳 Payments": {
-    "Created card + Apple + Google + PayPal + MetaMask payment with MetaMask API + Stripe SDK": undefined,
-  },
-  "🔐 Auth": {
-    "Created OAuth with Google to keep security and simplify auth flow using Supabase SDK and GCP": undefined,
-    "Created role-based authentication system with Google and number verification using GCP and Twilio SDK":
-      undefined,
-  },
   "🚦 Rate limiting": {
     "Implemented SPAM protection using rate limiting and allowing only authenticated users to use it": undefined,
   },
@@ -44,9 +47,6 @@ export const project26Achievements: GroupedAchievements = {
     'Created "Show map" functionality so deliveryman can see place on map using Google Maps API': undefined,
     "Improved UX of creating food using Admin CMS": undefined,
     "Created AI search bar to improve UX and CX and reduce support costs using OpenAI API and Upstash": undefined,
-  },
-  "🔴 Real-time": {
-    "Created custom support chat with USER / SUPPORT / ADMIN roles": undefined,
   },
   "🛠️ DevOps": {
     "Deployed on Vercel": undefined,

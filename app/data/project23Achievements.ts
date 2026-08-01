@@ -9,6 +9,19 @@ export const project23Achievements: GroupedAchievements = {
     "Created i18n with AI - so when somebody adds product in English it translates it into 4 languages (used Lambda for this in order to optimize UX)":
       undefined,
   },
+  "🔴 Real-time": {
+    "Created custom chat with USER / SUPPORT / ADMIN roles handling up to 200,000 messages/day and 100 concurrent connections via Pusher.js + Telegram API":
+      undefined,
+  },
+  "💳 Payments": {
+    "Created Web3 payment with MetaMask API + Stripe SDK + PayPal": undefined,
+    "Implemented CoinMarketCap API to convert crypto-currency to USD": undefined,
+  },
+  "⚡ Performance": {
+    "Improved Lighthouse mobile score 35 → 85 in under 20 hours — SSG/ISR + added metadata":
+      "https://i.imgur.com/Sj9hEBE.png",
+    "Scaled to 77 users/day - 222 unique visitors per 7 days": "https://youtu.be/4TiYacof9M8",
+  },
   "🧩 Backend": {
     "Created frontend with React using Next.js framework and backend with Supabase and API routes":
       "https://github.com/nicitaacom/23_store/tree/development/app/api",
@@ -23,19 +36,6 @@ export const project23Achievements: GroupedAchievements = {
       "https://github.com/nicitaacom/23_store/blob/development/app/api/dev_readme.md",
     "Created custom email when user gets check after purchasing or confirm email using Resend SDK": undefined,
     "Created custom email when user ask for better prices": undefined,
-  },
-  "🔴 Real-time": {
-    "Created custom chat with USER / SUPPORT / ADMIN roles handling up to 200,000 messages/day and 100 concurrent connections via Pusher.js + Telegram API":
-      undefined,
-  },
-  "⚡ Performance": {
-    "Improved Lighthouse mobile score 35 → 85 in under 20 hours — SSG/ISR + added metadata":
-      "https://i.imgur.com/Sj9hEBE.png",
-    "Scaled to 77 users/day - 222 unique visitors per 7 days": "https://youtu.be/4TiYacof9M8",
-  },
-  "💳 Payments": {
-    "Created Web3 payment with MetaMask API + Stripe SDK + PayPal": undefined,
-    "Implemented CoinMarketCap API to convert crypto-currency to USD": undefined,
   },
   "🛠️ DevOps": {
     "Manually e2e tested and used Cypress for tests": undefined,
