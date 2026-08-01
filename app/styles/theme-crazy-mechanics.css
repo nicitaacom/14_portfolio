@@ -101,6 +101,9 @@
 :root[data-theme="crazy-mechanics"] .paper-tab,
 :root[data-theme="crazy-mechanics"] .modal-title-label {
   font-family: var(--font-typewriter), monospace;
+  /* --secondary sits at ~87% lightness, almost matching --paper (88%) underneath
+     these labels, so the default label ink is nearly invisible here. */
+  color: hsl(var(--wood));
 }
 
 :root[data-theme="crazy-mechanics"] .navbar-plate {
