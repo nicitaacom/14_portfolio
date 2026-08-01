@@ -7,7 +7,7 @@ import { CollaborationIcon } from "../CollaborationIcon"
 
 import { PiTelegramLogoBold } from "react-icons/pi"
 import { RiDiscordLine } from "react-icons/ri"
-import { FiCalendar, FiUsers, FiFileText, FiExternalLink, FiLayers } from "react-icons/fi"
+import { FiCalendar, FiUsers, FiFileText, FiLayers } from "react-icons/fi"
 import { useScopedI18n } from "@/locales/client"
 import { NewYearModalStillLife } from "@/components/NewYear/NewYearModalStillLife"
 import { NewYearSnowParticleField } from "@/components/NewYear/NewYearSnowParticleField"
@@ -98,7 +98,8 @@ export function ModalMoreInfo({
       className="project-more-info-modal flex max-h-[calc(100dvh-1rem)] max-w-[calc(100vw-1rem)] flex-col tablet:max-h-[90vh] tablet:max-w-[900px] laptop:max-w-[1180px] desktop:max-w-[1280px]"
       isOpen={isOpen}
       onClose={onClose}
-      title={badge ?? label}>
+      title={badge ?? label}
+      titleHref={siteUrl}>
       <NewYearModalStillLife />
       <div className="project-modal-content relative z-[1] flex min-h-0 flex-1 flex-col overflow-hidden">
         <header className="project-modal-header relative shrink-0 overflow-hidden border-b border-brass/60 bg-[linear-gradient(to_bottom,hsl(var(--paper)/0.06),transparent_70%)] px-md py-sm pr-xl shadow-[0_2px_0_rgb(0_0_0/0.22),inset_0_1px_0_rgb(255_255_255/0.1)] tablet:py-md">
@@ -107,36 +108,8 @@ export function ModalMoreInfo({
             aria-hidden="true"
           />
           <div className="relative flex flex-col items-start gap-y-xs">
-            <h1 className="text-lg font-bold tracking-tight text-secondary">
-              {siteUrl ? (
-                <a
-                  className="inline-flex items-center gap-x-sm transition-colors duration-300 hover:text-cta"
-                  href={siteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  {theme === "new-year" ? (
-                    <>
-                      <span className="sr-only">{label}</span>
-                      <NewYearSnowParticleField seedText={label} />
-                    </>
-                  ) : (
-                    label
-                  )}
-                  <FiExternalLink className="opacity-45" size={16} />
-                </a>
-              ) : (
-                <>
-                  {theme === "new-year" ? (
-                    <>
-                      <span className="sr-only">{label}</span>
-                      <NewYearSnowParticleField seedText={label} />
-                    </>
-                  ) : (
-                    label
-                  )}
-                </>
-              )}
-            </h1>
+            <h1 className="sr-only">{label}</h1>
+            {theme === "new-year" && <NewYearSnowParticleField seedText={label} />}
             <span
               className="new-year-modal-greeting-art"
               style={{ "--new-year-greeting-image": `url(${newYearGreetingImage})` } as React.CSSProperties}
