@@ -10,7 +10,7 @@ import { languages } from "@/data/languages"
 import { TLocale } from "@/locales/config"
 import { NEXT_LOCALE_COOKIE_NAME, getLocalizedPathname } from "@/locales/helpers"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
-import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
+import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
 
 export function LanguageDropdown() {
@@ -26,7 +26,7 @@ export function LanguageDropdown() {
   const currentLanguage = languages.find(language => language.code === locale) ?? languages[0]
 
   useCloseOnClickOutside(dropdownContainerRef, () => setIsOpen(false))
-  useCloseOnClickEsc(() => setIsOpen(false))
+  useCloseOnEsc(() => setIsOpen(false))
 
   function changeLanguage(nextLocale: TLocale) {
     if (nextLocale === locale) {

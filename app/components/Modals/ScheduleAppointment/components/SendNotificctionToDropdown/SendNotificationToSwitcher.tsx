@@ -3,7 +3,7 @@
 import { useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
 
-import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
+import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
 import { DropdownContainerContent } from "./DropdownContainerContent"
 
@@ -19,7 +19,7 @@ export function SendNotificationToSwitcher() {
   }
 
   useCloseOnClickOutside(dropdownContainerRef, closeDropdown)
-  useCloseOnClickEsc(closeDropdown)
+  useCloseOnEsc(closeDropdown)
 
   return (
     <div

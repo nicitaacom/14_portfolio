@@ -6,7 +6,7 @@ import { BiSolidDownArrow } from "react-icons/bi"
 import { twMerge } from "tailwind-merge"
 
 import { GMCheckbox } from "@/(site)/appointment/components/GMCheckbox"
-import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
+import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { localizePath } from "@/locales/helpers"
@@ -30,7 +30,7 @@ export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
     setIsShowDropdown(!isShowDropdown)
   }
 
-  useCloseOnClickEsc(closeDropdown)
+  useCloseOnEsc(closeDropdown)
   useCloseOnClickOutside(dropdownContainerRef, closeDropdown)
 
   return (

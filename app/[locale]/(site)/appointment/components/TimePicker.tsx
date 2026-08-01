@@ -6,7 +6,7 @@ import { BiTimeFive } from "react-icons/bi"
 import { twMerge } from "tailwind-merge"
 import moment from "moment"
 
-import { useCloseOnClickEsc } from "@/hooks/useOnClickEsc"
+import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
 import { DEFAULT_APPOINTMENT_TIME_MSK, useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { useSelectedDateStore } from "@/store/useSelectedDateStore"
@@ -30,7 +30,7 @@ export function TimePicker() {
 
   const isHover = hover !== null
 
-  useCloseOnClickEsc(() => setShowDropdown(false))
+  useCloseOnEsc(() => setShowDropdown(false))
   useCloseOnClickOutside(dropdownContainerRef, () => setShowDropdown(false))
 
   const now = moment.tz("Europe/Moscow") // Get current time in MSK timezone
