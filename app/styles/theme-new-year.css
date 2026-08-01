@@ -1637,9 +1637,7 @@
 }
 
 :root[data-theme="new-year"] .site-modal.modal-frame {
-  background: var(--new-year-grain),
-    linear-gradient(90deg, transparent 46%, rgb(200 26 48 / 0.28) 46% 54%, transparent 54%),
-    linear-gradient(145deg, #173f30, #04150f 76%);
+  background: var(--new-year-grain), linear-gradient(145deg, #173f30, #04150f 76%);
   border: 1px solid rgb(217 195 151 / 0.45);
 }
 
@@ -1793,11 +1791,11 @@
   height: 100%;
 }
 
-.new-year-modal-2026-art {
+.new-year-modal-greeting-art {
   display: none;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art {
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-art {
   background: linear-gradient(
     90deg,
     transparent calc(50% - 340px),
@@ -1817,9 +1815,9 @@
   z-index: 1;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::before,
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::after {
-  background-image: url("/UI/new-year/new-year-2026.jpeg");
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-art::before,
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-art::after {
+  background-image: var(--new-year-greeting-image);
   background-repeat: no-repeat;
   background-size: 335% 100%;
   content: "";
@@ -1829,7 +1827,7 @@
   top: 0;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::before {
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-art::before {
   background-position: left center;
   left: 0;
   right: calc(50% - 38px);
@@ -1837,7 +1835,7 @@
   mask-image: linear-gradient(90deg, #000 0 calc(100% - 260px), transparent 100%);
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art::after {
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-art::after {
   background-position: right center;
   left: calc(50% + 38px);
   right: 0;
@@ -1845,7 +1843,7 @@
   mask-image: linear-gradient(90deg, transparent, #000 260px 100%);
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center {
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-center {
   bottom: 0;
   filter: brightness(0.78) saturate(0.82) drop-shadow(-8px 0 7px rgb(237 246 250 / 0.55))
     drop-shadow(8px 0 7px rgb(237 246 250 / 0.55));
@@ -1859,15 +1857,15 @@
   mask-image: linear-gradient(90deg, transparent, #000 32%, #000 68%, transparent);
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::before,
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::after {
-  background: url("/UI/new-year/new-year-2026.jpeg") center / 100% 100% no-repeat;
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-center::before,
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-center::after {
+  background: var(--new-year-greeting-image) center / 100% 100% no-repeat;
   content: "";
   inset: 0;
   position: absolute;
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::before {
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-center::before {
   filter: blur(3.2px);
   opacity: 0.207;
   transform: scale(1.025);
@@ -1875,7 +1873,7 @@
   mask-image: linear-gradient(90deg, transparent, #000 35%, #000 65%, transparent);
 }
 
-:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-center::after {
+:root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-center::after {
   opacity: 0.76;
   -webkit-mask-image: linear-gradient(90deg, transparent 8%, #000 42%, #000 58%, transparent 92%);
   mask-image: linear-gradient(90deg, transparent 8%, #000 42%, #000 58%, transparent 92%);
@@ -2351,7 +2349,7 @@
     padding: 0 3.5rem 0 0;
   }
 
-  :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-2026-art {
+  :root[data-theme="new-year"] .project-more-info-modal .new-year-modal-greeting-art {
     right: -3.5rem;
   }
 
@@ -2383,12 +2381,20 @@
   gap: 1rem;
 }
 
+/* Both boards are only ever a 6px pad around a single panel, so the border, shadow and snow lip
+   they take from .workbench-board drew a second frame directly under the panel's own. They give
+   up all of their chrome and keep only the sticky column placement */
 :root[data-theme="new-year"] .appointment-calendar-board,
 :root[data-theme="new-year"] .appointment-bookings-board {
-  background: linear-gradient(90deg, transparent 0 48%, rgb(200 26 48 / 0.16) 48% 52%, transparent 52%),
-    var(--new-year-knit), var(--theme-board-background);
-  border-color: rgb(217 195 151 / 0.36);
-  border-radius: 18px;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+:root[data-theme="new-year"] .appointment-calendar-board::after,
+:root[data-theme="new-year"] .appointment-bookings-board::after {
+  content: none;
 }
 
 :root[data-theme="new-year"] .appointment-schedule-panel {
@@ -2559,28 +2565,34 @@
   }
 }
 
-@media (max-width: 1023px) {
-  /* Below the two-column split, .appointment-calendar-board and .appointment-bookings-board are
-     only ever a 6px pad around one .machine-panel, so their own border, shadow and snow lip from
-     .workbench-board duplicated the panel's framing right underneath it. Their own chrome is
-     dropped here so only the panel reads as the frame */
-  :root[data-theme="new-year"] .appointment-calendar-board,
-  :root[data-theme="new-year"] .appointment-bookings-board {
-    background: none;
-    border: 0;
-    box-shadow: none;
-  }
-
-  :root[data-theme="new-year"] .appointment-calendar-board::after,
-  :root[data-theme="new-year"] .appointment-bookings-board::after {
-    content: none;
-  }
-}
-
 @media (max-width: 767px) {
   :root[data-theme="new-year"] .appointment-page-shell {
     padding-bottom: 5.5rem;
   }
+}
+
+/* The booking modal is cut from ice: a frozen slab frame with a wall of cubes stacked around it.
+   The canvas overhangs the frame on every side, so the blocks sit half on and half off the edge. */
+.new-year-modal-ice {
+  display: none;
+}
+
+:root[data-theme="new-year"] .new-year-modal-ice {
+  display: block;
+  height: calc(100% + 24px);
+  inset: -12px;
+  pointer-events: none;
+  position: absolute;
+  width: calc(100% + 24px);
+  z-index: 5;
+}
+
+/* Near-black under the ice, so the gaps between the packed cubes read as voids the way they do in
+   a full tray. A light frame would have turned the whole band into one pale slab. */
+:root[data-theme="new-year"] .site-modal.appointment-modal-frame {
+  background: var(--new-year-grain), linear-gradient(158deg, #0c1d2e, #050d16 78%);
+  border: 0;
+  box-shadow: 0 28px 68px var(--new-year-shadow);
 }
 
 /* Booking flow: an opened invitation with frosted controls and knitted detail cards */

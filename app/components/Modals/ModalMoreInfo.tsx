@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useState } from "react"
+import { ReactNode, useMemo, useState } from "react"
 import { Button } from "../Button"
 import { ModalContainer } from "./ModalContainer"
 import { CollaborationIcon } from "../CollaborationIcon"
@@ -12,6 +12,7 @@ import { useScopedI18n } from "@/locales/client"
 import { NewYearModalStillLife } from "@/components/NewYear/NewYearModalStillLife"
 import { NewYearSnowParticleField } from "@/components/NewYear/NewYearSnowParticleField"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
+import { resolveNewYearGreetingImage } from "@/utils/resolveNewYearGreetingImage"
 
 export interface Collaborator {
   name?: string
@@ -90,6 +91,7 @@ export function ModalMoreInfo({
   const resolvedContributionTitle = contributionTitle ?? t("whatIDid")
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selected = collaborators[selectedIndex]
+  const newYearGreetingImage = useMemo(() => resolveNewYearGreetingImage(new Date().getFullYear()), [])
 
   return (
     <ModalContainer
@@ -135,8 +137,11 @@ export function ModalMoreInfo({
                 </>
               )}
             </h1>
-            <span className="new-year-modal-2026-art" aria-hidden="true">
-              <span className="new-year-modal-2026-center" />
+            <span
+              className="new-year-modal-greeting-art"
+              style={{ "--new-year-greeting-image": `url(${newYearGreetingImage})` } as React.CSSProperties}
+              aria-hidden="true">
+              <span className="new-year-modal-greeting-center" />
             </span>
           </div>
         </header>
