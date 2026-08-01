@@ -420,14 +420,30 @@
       linear-gradient(rgb(15 11 16 / 0.62), rgb(12 8 13 / 0.72)),
       url("/UI/crazy-mechanics/crazy-mechanics-brick.webp") center top / 600px auto repeat;
     margin-top: -62px;
-    height: calc(100dvh - 72px);
+    height: calc(100dvh - 4.75rem);
     overflow-y: auto;
     padding-top: calc(4.75rem + 62px);
   }
 
   @media (min-width: 768px) {
     .appointment-rack {
+      height: calc(100dvh - 5.5rem);
       padding-top: calc(5.5rem + 62px);
+    }
+  }
+
+  /* Layout's own min-height floor uses a flat 72px navbar-height guess, which is a couple px
+     short of the real navbar. That floor is invisible everywhere it's shorter than actual page
+     content, but on this route the rack now fits its own precise height and the floor becomes
+     the binding constraint - so it needs the same accurate per-breakpoint value the rack uses. */
+
+  .site-shell:has(.appointment-rack) {
+    min-height: calc(100dvh - 4.75rem);
+  }
+
+  @media (min-width: 768px) {
+    .site-shell:has(.appointment-rack) {
+      min-height: calc(100dvh - 5.5rem);
     }
   }
 
