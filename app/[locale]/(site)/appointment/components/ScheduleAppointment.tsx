@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Calendar } from "react-calendar"
 import { nanoid } from "nanoid"
 import moment from "moment-timezone"
@@ -18,6 +18,7 @@ import { getCookie, setCookie } from "@/utils/helpersCSR"
 import { useScopedI18n } from "@/locales/client"
 
 export function ScheduleAppointment() {
+  const [isMounted, setIsMounted] = useState(false)
   const { selectedDate, setSelectedDate } = useSelectedDateStore()
   const { selectedTime, setSelectedTime } = useSelectedTimeStore()
   const { selectedTimezone, setSelectedTimezone } = useSelectedTimezoneStore()
@@ -42,6 +43,14 @@ export function ScheduleAppointment() {
     if (!getCookie("user_cookie_id")) {
       setCookie("user_cookie_id", nanoid())
     }
+  }, [])
+
+  useEffect(() => {
+    setIsMounted(true)
+    if (selectedDate) return
+    const now = new Date()
+    setSelectedDate(isDateBeforeTodayOrTime(now) ? moment(now).add(1, "day").toDate() : now)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -69,15 +78,17 @@ export function ScheduleAppointment() {
             </div>
           </div>
 
-          <div className="appointment-calendar-shell machine-bezel min-w-0 overflow-hidden px-xs pb-xs">
-            <Calendar
-              onChange={setSelectedDate}
-              value={selectedDate}
-              tileClassName={({ date }) =>
-                isDateBeforeTodayOrTime(date) ? "opacity-40 hover:bg-transparent cursor-not-allowed" : ""
-              }
-              tileDisabled={({ date }) => isDateBeforeTodayOrTime(date)}
-            />
+          <div className="appointment-calendar-shell machine-bezel min-w-0 overflow-hidden px-xs pb-xs min-h-[302px]">
+            {isMounted && (
+              <Calendar
+                onChange={setSelectedDate}
+                value={selectedDate}
+                tileClassName={({ date }) =>
+                  isDateBeforeTodayOrTime(date) ? "opacity-40 hover:bg-transparent cursor-not-allowed" : ""
+                }
+                tileDisabled={({ date }) => isDateBeforeTodayOrTime(date)}
+              />
+            )}
           </div>
 
           <Button

@@ -1,7 +1,4 @@
 import { create } from "zustand"
-import moment from "moment"
-
-import { isDateBeforeTodayOrTime } from "@/utils/isDateBeforeTodayOrTime"
 
 type ValuePiece = Date | null
 
@@ -12,9 +9,11 @@ interface SelectedDateStore {
   setSelectedDate: (value: Value) => void
 }
 
-const tomorrow = moment().add(1, "day").toDate()
-
+// `new Date()` at module scope runs once on the server (server's own timezone) and again on
+// the client (browser's local timezone), so the two renders land on different calendar days
+// near midnight - Next.js flags it as a hydration mismatch. The real default is set client-side
+// in ScheduleAppointment's mount effect instead.
 export const useSelectedDateStore = create<SelectedDateStore>()(set => ({
-  selectedDate: isDateBeforeTodayOrTime(new Date()) ? tomorrow : new Date(),
+  selectedDate: null,
   setSelectedDate: (value: Value) => set({ selectedDate: value }),
 }))
