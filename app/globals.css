@@ -40,6 +40,64 @@
 }
 
 @layer components {
+  /* Gradient background utilities - complex multi-layer gradients that Tailwind utilities don't express */
+  .bg-theme-navbar {
+    background: var(--theme-navbar-background);
+  }
+  .bg-theme-board {
+    background: var(--theme-board-background);
+  }
+  .bg-theme-panel {
+    background: var(--theme-panel-background);
+  }
+  .bg-theme-control {
+    background: var(--theme-control-background);
+  }
+  .bg-theme-label {
+    background: var(--theme-label-background);
+  }
+  .bg-theme-frame {
+    background: var(--theme-frame-background);
+  }
+  .bg-theme-project {
+    background: var(--theme-project-background);
+  }
+  .bg-theme-input {
+    background: var(--theme-input-background);
+  }
+  .bg-theme-modal-frame {
+    background: var(--theme-modal-frame-background);
+  }
+  .bg-theme-modal-surface {
+    background: var(--theme-modal-surface-background);
+  }
+  .bg-theme-appointment {
+    background: var(--theme-appointment-background);
+  }
+  .bg-theme-appointment-modal {
+    background: var(--theme-appointment-modal-background);
+  }
+  .bg-theme-loading {
+    background: var(--theme-loading-background);
+  }
+
+  /* Shadow edge utilities for inset effects */
+  .shadow-theme-top {
+    box-shadow: inset 0 1px 0 var(--theme-top-edge);
+  }
+  .shadow-theme-bottom {
+    box-shadow: inset 0 -1px 0 var(--theme-bottom-edge);
+  }
+  .shadow-theme-inset {
+    box-shadow: inset 0 3px 8px var(--theme-inset-shadow);
+  }
+  .shadow-theme-cast {
+    box-shadow: 0 12px 30px var(--theme-shadow);
+  }
+  .shadow-theme-drop {
+    box-shadow: 0 18px 42px var(--theme-shadow);
+  }
+
   .line {
     @apply border-r-[1px] border-solid border-secondary;
     border-image: linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--primary))) 1 100%;
@@ -187,32 +245,26 @@
   }
 
   .navbar-plate {
-    background:
-      radial-gradient(ellipse 64px 160% at 18% 50%, transparent 0 47px, rgba(0, 0, 0, 0.2) 48px 50px, transparent 51px)
-        padding-box,
-      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 7px, rgba(255, 255, 255, 0.05) 7px 8px)
-        padding-box,
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent 32%, rgba(0, 0, 0, 0.28)) padding-box,
-      linear-gradient(to bottom, hsl(var(--wood)), hsl(var(--wood))) padding-box,
-      linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep))) border-box;
-    background-clip: padding-box, padding-box, padding-box, padding-box, border-box;
-    border: 3px solid transparent;
+    @apply border rounded-b-theme;
+    background: var(--theme-navbar-background);
+    background-clip: padding-box;
+    border-color: var(--theme-trim);
     box-shadow:
-      0 12px 12px rgba(0, 0, 0, 0.75),
-      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      0 12px 30px var(--theme-shadow),
+      inset 0 1px 0 var(--theme-top-edge);
   }
 
   .navbar-plate::before {
+    @apply absolute pointer-events-none z-0;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent 18%, rgba(0, 0, 0, 0.18));
-    border: 1px solid hsl(var(--steel-deep) / 0.72);
+    border: 1px solid var(--theme-trim);
+    border-radius: calc(var(--theme-radius) - 3px);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       0 1px 0 rgba(255, 255, 255, 0.1);
     content: "";
     inset: 3px 3px 9px;
-    pointer-events: none;
-    position: absolute;
-    z-index: 0;
+    opacity: var(--theme-hardware-opacity);
   }
 
   .navbar-plate > * {
@@ -319,11 +371,12 @@
   }
 
   .machine-face {
-    background: linear-gradient(to bottom, hsl(var(--steel)), hsl(var(--steel-deep)));
-    border: 1px solid hsl(var(--brass) / 0.35);
+    @apply border rounded-theme;
+    background: var(--theme-panel-background);
+    border-color: var(--theme-trim);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      0 12px 12px rgba(0, 0, 0, 0.6);
+      0 12px 30px var(--theme-shadow),
+      inset 0 1px 0 var(--theme-top-edge);
   }
 
   .machine-slot {
@@ -356,18 +409,13 @@
       hsl(var(--brass)) 18% 40%,
       hsl(var(--steel-deep)) 62% 100%
     );
-    background: linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 12%, rgb(0 0 0 / 0.28) 100%),
-      repeating-linear-gradient(95deg, transparent 0 22px, rgb(255 255 255 / 0.018) 23px 24px),
-      linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
-    border: 2px solid transparent;
-    border-radius: 4px;
-    background-clip: padding-box, padding-box, border-box;
-    background-origin: border-box;
+    @apply relative border rounded-theme;
+    background: var(--theme-panel-background);
+    background-clip: padding-box;
+    border-color: var(--theme-trim);
     box-shadow:
-      0 12px 12px rgb(0 0 0 / 0.75),
-      inset 0 1px 0 hsl(var(--cta) / 0.42),
-      inset 0 -2px 0 rgb(0 0 0 / 0.55);
-    position: relative;
+      0 18px 42px var(--theme-shadow),
+      inset 0 1px 0 var(--theme-top-edge);
   }
 
   .machine-panel::before {
@@ -569,33 +617,28 @@
       0 1px 0 hsl(var(--cta) / 0.18);
   }
 
-  .plaque {
-    background: linear-gradient(to bottom, rgb(255 255 255 / 0.15), transparent 33%, rgb(0 0 0 / 0.26)),
-      linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
-    border: 1px solid hsl(var(--brass) / 0.54);
-    border-radius: 3px;
+  .plaque,
+  .appointment-choice {
+    @apply border text-paper transition-[transform,box-shadow,filter] duration-[80ms,80ms,180ms] ease-linear;
+    background: var(--theme-control-background);
+    border-color: var(--theme-trim-strong);
+    border-radius: calc(var(--theme-radius) - 3px);
     box-shadow:
-      0 4px 0 hsl(var(--steel-deep)),
-      0 8px 10px rgb(0 0 0 / 0.5),
-      inset 0 1px 0 rgb(255 255 255 / 0.16);
-    color: hsl(var(--paper));
-    text-shadow:
-      0 1px 0 rgb(0 0 0 / 0.9),
-      0 -1px 0 rgb(255 255 255 / 0.08);
-    transition:
-      transform 80ms linear,
-      box-shadow 80ms linear,
-      filter 180ms ease;
+      0 5px 14px var(--theme-shadow),
+      inset 0 1px 0 var(--theme-top-edge);
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.6);
   }
 
-  .plaque:hover {
+  .plaque:hover,
+  .appointment-choice:hover {
     filter: brightness(1.13);
   }
-  .plaque:active {
+
+  .plaque:active,
+  .appointment-choice:active {
     box-shadow:
-      0 3px 0 hsl(var(--steel-deep)),
-      0 4px 6px rgb(0 0 0 / 0.5),
-      inset 0 2px 4px rgb(0 0 0 / 0.45);
+      0 2px 8px var(--theme-shadow),
+      inset 0 2px 5px rgb(0 0 0 / 0.38);
     transform: translateY(1px);
   }
 
@@ -667,6 +710,18 @@
     pointer-events: none;
     position: absolute;
     z-index: 3;
+  }
+
+  .project-info-board,
+  .appointment-details-panel {
+    @apply border rounded-theme;
+    background: var(--theme-project-info-background);
+    border-color: var(--theme-trim);
+    border-radius: calc(var(--theme-radius) - 3px);
+    box-shadow:
+      inset 0 2px 5px var(--theme-inset-shadow),
+      inset 0 1px 0 var(--theme-top-edge),
+      0 4px 7px var(--theme-panel-drop-shadow);
   }
 
   .project-info-board {

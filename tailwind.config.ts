@@ -54,6 +54,45 @@ const config: Config = {
         pipe: "hsl(var(--pipe) / 1)",
         blueprint: "hsl(var(--blueprint) / 1)",
         room: "hsl(var(--room) / 1)",
+
+        /* Theme-specific semantic colors */
+        "theme-trim": "var(--theme-trim)",
+        "theme-trim-strong": "var(--theme-trim-strong)",
+        "theme-label-bg": "var(--theme-label-background)",
+        "theme-control-bg": "var(--theme-control-background)",
+        "theme-panel-bg": "var(--theme-panel-background)",
+        "theme-inset-bg": "var(--theme-inset-background)",
+        "theme-board-bg": "var(--theme-board-background)",
+        "theme-frame-bg": "var(--theme-frame-background)",
+        "theme-project-bg": "var(--theme-project-background)",
+        "theme-project-info-bg": "var(--theme-project-info-background)",
+        "theme-input-bg": "var(--theme-input-background)",
+        "theme-modal-frame-bg": "var(--theme-modal-frame-background)",
+        "theme-modal-surface-bg": "var(--theme-modal-surface-background)",
+        "theme-appointment-bg": "var(--theme-appointment-background)",
+        "theme-appointment-modal-bg": "var(--theme-appointment-modal-background)",
+        "theme-loading-bg": "var(--theme-loading-background)",
+        "theme-navbar-bg": "var(--theme-navbar-background)",
+      },
+      borderColor: {
+        theme: {
+          trim: "var(--theme-trim)",
+          "trim-strong": "var(--theme-trim-strong)",
+        },
+      },
+      borderRadius: {
+        theme: "var(--theme-radius)",
+      },
+      boxShadow: {
+        "theme-cast": "var(--theme-cast-shadow)",
+        "theme-drop": "var(--theme-panel-drop-shadow)",
+      },
+      opacity: {
+        "theme-hardware": "var(--theme-hardware-opacity)",
+        "theme-fastener": "var(--theme-fastener-opacity)",
+      },
+      rotate: {
+        "theme": "var(--theme-label-rotation)",
       },
     },
   },
