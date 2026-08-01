@@ -12,6 +12,7 @@ import { NewYearModalChimney } from "@/components/NewYear/NewYearModalChimney"
 import { NewYearModalIce } from "@/components/NewYear/NewYearModalIce"
 import { NewYearModalPullClose } from "@/components/NewYear/NewYearModalPullClose"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
+import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 
 interface ModalContainerProps {
   isOpen: boolean
@@ -63,6 +64,8 @@ export function ModalContainer({
     document.body.style.overflow = ""
     document.body.classList.remove("modal-open")
   }
+
+  useCloseOnEsc(closeModal)
 
   /* for e.stopPropagation when mousedown on modal and mouseup on modalBg */
   const modalBgHandler = useSwipeable({
