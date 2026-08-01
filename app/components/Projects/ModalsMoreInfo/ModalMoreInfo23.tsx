@@ -4,6 +4,7 @@ import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/modalsStore"
 import { projectStacks } from "@/data/projectStacks"
+import { project23Achievements } from "@/data/project23Achievements"
 
 export default function ModalMoreInfo23() {
   const { isOpen, closeModal } = useModalsStore()
@@ -18,7 +19,7 @@ export default function ModalMoreInfo23() {
       taskLabel={t("project23Task")}
       stack={projectStacks.project23}
       deadline="1 month"
-      collaborators={[{ description: t("project23Collaboration") }]}
+      collaborators={[{ description: project23Achievements }]}
     />
   )
 }

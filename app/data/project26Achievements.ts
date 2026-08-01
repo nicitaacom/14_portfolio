@@ -43,8 +43,10 @@ export const project26Achievements: GroupedAchievements = {
       undefined,
     'Created "Show map" functionality so deliveryman can see place on map using Google Maps API': undefined,
     "Improved UX of creating food using Admin CMS": undefined,
-    "Created custom support chat with USER / SUPPORT / ADMIN roles": undefined,
     "Created AI search bar to improve UX and CX and reduce support costs using OpenAI API and Upstash": undefined,
+  },
+  "🔴 Real-time": {
+    "Created custom support chat with USER / SUPPORT / ADMIN roles": undefined,
   },
   "🛠️ DevOps": {
     "Deployed on Vercel": undefined,

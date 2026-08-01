@@ -121,8 +121,6 @@ export default {
     project22Arif:
       "Pull request reviews\nTask completion\n\nPages:\n/auth/signin - frontend + backend\n/auth/signup - frontend + backend\n/auth/recover - frontend + backend",
     project23Task: "Create a marketplace where users can buy and sell products.",
-    project23Collaboration:
-      "- fully functional auth\n- dark / light mode\n- custom support chat with USER / SUPPORT / ADMIN roles\n- users can add / edit / delete products\n- product search by title and description\n- payment setup with MetaMask, PayPal, and Stripe\n- Supabase setup: emails, SMTP, SQL tables, RLS, auth redirect URLs\n- task organization in GitHub Projects\n- full project documentation\n- scalability improvements\n- migration from Vite to Next.js\n\nMore info is in my summary.",
     project24Task: "Create a dashboard with MUI.",
     project24Collaboration: "Whole site\n\nFunctionality:\nAdvanced dark mode\nAuth with Clerk",
     project26Task: "Create a full-stack restaurant website.",
