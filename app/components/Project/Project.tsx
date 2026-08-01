@@ -46,7 +46,7 @@ export function Project({
   projectGroup,
 }: ProjectProps) {
   const t = useScopedI18n("common")
-  const previewClassName = "machine-bezel border-0 group relative block min-h-0 w-full flex-1 overflow-hidden"
+  const previewClassName = "machine-bezel border-0 group relative block h-full w-full overflow-hidden"
 
   return (
     <div className="site-card pipe-frame relative w-full tablet:h-[720px] h-[784px]">
@@ -54,7 +54,7 @@ export function Project({
       <HalloweenProjectSkull />
       <NewYearProjectOrnament />
       <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px]">
-        <div className="project-header shrink-0 px-[10px] pt-[10px]">
+        <div className="project-header shrink-0">
           <span className="project-paper-tab truncate">{projectName}</span>
           <div className="flex gap-x-sm">
             {figmaUrl && (
@@ -84,31 +84,37 @@ export function Project({
           </div>
         </div>
         {preview ? (
-          <div className={`${previewClassName} mx-[10px]`}>{preview}</div>
+          <div className="min-h-0 flex-1 px-[10px]">
+            <div className={previewClassName}>{preview}</div>
+          </div>
         ) : youTubeEmbedPreview ? (
-          <div className={`${previewClassName} mx-[10px]`}>
-            <iframe
-              className="h-full w-full"
-              width="100%"
-              height="100%"
-              src={youTubeEmbedPreview}
-              loading="lazy"
-              tabIndex={-1}
-              title={`${projectName} preview`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen></iframe>
-            <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+          <div className="min-h-0 flex-1 px-[10px]">
+            <div className={previewClassName}>
+              <iframe
+                className="h-full w-full"
+                width="100%"
+                height="100%"
+                src={youTubeEmbedPreview}
+                loading="lazy"
+                tabIndex={-1}
+                title={`${projectName} preview`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen></iframe>
+              <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+            </div>
           </div>
         ) : (
-          <div className={`${previewClassName} mx-[10px]`}>
-            <iframe
-              className="h-full w-full"
-              src={siteUrl}
-              loading="lazy"
-              tabIndex={-1}
-              title={`${projectName} preview`}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+          <div className="min-h-0 flex-1 px-[10px]">
+            <div className={previewClassName}>
+              <iframe
+                className="h-full w-full"
+                src={siteUrl}
+                loading="lazy"
+                tabIndex={-1}
+                title={`${projectName} preview`}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+            </div>
           </div>
         )}
         <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md pb-[10px] tablet:h-[80px] tablet:flex-row">

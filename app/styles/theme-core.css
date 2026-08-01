@@ -23,7 +23,7 @@
   --theme-shadow: rgb(0 0 0 / 0);
   --theme-frame-border-width: 0;
   --theme-hairline-width: 1px;
-  --theme-header-padding: 0;
+  --theme-header-padding: 10px;
   --theme-label-padding: 0;
   --theme-info-board-padding: 0;
   --theme-frame-padding: 0;
