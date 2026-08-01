@@ -435,6 +435,11 @@ body {
     0 4px 7px var(--theme-panel-drop-shadow);
 }
 
+.project-info-board {
+  border-top-width: 2px;
+  border-top-color: var(--theme-trim-strong);
+}
+
 /* The board's `px-md py-md` are Tailwind utilities on the element. This file is unlayered, so
    it outranks `@layer utilities` and the flat themes get to drop the inset without the class
    list changing. Scoped to the board alone — the appointment panel keeps its own spacing. */

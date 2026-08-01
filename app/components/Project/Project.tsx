@@ -53,8 +53,8 @@ export function Project({
       <HalloweenFrameOrnaments variant="project" />
       <HalloweenProjectSkull />
       <NewYearProjectOrnament />
-      <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px] p-[10px]">
-        <div className="project-header shrink-0">
+      <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px]">
+        <div className="project-header shrink-0 px-[10px] pt-[10px]">
           <span className="project-paper-tab truncate">{projectName}</span>
           <div className="flex gap-x-sm">
             {figmaUrl && (
@@ -84,9 +84,9 @@ export function Project({
           </div>
         </div>
         {preview ? (
-          <div className={previewClassName}>{preview}</div>
+          <div className={`${previewClassName} mx-[10px]`}>{preview}</div>
         ) : youTubeEmbedPreview ? (
-          <div className={previewClassName}>
+          <div className={`${previewClassName} mx-[10px]`}>
             <iframe
               className="h-full w-full"
               width="100%"
@@ -100,7 +100,7 @@ export function Project({
             <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
           </div>
         ) : (
-          <div className={previewClassName}>
+          <div className={`${previewClassName} mx-[10px]`}>
             <iframe
               className="h-full w-full"
               src={siteUrl}
@@ -111,7 +111,7 @@ export function Project({
             <div className="pointer-events-none absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
           </div>
         )}
-        <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md tablet:h-[80px] tablet:flex-row">
+        <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md pb-[10px] tablet:h-[80px] tablet:flex-row">
           <div className="flex w-full flex-col">
             <p className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm">
               {t("stack")}: <span>{limitProjectStack(stack, stackCharacterLimit)}</span>
