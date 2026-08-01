@@ -420,7 +420,8 @@
       linear-gradient(rgb(15 11 16 / 0.62), rgb(12 8 13 / 0.72)),
       url("/UI/crazy-mechanics/crazy-mechanics-brick.webp") center top / 600px auto repeat;
     margin-top: -62px;
-    min-height: 100dvh;
+    height: calc(100dvh - 72px);
+    overflow-y: auto;
     padding-top: calc(4.75rem + 62px);
   }
 
