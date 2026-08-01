@@ -9,7 +9,7 @@ function TooltipGithub() {
 
   return (
     <div>
-      <h1 className="whitespace-pre-line text-steel-deep text-xs">{t("githubTooltip")}</h1>
+      <h1 className="whitespace-pre-line text-secondary text-xs">{t("githubTooltip")}</h1>
     </div>
   )
 }

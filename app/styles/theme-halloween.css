@@ -32,6 +32,13 @@
   --theme-trim: rgb(124 104 146 / 0.72);
   --theme-trim-strong: rgb(255 120 25 / 0.84);
   --theme-top-edge: rgb(231 225 209 / 0.18);
+  --theme-bottom-edge: rgb(0 0 0 / 0.4);
+  --theme-inset-shadow: rgb(0 0 0 / 0.48);
+  --theme-cast-shadow: rgb(0 0 0 / 0.28);
+  --theme-panel-drop-shadow: rgb(0 0 0 / 0.5);
+  --theme-header-padding: 4px 8px;
+  --theme-label-padding: 7px 12px;
+  --theme-info-board-padding: 1rem;
   --theme-shadow: var(--halloween-shadow);
   --theme-fastener-opacity: 0;
   --theme-hardware-opacity: 0;

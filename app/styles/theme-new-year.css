@@ -79,6 +79,13 @@
   --theme-trim: rgb(217 195 151 / 0.34);
   --theme-trim-strong: hsl(var(--cta) / 0.62);
   --theme-top-edge: rgb(248 246 242 / 0.16);
+  --theme-bottom-edge: rgb(0 0 0 / 0.4);
+  --theme-inset-shadow: rgb(0 0 0 / 0.48);
+  --theme-cast-shadow: rgb(0 0 0 / 0.28);
+  --theme-panel-drop-shadow: rgb(0 0 0 / 0.5);
+  --theme-header-padding: 4px 8px;
+  --theme-label-padding: 7px 12px;
+  --theme-info-board-padding: 1rem;
   --theme-shadow: var(--new-year-shadow);
   /* Watercolour paper and knit wool have no rivets, no bevel hardware and no
      crooked workshop tape */

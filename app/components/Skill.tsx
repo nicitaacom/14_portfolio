@@ -52,7 +52,7 @@ export function Skill(skill: ISkill) {
       } gap-xs select-none`}
       key={skill.id}>
       <div
-        className={`site-label tape-label relative flex justify-end items-center text-end text-steel-deep font-bold whitespace-nowrap px-xs
+        className={`site-label tape-label relative flex justify-end items-center text-end text-secondary font-bold whitespace-nowrap px-xs
         ${skill.small ? skill.labelClassName : "min-w-[32%]"}`}>
         {skill.label}
       </div>

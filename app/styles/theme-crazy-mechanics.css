@@ -17,11 +17,22 @@
   --theme-trim: hsl(var(--brass) / 0.42);
   --theme-trim-strong: hsl(var(--brass) / 0.72);
   --theme-top-edge: rgb(255 255 255 / 0.16);
+  --theme-bottom-edge: rgb(0 0 0 / 0.44);
+  --theme-inset-shadow: rgb(0 0 0 / 0.48);
+  --theme-cast-shadow: rgb(0 0 0 / 0.28);
+  --theme-panel-drop-shadow: rgb(0 0 0 / 0.5);
   --theme-shadow: rgb(0 0 0 / 0.75);
+  --theme-frame-border-width: 4px;
+  --theme-frame-padding: 7px;
+  --theme-header-padding: 4px 8px;
+  --theme-label-padding: 7px 12px;
+  --theme-info-board-padding: 1rem;
   --theme-fastener-opacity: 1;
   --theme-hardware-opacity: 1;
   --theme-label-rotation: -1deg;
   --theme-radius: 4px;
+  --theme-navbar-fade: hsl(var(--wood));
+  --theme-tooltip-color: hsl(var(--steel-deep));
   --theme-navbar-background: radial-gradient(
       ellipse 64px 160% at 18% 50%,
       transparent 0 47px,
@@ -96,6 +107,3 @@
   border-width: 3px;
 }
 
-:root[data-theme="crazy-mechanics"] .pipe-frame {
-  border-width: 4px;
-}

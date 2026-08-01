@@ -121,10 +121,13 @@
   .tooltip-r .tooltiptext-r {
     @apply absolute z-[99] pointer-events-none
     w-max max-w-[220px] px-sm py-xs
-    text-xs text-steel-deep text-center leading-snug
+    text-xs text-center leading-snug
     opacity-0 invisible
     scale-95
     transition-all duration-200 ease-out;
+    /* This selector outranks the themed rule in theme-core.css, so the ink has to come from a
+       variable here. Hard-coding steel-deep put 13% text on the 19% `default` label surface. */
+    color: var(--theme-tooltip-color);
   }
 
   /* Top */
@@ -612,69 +615,21 @@
     transform: rotate(-1.3deg);
   }
 
-  .pipe-frame {
-    background:
-      radial-gradient(
-          circle at 12px 12px,
-          hsl(var(--paper) / 0.35) 0 3px,
-          hsl(var(--steel)) 4px 8px,
-          hsl(var(--steel-deep)) 9px 13px,
-          transparent 14px
-        )
-        0 0 / 100% 100% no-repeat,
-      linear-gradient(135deg, hsl(var(--brass)), hsl(var(--steel)) 28%, hsl(var(--steel-deep)) 62%, hsl(var(--brass)));
-    border: 4px solid hsl(var(--steel-deep));
-    border-radius: 10px;
-    box-shadow:
-      0 18px 18px rgb(0 0 0 / 0.75),
-      inset 0 1px 0 rgb(255 255 255 / 0.24);
-    padding: 7px;
-  }
-
-  .wood-body {
-    background: repeating-linear-gradient(2deg, hsl(var(--wood) / 0.3) 0 2px, transparent 2px 10px),
-      linear-gradient(to bottom, hsl(var(--wood) / 0.96), hsl(var(--steel-deep) / 0.94));
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.16),
-      inset 0 -2px 0 rgb(0 0 0 / 0.38);
-  }
-
-  .project-wood-body {
-    background: repeating-linear-gradient(2deg, hsl(var(--steel-deep) / 0.25) 0 1px, transparent 1px 7px),
-      repeating-linear-gradient(92deg, transparent 0 39px, hsl(var(--paper) / 0.055) 40px 41px),
-      linear-gradient(to bottom, hsl(var(--brass) / 0.38), hsl(var(--wood) / 0.92) 28%, hsl(var(--steel-deep) / 0.86));
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.16),
-      inset 0 -3px 0 rgb(0 0 0 / 0.44);
-  }
+  /* Surface, border and shadow for the card live in theme-core.css, driven by --theme-*.
+     Only layout stays here: a value repeated in both files reappears in every theme that
+     forgets to override it, which is what stacked the card into nested boxes. */
 
   .project-header {
     align-items: center;
-    background: linear-gradient(to bottom, hsl(var(--paper) / 0.12), transparent 58%);
-    border-bottom: 1px solid hsl(var(--brass) / 0.52);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.17),
-      0 2px 0 rgb(0 0 0 / 0.28);
     display: flex;
     height: 42px;
     justify-content: space-between;
     min-width: 0;
-    padding: 4px 8px;
   }
 
   .project-paper-tab {
-    background: repeating-linear-gradient(0deg, transparent 0 5px, hsl(var(--wood) / 0.09) 6px 7px),
-      linear-gradient(100deg, hsl(var(--paper)), hsl(var(--paper) / 0.8));
-    border: 1px solid hsl(var(--brass) / 0.5);
-    box-shadow:
-      0 3px 5px rgb(0 0 0 / 0.42),
-      inset 0 1px 0 rgb(255 255 255 / 0.55);
-    color: hsl(var(--steel-deep));
-    font-family: var(--font-typewriter), monospace;
     line-height: 1;
     max-width: calc(100% - 8px);
-    padding: 7px 12px;
-    transform: rotate(-0.7deg);
   }
 
   .project-wood-body::before {
@@ -715,13 +670,6 @@
   }
 
   .project-info-board {
-    background: repeating-linear-gradient(1deg, hsl(var(--steel-deep) / 0.24) 0 1px, transparent 1px 7px),
-      linear-gradient(to bottom, hsl(var(--brass) / 0.31), hsl(var(--wood) / 0.96));
-    border: 1px solid hsl(var(--brass) / 0.5);
-    box-shadow:
-      inset 0 2px 5px rgb(0 0 0 / 0.45),
-      inset 0 1px 0 rgb(255 255 255 / 0.14),
-      0 4px 7px rgb(0 0 0 / 0.5);
     color: hsl(var(--paper));
   }
 

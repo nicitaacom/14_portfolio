@@ -1,63 +1,53 @@
 :root,
 :root[data-theme="default"] {
-  --primary: 260deg 20% 10%;
-  --primary-foreground: 262deg 16% 16%;
-  --secondary: 260deg 12% 91%;
-  --secondary-foreground: 260deg 9% 72%;
-  --steel: 261deg 15% 20%;
-  --steel-deep: 263deg 24% 9%;
-  --wood: 262deg 13% 16%;
-  --brass: 277deg 32% 50%;
-  --paper: 260deg 16% 90%;
-  --pipe: 260deg 9% 52%;
-  --blueprint: 259deg 24% 25%;
-  --room: 264deg 32% 5%;
+  --primary: 0deg 0% 13%;
+  --primary-foreground: 0deg 0% 19%;
+  --secondary: 0deg 0% 87%;
+  --secondary-foreground: 0deg 0% 77%;
+  --steel: 0deg 0% 19%;
+  --steel-deep: 0deg 0% 13%;
+  --wood: 0deg 0% 19%;
+  --brass: 0deg 0% 60%;
+  --paper: 0deg 0% 90%;
+  --pipe: 0deg 0% 52%;
+  --blueprint: 0deg 0% 25%;
+  --room: 0deg 0% 8%;
 
-  --theme-trim: hsl(var(--cta) / 0.28);
-  --theme-trim-strong: hsl(var(--cta) / 0.54);
-  --theme-top-edge: rgb(255 255 255 / 0.09);
-  --theme-shadow: rgb(0 0 0 / 0.42);
+  --theme-trim: hsl(var(--primary-foreground));
+  --theme-trim-strong: hsl(var(--cta));
+  --theme-top-edge: rgb(255 255 255 / 0);
+  --theme-bottom-edge: rgb(0 0 0 / 0);
+  --theme-inset-shadow: rgb(0 0 0 / 0);
+  --theme-cast-shadow: rgb(0 0 0 / 0);
+  --theme-panel-drop-shadow: rgb(0 0 0 / 0);
+  --theme-shadow: rgb(0 0 0 / 0);
+  --theme-frame-border-width: 0;
+  --theme-hairline-width: 1px;
+  --theme-header-padding: 0;
+  --theme-label-padding: 0;
+  --theme-info-board-padding: 0;
+  --theme-frame-padding: 0;
   --theme-fastener-opacity: 0;
   --theme-hardware-opacity: 0;
   --theme-label-rotation: 0deg;
-  --theme-radius: 10px;
-  --theme-navbar-background: linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 54%),
-    linear-gradient(120deg, hsl(var(--primary-foreground) / 0.98), hsl(var(--steel-deep) / 0.98));
-  --theme-board-background: radial-gradient(circle at 18% 0%, hsl(var(--cta) / 0.08), transparent 42%),
-    linear-gradient(145deg, hsl(var(--primary-foreground) / 0.96), hsl(var(--steel-deep) / 0.96));
-  --theme-panel-background: radial-gradient(circle at 82% 0%, hsl(var(--cta) / 0.08), transparent 35%),
-    linear-gradient(145deg, hsl(var(--steel) / 0.98), hsl(var(--steel-deep) / 0.98));
-  --theme-inset-background: linear-gradient(180deg, hsl(var(--steel-deep) / 0.88), hsl(var(--primary) / 0.72));
-  --theme-control-background: linear-gradient(180deg, rgb(255 255 255 / 0.08), transparent 45%),
-    linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
-  --theme-label-background: linear-gradient(120deg, hsl(var(--paper) / 0.96), hsl(var(--paper) / 0.8));
-  --theme-frame-background: linear-gradient(
-    135deg,
-    hsl(var(--cta) / 0.42),
-    hsl(var(--steel)) 22%,
-    hsl(var(--steel-deep)) 78%
-  );
-  --theme-project-background: radial-gradient(circle at 72% 0%, hsl(var(--cta) / 0.09), transparent 35%),
-    linear-gradient(160deg, hsl(var(--steel) / 0.98), hsl(var(--steel-deep) / 0.98));
-  --theme-project-info-background: linear-gradient(
-    145deg,
-    hsl(var(--primary-foreground) / 0.94),
-    hsl(var(--steel-deep) / 0.94)
-  );
-  --theme-input-background: linear-gradient(
-    180deg,
-    hsl(var(--steel-deep) / 0.96),
-    hsl(var(--primary-foreground) / 0.86)
-  );
-  --theme-modal-frame-background: linear-gradient(135deg, hsl(var(--steel)), hsl(var(--steel-deep)));
-  --theme-modal-surface-background: radial-gradient(circle at 50% -20%, hsl(var(--cta) / 0.12), transparent 48%),
-    linear-gradient(145deg, hsl(var(--primary-foreground)), hsl(var(--steel-deep)));
-  --theme-appointment-background: radial-gradient(circle at 50% 5%, hsl(var(--cta) / 0.11), transparent 38%),
-    linear-gradient(180deg, hsl(var(--room)), hsl(var(--steel-deep)));
-  --theme-appointment-modal-background: radial-gradient(circle at 30% 0%, hsl(var(--cta) / 0.1), transparent 38%),
-    linear-gradient(145deg, hsl(var(--primary-foreground)), hsl(var(--steel-deep)));
-  --theme-loading-background: radial-gradient(circle at 50% 38%, hsl(var(--cta) / 0.12), transparent 34%),
-    hsl(var(--room));
+  --theme-radius: 4px;
+  --theme-navbar-background: hsl(var(--primary));
+  --theme-navbar-fade: hsl(var(--primary));
+  --theme-tooltip-color: hsl(var(--secondary));
+  --theme-board-background: hsl(var(--primary-foreground));
+  --theme-panel-background: hsl(var(--primary-foreground));
+  --theme-inset-background: hsl(var(--primary));
+  --theme-control-background: hsl(var(--steel));
+  --theme-label-background: hsl(var(--primary-foreground));
+  --theme-frame-background: hsl(var(--steel));
+  --theme-project-background: hsl(var(--primary-foreground));
+  --theme-project-info-background: hsl(var(--primary-foreground));
+  --theme-input-background: hsl(var(--steel-deep));
+  --theme-modal-frame-background: hsl(var(--steel));
+  --theme-modal-surface-background: hsl(var(--primary-foreground));
+  --theme-appointment-background: hsl(var(--room));
+  --theme-appointment-modal-background: hsl(var(--primary-foreground));
+  --theme-loading-background: hsl(var(--room));
 }
 
 html {
@@ -93,37 +83,12 @@ body {
 }
 
 .theme-backdrop-default {
-  background: radial-gradient(circle at 50% -10%, hsl(var(--cta) / 0.11), transparent 34rem),
-    linear-gradient(180deg, #110d18, #07050a 74%);
+  background: hsl(var(--primary));
 }
 
-.default-grid {
-  background-image: linear-gradient(hsl(var(--cta) / 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--cta) / 0.025) 1px, transparent 1px);
-  background-size: 72px 72px;
-  inset: 0;
-  mask-image: linear-gradient(to bottom, black, transparent 78%);
-  position: absolute;
-}
-
+.default-grid,
 .default-orbit {
-  border: 1px solid hsl(var(--cta) / 0.08);
-  border-radius: 50%;
-  position: absolute;
-}
-
-.default-orbit-one {
-  height: 36rem;
-  right: -14rem;
-  top: -18rem;
-  width: 36rem;
-}
-
-.default-orbit-two {
-  bottom: -26rem;
-  height: 48rem;
-  left: -22rem;
-  width: 48rem;
+  display: none;
 }
 
 :root[data-theme="default"] .navbar-rivet {
@@ -162,10 +127,10 @@ body {
 .machine-slot,
 .machine-bezel {
   background: var(--theme-inset-background);
-  border: 1px solid var(--theme-trim);
+  border: var(--theme-hairline-width) solid var(--theme-trim);
   border-radius: calc(var(--theme-radius) - 3px);
   box-shadow:
-    inset 0 3px 8px rgb(0 0 0 / 0.48),
+    inset 0 3px 8px var(--theme-inset-shadow),
     inset 0 1px 0 var(--theme-top-edge);
 }
 
@@ -173,6 +138,7 @@ body {
   background: var(--theme-inset-background);
   border-color: var(--theme-trim);
 }
+
 
 .machine-face {
   background: var(--theme-panel-background);
@@ -388,12 +354,20 @@ body {
 .paper-tab,
 .modal-title-label {
   background: var(--theme-label-background);
-  border-color: var(--theme-trim);
+  border: var(--theme-hairline-width) solid var(--theme-trim);
   border-radius: calc(var(--theme-radius) - 5px);
   box-shadow:
     0 5px 14px var(--theme-shadow),
-    inset 0 1px 0 rgb(255 255 255 / 0.34);
+    inset 0 1px 0 var(--theme-top-edge);
+  color: hsl(var(--secondary));
   font-family: var(--font-inter), Inter, sans-serif;
+}
+
+/* Only .project-paper-tab sets a padding in the base rules; the tooltips in the group above
+   keep their own, so this stays scoped to the tab rather than the whole label family. */
+
+.project-paper-tab {
+  padding: var(--theme-label-padding);
 }
 
 /* Labels take the rotation as their whole transform */
@@ -418,10 +392,16 @@ body {
   --tw-rotate: var(--theme-label-rotation);
 }
 
+/* Each of these uses the `border` shorthand rather than `border-color`. The base rules in
+   globals.css set a full `border: <width> solid <colour>` for every theme, so a longhand here
+   leaves that width behind and the element keeps a frame the theme never asked for — which is
+   what stacked the card into a box inside a box inside a box under `default`. */
+
 .pipe-frame {
   background: var(--theme-frame-background);
-  border-color: hsl(var(--steel-deep));
+  border: var(--theme-frame-border-width) solid hsl(var(--secondary));
   border-radius: calc(var(--theme-radius) + 2px);
+  padding: var(--theme-frame-padding);
   box-shadow:
     0 20px 44px var(--theme-shadow),
     inset 0 1px 0 var(--theme-top-edge);
@@ -430,18 +410,37 @@ body {
 .wood-body,
 .project-wood-body {
   background: var(--theme-project-background);
+  box-shadow:
+    inset 0 1px 0 var(--theme-top-edge),
+    inset 0 -3px 0 var(--theme-bottom-edge);
 }
 
 .project-header {
   background: linear-gradient(180deg, var(--theme-top-edge), transparent);
-  border-color: var(--theme-trim);
+  border-bottom: var(--theme-hairline-width) solid var(--theme-trim);
+  box-shadow:
+    inset 0 1px 0 var(--theme-top-edge),
+    0 2px 0 var(--theme-cast-shadow);
+  padding: var(--theme-header-padding);
 }
 
 .project-info-board,
 .appointment-details-panel {
   background: var(--theme-project-info-background);
-  border-color: var(--theme-trim);
+  border: var(--theme-hairline-width) solid var(--theme-trim);
   border-radius: calc(var(--theme-radius) - 3px);
+  box-shadow:
+    inset 0 2px 5px var(--theme-inset-shadow),
+    inset 0 1px 0 var(--theme-top-edge),
+    0 4px 7px var(--theme-panel-drop-shadow);
+}
+
+/* The board's `px-md py-md` are Tailwind utilities on the element. This file is unlayered, so
+   it outranks `@layer utilities` and the flat themes get to drop the inset without the class
+   list changing. Scoped to the board alone — the appointment panel keeps its own spacing. */
+
+.project-info-board {
+  padding: var(--theme-info-board-padding);
 }
 
 .workshop-input,
