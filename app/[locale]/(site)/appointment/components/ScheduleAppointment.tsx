@@ -78,7 +78,7 @@ export function ScheduleAppointment() {
             </div>
           </div>
 
-          <div className="appointment-calendar-shell machine-bezel min-w-0 overflow-hidden px-xs pb-xs min-h-[302px]">
+          <div className="appointment-calendar-shell machine-bezel min-w-0 overflow-hidden px-xs pb-xs">
             {isMounted && (
               <Calendar
                 onChange={setSelectedDate}
