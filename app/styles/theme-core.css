@@ -25,7 +25,7 @@
   --theme-hairline-width: 1px;
   --theme-header-padding: 10px;
   --theme-label-padding: 0;
-  --theme-info-board-padding: 0;
+  --theme-info-board-padding: 1rem;
   --theme-frame-padding: 0;
   --theme-fastener-opacity: 0;
   --theme-hardware-opacity: 0;
