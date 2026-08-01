@@ -27,7 +27,7 @@ export default async function LocaleLayout({
 
   return (
     <I18nProviderClient locale={locale}>
-      <div className={`${inter.variable} ${specialElite.variable} ${fraunces.variable} relative isolate`}>
+      <div className={`${inter.variable} ${specialElite.variable} ${fraunces.variable} site-root relative isolate`}>
         <WorkbenchWall />
         {/* Between the backdrop and the content layer, so the shells burst over the town in the
             scene rather than over the interface. Fixed rather than in flow, so the display holds

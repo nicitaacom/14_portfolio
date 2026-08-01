@@ -484,6 +484,15 @@
     }
   }
 
+  /* The rack paints its own brick background over the seasonal backdrop, but the two textures
+     are close-not-identical colors - any gap where the rack's fixed height falls short of the
+     viewport let the backdrop show through as a seam. One route, one background: hide the
+     backdrop outright here instead of trying to keep two independent layers pixel-aligned. */
+
+  .site-root:has(.appointment-rack) .seasonal-backdrop {
+    display: none;
+  }
+
   /* Layout's own min-height floor uses a flat 72px navbar-height guess, which is a couple px
      short of the real navbar. That floor is invisible everywhere it's shorter than actual page
      content, but on this route the rack now fits its own precise height and the floor becomes
