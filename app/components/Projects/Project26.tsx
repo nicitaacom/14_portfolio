@@ -9,7 +9,7 @@ export default function Project26({ openModal }: { openModal: () => void }) {
     <Project
       stack={projectStacks.project26}
       stackCharacterLimit={40}
-      date="11.2023 - 01.2023 (~643h)"
+      date="11.2023 - 01.2024 (~693h)"
       openMoreInfoModal={openModal}
       siteUrl="https://26-hot-delivery.vercel.app/?utm_source=portfolio&utm_medium=website&utm_campaign=personal_portfolio&utm_content=homepage"
       // no github url cuz I decided to keep it closed source
