@@ -17,10 +17,8 @@ export function CollaborationIcon({
   onClick,
 }: CollaborationIconProps) {
   return (
-    <a
-      href={collaboratorUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      type="button"
       title={name}
       aria-current={isSelected ? "true" : undefined}
       onClick={onClick}
@@ -39,11 +37,15 @@ export function CollaborationIcon({
       <span className="max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-xs font-semibold transition-colors duration-200 group-hover:text-white">
         {name}
       </span>
-      <FiExternalLink
-        className="ml-auto shrink-0 text-secondary-foreground/45 transition-colors duration-200 group-hover:text-cta"
-        size={12}
-        aria-hidden="true"
-      />
-    </a>
+      <a
+        href={collaboratorUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${name} on GitHub`}
+        onClick={event => event.stopPropagation()}
+        className="ml-auto shrink-0 text-secondary-foreground/45 transition-colors duration-200 hover:text-cta">
+        <FiExternalLink size={12} aria-hidden="true" />
+      </a>
+    </button>
   )
 }
