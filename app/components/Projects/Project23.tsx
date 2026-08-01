@@ -9,7 +9,7 @@ export default function Project23({ openModal }: { openModal: () => void }) {
     <Project
       stack={projectStacks.project23}
       stackCharacterLimit={40}
-      date="09.2023 - 11.2023 (~670h)"
+      date="09.2023 (~780h)"
       openMoreInfoModal={openModal}
       siteUrl="https://www.jokik.fi/?utm_source=nicitaa.com"
       githubUrl="https://github.com/nicitaacom/23_store"
