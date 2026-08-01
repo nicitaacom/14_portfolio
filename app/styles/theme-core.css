@@ -75,10 +75,6 @@ body {
   position: fixed;
 }
 
-.halloween-request-content {
-  display: contents;
-}
-
 .theme-backdrop {
   inset: 0;
   opacity: 0;
