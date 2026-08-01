@@ -224,6 +224,8 @@ export const NavbarWaves = forwardRef<NavbarWavesHandle>(function NavbarWaves(_,
       return
     }
 
+    if (theme !== "crazy-mechanics") return
+
     const gridSpacing = 28
     context.strokeStyle = "rgba(220, 210, 230, 0.055)"
     context.lineWidth = 1
