@@ -59,7 +59,8 @@ not. The first layer that answers wins and the rest are skipped.
 | Term             | Means                                                                               |
 | ---------------- | ----------------------------------------------------------------------------------- |
 | `deviceId`       | `14-<body>-<check>`. The identity itself, signed — see "The deviceId itself".        |
-| `clientDeviceId` | what layer 1 sent this request. `null` when localStorage had nothing.                |
+| `storedDeviceId` | the transport form of that id — the only shape localStorage and the browser see.     |
+| `clientDeviceId` | what layer 1 sent this request, in transport form. `null` when localStorage was empty. |
 | `fingerprint`    | sha256 of machine signals. `null` = not computed yet, `""` = computed and empty.     |
 | trustworthy IP   | a parseable public address — not loopback, not a private range. See below.           |
 | write-back       | `syncDeviceIdLayers` — after resolving, every layer is re-pointed at the winning id. |
@@ -92,6 +93,31 @@ letting them stay valid forever.
 
 **This is a keyed check, not a character substitution table.** A fixed table would be readable off a
 handful of real ids, and every visitor holds one of those in their own localStorage.
+
+#### Transport form — what localStorage actually holds
+
+The check rejects a hand-typed id, but on its own it leaves the *shape* on display: open devtools,
+see `14-<21 chars>-<8 chars>`, and you know exactly what the server expects. So the value written to
+localStorage is not the id — every character steps 3 places back through `TRANSPORT_ALPHABET`
+(`0-9a-zA-Z-`, 63 characters) and the whole string is then reversed:
+
+```
+  signed id, server side   14-3gNLK4sp9SVtVHhyHDJmf-YK7332SS
+  step 1  (-3 places)      xx-11PYUZfmJDHhrHYqSQ6ic0N4LKg0
+  step 2  (reverse)        PP-004HVXcjGAEveESqSP6mp1HIKd0X1Z   ← what devtools shows
+```
+
+`decodeDeviceId` undoes both steps before `isValidDeviceId` runs. The signed id never reaches the
+browser: `trackVisitAction` returns `{ storedDeviceId }`, the transport form, and that is the only
+shape `useDeviceIdStore` ever holds.
+
+Note the `-` separators move: `-` sits at index 62, so the character that lands on it is whatever was
+at index 2 (`"2"`), and the real separators step elsewhere. Nothing in the stored value marks where
+the prefix, body and check begin.
+
+**The step and the reversal are a fixed pair — two sample ids give them away.** They hide the
+structure so there is nothing obvious to copy; they are not what makes an id unforgeable. The keyed
+check is still the thing that accepts or rejects.
 
 ### Layer 1 — localStorage
 
@@ -270,8 +296,12 @@ Finally `UTMTracker` strips the query string with `history.replaceState` so a re
      all 4 miss ──► deviceId = createDeviceId()  →  14-<body>-<check>
      ──► written to all layers, 1 utm_stats row inserted
 
-  E. localStorage hand-edited to "14-mine"
-     layer 1 REJECTED by isValidDeviceId (no check, wrong shape)
+  E. localStorage hand-edited to anything at all
+     decodeDeviceId steps it back  ──► isValidDeviceId REJECTS
+        "14-mine"                        wrong shape after decoding
+        a copied real shape              check does not match its own body
+        a real body + invented check     same
+        one character of a real id       same
      ──► resolves through layers 2-4 exactly as in B/C/D
      ──► utm_stats never sees the typed value, and the real id is written back over it
 ```
