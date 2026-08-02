@@ -2,7 +2,7 @@
 
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"
 import { projectStacks } from "@/data/projectStacks"
 

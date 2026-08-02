@@ -14,7 +14,7 @@ import {
   ProjectNexgem,
   ProjectRizAdminDashboard,
 } from "./Projects"
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import { useScopedI18n } from "@/locales/client"
 
 export function ProjectsSwitcher() {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { projectStacks } from "@/data/projectStacks"
 

@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@/components/Button"
 import { useScopedI18n } from "@/locales/client"
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 
 export function DoneButton() {
   const { closeModal } = useModalsStore()

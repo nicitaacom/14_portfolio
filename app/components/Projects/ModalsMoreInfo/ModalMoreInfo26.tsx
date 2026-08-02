@@ -1,6 +1,6 @@
 "use client"
 
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"

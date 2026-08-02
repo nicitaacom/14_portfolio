@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
 
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import { ModalContainer } from "../ModalContainer"
 import { TModals } from "@/interfaces/TModals"
 import { Step1 } from "./components/Step1"

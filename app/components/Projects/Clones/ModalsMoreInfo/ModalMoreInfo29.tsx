@@ -1,6 +1,6 @@
 "use client"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo29() {

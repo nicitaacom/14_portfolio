@@ -2,7 +2,7 @@
 
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { useScopedI18n } from "@/locales/client"
-import { useModalsStore } from "@/store/modalsStore"
+import { useModalsStore } from "@/store/useModalsStore"
 import { projectStacks } from "@/data/projectStacks"
 import { project23Achievements } from "@/data/project23Achievements"
 
