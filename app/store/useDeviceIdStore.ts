@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { createJSONStorage, persist } from "zustand/middleware"
+import { persist } from "zustand/middleware"
 
 interface DeviceIdStore {
   deviceId: string | null
@@ -18,6 +18,5 @@ function deviceIdStore(set: SetState): DeviceIdStore {
 export const useDeviceIdStore = create<DeviceIdStore>()(
   persist(deviceIdStore, {
     name: "deviceIdStore",
-    storage: createJSONStorage(() => localStorage),
   }),
 )
