@@ -22,10 +22,20 @@ const WRITE_VERB_PATTERN = /^(insert|update|upd|delete|del|set|create|add|hadd|h
 const ALWAYS_VAGUE_NAMES = new Set(["result", "results", "data", "res", "resp", "something", "output", "value", "response2"])
 
 // Calls that match READ_VERB_PATTERN by name shape but aren't this codebase's own SDK/DB/Redis
-// read convention at all - a factory/client getter (getSupabaseServer) or a built-in Web API
-// (Response.json(), createImageBitmap) whose result is properly named for what it holds, not for
-// the "read" verb in the method name.
-const EXCLUDED_METHOD_NAMES = new Set(["getSupabaseServerSDK", "getSupabaseServerSupport", "json", "createImageBitmap", "getCookie"])
+// read convention at all - a factory/client getter (getSupabaseServer), a built-in Web API
+// (Response.json(), createImageBitmap), or getScopedI18n, which hands back the `t` translator
+// function every localized page calls by that one-letter name. getResponseDataFn is this
+// codebase's own stand-in for Response.json() and reads the body off a `response` that is already
+// named, so its result is responseData - the payload it holds, not the verb that produced it.
+const EXCLUDED_METHOD_NAMES = new Set([
+  "getSupabaseServerSDK",
+  "getSupabaseServerSupport",
+  "json",
+  "createImageBitmap",
+  "getCookie",
+  "getScopedI18n",
+  "getResponseDataFn",
+])
 
 // Variable names that are always correct regardless of the awaited call's own name - these hold a
 // callable client/factory, not a data payload, so the Resp suffix convention doesn't apply to them.
