@@ -14,6 +14,8 @@ declare global {
       UPSTASH_REDIS_REST_TOKEN: string
       UPSTASH_REDIS_URL: string
 
+      DEVICE_ID_ENCRYPTION_KEY: string
+
       ADMIN_USER_ID_ARR: string
       ADMIN_PASSWORD: string
     }

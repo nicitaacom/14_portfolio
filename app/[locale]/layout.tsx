@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid"
 import { notFound } from "next/navigation"
 
 import Layout from "@/components/Layout"
@@ -36,7 +35,7 @@ export default async function LocaleLayout({
         <div className="relative z-10">
           <HalloweenGraveEvent />
           <Navbar />
-          <UTMTracker userId={`14-${nanoid()}`} />
+          <UTMTracker />
           <NewYearJazzPlayer />
           <Layout>{children}</Layout>
         </div>
