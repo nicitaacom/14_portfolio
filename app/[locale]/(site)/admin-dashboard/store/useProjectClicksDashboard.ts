@@ -6,18 +6,24 @@ import type { TProjectClicksTimelineMode } from "../types/TProjectClicksTimeline
 
 interface ProjectClicksDashboardStore {
   overview: TProjectClicksOverviewDB[]
-  timeline: TProjectClicksTimelineDB[]
-  selectedProjectSlug: string
-  timelineMode: TProjectClicksTimelineMode
-  currentState: "idle" | "fetching" | "up to date"
-  overviewErrorMessage: string
-  timelineErrorMessage: string
   setOverview: (overview: TProjectClicksOverviewDB[]) => void
+
+  timeline: TProjectClicksTimelineDB[]
   setTimeline: (timeline: TProjectClicksTimelineDB[]) => void
+
+  selectedProjectSlug: string
   setSelectedProjectSlug: (selectedProjectSlug: string) => void
+
+  timelineMode: TProjectClicksTimelineMode
   setTimelineMode: (timelineMode: TProjectClicksTimelineMode) => void
+
+  currentState: "idle" | "fetching" | "up to date"
   setCurrentState: (currentState: "idle" | "fetching" | "up to date") => void
+
+  overviewErrorMessage: string
   setOverviewErrorMessage: (overviewErrorMessage: string) => void
+
+  timelineErrorMessage: string
   setTimelineErrorMessage: (timelineErrorMessage: string) => void
 }
 
@@ -25,17 +31,23 @@ const DEFAULT_PROJECT_SLUG = trackedProjects[0]?.slug ?? "project-riz-admin-dash
 
 export const useProjectClicksDashboard = create<ProjectClicksDashboardStore>()(set => ({
   overview: [],
-  timeline: [],
-  selectedProjectSlug: DEFAULT_PROJECT_SLUG,
-  timelineMode: "monthly",
-  currentState: "idle",
-  overviewErrorMessage: "",
-  timelineErrorMessage: "",
   setOverview: overview => set({ overview }),
+
+  timeline: [],
   setTimeline: timeline => set({ timeline }),
+
+  selectedProjectSlug: DEFAULT_PROJECT_SLUG,
   setSelectedProjectSlug: selectedProjectSlug => set({ selectedProjectSlug }),
+
+  timelineMode: "monthly",
   setTimelineMode: timelineMode => set({ timelineMode }),
+
+  currentState: "idle",
   setCurrentState: currentState => set({ currentState }),
+
+  overviewErrorMessage: "",
   setOverviewErrorMessage: overviewErrorMessage => set({ overviewErrorMessage }),
+
+  timelineErrorMessage: "",
   setTimelineErrorMessage: timelineErrorMessage => set({ timelineErrorMessage }),
 }))

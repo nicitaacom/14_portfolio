@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { BiSolidDownArrow } from "react-icons/bi"
 import { twMerge } from "tailwind-merge"
 
@@ -10,7 +10,6 @@ import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { localizePath } from "@/locales/helpers"
-import { useNavbarAdminDropdown } from "@/store/useNavbarAdminDropdown"
 
 interface AdminDropdownProps {
   isGMLive: boolean
@@ -18,7 +17,7 @@ interface AdminDropdownProps {
 
 export function AdminDropdown({ isGMLive }: AdminDropdownProps) {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
-  const { isShowDropdown, setIsShowDropdown } = useNavbarAdminDropdown()
+  const [isShowDropdown, setIsShowDropdown] = useState(false)
   const locale = useCurrentLocale()
   const t = useScopedI18n("navbar")
 

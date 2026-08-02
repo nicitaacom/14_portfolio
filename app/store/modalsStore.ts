@@ -10,20 +10,6 @@ interface ModalsStore {
 
 export const useModalsStore = create<ModalsStore>()(set => ({
   isOpen: {} as Record<TModals, boolean>,
-  openModal: id => {
-    set(state => ({
-      isOpen: {
-        ...state.isOpen,
-        [id]: true,
-      },
-    }))
-  },
-  closeModal: id => {
-    set(state => ({
-      isOpen: {
-        ...state.isOpen,
-        [id]: false,
-      },
-    }))
-  },
+  openModal: id => set(state => ({ isOpen: { ...state.isOpen, [id]: true } })),
+  closeModal: id => set(state => ({ isOpen: { ...state.isOpen, [id]: false } })),
 }))

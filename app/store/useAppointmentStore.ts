@@ -7,44 +7,62 @@ export type ContactMethod = "telegram" | "discord" | "email" | "linkedin"
 
 interface AppointmentStore {
   step: Step
+  setStep: (step: Step) => void
+
+  contact: string
+  setContact: (contact: string) => void
+
+  appointmentNote: string
+  setAppointmentNote: (appointmentNote: string) => void
+
+  channel: Channel
+  setChannel: (channel: Channel) => void
+
+  isShowUpOnACall: boolean
+  toggleIsShowUpOnACall: () => void
+
+  isSendNotification: boolean
+  toggleIsSendNotification: () => void
+
+  inputNotificationTo: string
+  setInputNotificationTo: (inputValue: string) => void
+
   direction: "next" | "prev"
   prevDirection: "next" | "prev"
-  channel: Channel
   contactMethod: ContactMethod
-  contact: string
-  appointmentNote: string
-  setContact: (contact: string) => void
-  setAppointmentNote: (appointmentNote: string) => void
-  isShowUpOnACall: boolean
-  isSendNotification: boolean
   sendNotificationTo: SendNotificationTo
-  inputNotificationTo: string
-  setStep: (step: Step) => void
   setNextStep: () => void
   setPrevStep: () => void
-  setChannel: (channel: Channel) => void
   setNextContactMethod: () => void
-  toggleIsShowUpOnACall: () => void
-  toggleIsSendNotification: () => void
-  setInputNotificationTo: (inputValue: string) => void
   setNextSendNotificationTo: () => void
 }
 
 export const useAppointmentStore = create<AppointmentStore>()((set, get) => ({
   step: "step-1",
+  setStep: (step: Step) => set(() => ({ step })),
+
+  contact: "",
+  setContact: (contact: string) => set(() => ({ contact })),
+
+  appointmentNote: "",
+  setAppointmentNote: (appointmentNote: string) => set(() => ({ appointmentNote })),
+
+  channel: null,
+  setChannel: (channel: Channel) => set(() => ({ channel })),
+
+  isShowUpOnACall: false,
+  toggleIsShowUpOnACall: () => set(state => ({ isShowUpOnACall: !state.isShowUpOnACall })),
+
+  isSendNotification: false,
+  toggleIsSendNotification: () => set(state => ({ isSendNotification: !state.isSendNotification })),
+
+  inputNotificationTo: "",
+  setInputNotificationTo: (inputValue: string) => set(() => ({ inputNotificationTo: inputValue })),
+
   direction: "next",
   prevDirection: "next",
-  channel: null,
   contactMethod: "email",
-  contact: "",
-  appointmentNote: "",
-  isShowUpOnACall: false,
-  isSendNotification: false,
   sendNotificationTo: "email",
-  inputNotificationTo: "",
-  setStep: (step: Step) => set(() => ({ step })),
-  setContact: (contact: string) => set(() => ({ contact })),
-  setAppointmentNote: (appointmentNote: string) => set(() => ({ appointmentNote })),
   setNextStep: () =>
     set(state => ({
       step: state.step === "step-1" ? "step-2" : "step-3",
@@ -57,7 +75,6 @@ export const useAppointmentStore = create<AppointmentStore>()((set, get) => ({
       prevDirection: state.direction,
       direction: "prev",
     })),
-  setChannel: (channel: Channel) => set(() => ({ channel })),
   setNextContactMethod: () =>
     set(state => ({
       contactMethod:
@@ -69,9 +86,6 @@ export const useAppointmentStore = create<AppointmentStore>()((set, get) => ({
               ? "linkedin"
               : "email",
     })),
-  toggleIsShowUpOnACall: () => set(state => ({ isShowUpOnACall: !state.isShowUpOnACall })),
-  toggleIsSendNotification: () => set(state => ({ isSendNotification: !state.isSendNotification })),
-  setInputNotificationTo: (inputValue: string) => set(() => ({ inputNotificationTo: inputValue })),
   setNextSendNotificationTo: () =>
     set(state => ({
       sendNotificationTo:
