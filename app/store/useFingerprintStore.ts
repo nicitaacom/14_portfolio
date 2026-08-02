@@ -8,17 +8,20 @@ interface FingerprintStore {
   computedAt: number | null
 }
 
-export const useFingerprintStore = create<FingerprintStore>()(
-  persist(
-    set => ({
-      fingerprint: null,
-      setFingerprint: (fingerprint: string, computedAt: number) => set({ fingerprint, computedAt }),
+type SetState = (partial: Partial<FingerprintStore>) => void
 
-      computedAt: null,
-    }),
-    {
-      name: "14-fingerprint-store",
-      storage: createJSONStorage(() => localStorage),
-    },
-  ),
+function fingerprintStore(set: SetState): FingerprintStore {
+  return {
+    fingerprint: null,
+    setFingerprint: (fingerprint: string, computedAt: number) => set({ fingerprint, computedAt }),
+
+    computedAt: null,
+  }
+}
+
+export const useFingerprintStore = create<FingerprintStore>()(
+  persist(fingerprintStore, {
+    name: "fingerprintStore",
+    storage: createJSONStorage(() => localStorage),
+  }),
 )
