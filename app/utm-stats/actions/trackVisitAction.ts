@@ -26,7 +26,10 @@ function isTrustworthyIp(ip: string) {
   return ip !== "127.0.0.1" && ip !== "::1"
 }
 
-async function resolveDeviceId(clientDeviceId: string | null, ip: string, fingerprint: string) {
+// The layers the browser and the request already have on hand - localStorage/cookie first, then
+// the IP mapping. Returns null when every one of them misses, which is the only case the
+// fingerprint layer below exists for.
+async function resolveDeviceIdFromStorageAndIp(clientDeviceId: string | null, ip: string) {
   if (clientDeviceId) return clientDeviceId
 
   const cookieStore = await cookies()
@@ -39,11 +42,16 @@ async function resolveDeviceId(clientDeviceId: string | null, ip: string, finger
     if (deviceIdFromIp) return deviceIdFromIp
   }
 
-  // Fingerprint match is a probability, not proof - a different browser on a similar machine
-  // tells the server nothing about whether it's actually the same person. Kept on its own short
-  // TTL (see syncDeviceIdLayers) instead of the day-long expiry the IP/cookie layers use, so a
-  // coincidental match can only bridge one short session, not silently claim someone else's
-  // deviceId for the rest of the day.
+  return null
+}
+
+// Fingerprint match is a probability, not proof - a different browser on a similar machine
+// tells the server nothing about whether it's actually the same person. It lives in Redis alone
+// on a short TTL (see syncDeviceIdLayers) instead of the day-long expiry the IP/cookie layers
+// use, so a coincidental match can only bridge one short session, not silently claim someone
+// else's deviceId for the rest of the day. An empty fingerprint means the browser had nothing to
+// offer, so there is nothing to look up and a new deviceId is the answer.
+async function resolveDeviceIdFromFingerprint(fingerprint: string) {
   if (fingerprint) {
     const deviceIdFromFingerprint = await redis.get<string>(redisKey.getDeviceIdByFingerprintKey(fingerprint))
     if (deviceIdFromFingerprint) return deviceIdFromFingerprint
@@ -55,9 +63,9 @@ async function resolveDeviceId(clientDeviceId: string | null, ip: string, finger
 // Two people behind the same NAT/CGNAT/office wifi can, in principle, receive the same deviceId
 // via this IP-fallback lookup if one clears storage right after the other visited from that
 // shared IP - a best-effort recovery heuristic, not a guarantee. Same caveat applies to the
-// fingerprint lookup below for two people on genuinely identical hardware within the same
+// fingerprint lookup above for two people on genuinely identical hardware within the same
 // 10-minute window.
-async function syncDeviceIdLayers(deviceId: string, ip: string, timezone: string, fingerprint: string) {
+async function syncDeviceIdLayers(deviceId: string, ip: string, timezone: string, fingerprint: string | null) {
   const endOfDay = getEndOfDayInTimezone(timezone)
 
   if (isTrustworthyIp(ip)) {
@@ -83,16 +91,28 @@ async function syncDeviceIdLayers(deviceId: string, ip: string, timezone: string
   }
 }
 
+// Written out rather than inferred so the two shapes stay separate - an inferred union gives the
+// needsFingerprint shape an optional `deviceId?: undefined`, and `"deviceId" in result` then tells
+// the client nothing about which shape it actually got.
+type TrackVisitResult = { needsFingerprint: true } | { deviceId: string }
+
 export async function trackVisitAction(
   clientDeviceId: string | null,
   searchParams: { [key: string]: string | string[] | undefined } = {},
   currentUrl = "/",
   timezone = "UTC",
-  fingerprint = "",
-) {
+  // null means the browser has not computed one yet, "" means it tried and had nothing to offer -
+  // the difference is what stops this from asking for a fingerprint the browser already failed to
+  // produce and looping forever.
+  fingerprint: string | null = null,
+): Promise<TrackVisitResult> {
   const requestHeaders = await headers()
   const ip = getRequestIp(requestHeaders)
-  const deviceId = await resolveDeviceId(clientDeviceId, ip, fingerprint)
+
+  const deviceIdFromStorageAndIp = await resolveDeviceIdFromStorageAndIp(clientDeviceId, ip)
+  if (!deviceIdFromStorageAndIp && fingerprint === null) return { needsFingerprint: true as const }
+
+  const deviceId = deviceIdFromStorageAndIp ?? (await resolveDeviceIdFromFingerprint(fingerprint ?? ""))
   await syncDeviceIdLayers(deviceId, ip, timezone, fingerprint)
 
   const utmParams = extractUTMParams(searchParams)
