@@ -6,15 +6,18 @@ interface DeviceIdStore {
   setDeviceId: (deviceId: string) => void
 }
 
+type SetState = (partial: Partial<DeviceIdStore>) => void
+
+function deviceIdStore(set: SetState): DeviceIdStore {
+  return {
+    deviceId: null,
+    setDeviceId: (deviceId: string) => set({ deviceId }),
+  }
+}
+
 export const useDeviceIdStore = create<DeviceIdStore>()(
-  persist(
-    set => ({
-      deviceId: null,
-      setDeviceId: (deviceId: string) => set({ deviceId }),
-    }),
-    {
-      name: "14-device-id",
-      storage: createJSONStorage(() => localStorage),
-    },
-  ),
+  persist(deviceIdStore, {
+    name: "deviceIdStore",
+    storage: createJSONStorage(() => localStorage),
+  }),
 )
