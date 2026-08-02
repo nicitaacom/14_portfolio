@@ -160,8 +160,11 @@
     z-index: 99;
   }
 
+  /* Hard-coding steel-deep here put dark text on the dark `default` theme's label background
+     (same issue documented below for the directional variants) — read the themed ink colour
+     instead so it tracks whatever surface .tooltiptext actually renders on. */
   .tooltiptext * {
-    color: hsl(var(--steel-deep)) !important;
+    color: var(--theme-tooltip-color) !important;
     text-shadow: none !important;
   }
 
