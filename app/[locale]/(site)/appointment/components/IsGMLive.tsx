@@ -2,10 +2,8 @@
 
 import { Button } from "@/components/Button"
 import { useScopedI18n } from "@/locales/client"
-import { useIsGMLive } from "@/store/useIsGMLive"
 
-export function IsGMLive() {
-  const { isGMLive } = useIsGMLive()
+export function IsGMLive({ isGMLive }: { isGMLive: boolean }) {
   const t = useScopedI18n("appointment.page")
   const commonT = useScopedI18n("common")
   return (

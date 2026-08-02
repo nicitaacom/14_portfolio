@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { NavbarProjects } from "./NavbarProjects"
 import { useEffect, useState } from "react"
-import { useIsGMLive } from "@/store/useIsGMLive"
 import { AdminDropdown } from "./AdminDropdown"
 import { LanguageDropdown } from "./LanguageDropdown"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
@@ -21,12 +20,6 @@ export function NavbarWithProgress({ userId, is_live_call }: NavbarWithProgressP
   const [progress, setProgress] = useState(0)
   const locale = useCurrentLocale()
   const t = useScopedI18n("common")
-
-  const { setIsGMLive } = useIsGMLive()
-  useEffect(() => {
-    setIsGMLive(is_live_call)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     const updateProgress = () => {

@@ -1,6 +1,7 @@
 import moment from "moment"
 import { cookies } from "next/headers"
 
+import { getIsGMLive } from "@/libs/getIsGMLive"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 import { NewYearFilmStrip } from "@/components/NewYear/NewYearFilmStrip"
 import { ScheduleAppointment } from "../[locale]/(site)/appointment/components/ScheduleAppointment"
@@ -10,6 +11,7 @@ import { BookedAppointments } from "../[locale]/(site)/appointment/components/Bo
 import { IsGMLive } from "../[locale]/(site)/appointment/components/IsGMLive"
 
 export async function AppointmentPageView() {
+  const getIsGMLiveResp = await getIsGMLive()
   const today = moment().format("YYYY-MM-DD")
   const userCookieId = (await cookies()).get("user_cookie_id")?.value
   const { data: bookedAppointments } = userCookieId
@@ -19,7 +21,7 @@ export async function AppointmentPageView() {
   return (
     <div className="appointment-rack flex w-full justify-center overflow-x-hidden px-sm tablet:px-md">
       <div className="appointment-page-shell mx-auto flex w-full max-w-[680px] flex-col gap-sm laptop:max-w-[920px]">
-        <IsGMLive />
+        <IsGMLive isGMLive={getIsGMLiveResp} />
         <section className="new-year-appointment-editorial">
           <NewYearFilmStrip variant="appointment" />
         </section>
