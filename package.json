@@ -6,7 +6,7 @@
     "dev": "next dev -p 3014",
     "build": "next build",
     "start": "next start -p 3014",
-    "lint": "eslint app --ext .ts,.tsx",
+    "lint": "eslint . --ext .ts,.tsx",
     "update-types": "pnpx supabase gen types typescript --project-id bvvhwcmjlbofleanshdm > app/interfaces/types_db.ts"
   },
   "dependencies": {
