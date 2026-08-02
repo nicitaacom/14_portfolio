@@ -24,6 +24,7 @@
       }
     ],
     "local/envs-order": "warn",
+    "local/no-unused-envs": "warn",
     "local/response-variable-naming": "warn",
     "local/zustand-creator-name-matches-store": "warn",
     "local/zustand-extract-set-type": "warn",
