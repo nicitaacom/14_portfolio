@@ -13,7 +13,7 @@ type RateLimitResult = {
 
 const limiterCache = new Map<string, Ratelimit>()
 const ephemeralCache = new Map<string, number>()
-const redis = Redis.fromEnv()
+const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN })
 
 type RateLimitPayload = {
   limiterName: TRateLimiterName

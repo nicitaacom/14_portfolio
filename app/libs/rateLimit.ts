@@ -17,7 +17,7 @@ export async function rateLimit(key: string, limit: number, windowSec: number) {
   if (process.env.NODE_ENV === "development") return { success: true }
 
   const rateLimit = new Ratelimit({
-    redis: Redis.fromEnv(),
+    redis: new Redis({ url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN }),
     limiter: Ratelimit.slidingWindow(limit, `${windowSec} s`),
     analytics: true,
   })
