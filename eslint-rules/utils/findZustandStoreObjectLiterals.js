@@ -47,6 +47,21 @@ function findZustandStoreObjectLiterals(programNode) {
   return objectLiterals
 }
 
+// Middleware sits between create() and the store creator function, one call per middleware -
+// `create(subscribeWithSelector(persist(gsmStore, { name: "gsmStore" })))`. The creator is the first
+// argument at the bottom of that chain, so peel off one known middleware call at a time until an
+// identifier turns up. `create<T>()(set => ({ ... }))` writes the store inline and has no name to
+// find, so that shape returns null and callers skip it.
+const STORE_CREATOR_MIDDLEWARE_NAMES = new Set(["persist", "subscribeWithSelector", "devtools", "combine", "redux", "immer"])
+
+function findStoreCreatorIdentifier(node) {
+  if (!node) return null
+  if (node.type === "Identifier") return node
+  if (node.type !== "CallExpression" || node.callee.type !== "Identifier") return null
+  if (!STORE_CREATOR_MIDDLEWARE_NAMES.has(node.callee.name)) return null
+  return findStoreCreatorIdentifier(node.arguments[0])
+}
+
 // The type the store is created WITH - `create<TicketsStore>(...)` names TicketsStore, and that
 // name resolves to a `type TicketsStore = { ... }` or `interface TicketsStore { ... }` in the same
 // file. The store's returned object and this type list the exact same state/setter names, so
@@ -99,4 +114,4 @@ function findZustandStoreTypeMembers(programNode) {
   return bodies
 }
 
-module.exports = { findZustandStoreObjectLiterals, findZustandStoreTypeMembers }
+module.exports = { findZustandStoreObjectLiterals, findZustandStoreTypeMembers, findStoreCreatorIdentifier, isZustandCreateCall }

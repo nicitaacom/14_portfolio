@@ -23,13 +23,18 @@
         ]
       }
     ],
+    "local/zustand-creator-name-matches-store": "warn",
+    "local/zustand-extract-set-type": "warn",
     "local/zustand-no-await-in-store": "warn",
     "local/zustand-no-in-hooks-folder": "warn",
     "local/zustand-no-pointless-store": "warn",
     "local/zustand-no-selector": "warn",
     "local/zustand-no-stateless-store": "warn",
+    "local/zustand-persist-name": "warn",
+    "local/zustand-persist-named-store": "warn",
     "local/zustand-prefer-inline-setter": "warn",
     "local/zustand-require-method": "warn",
-    "local/zustand-state-setter-pairing": "warn"
+    "local/zustand-state-setter-pairing": "warn",
+    "local/zustand-store-export-matches-filename": "warn"
   }
 }
