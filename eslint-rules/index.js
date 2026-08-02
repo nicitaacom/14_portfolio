@@ -10,6 +10,7 @@
 module.exports = {
   rules: {
     "no-untranslated-ui": require("./no-untranslated-ui"),
+    ...require("./response-variable-naming"),
     ...require("./zustand-creator-name-matches-store"),
     ...require("./zustand-extract-set-type"),
     ...require("./zustand-no-await-in-store"),
