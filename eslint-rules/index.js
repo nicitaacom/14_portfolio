@@ -10,5 +10,13 @@
 module.exports = {
   rules: {
     "no-untranslated-ui": require("./no-untranslated-ui"),
+    ...require("./zustand-no-await-in-store"),
+    ...require("./zustand-no-in-hooks-folder"),
+    ...require("./zustand-no-pointless-store"),
+    ...require("./zustand-no-selector"),
+    ...require("./zustand-no-stateless-store"),
+    ...require("./zustand-prefer-inline-setter"),
+    ...require("./zustand-require-method"),
+    ...require("./zustand-state-setter-pairing"),
   },
 }
