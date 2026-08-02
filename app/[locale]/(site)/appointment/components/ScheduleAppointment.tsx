@@ -7,21 +7,19 @@ import moment from "moment-timezone"
 
 import { Button } from "@/components/Button"
 import { TimePicker } from "./TimePicker"
-import { useSelectedDateStore } from "@/store/useSelectedDateStore"
-import { getNextAvailableTimeMSK, useSelectedTimeStore } from "@/store/useSelectedTimeStore"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { useModalsStore } from "@/store/useModalsStore"
 import { isDateBeforeTodayOrTime } from "@/utils/isDateBeforeTodayOrTime"
 import { TimeZonePicker } from "./TimezonePicker/TimeZonePicker"
 import { convertCurrentToTargetTimezone } from "../../functions/convertCurrentToTargetTimezone"
 import { getCookie, setCookie } from "@/utils/helpersCSR"
 import { useScopedI18n } from "@/locales/client"
+import { useAppointmentStore } from "@/store/useAppointmentStore"
+import { getNextAvailableTimeMSK } from "../../functions/getNextAvailableTimeMSK"
 
 export function ScheduleAppointment() {
   const [isMounted, setIsMounted] = useState(false)
-  const { selectedDate, setSelectedDate } = useSelectedDateStore()
-  const { selectedTime, setSelectedTime } = useSelectedTimeStore()
-  const { selectedTimezone, setSelectedTimezone } = useSelectedTimezoneStore()
+  const { selectedDate, setSelectedDate, selectedTime, setSelectedTime, selectedTimezone, setSelectedTimezone } =
+    useAppointmentStore()
   const { openModal } = useModalsStore()
   const t = useScopedI18n("appointment.page")
 

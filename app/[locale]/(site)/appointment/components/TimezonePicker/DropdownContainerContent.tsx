@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { twMerge } from "tailwind-merge"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
+import { useAppointmentStore } from "@/store/useAppointmentStore"
 
 export function DropdownContainerContent({
   isShowDropdown,
@@ -9,7 +9,7 @@ export function DropdownContainerContent({
   isShowDropdown: boolean
   toggleDropdown: () => void
 }) {
-  const { selectedTimezone } = useSelectedTimezoneStore()
+  const { selectedTimezone } = useAppointmentStore()
   return (
     <button
       type="button"

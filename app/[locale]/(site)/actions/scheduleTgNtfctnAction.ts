@@ -2,8 +2,8 @@
 
 import { createClient } from "@supabase/supabase-js"
 import moment from "moment-timezone"
+import type { Value } from "@/store/useAppointmentStore"
 
-import { Value } from "@/store/useSelectedDateStore"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 const EDGE_FUNCTION_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/sendTgNtfcnAppointment`

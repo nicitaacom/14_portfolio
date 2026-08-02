@@ -4,11 +4,10 @@ import { useMemo, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import moment from "moment"
 
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { Input } from "@/components/Input"
-import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
 import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 import { useScopedI18n } from "@/locales/client"
+import { useAppointmentStore } from "@/store/useAppointmentStore"
 
 export function DropdownContent({
   closeDropdown,
@@ -19,8 +18,7 @@ export function DropdownContent({
 }) {
   const [hover, setHover] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState("")
-  const { selectedTimezone, setSelectedTimezone } = useSelectedTimezoneStore()
-  const { setSelectedTime } = useSelectedTimeStore()
+  const { selectedTimezone, setSelectedTimezone, setSelectedTime } = useAppointmentStore()
   const t = useScopedI18n("appointment.page")
   const isHover = hover !== null
 

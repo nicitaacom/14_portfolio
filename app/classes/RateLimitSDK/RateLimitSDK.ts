@@ -1,6 +1,6 @@
 import { TPublicRateLimiterName } from "@/interfaces/TPublicRateLimiterName"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { getCookie } from "@/utils/helpersCSR"
+import { useAppointmentStore } from "@/store/useAppointmentStore"
 
 type Action = API.RateLimitRequest["action"]
 
@@ -14,7 +14,7 @@ export class RateLimitSDK {
   }
 
   private async requestFn(action: Action, limiterName: TPublicRateLimiterName): Promise<API.RateLimitResponse> {
-    const { selectedTimezone: userTimezone } = useSelectedTimezoneStore.getState()
+    const { selectedTimezone: userTimezone } = useAppointmentStore.getState()
     const userCookieId = getCookie("user_cookie_id")
 
     const response = await fetch("/api/rate-limit", {

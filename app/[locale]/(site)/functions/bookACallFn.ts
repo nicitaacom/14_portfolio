@@ -6,9 +6,6 @@ import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { formatedDateTimeFn } from "./formatedDateTimeFn"
 import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
 import useToast from "@/store/useToast"
-import { useSelectedDateStore } from "@/store/useSelectedDateStore"
-import { useSelectedTimeStore } from "@/store/useSelectedTimeStore"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 
 interface BookACallMessages {
   chooseChannelFirst: string
@@ -17,12 +14,19 @@ interface BookACallMessages {
 }
 
 export async function bookACallFn(messages: BookACallMessages) {
-  const { contactMethod, contact, isSendNotification, sendNotificationTo, inputNotificationTo, channel } =
-    useAppointmentStore.getState()
-  const { selectedDate } = useSelectedDateStore.getState()
-  const { selectedTime } = useSelectedTimeStore.getState()
-  const { selectedTimezone } = useSelectedTimezoneStore.getState()
-  const { setNextStep, appointmentNote } = useAppointmentStore.getState()
+  const {
+    contactMethod,
+    contact,
+    isSendNotification,
+    sendNotificationTo,
+    inputNotificationTo,
+    channel,
+    selectedDate,
+    selectedTime,
+    selectedTimezone,
+    setNextStep,
+    appointmentNote,
+  } = useAppointmentStore.getState()
 
   const toast = useToast.getState()
 

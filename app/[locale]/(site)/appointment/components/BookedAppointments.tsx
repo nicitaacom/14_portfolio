@@ -9,15 +9,15 @@ import { useState } from "react"
 
 import { BookingsResponse } from "@/interfaces/BookingsResponse"
 import { convertCurrentToTargetTimezone } from "../../functions/convertCurrentToTargetTimezone"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Input"
 import useToast from "@/store/useToast"
 import { useScopedI18n } from "@/locales/client"
 import { useBookingActions } from "../../hooks/useBookingActions"
+import { useAppointmentStore } from "@/store/useAppointmentStore"
 
 export function BookedAppointments({ booked_appointments }: { booked_appointments: BookingsResponse[] }) {
-  const { selectedTimezone } = useSelectedTimezoneStore()
+  const { selectedTimezone } = useAppointmentStore()
   const toast = useToast()
   const t = useScopedI18n("appointment.page")
   const commonT = useScopedI18n("common")

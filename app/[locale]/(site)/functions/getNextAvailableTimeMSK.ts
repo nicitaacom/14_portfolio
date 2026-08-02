@@ -1,11 +1,6 @@
-import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
-import { create } from "zustand"
 import moment from "moment-timezone"
 
-interface SelectedTimeStore {
-  selectedTime: string
-  setSelectedTime: (time: string) => void
-}
+import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 
 export const DEFAULT_APPOINTMENT_TIME_MSK = appointmentTimesMSK[0].time
 
@@ -20,8 +15,3 @@ export function getNextAvailableTimeMSK(now = moment.tz("Europe/Moscow")): strin
     })?.time ?? DEFAULT_APPOINTMENT_TIME_MSK
   )
 }
-
-export const useSelectedTimeStore = create<SelectedTimeStore>()(set => ({
-  selectedTime: DEFAULT_APPOINTMENT_TIME_MSK,
-  setSelectedTime: (time: string) => set({ selectedTime: time }),
-}))

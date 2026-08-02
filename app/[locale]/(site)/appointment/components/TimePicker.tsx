@@ -8,21 +8,18 @@ import moment from "moment"
 
 import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
-import { DEFAULT_APPOINTMENT_TIME_MSK, useSelectedTimeStore } from "@/store/useSelectedTimeStore"
-import { useSelectedDateStore } from "@/store/useSelectedDateStore"
-import { useSelectedTimezoneStore } from "@/store/useSelectedTimezoneStore"
 import { appointmentTimesMSK } from "@/data/appointmentTimesMSK"
 import { isDateBeforeTodayOrTime } from "@/utils/isDateBeforeTodayOrTime"
 import { convertCurrentToTargetTimezone } from "../../functions/convertCurrentToTargetTimezone"
 import { isDisabledFn } from "../../functions/isDisabledFn"
 import { useScopedI18n } from "@/locales/client"
+import { useAppointmentStore } from "@/store/useAppointmentStore"
+import { DEFAULT_APPOINTMENT_TIME_MSK } from "../../functions/getNextAvailableTimeMSK"
 
 export function TimePicker() {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
 
-  const { selectedTimezone } = useSelectedTimezoneStore()
-  const { selectedDate } = useSelectedDateStore()
-  const { selectedTime, setSelectedTime } = useSelectedTimeStore()
+  const { selectedTimezone, selectedDate, selectedTime, setSelectedTime } = useAppointmentStore()
   const t = useScopedI18n("appointment.page")
   const [showDropdown, setShowDropdown] = useState(false)
   const [hover, setHover] = useState<string | null>(null)
