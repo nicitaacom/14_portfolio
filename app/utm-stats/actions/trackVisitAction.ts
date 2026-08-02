@@ -1,8 +1,9 @@
 "use server"
 
+import { isIP } from "net"
 import { cookies, headers } from "next/headers"
-import { nanoid } from "nanoid"
 import { redisKey } from "@/classes/RedisKey/RedisKey"
+import { createDeviceId, isValidDeviceId } from "@/libs/deviceId"
 import { decryptDeviceId, DEVICE_ID_COOKIE_NAME, encryptDeviceId, getEndOfDayInTimezone } from "@/libs/deviceIdCookie"
 import { redis } from "@/libs/redis"
 import { getRequestIp } from "@/libs/rateLimitServer"
@@ -22,24 +23,48 @@ const FINGERPRINT_TTL_SEC = 600
 // never sets x-real-ip/x-forwarded-for, so getRequestIp falls back to this literal string for
 // every visitor. Trusting it as a Redis lookup key would hand every storage-wiped visitor
 // whichever stranger's deviceId last wrote under that shared fake key.
+//
+// The same goes for the private ranges: everyone behind one router shares 192.168.x.x, so that
+// address names a household rather than a visitor. And since both headers arrive from the request
+// itself, a hand-written `x-forwarded-for: not-an-ip` would otherwise become a Redis key that any
+// number of people could aim at - isIP is what keeps the key an actual address.
+const PRIVATE_IP_PATTERNS = [
+  /^10\./,
+  /^192\.168\./,
+  /^172\.(1[6-9]|2\d|3[01])\./,
+  /^169\.254\./,
+  /^f[cd][0-9a-f]{2}:/i,
+  /^fe80:/i,
+]
+
 function isTrustworthyIp(ip: string) {
-  return ip !== "127.0.0.1" && ip !== "::1"
+  if (ip === "127.0.0.1" || ip === "::1") return false
+  if (PRIVATE_IP_PATTERNS.some(pattern => pattern.test(ip))) return false
+  return isIP(ip) !== 0
+}
+
+// computeFingerprint returns a sha256 hex digest and nothing else. Checking the shape here keeps
+// the Redis key bounded - the value arrives as a server action argument, so without this a caller
+// could send a megabyte of text and have it written as a key.
+function isValidFingerprint(fingerprint: string) {
+  return /^[0-9a-f]{64}$/.test(fingerprint)
 }
 
 // The layers the browser and the request already have on hand - localStorage/cookie first, then
 // the IP mapping. Returns null when every one of them misses, which is the only case the
 // fingerprint layer below exists for.
 async function resolveDeviceIdFromStorageAndIp(clientDeviceId: string | null, ip: string) {
-  if (clientDeviceId) return clientDeviceId
+  // isValidDeviceId on every one of these, not only the localStorage value - see its own comment.
+  if (isValidDeviceId(clientDeviceId)) return clientDeviceId
 
   const cookieStore = await cookies()
   const cookieValue = cookieStore.get(DEVICE_ID_COOKIE_NAME)?.value
   const decryptedCookieDeviceId = cookieValue ? decryptDeviceId(cookieValue) : null
-  if (decryptedCookieDeviceId) return decryptedCookieDeviceId
+  if (isValidDeviceId(decryptedCookieDeviceId)) return decryptedCookieDeviceId
 
   if (isTrustworthyIp(ip)) {
     const deviceIdFromIp = await redis.get<string>(redisKey.getDeviceIdByIpKey(ip))
-    if (deviceIdFromIp) return deviceIdFromIp
+    if (isValidDeviceId(deviceIdFromIp)) return deviceIdFromIp
   }
 
   return null
@@ -52,12 +77,12 @@ async function resolveDeviceIdFromStorageAndIp(clientDeviceId: string | null, ip
 // else's deviceId for the rest of the day. An empty fingerprint means the browser had nothing to
 // offer, so there is nothing to look up and a new deviceId is the answer.
 async function resolveDeviceIdFromFingerprint(fingerprint: string) {
-  if (fingerprint) {
+  if (isValidFingerprint(fingerprint)) {
     const deviceIdFromFingerprint = await redis.get<string>(redisKey.getDeviceIdByFingerprintKey(fingerprint))
-    if (deviceIdFromFingerprint) return deviceIdFromFingerprint
+    if (isValidDeviceId(deviceIdFromFingerprint)) return deviceIdFromFingerprint
   }
 
-  return `14-${nanoid()}`
+  return createDeviceId()
 }
 
 // Two people behind the same NAT/CGNAT/office wifi can, in principle, receive the same deviceId
@@ -72,7 +97,7 @@ async function syncDeviceIdLayers(deviceId: string, ip: string, timezone: string
     await redis.set(redisKey.getDeviceIdByIpKey(ip), deviceId, { exat: Math.floor(endOfDay.getTime() / 1000) })
   }
 
-  if (fingerprint) {
+  if (fingerprint && isValidFingerprint(fingerprint)) {
     await redis.set(redisKey.getDeviceIdByFingerprintKey(fingerprint), deviceId, { ex: FINGERPRINT_TTL_SEC })
   }
 

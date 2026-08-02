@@ -19,12 +19,21 @@ const encryptionKey = getEncryptionKey()
 
 export function getEndOfDayInTimezone(timezone: string) {
   const now = new Date()
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(now)
+
+  // The timezone reaches here straight from the browser as a server action argument, and Intl
+  // throws a RangeError on any name it does not know. Without this, one edited argument ends the
+  // whole visit before a row is ever written.
+  let parts
+  try {
+    parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(now)
+  } catch {
+    return new Date(now.getTime() + 24 * 60 * 60 * 1000)
+  }
 
   const year = parts.find(part => part.type === "year")?.value
   const month = parts.find(part => part.type === "month")?.value

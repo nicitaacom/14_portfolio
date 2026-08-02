@@ -31,11 +31,14 @@ export function UTMTracker() {
         setDeviceId(trackVisitActionResp.deviceId)
       }
 
+      // Only once the visit is recorded - the utm params in the URL are the attribution, so
+      // stripping them after a failed call would lose it for good. Left in place they get one more
+      // chance on the next render.
       const url = window.location.origin + window.location.pathname
       window.history.replaceState({}, "", url)
     }
 
-    trackVisit()
+    void trackVisit().catch(error => console.error("Error tracking UTM visit:", error))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
