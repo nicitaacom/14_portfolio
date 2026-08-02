@@ -140,8 +140,8 @@ export async function trackVisitAction(
       }
 
   const userAgent = requestHeaders.get("user-agent") ?? "unknown"
-  const insertDBUTMVisitResponse = await insertDBUTMVisitAction(deviceId, finalParams, userAgent, currentUrl)
-  if (typeof insertDBUTMVisitResponse === "string") console.log(52, "insert failed - ", insertDBUTMVisitResponse)
+  const response = await insertDBUTMVisitAction(deviceId, finalParams, userAgent, currentUrl)
+  if (typeof response === "string") console.log(52, "insert failed - ", response)
 
   return { deviceId }
 }

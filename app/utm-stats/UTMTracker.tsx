@@ -18,16 +18,18 @@ export function UTMTracker() {
     // Canvas and WebGL reads cost real time on the main thread and every returning visitor used to
     // pay it for a value that nothing then read.
     async function trackVisit() {
-      let result = await trackVisitAction(deviceId, params, currentUrl, timezone)
+      let trackVisitActionResp = await trackVisitAction(deviceId, params, currentUrl, timezone)
 
-      if ("needsFingerprint" in result) {
+      if ("needsFingerprint" in trackVisitActionResp) {
         // "" tells the server this browser tried and had nothing to offer, so it mints a new
         // deviceId rather than asking again.
         const fingerprint = await computeFingerprint().catch(() => "")
-        result = await trackVisitAction(deviceId, params, currentUrl, timezone, fingerprint)
+        trackVisitActionResp = await trackVisitAction(deviceId, params, currentUrl, timezone, fingerprint)
       }
 
-      if ("deviceId" in result && result.deviceId !== deviceId) setDeviceId(result.deviceId)
+      if ("deviceId" in trackVisitActionResp && trackVisitActionResp.deviceId !== deviceId) {
+        setDeviceId(trackVisitActionResp.deviceId)
+      }
 
       const url = window.location.origin + window.location.pathname
       window.history.replaceState({}, "", url)

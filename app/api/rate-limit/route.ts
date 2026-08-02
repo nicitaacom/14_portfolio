@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
   try {
     if (action === "getRemaining") {
-      const remaining = await getRateLimitRemaining({
+      const getRateLimitRemainingResp = await getRateLimitRemaining({
         limiterName,
         userCookieId,
         ip,
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
       return NextResponse.json(
         {
-          remaining,
+          remaining: getRateLimitRemainingResp,
         } satisfies API.RateLimitResponse,
         { status: 200 },
       )

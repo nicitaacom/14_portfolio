@@ -17,15 +17,15 @@ export function useUTMStats() {
     setIsLoading(true)
     setError(null)
 
-    const result = await selectDBUTMStatsAction(range)
+    const selectDBUTMStatsActionResp = await selectDBUTMStatsAction(range)
 
     if (requestIdRef.current !== requestId) return
 
-    if (typeof result === "string") {
-      setError(result)
+    if (typeof selectDBUTMStatsActionResp === "string") {
+      setError(selectDBUTMStatsActionResp)
       setUtmStats(null)
     } else {
-      setUtmStats(result)
+      setUtmStats(selectDBUTMStatsActionResp)
     }
 
     setIsLoading(false)

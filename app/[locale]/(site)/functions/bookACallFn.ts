@@ -45,9 +45,9 @@ export async function bookACallFn(messages: BookACallMessages) {
 
   try {
     const rateLimitSDK = new RateLimitSDK()
-    const rateLimitRemaining = await rateLimitSDK.getRemaining("bookACall")
+    const getRemainingResp = await rateLimitSDK.getRemaining("bookACall")
 
-    if (rateLimitRemaining.remaining <= 0) {
+    if (getRemainingResp.remaining <= 0) {
       toast.show("error", messages.errorTitle, messages.dailyLimitReached(), 15000)
       return
     }
