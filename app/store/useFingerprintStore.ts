@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { createJSONStorage, persist } from "zustand/middleware"
+import { persist } from "zustand/middleware"
 
 interface FingerprintStore {
   fingerprint: string | null
@@ -22,6 +22,5 @@ function fingerprintStore(set: SetState): FingerprintStore {
 export const useFingerprintStore = create<FingerprintStore>()(
   persist(fingerprintStore, {
     name: "fingerprintStore",
-    storage: createJSONStorage(() => localStorage),
   }),
 )
