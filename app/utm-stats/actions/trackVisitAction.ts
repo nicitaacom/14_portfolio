@@ -3,7 +3,7 @@
 import { isIP } from "net"
 import { cookies, headers } from "next/headers"
 import { redisKey } from "@/classes/RedisKey/RedisKey"
-import { createDeviceId, isValidDeviceId } from "@/libs/deviceId"
+import { createDeviceId, decodeDeviceId, encodeDeviceId, isValidDeviceId } from "@/libs/deviceId"
 import { decryptDeviceId, DEVICE_ID_COOKIE_NAME, encryptDeviceId, getEndOfDayInTimezone } from "@/libs/deviceIdCookie"
 import { redis } from "@/libs/redis"
 import { getRequestIp } from "@/libs/rateLimitServer"
@@ -54,8 +54,11 @@ function isValidFingerprint(fingerprint: string) {
 // the IP mapping. Returns null when every one of them misses, which is the only case the
 // fingerprint layer below exists for.
 async function resolveDeviceIdFromStorageAndIp(clientDeviceId: string | null, ip: string) {
-  // isValidDeviceId on every one of these, not only the localStorage value - see its own comment.
-  if (isValidDeviceId(clientDeviceId)) return clientDeviceId
+  // The localStorage value is in transport form, so it steps back to the signed id first. The
+  // cookie and Redis values are stored as the id itself and go straight to the check.
+  // isValidDeviceId on every one of them, not only on layer 1 - see its own comment.
+  const decodedClientDeviceId = decodeDeviceId(clientDeviceId)
+  if (isValidDeviceId(decodedClientDeviceId)) return decodedClientDeviceId
 
   const cookieStore = await cookies()
   const cookieValue = cookieStore.get(DEVICE_ID_COOKIE_NAME)?.value
@@ -116,12 +119,16 @@ async function syncDeviceIdLayers(deviceId: string, ip: string, timezone: string
   }
 }
 
+// storedDeviceId, not deviceId - what goes back to the browser is the transport form, since that
+// is the only shape localStorage ever holds. The signed id stays on this side.
+//
 // Written out rather than inferred so the two shapes stay separate - an inferred union gives the
-// needsFingerprint shape an optional `deviceId?: undefined`, and `"deviceId" in result` then tells
-// the client nothing about which shape it actually got.
-type TrackVisitResult = { needsFingerprint: true } | { deviceId: string }
+// needsFingerprint shape an optional `storedDeviceId?: undefined`, and `"storedDeviceId" in result`
+// then tells the client nothing about which shape it actually got.
+type TrackVisitResult = { needsFingerprint: true } | { storedDeviceId: string }
 
 export async function trackVisitAction(
+  // in transport form - see encodeDeviceId
   clientDeviceId: string | null,
   searchParams: { [key: string]: string | string[] | undefined } = {},
   currentUrl = "/",
@@ -140,6 +147,9 @@ export async function trackVisitAction(
   const deviceId = deviceIdFromStorageAndIp ?? (await resolveDeviceIdFromFingerprint(fingerprint ?? ""))
   await syncDeviceIdLayers(deviceId, ip, timezone, fingerprint)
 
+  // createDeviceId only ever produces characters TRANSPORT_ALPHABET knows, so this never returns null
+  const storedDeviceId = encodeDeviceId(deviceId) ?? deviceId
+
   const utmParams = extractUTMParams(searchParams)
   const hasUTMParams = Object.values(utmParams).some(param => param !== undefined)
 
@@ -154,7 +164,7 @@ export async function trackVisitAction(
     .limit(1)
     .maybeSingle()
 
-  if (recentVisit) return { deviceId }
+  if (recentVisit) return { storedDeviceId }
 
   const finalParams = hasUTMParams
     ? utmParams
@@ -168,7 +178,7 @@ export async function trackVisitAction(
   const response = await insertDBUTMVisitAction(deviceId, finalParams, userAgent, currentUrl)
   if (typeof response === "string") console.log(52, "insert failed - ", response)
 
-  return { deviceId }
+  return { storedDeviceId }
 }
 
 interface UTMParams {

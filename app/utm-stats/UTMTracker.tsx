@@ -27,8 +27,10 @@ export function UTMTracker() {
         trackVisitActionResp = await trackVisitAction(deviceId, params, currentUrl, timezone, fingerprint)
       }
 
-      if ("deviceId" in trackVisitActionResp && trackVisitActionResp.deviceId !== deviceId) {
-        setDeviceId(trackVisitActionResp.deviceId)
+      // The store only ever holds the transport form, so this compares and writes that - the signed
+      // id itself never reaches the browser.
+      if ("storedDeviceId" in trackVisitActionResp && trackVisitActionResp.storedDeviceId !== deviceId) {
+        setDeviceId(trackVisitActionResp.storedDeviceId)
       }
 
       // Only once the visit is recorded - the utm params in the URL are the attribution, so

@@ -64,6 +64,53 @@ export function createDeviceId() {
   return `${DEVICE_ID_PREFIX}-${body}-${checkFor(body)}`
 }
 
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// Transport form - what localStorage actually holds
+//
+// The check above already rejects a hand-typed id, but it leaves the SHAPE on display: open
+// devtools and `14-<21 chars>-<8 chars>` tells you exactly what the server expects, so the obvious
+// next move is to go looking for the mapping. So the value written to localStorage is not the id
+// itself - every character walks 3 places back through TRANSPORT_ALPHABET and the whole string is
+// then reversed:
+//
+//   id in the row   14-jDy3aI2IQuw4OFngI48Ad-VC7ZB3B8
+//   step 1 (-3)     xy0gXf7Y0B8Sm4tRnLfF2xf10gwXvS8Yx
+//   step 2 (rev)    xY8SvXwg01fx2FfLnRt4mS8B0Y7fXg0yx   ← what devtools shows
+//
+// The server reverses both steps before the check runs. `-3` and the reversal are a fixed pair,
+// so on their own they are readable off two example ids - they hide the structure, they do not
+// stand in for the keyed check, and the check is still what decides whether an id is accepted.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+
+// BODY_ALPHABET plus the "-" that separates the 3 parts - 63 characters, so every character of a
+// signed id has somewhere to step to and back from.
+const TRANSPORT_ALPHABET = `${BODY_ALPHABET}-`
+const TRANSPORT_SHIFT = -3
+
+function stepThroughAlphabet(value: string, shift: number) {
+  let stepped = ""
+  for (const character of value) {
+    const index = TRANSPORT_ALPHABET.indexOf(character)
+    if (index === -1) return null
+    stepped += TRANSPORT_ALPHABET[(index + shift + TRANSPORT_ALPHABET.length) % TRANSPORT_ALPHABET.length]
+  }
+  return stepped
+}
+
+function reverse(value: string) {
+  return [...value].reverse().join("")
+}
+
+export function encodeDeviceId(deviceId: string) {
+  const stepped = stepThroughAlphabet(deviceId, TRANSPORT_SHIFT)
+  return stepped === null ? null : reverse(stepped)
+}
+
+export function decodeDeviceId(storedDeviceId: string | null | undefined) {
+  if (typeof storedDeviceId !== "string") return null
+  return stepThroughAlphabet(reverse(storedDeviceId), -TRANSPORT_SHIFT)
+}
+
 // Every deviceId reaching the server goes through here first - the one from localStorage, the one
 // decrypted out of the cookie, and the ones read back from Redis. The Redis and cookie values were
 // written by this server, so they pass by construction; running them through anyway is what retires
