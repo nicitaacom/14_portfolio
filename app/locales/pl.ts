@@ -87,7 +87,7 @@ export default {
       messageSuffix: "którą chcę się podzielić.",
     },
     whyme: {
-      item1: "8 lat doświadczenia",
+      item1: "{years} lat doświadczenia",
       item2: "Jest wynik albo nie płacisz",
       item3: "Rosyjski / Ukraiński / Angielski / Niemiecki / Polski",
       note: "Nawet jeśli nie chcesz nic kupować, możesz umówić rozmowę i dostać świeże spojrzenie oraz przydatne informacje.",

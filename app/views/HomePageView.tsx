@@ -18,6 +18,15 @@ import { useScopedI18n } from "@/locales/client"
 type Tab = "offer" | "story" | "whyme"
 type Audience = "business" | "agency" | "developers"
 
+const CAREER_START = new Date(2018, 5, 1)
+
+function getYearsOfExperience() {
+  const now = new Date()
+  let years = now.getFullYear() - CAREER_START.getFullYear()
+  if (now.getMonth() < CAREER_START.getMonth()) years -= 1
+  return years
+}
+
 export function HomePageView() {
   const [activeTab, setActiveTab] = useState<Tab>("offer")
   const [openAudience, setOpenAudience] = useState<Audience>("business")
@@ -118,7 +127,7 @@ export function HomePageView() {
               ) : activeTab === "whyme" ? (
                 <div className="flex flex-col gap-sm text-start">
                   <ul className="flex list-disc flex-col gap-xs pl-xl text-sm font-bold">
-                    <li>{t("whyme.item1")}</li>
+                    <li>{t("whyme.item1", { years: getYearsOfExperience() })}</li>
                     <li>{t("whyme.item2")}</li>
                     <li>{t("whyme.item3")}</li>
                   </ul>
