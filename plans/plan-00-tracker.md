@@ -15,19 +15,6 @@ Seed: [app/components/Projects/NDAProjectPreview.tsx](../app/components/Projects
 
 | #   | Task                                                | Surface (vibes doc word)                           | Plan file                                                | Status                            |
 | --- | --------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------- | --------------------------------- |
-| 01  | Navbar                                              | HAZARD RAIL on a riveted steel PANEL               | [plan-01-navbar.md](plan-01-navbar.md)                   | built — revision A requested (§8) |
-| 02  | Workbench wall — bricks + violet neon, page-wide    | WORKBENCH (room + brick wall + light pool)         | [plan-02-workbench.md](plan-02-workbench.md)             | built — full-site pass            |
-| 03  | Modal — `app/components/Modals/ModalContainer.tsx`  | PIPE FRAME + WOOD BODY + PAPER TAB                 | plan-03-modal.md (next)                                  | built — full-site pass            |
-| 04  | Project card — `app/components/Project/Project.tsx` | PANEL, four corner screws, on the workbench        | plan-04-project-card.md                                  | built — full-site pass            |
-| 05  | Button.tsx                                          | PLAQUE, press sinks 1px                            | —                                                        | built — full-site pass            |
-| 06  | Lever — booking submit, `ScheduleAppointment/*`     | LEVER + GATE, icon inside the button (decision №3) | —                                                        | built — full-site pass            |
-| 07  | LoadingSpinner.tsx                                  | GEARSET, three meshed gears, 12s loop              | —                                                        | built — full-site pass            |
-| 08  | Input.tsx                                           | BEZEL, recessed slot, tape label above             | —                                                        | built — full-site pass            |
-| 09  | Tooltips/\* + Skill.tsx                             | TAPE LABEL, tilted, handwriting                    | —                                                        | built — full-site pass            |
-| 10  | Counters — odometer digits in the hazard rail       | COUNTER                                            | —                                                        | proposed                          |
-| 11  | Blueprint + Certificate surfaces                    | BLUEPRINT / CERTIFICATE                            | —                                                        | proposed                          |
-| 12  | Calendar-driven full-site themes                    | GLOBAL THEME CONFIG                                | [plan-12-seasonal-themes.md](plan-12-seasonal-themes.md) | built — full-site pass            |
-| 13  | Nexgem hover audio routing + centre pulse           | REQUEST / RESPONSE (n8n canvas)                    | [plan-13-nexgem-hover-audio.md](plan-13-nexgem-hover-audio.md) | approved — ready to build         |
 
 **Reorder note:** Nikita moved the workbench wall to slot 02 (was proposal 05) — background lands before modal and Project card. Tasks 05–11 still wait for his ordering before any plan-05 sheet is written (decision №4).
 
