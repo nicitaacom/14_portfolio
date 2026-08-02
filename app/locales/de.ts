@@ -136,7 +136,7 @@ export default {
     preview: {
       ariaLabel: "Eine leuchtende Fragezeichen-Lampe schwingt vor einer dunklen Wand",
       level: "NDA",
-      title: "Fallstudie zu einem vertraulichen Service",
+      title: "Outreach-Automatisierung für SMMA-Inhaber",
       description: "Kunden, Domains und Code bleiben vertraulich. Ergebnisse nicht.",
       identityProtected: "Identität geschützt",
       outcomes: "{count} Ergebnisse",

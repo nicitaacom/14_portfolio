@@ -134,7 +134,7 @@ export default {
     preview: {
       ariaLabel: "A glowing question-mark lamp swinging on a dark wall",
       level: "NDA",
-      title: "Confidential service case study",
+      title: "Outreach automatization for SMMA owners",
       description: "Private clients, domains, and code. Outcomes do not.",
       identityProtected: "Identity protected",
       outcomes: "{count} outcomes",
