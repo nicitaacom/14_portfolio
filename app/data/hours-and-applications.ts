@@ -17,29 +17,9 @@ export const hours = {
 }
 
 export const applications = {
-  "01.2027": {
-    amount_applies: 8200,
-    appointments: 41,
-  },
-  "12.2026": {
-    amount_applies: 8200,
-    appointments: 41,
-  },
-  "11.2026": {
-    amount_applies: 8200,
-    appointments: 41,
-  },
-  "10.2026": {
-    amount_applies: 8200,
-    appointments: 41,
-  },
-  "09.2026": {
-    amount_applies: 8200,
-    appointments: 41,
-  },
   "08.2026": {
-    amount_applies: 8200,
-    appointments: 41,
+    amount_applies: 8820,
+    appointments: 45,
   },
   "07.2026": {
     amount_applies: 8820,
