@@ -525,7 +525,7 @@ Deno.serve(async req => {
   const unscheduleQuery = `
     DO $$
     BEGIN
-      PERFORRM cron.unschedule('$\{cronJobName\}');
+      PERFORM cron.unschedule('${cronJobName}');
     EXCEPTION WHEN OTHERS THEN
       NULL;
     END $$;
