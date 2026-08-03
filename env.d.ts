@@ -18,6 +18,10 @@ declare global {
 
       ADMIN_USER_ID_ARR: string
       ADMIN_PASSWORD: string
+
+      RESEND_SECRET: string
+      NEXT_PUBLIC_SUPPORT_NOTIFICATION_EMAIL: string
+      CRON_SECRET: string
     }
   }
 }
