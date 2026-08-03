@@ -57,7 +57,7 @@ export async function scheduleTgNtfctnAction(
   const cronJobName = `telegram_notification_${notificationId}`
   const cronSchedule = `${scheduledFor.minute()} ${scheduledFor.hour()} ${scheduledFor.date()} ${
     scheduledFor.month() + 1
-  } ${scheduledFor.day()}`
+  } *`
 
   const query = `
     SELECT cron.schedule(
