@@ -571,27 +571,29 @@ Deno.serve(async req => {
 })
 ```
 
-### 2. Deploy it
+### 2. Deploy it — dashboard only
 
-**Dashboard — the copy-paste route:**
+1. Dashboard → **Edge Functions** → `sendTgNtfcnAppointment`.
+2. **Edit function** → the code editor opens on the live code.
+3. Click in the editor, select all, paste the whole block from section 1 over it.
+4. **Deploy updates** → wait for the green line, then reopen the function.
+5. **Details** → the version number went up by one. That is the proof it took.
+6. In the editor search for `PERFORM cron.unschedule` — one hit, spelled with one R.
 
-- Dashboard → **Edge Functions** → `sendTgNtfcnAppointment` → editor.
-- Select all, paste the block from 1, press **Deploy**.
+**Secrets the function reads** — Edge Functions → **Secrets**, all six have to exist:
 
-**CLI — nothing installed globally:**
+| Name | Used for |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | the client that reads and deletes the notification row |
+| `SERVICE_ROLE_KEY` | same client — note the name has no `SUPABASE_` in front of it here |
+| `TELEGRAM_BOT_TOKEN` | the send |
+| `TELEGRAM_CHAT_ID` | the send |
+| `RESEND_SECRET` | the failure email |
+| `ERR_EMAILS_SEND_TO` | where that email goes |
 
-- `supabase` is not on PATH on this machine. `pnpm dlx supabase@latest` runs it — 2.111.0 on 2026-08-03.
-- Same pattern as the `update-types` script in `package.json`, which already calls `pnpx supabase`.
-- The CLI reads the function off disk, so write it to a temp folder and let that folder go.
-
-```bash
-cd "$(mktemp -d)" && mkdir -p supabase/functions/sendTgNtfcnAppointment
-awk '/^## Edge functions/{f=1} f && /^[`]{3}ts$/{c=1;next} c && /^[`]{3}$/{exit} c' ~/Documents/GitHub/14_portfolio/dev_readme-supabase-sql.md > supabase/functions/sendTgNtfcnAppointment/index.ts
-pnpm dlx supabase@latest functions deploy sendTgNtfcnAppointment --project-ref bvvhwcmjlbofleanshdm
-```
-
-- Auth is yours to give: `pnpm dlx supabase@latest login`, or export `SUPABASE_ACCESS_TOKEN` first.
-- If it asks for Docker, add `--use-api` and the bundle happens server-side.
+- One missing name and every run answers 500 with `Missing one of ...` before it sends anything.
+- Edge Functions → **Logs** shows `sendTgNtfcnAppointment edge function started` on the first run
+  after a deploy — that line is the fastest check that the new version is the one being invoked.
 
 ### 3. Check it worked
 
@@ -621,17 +623,28 @@ SELECT current_setting('cron.timezone', true) AS cron_timezone, current_setting(
 
 ### 4. Run it now instead of waiting
 
-Same request the cron body sends, so it proves the send and the self-delete in one call:
+The same request pg_cron sends, so one click proves the send and the self-delete together.
 
-```bash
-curl -sS -X POST "$NEXT_PUBLIC_SUPABASE_URL/functions/v1/sendTgNtfcnAppointment" \
-  -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"notificationId":"PASTE_AN_ID_FROM_SECTION_3"}'
+1. Edge Functions → `sendTgNtfcnAppointment` → **Test**.
+2. Method **POST**, body:
+
+```json
+{ "notificationId": "PASTE_AN_ID_FROM_SECTION_3" }
 ```
 
-- `{"ok":true,...}` comes back, the Telegram message lands, and both queries in 3 then return 0 rows.
-- No failure email arrives. One used to on every successful send.
+3. **Send request**.
+
+- `{"ok":true,...}` comes back and the Telegram message lands.
+- Both queries in 3 then give 0 rows, and no failure email arrives. One used to, on every send.
+- A 401 means the panel sent the anon key: put the service role key in the `Authorization` header as
+  `Bearer <key>`, which is what the cron body sends.
+
+### 5. Decided against — the supabase CLI
+
+- `pnpm dlx supabase@latest functions deploy sendTgNtfcnAppointment --project-ref bvvhwcmjlbofleanshdm`
+  works with nothing installed globally, and it was tried on 2026-08-03.
+- It wants a login token and a second copy of the function on disk to read from.
+- Nikita's call: this function is deployed from the dashboard, and this doc stays the only copy.
 
 <br/>
 
