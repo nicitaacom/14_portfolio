@@ -66,7 +66,7 @@ that isn't in that map - it's the single source of truth for what counts as a "f
 3. A leading `-` before the type is shorthand for "removed" (e.g. `-chore: nav links` = `chore: removed nav links`) - use it only when the whole commit is a pure removal/deletion.
 4. Don't invent new types - if none of the 6 fit, ask before adding one. Same for reason-tags (`(fix)`/`(perf)` only) and feature-scopes (whitelist in `API_FOLDER_TO_FEATURE` only) - don't invent a third tag or an off-list scope without asking.
 5. No made-up scopes - the only parens allowed are `chore`/`style`'s reason-tags and `feat`'s whitelisted feature-scopes above.
-6. If commit has something for me to do (e.g execute SQL in supbase) then at a top of commit description add "🚨 TODO" numbered list.
+6. If commit has something for me to do (e.g execute SQL in supbase) then at a top of commit description add "🚨 TODO" numbered list - full shape and the chain requirement in the section below.
 7. commit name length 12-40 HARD LIMIT.
 8. `feat:` ONLY if you can present it to the user as a new capability.
 9. Before typing `chore:` or `style:` on tooling/UI work, ask: did this correct a real bug (`(fix)`), only change speed (`(perf)`, chore only), or neither (no tag)? Don't default every change to the untagged form regardless of which is true.
@@ -81,3 +81,37 @@ that isn't in that map - it's the single source of truth for what counts as a "f
 18. A commit whose CAUSE is an eslint rule (renaming/moving/suppressing something because a rule flagged it) names that rule - not just commits that edit `eslint-local-rules/**` itself (rule 10 already covers that case). If the rule name doesn't fit the 12-40 char subject, put it in the body instead (e.g. `chore: emptyState -> ntfcnEmptyState` body: `no-duplicate-export-easy: same export name collided with scraper's own EmptyState`). Never leave a rule-driven rename/suppress commit with no trace of which rule caused it.
 19. A `moved from:` block only belongs in a commit body when a file was actually renamed/moved (`git mv`, or a delete at the old path + a create at the new one). Extracting a hook/function into a NEW file while the old file just gets edited to import it is not a move - that old file still exists at its original path. Drop the `moved from:` line and the two paths in that case; keep `🟣 <rule>:` then the real why in short lines, same as the non-move shape in CLAUDE.md rule 13.
 20. No commit spam - a run of one-file commits is worse than one commit. Rule 16 splits a batch task by area, but "area" has a floor: when the per-area split lands on commits of a single file each, they belong in ONE commit named after the rule or task that caused them (`chore: eslint fix response naming`, not four separate `chore: resp name in <file>` commits). Rule 14's ~20-file cap is the ceiling for judgment-based work and rule 16 is the grouping test - neither is a reason to hand back a log where every entry is 1 file changed. Real incident: fixing `response-variable-naming` across 5 files produced 4 commits of 1 file each and had to be squashed back into one. Before committing a batch fix, look at how many files each planned commit would hold - if the answer is 1 for several of them in a row, merge those into one commit for the whole rule.
+
+## 🚨 TODO — every description opens with this
+
+A commit that only says what changed leaves me opening the diff to find out whether a manual step is
+waiting. The description answers that first.
+
+```
+chore: check envs are valid
+
+🚨 TODO
+
+1. open dev_readme-supbase-sql.md:878 -> copy the ## Keys check cron block -> open the Supabase
+   SQL editor -> replace YOUR_PRODUCTION_DOMAIN -> run it
+2. Vercel -> Settings -> Environment Variables -> Production -> add CRON_SECRET
+3. curl the webhook -> expect {"ok":true} -> send it twice, the second answers skipped
+```
+
+**Each item is a chain, never a bare command.** `1. supabase functions deploy sendTgNtfcnAppointment`
+is rejected: it says nothing about where to run it, what it changes, or how to tell it worked. An
+item names WHERE to go, WHAT to do there, and HOW you know it worked.
+
+**Nothing to do is still a description:**
+
+```
+🚨 TODO
+
+1. nothing - applied and verified here
+```
+
+### Enforced, not remembered
+
+`~/.claude/hooks/commit-rule-emoji-guard.py` denies the `git commit` before git runs when the body is
+missing, does not open with `🚨 TODO`, holds no numbered items, or holds an item with no arrow chain
+and no file / url / `command` / "button" in it.
