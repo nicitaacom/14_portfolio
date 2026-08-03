@@ -66,7 +66,7 @@ that isn't in that map - it's the single source of truth for what counts as a "f
 3. A leading `-` before the type is shorthand for "removed" (e.g. `-chore: nav links` = `chore: removed nav links`) - use it only when the whole commit is a pure removal/deletion.
 4. Don't invent new types - if none of the 6 fit, ask before adding one. Same for reason-tags (`(fix)`/`(perf)` only) and feature-scopes (whitelist in `API_FOLDER_TO_FEATURE` only) - don't invent a third tag or an off-list scope without asking.
 5. No made-up scopes - the only parens allowed are `chore`/`style`'s reason-tags and `feat`'s whitelisted feature-scopes above.
-6. If commit has something for me to do (e.g execute SQL in supbase) then at a top of commit description add "🚨 TODO" numbered list - full shape and the chain requirement in the section below.
+6. If commit has something for me to do that the AI has NO way to do itself (e.g execute SQL in supbase, set an env var, `git push`) then at a top of commit description add "🚨 TODO" numbered list - full shape, the chain requirement and what never belongs there in the section below.
 7. commit name length 12-40 HARD LIMIT.
 8. `feat:` ONLY if you can present it to the user as a new capability.
 9. Before typing `chore:` or `style:` on tooling/UI work, ask: did this correct a real bug (`(fix)`), only change speed (`(perf)`, chore only), or neither (no tag)? Don't default every change to the untagged form regardless of which is true.
@@ -82,10 +82,25 @@ that isn't in that map - it's the single source of truth for what counts as a "f
 19. A `moved from:` block only belongs in a commit body when a file was actually renamed/moved (`git mv`, or a delete at the old path + a create at the new one). Extracting a hook/function into a NEW file while the old file just gets edited to import it is not a move - that old file still exists at its original path. Drop the `moved from:` line and the two paths in that case; keep `🟣 <rule>:` then the real why in short lines, same as the non-move shape in CLAUDE.md rule 13.
 20. No commit spam - a run of one-file commits is worse than one commit. Rule 16 splits a batch task by area, but "area" has a floor: when the per-area split lands on commits of a single file each, they belong in ONE commit named after the rule or task that caused them (`chore: eslint fix response naming`, not four separate `chore: resp name in <file>` commits). Rule 14's ~20-file cap is the ceiling for judgment-based work and rule 16 is the grouping test - neither is a reason to hand back a log where every entry is 1 file changed. Real incident: fixing `response-variable-naming` across 5 files produced 4 commits of 1 file each and had to be squashed back into one. Before committing a batch fix, look at how many files each planned commit would hold - if the answer is 1 for several of them in a row, merge those into one commit for the whole rule.
 
-## 🚨 TODO — when something is waiting for me
+## 🚨 TODO — only what the AI has no way to do
 
 A commit that only says what changed leaves me opening the diff to find out whether a manual step is
-waiting. The description answers that first.
+waiting. The description answers that first — but only when the step is genuinely mine.
+
+**The test for an item: could the AI have done it itself? Then it is not a TODO.**
+
+| Belongs in the block                            | Never in the block                               |
+| ----------------------------------------------- | ------------------------------------------------ |
+| the Supabase SQL editor, a migration to apply   | `pnpm` / `npm` / `npx` — the AI has a terminal   |
+| a Vercel / Cloudflare / Stripe / PayPal console | cypress, playwright, vitest, storybook           |
+| an env var, a secret, an API key                | eslint, prettier, `tsc`, a build                 |
+| DNS, a domain, an OAuth consent screen          | editing a file, reading a diff                   |
+| my inbox, my phone, a 2FA prompt                | `git add` / `git commit` / `git checkout`        |
+| `git push` when pushing IS the step             | anything it already did (that is a `-` why line) |
+
+`git push` is denied in the AI's environment, so it belongs in the chat reply after every commit —
+not in the body. It earns a numbered item only when the push itself is the step (a deploy to trigger,
+a CI secret to pick up), never as a standing "and now push this" on each commit.
 
 ```
 chore: check envs are valid
@@ -95,14 +110,26 @@ chore: check envs are valid
 1. open dev_readme-supbase-sql.md:878 -> copy the ## Keys check cron block -> open the Supabase
    SQL editor -> replace YOUR_PRODUCTION_DOMAIN -> run it
 2. Vercel -> Settings -> Environment Variables -> Production -> add CRON_SECRET
-3. curl the webhook -> expect {"ok":true} -> send it twice, the second answers skipped
+3. BotFather -> /setwebhook -> paste the url -> expect "Webhook was set"
 ```
 
 **Each item is a chain, never a bare command.** `1. supabase functions deploy sendTgNtfcnAppointment`
 is rejected: it says nothing about where to run it, what it changes, or how to tell it worked. An
 item names WHERE to go, WHAT to do there, and HOW you know it worked.
 
-**Nothing waiting? Then there is NO block.** Write the why on its own:
+**A make-work item is rejected** — this one shipped and is what the rule above exists for:
+
+```
+❌ 🚨 TODO
+
+1. open a terminal in 23_store -> run pnpm exec cypress run --spec cypress/e2e/checkout.cy.ts
+   -> expect 4 passing checkout tests and 0 failures
+```
+
+A perfect chain, and still wrong: the AI has that terminal. It runs the tests and the result becomes
+a fact in the body — `- 4 checkout tests pass, 0 failures`.
+
+**Nothing out of its reach? Then there is NO block.** Write the why on its own:
 
 ```
 chore: drop unused deps
@@ -111,19 +138,24 @@ chore: drop unused deps
 - tsc clean, 197 tests still pass
 ```
 
-A filler `1. nothing - applied and verified here` is **rejected**. A block that keeps saying nothing
-trains me to skip every one of them, and then the one that matters gets skipped too.
+A filler `1. nothing - applied and verified here` is **rejected** for the same reason. Both shapes —
+filler and make-work — train me to skip the block, and then the one that matters gets skipped too.
 
-**The block is required whenever the commit touches** `.env*`, `env.d.ts`, a migration, a `.sql`
-file, or a `dev_readme*sql*` doc — those always leave a variable to set or SQL to run.
+**The block is required whenever the commit touches** `.env*`, `env.d.ts`, a `migrations/` or
+`supabase/` folder, a `.sql` file, or a `dev_readme*sql*` doc — those always leave a variable to set
+or SQL to run. A file that merely holds the word (`app/libs/supabaseAdmin.ts`) does not count.
 
 ### Enforced, not remembered — two layers
 
 **1. Before git runs.** `~/.claude/hooks/commit-rule-emoji-guard.py` (PreToolUse on Bash, wired in
-`~/.claude/settings.json`) denies the commit when the body is missing, does not open with `🚨 TODO`,
-holds no numbered items, or holds an item with no arrow chain and no file / url / `command` /
-"button" in it. It reads `-m`, `-am`, `-mX`, `--message=`, `-F` and `--file=`, and denies a bare
-`git commit` or `--amend --no-edit` because those leave the message unreadable until after it lands.
+`~/.claude/settings.json`) denies the commit when the body is missing, when a trigger path above is
+staged without a `🚨 TODO`, when an item is filler, when an item is a terminal command the AI runs
+itself, when an item names no out-of-reach place at all, or when no item has an arrow chain. It reads
+`-m`, `-am`, `-mX`, `--message=`, `-F` and `--file=`, and denies a bare `git commit` or
+`--amend --no-edit` because those leave the message unreadable until after it lands.
+
+A `command`, a "label" and any path or url are dropped before that out-of-reach match — otherwise
+`check the button reads "Pay with PayPal"` counts as a PayPal step while being a file the AI edits.
 
 **2. Git's own check.** `.githooks/commit-msg` runs the same rules on the message git is about to
 record, so a commit made outside the AI loop is still caught. It is TRACKED, unlike `.git/hooks`,
