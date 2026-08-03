@@ -1,9 +1,10 @@
 /**
  * Sends one Telegram message from the server.
  *
- * Both `sendTelegramMessageAction` and the weekly key check at
- * `app/api/webhooks/check-envs/route.ts` send through here, so the token and chat id are read in one
- * place and a failed send is reported the same way to both.
+ * The send-message route at `app/api/telegram/send-message/route.ts` (what the browser reaches
+ * through `TelegramSDK`), the appointment server actions, and the weekly key check at
+ * `app/api/webhooks/check-envs/route.ts` all send through here, so the token and chat id are read in
+ * one place and a failed send is reported the same way to all of them.
  */
 export type TTelegramSendResult = {
   ok: boolean

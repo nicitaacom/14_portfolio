@@ -30,6 +30,15 @@ declare module API {
     error?: string
   }
 
+  type SendTelegramMessageRequest = {
+    message: string
+  }
+
+  type SendTelegramMessageResponse = {
+    ok: boolean
+    error?: string
+  }
+
   type RateLimitRequest = {
     action: "rateLimit" | "getRemaining"
     limiterName: "bookACall" | "adminPasswordAttempt"

@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
 
-import { sendTelegramMessageAction } from "../actions/sendTelegramMessageAction"
 import { RateLimitSDK } from "@/classes/RateLimitSDK/RateLimitSDK"
+import { TelegramSDK } from "@/classes/TelegramSDK/TelegramSDK"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 import { formatedDateTimeFn } from "./formatedDateTimeFn"
 import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
@@ -85,7 +85,9 @@ export async function bookACallFn(messages: BookACallMessages) {
       throw new Error(responseData.error ?? "Failed to insert booking")
     }
 
-    await sendTelegramMessageAction(message)
+    const telegramSDK = new TelegramSDK()
+    const sendMessageResponse = await telegramSDK.sendMessage(`Booked call: ${message} \n`)
+    if (sendMessageResponse) console.error("Error sending telegram message:", sendMessageResponse)
 
     setNextStep()
   } catch (error) {

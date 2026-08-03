@@ -2,7 +2,7 @@
 
 import supabaseAdmin from "@/libs/supabaseAdmin"
 import { revalidatePath } from "next/cache"
-import { sendTelegramMessageAction } from "./sendTelegramMessageAction"
+import { sendTelegramMessage } from "@/utils/sendTelegramMessage"
 import { deleteTgNtfctnAction } from "./deleteTgNtfctnAction"
 
 export async function deleteDBAppointmentAction(
@@ -15,7 +15,10 @@ export async function deleteDBAppointmentAction(
 
   const { error } = await supabaseAdmin.from("bookings").delete().eq("id", bookedAppointmentId)
   if (error) throw new Error(error.message)
-  await sendTelegramMessageAction(`somebody canceled booking a call ${bookedDate} at ${bookedTimeMSK}`)
+  const telegramResponse = await sendTelegramMessage(
+    `somebody canceled booking a call ${bookedDate} at ${bookedTimeMSK}`,
+  )
+  if (!telegramResponse.ok) console.error("Error sending telegram message:", telegramResponse.description)
   revalidatePath("/appointment")
   revalidatePath("/admin-dashboard")
 }

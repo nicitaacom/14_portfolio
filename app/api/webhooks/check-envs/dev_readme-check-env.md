@@ -65,7 +65,7 @@ type TKeyCheckReport = {
 | File | Holds |
 | --- | --- |
 | [app/utils/checkKeys.ts](../../../utils/checkKeys.ts) | the 3 CAPS consts, the registry of 14 names, every probe, `runKeyChecks()` |
-| [app/utils/sendTelegramMessage.ts](../../../utils/sendTelegramMessage.ts) | one Telegram send, used by this route and `sendTelegramMessageAction` |
+| [app/utils/sendTelegramMessage.ts](../../../utils/sendTelegramMessage.ts) | one Telegram send, used by this route, the send-message route, and the appointment server actions |
 | [app/libs/keysCheckRedis.ts](../../../libs/keysCheckRedis.ts) | the three Upstash keys, on the shared client from `app/libs/redis.ts` |
 | [route.ts](route.ts) | the webhook Supabase pg_cron sends a request to |
 | [tests/keys.test.mjs](../../../../tests/keys.test.mjs) | `pnpm test:keys` — one test per name + 3 drift tests |

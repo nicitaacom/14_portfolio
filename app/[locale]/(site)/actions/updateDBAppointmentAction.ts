@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 import supabaseAdmin from "@/libs/supabaseAdmin"
 import { deleteTgNtfctnAction } from "./deleteTgNtfctnAction"
 import { scheduleTgNtfctnAction } from "./scheduleTgNtfctnAction"
-import { sendTelegramMessageAction } from "./sendTelegramMessageAction"
+import { sendTelegramMessage } from "@/utils/sendTelegramMessage"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 
@@ -77,9 +77,10 @@ export async function updateDBAppointmentAction(
     if (typeof scheduleResp === "string") throw new Error(scheduleResp)
   }
 
-  await sendTelegramMessageAction(
+  const telegramResponse = await sendTelegramMessage(
     `somebody updated booking a call from ${prevBookingDate} at ${prevBookingTimeMSK} to ${moment(normalizedDate).format("DD.MM.YYYY")} at ${normalizedTime}`,
   )
+  if (!telegramResponse.ok) console.error("Error sending telegram message:", telegramResponse.description)
 
   revalidatePath("/appointment")
   revalidatePath("/admin-dashboard")
