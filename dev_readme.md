@@ -12,6 +12,7 @@ and there you find info how Project.tsx work
 [dev_readme-supabase-sql.md](./dev_readme-supabase-sql.md)<br/>
 [dev_readme-ui-system.md](./dev_readme-ui-system.md) — how every seasonal theme is built<br/>
 [dev_readme-utm-stats.md](./dev_readme-utm-stats.md) — the 4 layers that resolve one deviceId per visitor<br/>
+[app/api/webhooks/check-envs/dev_readme-check-env.md](./app/api/webhooks/check-envs/dev_readme-check-env.md) — are the API keys still valid: pre-push run every 3 days, weekly prod webhook<br/>
 
 ### Docs structure:
 

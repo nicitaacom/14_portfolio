@@ -1,0 +1,11 @@
+#!/bin/bash
+# Reject commits with Co-Authored-By trailers (this repo doesn't use them per commit-patterns.md)
+#
+# It moved here from .git/hooks/ on 2026-08-03 so it is tracked by git. In .git/hooks it was wiped by
+# every OS reinstall and every fresh clone, silently. `git config core.hooksPath .githooks` points git
+# at this folder, and that setting is the only thing a fresh clone has to redo.
+if grep -q "Co-Authored-By:" "$1"; then
+  echo "❌ Commit rejected: Co-Authored-By trailers not allowed in this repo (see commit-patterns.md)"
+  exit 1
+fi
+exit 0
