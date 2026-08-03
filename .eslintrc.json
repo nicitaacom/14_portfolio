@@ -1,6 +1,8 @@
 {
   "extends": "next/core-web-vitals",
-  "plugins": ["local"],
+  "plugins": [
+    "local"
+  ],
   "rules": {
     "local/no-untranslated-ui": [
       "warn",
@@ -40,5 +42,25 @@
     "local/zustand-require-method": "warn",
     "local/zustand-state-setter-pairing": "warn",
     "local/zustand-store-export-matches-filename": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "package.json"
+      ],
+      "processor": "local/json"
+    },
+    {
+      "files": [
+        "package.json/*.js"
+      ],
+      "parserOptions": {
+        "ecmaVersion": 2022,
+        "sourceType": "module"
+      },
+      "rules": {
+        "local/no-unused-dependencies": "warn"
+      }
+    }
+  ]
 }

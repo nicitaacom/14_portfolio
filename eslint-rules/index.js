@@ -29,5 +29,8 @@ module.exports = {
     ...require("./zustand-require-method"),
     ...require("./zustand-state-setter-pairing"),
     ...require("./zustand-store-export-matches-filename"),
+    // runs on package.json through the processor below
+    ...require("./no-unused-dependencies"),
   },
+  processors: require("./json-processor"),
 }

@@ -6,7 +6,7 @@
     "dev": "next dev -p 3014",
     "build": "next build",
     "start": "next start -p 3014",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --ext .ts,.tsx && eslint package.json",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/alias-hook.mjs --test tests/resolveSeasonalTheme.test.mjs tests/checkKeys.test.mjs",
     "test:keys": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/alias-hook.mjs --env-file=.env.local --test tests/keys.test.mjs",
     "update-types": "pnpx supabase gen types typescript --project-id bvvhwcmjlbofleanshdm > app/interfaces/types_db.ts"
