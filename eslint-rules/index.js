@@ -14,6 +14,7 @@ module.exports = {
     ...require("./vars-order"),
     // same here - the rule id is "no-unused-envs", see the header of unused-declared-vars.js
     ...require("./unused-declared-vars"),
+    ...require("./no-undeclared-envs"),
     ...require("./response-variable-naming"),
     ...require("./zustand-creator-name-matches-store"),
     ...require("./zustand-extract-set-type"),
