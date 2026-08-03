@@ -12,9 +12,9 @@ there are two:
 - **on push** — every 3 days, against the local dotenv file
 - **weekly in prod** — against the real Vercel values, because those are a separate copy that drifts
 
-Same design as `23_store`. See its
-[dev_readme-check-env.md](../../../../../23_store/app/api/webhooks/check-envs/dev_readme-check-env.md)
-for the fuller write-up; this file records what is different here.
+Same design as `23_store`, whose copy at `app/api/webhooks/check-envs/dev_readme-check-env.md` holds the
+fuller write-up (not linked — that is a separate repo, so a relative link would break on GitHub). This
+file records what is different here.
 
 ## 1. Where data lives
 
