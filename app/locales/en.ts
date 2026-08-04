@@ -183,7 +183,7 @@ export default {
       hoverHere: "Hover an icon",
     },
     card: {
-      engagement: "Client engagement",
+      engagement: "11.2025",
     },
     modal: {
       label: "Nexgem automation platform",

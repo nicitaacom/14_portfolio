@@ -186,7 +186,7 @@ export default {
       hoverHere: "Наведіть на іконку",
     },
     card: {
-      engagement: "Клієнтський проєкт",
+      engagement: "11.2025",
     },
     modal: {
       label: "Платформа автоматизації Nexgem",

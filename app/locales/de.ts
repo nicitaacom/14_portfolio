@@ -189,7 +189,7 @@ export default {
       hoverHere: "Auf ein Symbol zeigen",
     },
     card: {
-      engagement: "Kundenprojekt",
+      engagement: "11.2025",
     },
     modal: {
       label: "Nexgem Automatisierungsplattform",
