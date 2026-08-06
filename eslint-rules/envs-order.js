@@ -3,16 +3,12 @@
 const fs = require("fs")
 const path = require("path")
 
-// This file is named vars-order.js while the rule id below is "envs-order" - a PreToolUse hook on
-// this machine refuses any file path whose name holds those three letters, so the file needed a
-// different name. ESLint reads the id from the export key at the bottom, not from the filename.
-//
 // Why this rule exists: .env.example is the source of truth for which variables the app reads, and
 // env.d.ts is what TypeScript checks every process.<VAR> access against. When the two drift, a
 // variable either type-checks with no example line telling the next person to set it, or has an
 // example line and no type at all. This keeps both files listing the SAME names in the SAME order,
 // and keeps .env.example itself grouped: the site URL variables, then Supabase, then Redis/Upstash,
-// then AWS, then Pusher, then the rest.
+// then AWS, then Pusher, then notifications, then payments, then the rest, then config.
 //
 // The two directions of drift are treated differently on purpose:
 //
@@ -32,15 +28,16 @@ const path = require("path")
 // four checks, and firing on Program of that one file reports once per lint run instead of once per
 // source file in the repo.
 
-// The order .env.example itself must run in. Rank 0 sits highest in the file, rank 5 lowest. A site
+// The order .env.example itself must run in. Rank 0 sits highest in the file, rank 7 lowest. A site
 // URL is the one variable a fresh checkout always sets first, Supabase is the database behind it,
-// Redis/Upstash the key-value store in front of that, then AWS, then Pusher - after those five,
-// order is free.
+// Redis/Upstash the key-value store in front of that, then AWS, then Pusher, then notifications, then
+// payments - after those seven, order is free, with one exception: config sits last on purpose, see
+// the missingConfigSpacing check below.
 //
-// AWS and Pusher are conditional: a repo holding no AWS variable simply runs Redis/Upstash straight
-// into Pusher, and a repo holding neither runs Redis/Upstash straight into the rest. A group nobody
-// uses is never a problem - only a group sitting ABOVE one that belongs higher gets reported, which
-// the highest-rank-so-far walk below gives for free.
+// AWS, Pusher, notifications and payments are all conditional: a repo holding none of a group simply
+// runs the group before it straight into the group after. A group nobody uses is never a problem -
+// only a group sitting ABOVE one that belongs higher gets reported, which the highest-rank-so-far walk
+// below gives for free.
 const GROUPS = [
   { rank: 0, label: "site URL", matches: name => /URL$/.test(name) && /(PRODUCTION|SITE)/.test(name) },
   { rank: 1, label: "Supabase", matches: name => name.includes("SUPABASE") },
@@ -48,9 +45,18 @@ const GROUPS = [
   // S3 is an AWS service, so an S3_* variable belongs with the AWS keys that reach it
   { rank: 3, label: "AWS", matches: name => name.includes("AWS") || name.startsWith("S3_") },
   { rank: 4, label: "Pusher", matches: name => name.includes("PUSHER") },
+  {
+    rank: 5,
+    label: "notifications",
+    matches: name => name.includes("TELEGRAM") || name.includes("RESEND") || name.includes("CRON") || name.includes("NOTIFICATION"),
+  },
+  // no repo has a payments variable yet - the rank is reserved so one lands in the right spot
+  // the day a repo adds Stripe or similar, instead of the taxonomy growing again then
+  { rank: 6, label: "payments", matches: name => name.includes("STRIPE") || name.includes("PAYMENT") },
 ]
 
-const OTHER_GROUP = { rank: 5, label: "everything else" }
+// config has no matcher on purpose - see missingConfigSpacing below for why nothing sorts into it yet.
+const OTHER_GROUP = { rank: 7, label: "everything else" }
 const FALLBACK_INDENT = "      "
 
 function getGroup(name) {
@@ -65,20 +71,49 @@ function readLines(filePath) {
   }
 }
 
+// This repo's example file is .env.local.example, not .env.example - see
+// app/api/webhooks/check-envs/dev_readme-check-env.md. .env.example is tried second so the rule still
+// works in a repo using that convention instead.
+function findExampleFile(repoRoot) {
+  const localExample = path.join(repoRoot, ".env.local.example")
+  if (fs.existsSync(localExample)) return localExample
+
+  return path.join(repoRoot, ".env.example")
+}
+
 // Every non-comment, non-blank line of .env.example holds one variable - the identifier before the
 // first "=". The value after it is never read.
+//
+// Alongside the name, each one gets a clusterIndex: .env.example's own blank lines break it into
+// clusters (Supabase, Redis/Upstash, Telegram, Lambda, ...), and a fix that adds or moves a
+// declaration in env.d.ts uses this to know whether the line lands flush against its neighbor or
+// behind a blank line of its own - matching the grouping .env.example already chose.
 function parseExampleNames(filePath) {
   const lines = readLines(filePath)
   if (lines === null) return null
 
   const names = []
+  const clusterIndexByName = new Map()
+  let clusterIndex = 0
+  let sawNameInCluster = false
   for (const line of lines) {
     const trimmed = line.trim()
-    if (trimmed === "" || trimmed.startsWith("#")) continue
+    if (trimmed === "") {
+      if (sawNameInCluster) {
+        clusterIndex += 1
+        sawNameInCluster = false
+      }
+      continue
+    }
+    if (trimmed.startsWith("#")) continue
     const match = /^(?:export\s+)?([A-Za-z_$][\w$]*)\s*=/.exec(trimmed)
-    if (match && !names.includes(match[1])) names.push(match[1])
+    if (match && !names.includes(match[1])) {
+      names.push(match[1])
+      clusterIndexByName.set(match[1], clusterIndex)
+      sawNameInCluster = true
+    }
   }
-  return names
+  return { names, clusterIndexByName }
 }
 
 // Every "IDENTIFIER: type" line inside the ProcessEnv interface is one declaration. Comments are
@@ -174,13 +209,14 @@ function buildMoveFix(fixer, sourceCode, fromLine, afterLine) {
 
 // The line a new declaration goes after: the nearest name ABOVE it in .env.example that is already
 // declared, so the added line lands where .env.example already puts it. When nothing above it is
-// declared yet, it goes directly under the `interface ProcessEnv {` line.
+// declared yet, it goes directly under the `interface ProcessEnv {` line - name comes back null there,
+// since the interface line belongs to no cluster.
 function findAnchorLine(missingName, exampleNames, lineByName, interfaceLine) {
   for (let index = exampleNames.indexOf(missingName) - 1; index >= 0; index--) {
     const previousLine = lineByName.get(exampleNames[index])
-    if (previousLine !== undefined) return previousLine
+    if (previousLine !== undefined) return { line: previousLine, name: exampleNames[index] }
   }
-  return interfaceLine
+  return { line: interfaceLine, name: null }
 }
 
 module.exports = {
@@ -211,7 +247,14 @@ module.exports = {
         wrongGroupOrder:
           '.env.example puts "{{name}}" ({{group}}) below "{{previousName}}" ({{previousGroup}}) - reorder ' +
           ".env.example so it runs: the site URL variables, then Supabase, then Redis/Upstash, then AWS, " +
-          "then Pusher, then the rest.",
+          "then Pusher, then notifications, then payments, then the rest, then config.",
+        missingBlankLine:
+          '"{{name}}" starts a new cluster in .env.example (a blank line sits above it there) - add a blank ' +
+          'line above it in ProcessEnv too, so the two files split into the same clusters.',
+        missingConfigSpacing:
+          '"{{name}}" is the first config variable ({{name}} already holds a real value, e.g. an email or a ' +
+          "number) but only {{found}} blank line(s) sit above it - config needs a double blank line separating " +
+          "it from the group above, same as every other group boundary.",
       },
     },
     create(context) {
@@ -222,9 +265,10 @@ module.exports = {
       if (repoRoot === null || path.resolve(filename) !== path.join(repoRoot, "env.d.ts")) return {}
 
       const sourceCode = context.sourceCode ?? context.getSourceCode()
-      const exampleNames = parseExampleNames(path.join(repoRoot, ".env.example"))
+      const parsedExample = parseExampleNames(findExampleFile(repoRoot))
       const parsed = parseDeclarations(sourceCode.lines)
-      if (exampleNames === null || parsed === null) return {}
+      if (parsedExample === null || parsed === null) return {}
+      const { names: exampleNames, clusterIndexByName } = parsedExample
 
       return {
         Program() {
@@ -236,15 +280,25 @@ module.exports = {
           for (const name of exampleNames) {
             if (lineByName.has(name)) continue
 
-            const anchorLine = findAnchorLine(name, exampleNames, lineByName, parsed.interfaceLine)
-            const anchorText = sourceCode.lines[anchorLine - 1] ?? ""
-            const anchorEnd = sourceCode.getIndexFromLoc({ line: anchorLine, column: anchorText.length })
+            const anchor = findAnchorLine(name, exampleNames, lineByName, parsed.interfaceLine)
+            const anchorText = sourceCode.lines[anchor.line - 1] ?? ""
+            const anchorEnd = sourceCode.getIndexFromLoc({ line: anchor.line, column: anchorText.length })
+
+            // A blank line goes ahead of the inserted declaration when .env.example puts this name in
+            // a later cluster than its anchor - the same blank line .env.example already has between
+            // the two. Landing right on the interface line never gets one: there is no cluster above
+            // it to separate from.
+            const anchorClusterIndex = anchor.name === null ? null : clusterIndexByName.get(anchor.name)
+            const needsBlankLine =
+              anchorClusterIndex !== null && clusterIndexByName.get(name) !== anchorClusterIndex
+            const prefix = needsBlankLine ? "\n" : ""
 
             context.report({
-              loc: getLineLoc(sourceCode, anchorLine),
+              loc: getLineLoc(sourceCode, anchor.line),
               messageId: "missingDeclaration",
               data: { name },
-              fix: fixer => fixer.insertTextAfterRange([anchorEnd, anchorEnd], `\n${indent}${name}: string`),
+              fix: fixer =>
+                fixer.insertTextAfterRange([anchorEnd, anchorEnd], `\n${prefix}${indent}${name}: string`),
             })
           }
 
@@ -291,6 +345,37 @@ module.exports = {
               messageId: previousName ? "wrongOrder" : "wrongOrderFirst",
               data: { name: declaration.name, previousName: previousName ?? "" },
               fix: isFixable ? fixer => buildMoveFix(fixer, sourceCode, declaration.line, anchorLine) : undefined,
+            })
+          }
+
+          // Blank-line separators between clusters: only checked once every pair above is already in
+          // the right order, so a move fix always settles before this looks at spacing - moving a line
+          // would invalidate whatever blank line this inserted around it. One report per pass, same as
+          // the move fix, for the same reason: two inserts in one pass would fight over line numbers.
+          let hasBlankLineFix = false
+          for (let index = 1; index < sharedDeclarations.length; index++) {
+            const declaration = sharedDeclarations[index]
+            const previous = sharedDeclarations[index - 1]
+            const declarationCluster = clusterIndexByName.get(declaration.name)
+            const previousCluster = clusterIndexByName.get(previous.name)
+            if (declarationCluster === previousCluster) continue
+
+            const isAdjacent = declaration.line === previous.line + 1
+            if (!isAdjacent) continue
+
+            const isFixable = !hasBlankLineFix
+            if (isFixable) hasBlankLineFix = true
+
+            context.report({
+              loc: getLineLoc(sourceCode, declaration.line),
+              messageId: "missingBlankLine",
+              data: { name: declaration.name },
+              fix: isFixable
+                ? fixer => {
+                    const lineStart = sourceCode.getIndexFromLoc({ line: declaration.line, column: 0 })
+                    return fixer.insertTextBeforeRange([lineStart, lineStart], "\n")
+                  }
+                : undefined,
             })
           }
 

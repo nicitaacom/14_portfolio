@@ -3,9 +3,8 @@
 const fs = require("fs")
 const path = require("path")
 
-// This file is named unused-declared-vars.js while the rule id below is "no-defined-unused-envs" -
-// ESLint reads the id from the export key at the bottom, not from the filename. vars-order.js in
-// this same folder uses the id "envs-order" for the same reason.
+// This file is named unused-declared-envs.js while the rule id below is "no-defined-unused-envs" -
+// ESLint reads the id from the export key at the bottom, not from the filename.
 //
 // Why this rule exists: env.d.ts only ever grows. A declaration stays behind long after the code
 // that read it was deleted, and nothing complains - it still type-checks, .env.example still tells
@@ -58,7 +57,7 @@ const IDENTIFIER_PATTERN = /[A-Za-z_$][\w$]*/g
 // this the rule would walk the whole repo dozens of times per lint run.
 const usedNamesByRepoRoot = new Map()
 
-// Same walk-up as vars-order.js - the nearest folder holding a package.json is the repo root, and
+// Same walk-up as envs-order.js - the nearest folder holding a package.json is the repo root, and
 // the declaration file sits directly in it.
 function findRepoRoot(filename) {
   let dir = path.dirname(filename)

@@ -10,10 +10,9 @@
 module.exports = {
   rules: {
     "no-untranslated-ui": require("./no-untranslated-ui"),
-    // file name differs from the rule id ("envs-order") on purpose - see the header of vars-order.js
-    ...require("./vars-order"),
-    // same here - the rule id is "no-defined-unused-envs", see the header of unused-declared-vars.js
-    ...require("./unused-declared-vars"),
+    ...require("./envs-order"),
+    // same here - the rule id is "no-defined-unused-envs", see the header of unused-declared-envs.js
+    ...require("./unused-declared-envs"),
     ...require("./no-undeclared-envs"),
     ...require("./response-variable-naming"),
     ...require("./zustand-creator-name-matches-store"),
