@@ -12,7 +12,6 @@
     "update-types": "pnpx supabase gen types typescript --project-id bvvhwcmjlbofleanshdm > app/interfaces/types_db.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-scheduler": "^3.675.0",
     "@supabase/auth-helpers-nextjs": "^0.8.7",
     "@supabase/supabase-js": "^2.43.2",
     "@upstash/ratelimit": "^1.1.3",
