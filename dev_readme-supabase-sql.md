@@ -357,22 +357,7 @@ GRANT EXECUTE ON FUNCTION public.log_cron_run(text, text) TO authenticated;
 
 ## Edge functions
 
-`sendTgNtfcnAppointment` — the appointment reminder. pg_cron fires it 10 minutes before a booking, it
-sends the Telegram message, deletes the notification row, then deletes its own cron schedule.
-
-- The schedule is created in `app/[locale]/(site)/actions/scheduleTgNtfctnAction.ts`.
-- This doc is the only permanent copy of the code — the dashboard editor keeps no history.
-
-### 0. Two things that break the delete silently
-
-- `PERFORM`, never `PERFORRM`. A misspelled keyword is a parse error for the whole `DO` block, and
-  `EXCEPTION WHEN OTHERS` only catches runtime errors, so nothing absorbs it.
-- `'${cronJobName}'` has to interpolate. Escaped braces send the literal text instead, and then the
-  unschedule looks for a job by that literal name.
-- Both were wrong at once until 2026-08-03: every successful send left its schedule behind and mailed
-  a failure notice for the delete step.
-
-### 1. The function
+### 1. Function name: sendTgNtfcnAppointment
 
 ```ts
 // @ts-nocheck
@@ -571,25 +556,16 @@ Deno.serve(async req => {
 })
 ```
 
-### 2. Deploy it — dashboard only
-
-1. Dashboard → **Edge Functions** → `sendTgNtfcnAppointment`.
-2. **Edit function** → the code editor opens on the live code.
-3. Click in the editor, select all, paste the whole block from section 1 over it.
-4. **Deploy updates** → wait for the green line, then reopen the function.
-5. **Details** → the version number went up by one. That is the proof it took.
-6. In the editor search for `PERFORM cron.unschedule` — one hit, spelled with one R.
-
 **Secrets the function reads** — Edge Functions → **Secrets**, all six have to exist:
 
-| Name | Used for |
-| --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | the client that reads and deletes the notification row |
-| `SERVICE_ROLE_KEY` | same client — note the name has no `SUPABASE_` in front of it here |
-| `TELEGRAM_BOT_TOKEN` | the send |
-| `TELEGRAM_CHAT_ID` | the send |
-| `RESEND_SECRET` | the failure email |
-| `ERR_EMAILS_SEND_TO` | where that email goes |
+| Name                       | Used for                                                           |
+| -------------------------- | ------------------------------------------------------------------ |
+| `NEXT_PUBLIC_SUPABASE_URL` | the client that reads and deletes the notification row             |
+| `SERVICE_ROLE_KEY`         | same client — note the name has no `SUPABASE_` in front of it here |
+| `TELEGRAM_BOT_TOKEN`       | the send                                                           |
+| `TELEGRAM_CHAT_ID`         | the send                                                           |
+| `RESEND_SECRET`            | the failure email                                                  |
+| `ERR_EMAILS_SEND_TO`       | where that email goes                                              |
 
 - One missing name and every run answers 500 with `Missing one of ...` before it sends anything.
 - Edge Functions → **Logs** shows `sendTgNtfcnAppointment edge function started` on the first run
@@ -611,19 +587,20 @@ SELECT status, return_message, start_time FROM cron.job_run_details ORDER BY sta
 SELECT current_setting('cron.timezone', true) AS cron_timezone, current_setting('TimeZone') AS db_timezone, now();
 ```
 
-| Answer | Meaning |
-| --- | --- |
-| `schedule` = `50 14 3 8 *` | right. 5th field `*`, 3rd field the appointment day |
-| `schedule` ends in a digit | the day-of-week bug is back — cron reads day-number OR weekday, so it fires early |
-| `scheduled_for` = booking time minus 10 min | the row the edge function reads |
-| after the send: 0 rows in `cron.job` | the schedule deleted itself — the whole point of section 0 |
-| after the send: 0 rows in `telegram_notifications` | the row deleted itself |
-| `cron_timezone` = `Europe/Moscow` | fires at the intended minute |
-| `cron_timezone` = `UTC` | fires 3 hours late — the schedule numbers are Moscow local |
+| Answer                                             | Meaning                                                                           |
+| -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `schedule` = `50 14 3 8 *`                         | correct — 5th field is `*`, 3rd field is the appointment day                      |
+| `schedule` ends in a digit                         | the day-of-week bug is back — cron reads day-number OR weekday, so it fires early |
+| `scheduled_for` = booking time minus 10 min        | the row the edge function reads                                                   |
+| after the send: 0 rows in `cron.job`               | the schedule deleted itself                                                       |
+| after the send: 0 rows in `telegram_notifications` | the row deleted itself                                                            |
+| `cron_timezone` = `Europe/Moscow`                  | fires at the intended minute                                                      |
+| `cron_timezone` = `UTC`                            | fires 3 hours late — the schedule numbers are Moscow local                        |
 
 ### 4. Run it now instead of waiting
 
-The same request pg_cron sends, so one click proves the send and the self-delete together.
+The same request pg_cron sends. One click sends the message and deletes the schedule, so both fixes
+show at once.
 
 1. Edge Functions → `sendTgNtfcnAppointment` → **Test**.
 2. Method **POST**, body:
@@ -634,8 +611,9 @@ The same request pg_cron sends, so one click proves the send and the self-delete
 
 3. **Send request**.
 
-- `{"ok":true,...}` comes back and the Telegram message lands.
-- Both queries in 3 then give 0 rows, and no failure email arrives. One used to, on every send.
+- `{"ok":true,...}` comes back and the Telegram message arrives.
+- Both queries in 3 then give 0 rows, and no failure email arrives. Before the fix one arrived after
+  every successful send.
 - A 401 means the panel sent the anon key: put the service role key in the `Authorization` header as
   `Bearer <key>`, which is what the cron body sends.
 
@@ -740,15 +718,15 @@ curl -s -X POST https://YOUR_PRODUCTION_DOMAIN/api/webhooks/check-envs \
   -H "Authorization: Bearer YOUR_CRON_SECRET" | jq
 ```
 
-| Answer | Meaning |
-| --- | --- |
-| `{"ok":true,"checked":14}` | every name is good |
-| `{"skipped":true,"daysSinceLastRun":0}` | already ran inside `PROD_CHECK_EVERY_DAYS` — the gate works |
-| `{"ok":false,...,"alerted":true,"telegramSent":true}` | the Telegram message went out, no email sent |
-| `{"ok":false,...,"alerted":true,"emailSent":true}` | Telegram did not land, so the email went instead |
-| `{"ok":false,"alerted":false,"reason":"same names as last alert"}` | quiet on purpose, nothing new |
-| `{"error":"Unauthorized"}` | the Vault secret and `CRON_SECRET` in Vercel differ |
-| `{"error":"CRON_SECRET is not configured"}` | the variable is missing from Vercel Production |
+| Answer                                                             | Meaning                                                     |
+| ------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `{"ok":true,"checked":14}`                                         | every name is good                                          |
+| `{"skipped":true,"daysSinceLastRun":0}`                            | already ran inside `PROD_CHECK_EVERY_DAYS` — the gate works |
+| `{"ok":false,...,"alerted":true,"telegramSent":true}`              | the Telegram message went out, no email sent                |
+| `{"ok":false,...,"alerted":true,"emailSent":true}`                 | Telegram did not land, so the email went instead            |
+| `{"ok":false,"alerted":false,"reason":"same names as last alert"}` | quiet on purpose, nothing new                               |
+| `{"error":"Unauthorized"}`                                         | the Vault secret and `CRON_SECRET` in Vercel differ         |
+| `{"error":"CRON_SECRET is not configured"}`                        | the variable is missing from Vercel Production              |
 
 ### 4. Where the state lives
 
