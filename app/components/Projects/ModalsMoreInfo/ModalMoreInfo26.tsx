@@ -6,6 +6,7 @@ import { useScopedI18n } from "@/locales/client"
 import webAvatar from "../../../../public/collaborations/web-avatar.jpg"
 import { projectStacks } from "@/data/projectStacks"
 import { project26Achievements } from "@/data/project26Achievements"
+import { repos } from "@/data/repos"
 
 export default function ModalMoreInfo26() {
   const { isOpen, closeModal } = useModalsStore()
@@ -16,7 +17,7 @@ export default function ModalMoreInfo26() {
       isOpen={isOpen["26MoreInfo"]}
       onClose={() => closeModal("26MoreInfo")}
       label="Hot delivery"
-      siteUrl="https://hot-delivery.vercel.app/"
+      siteUrl={repos[25].url}
       taskLabel={t("project26Task")}
       stack={projectStacks.project26}
       deadline="2 weeks"

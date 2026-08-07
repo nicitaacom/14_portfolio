@@ -122,7 +122,7 @@ const repos = [
   {
     id: 26,
     description: "hot delivery",
-    url: "https://hot-delivery.net/",
+    url: "https://hot-delivery.nicitaa.com/",
   },
   {
     id: 27,
