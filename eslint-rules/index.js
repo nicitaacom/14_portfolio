@@ -11,7 +11,7 @@ module.exports = {
   rules: {
     "no-untranslated-ui": require("./no-untranslated-ui"),
     ...require("./envs-order"),
-    // same here - the rule id is "no-defined-unused-envs", see the header of unused-declared-envs.js
+    // same here - the rule id is "no-unused-defined-envs", see the header of unused-declared-envs.js
     ...require("./unused-declared-envs"),
     ...require("./no-undeclared-envs"),
     ...require("./response-variable-naming"),

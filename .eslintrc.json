@@ -5,8 +5,8 @@
   ],
   "rules": {
     "local/envs-order": "warn",
-    "local/no-defined-unused-envs": "warn",
-    "local/no-undefined-used-envs": "warn",
+    "local/no-unused-defined-envs": "error",
+    "local/no-used-undefined-envs": "error",
     "local/no-untranslated-ui": [
       "warn",
       {

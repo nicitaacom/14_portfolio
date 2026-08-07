@@ -3,7 +3,7 @@
 const fs = require("fs")
 const path = require("path")
 
-// This file is named unused-declared-envs.js while the rule id below is "no-defined-unused-envs" -
+// This file is named unused-declared-envs.js while the rule id below is "no-unused-defined-envs" -
 // ESLint reads the id from the export key at the bottom, not from the filename.
 //
 // Why this rule exists: env.d.ts only ever grows. A declaration stays behind long after the code
@@ -82,7 +82,7 @@ const SETTLEMENTS =
   "this rule parses, so the warning goes on its own - and TS autocomplete stops offering a name " +
   "nothing reads\n" +
   "2. a library reads it without being handed it, the way Redis.fromEnv() reads UPSTASH_REDIS_REST_" +
-  "URL - keep it, and suppress here: // eslint-disable-next-line local/no-defined-unused-envs -- " +
+  "URL - keep it, and suppress here: // eslint-disable-next-line local/no-unused-defined-envs -- " +
   "read by Redis.fromEnv()\n" +
   "3. that same library also takes it as an argument - hand it over explicitly instead of " +
   "suppressing, the way app/libs/supabaseClient.ts writes createClientComponentClient<Database>({ " +
@@ -230,7 +230,7 @@ function getLineLoc(sourceCode, line) {
 }
 
 module.exports = {
-  "no-defined-unused-envs": {
+  "no-unused-defined-envs": {
     meta: {
       type: "suggestion",
       docs: {
