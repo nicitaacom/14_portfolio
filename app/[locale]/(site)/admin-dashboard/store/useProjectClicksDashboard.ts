@@ -1,4 +1,4 @@
-import { trackedProjects } from "@/data/trackedProjects"
+import { trackedProjects } from "@/data/repos"
 import { create } from "zustand"
 import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB"
 import type { TProjectClicksTimelineDB } from "../types/TProjectClicksTimelineDB"

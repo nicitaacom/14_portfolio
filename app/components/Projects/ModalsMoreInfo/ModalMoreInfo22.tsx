@@ -1,12 +1,14 @@
 "use client"
 
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
+import { trackedProjectsMap } from "@/data/repos"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/useModalsStore"
-import { projectStacks } from "@/data/projectStacks"
 import { project22Achievements } from "@/data/project22Achievements"
 
 export default function ModalMoreInfo22() {
+  const project = trackedProjectsMap["project-22-aer"]
+
   const { isOpen, closeModal } = useModalsStore()
   const t = useScopedI18n("projectModal")
 
@@ -17,7 +19,7 @@ export default function ModalMoreInfo22() {
       label="22_aer"
       siteUrl="https://22-aer-nicitaa.vercel.app/"
       taskLabel={t("project22Task")}
-      stack={projectStacks.project22}
+      stack={project.stack}
       deadline="1 month"
       collaborators={[
         { description: project22Achievements },

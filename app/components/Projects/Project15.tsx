@@ -1,6 +1,5 @@
 import { Project } from "../Project/Project"
-import { trackedProjectsMap } from "@/data/trackedProjects"
-import { projectStacks } from "@/data/projectStacks"
+import { trackedProjectsMap } from "@/data/repos"
 
 export default function Project15({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-15-hoobank"]
@@ -8,7 +7,7 @@ export default function Project15({ openModal }: { openModal: () => void }) {
   return (
     <Project
       openMoreInfoModal={openModal}
-      stack={projectStacks.project15}
+      stack={project.stack}
       stackCharacterLimit={40}
       date="05.2023 - 05.2023 (~50h)"
       siteUrl="https://15-hoo-bank.vercel.app"

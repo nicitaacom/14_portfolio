@@ -1,10 +1,9 @@
 "use client"
 
 import { Project } from "../Project/Project"
-import { trackedProjectsMap } from "@/data/trackedProjects"
+import { trackedProjectsMap } from "@/data/repos"
 import { useScopedI18n } from "@/locales/client"
 import { NexgemProjectPreview } from "./NexgemProjectPreview"
-import { projectStacks } from "@/data/projectStacks"
 
 export default function ProjectNexgem({ openModal }: { openModal: () => void }) {
   const t = useScopedI18n("nexgemProject.card")
@@ -14,7 +13,7 @@ export default function ProjectNexgem({ openModal }: { openModal: () => void }) 
     <Project
       openMoreInfoModal={openModal}
       preview={<NexgemProjectPreview />}
-      stack={projectStacks.projectNexgem}
+      stack={project.stack}
       stackCharacterLimit={40}
       date={t("engagement")}
       projectSlug={project.slug}

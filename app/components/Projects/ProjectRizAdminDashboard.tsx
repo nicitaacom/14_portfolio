@@ -1,6 +1,5 @@
 import { Project } from "../Project/Project"
-import { trackedProjectsMap } from "@/data/trackedProjects"
-import { projectStacks } from "@/data/projectStacks"
+import { trackedProjectsMap } from "@/data/repos"
 
 export default function ProjectRizAdminDashboard({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-riz-admin-dashboard"]
@@ -8,7 +7,7 @@ export default function ProjectRizAdminDashboard({ openModal }: { openModal: () 
   return (
     <Project
       openMoreInfoModal={openModal}
-      stack={projectStacks.projectRizAdminDashboard}
+      stack={project.stack}
       stackCharacterLimit={40}
       date="04.2023 - 04.2023 (~40h)"
       figmaUrl="https://www.figma.com/file/gEIGnyBftjDqfN9WhPaSea/Figma-riz?type=design&node-id=1669-162202&mode=design"

@@ -1,6 +1,5 @@
 import { Project } from "../../Project/Project"
-import { trackedProjectsMap } from "@/data/trackedProjects"
-import { projectStacks } from "@/data/projectStacks"
+import { trackedProjectsMap } from "@/data/repos"
 
 export default function Project28({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-28-notion-clone"]
@@ -8,7 +7,7 @@ export default function Project28({ openModal }: { openModal: () => void }) {
   return (
     <Project
       openMoreInfoModal={openModal}
-      stack={projectStacks.project28}
+      stack={project.stack}
       stackCharacterLimit={40}
       date="10.2023 - 10.2023 (~14h)"
       siteUrl="https://28-jotion-clone.vercel.app/"

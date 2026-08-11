@@ -1,11 +1,13 @@
 "use client"
 
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
+import { trackedProjectsMap } from "@/data/repos"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/useModalsStore"
-import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfoRizAdminDashboard() {
+  const project = trackedProjectsMap["project-riz-admin-dashboard"]
+
   const { isOpen, closeModal } = useModalsStore()
   const t = useScopedI18n("projectModal")
 
@@ -16,7 +18,7 @@ export default function ModalMoreInfoRizAdminDashboard() {
       label={t("projectRizLabel")}
       siteUrl="https://admin.waka.cool/not-deployed"
       taskLabel={t("projectRizTask")}
-      stack={projectStacks.projectRizAdminDashboard}
+      stack={project.stack}
       deadline={t("noDeadline")}
       collaborators={[{ description: t("projectRizCollaboration") }]}
     />

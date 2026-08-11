@@ -3,7 +3,7 @@
 import { useCallback, type ReactNode, useMemo } from "react"
 import { FiRefreshCcw } from "react-icons/fi"
 import { Button } from "@/components/Button"
-import { trackedProjects } from "@/data/trackedProjects"
+import { trackedProjects } from "@/data/repos"
 import { useSetProjectClicksDashboard } from "../hooks/useSetProjectClicksDashboard"
 import { useProjectClicksDashboard } from "../store/useProjectClicksDashboard"
 import { ProjectClicksSummaryStat } from "./ProjectClicksSummaryStat"

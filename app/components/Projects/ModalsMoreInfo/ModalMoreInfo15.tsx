@@ -1,10 +1,12 @@
 "use client"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
+import { trackedProjectsMap } from "@/data/repos"
 import { useScopedI18n } from "@/locales/client"
 import { useModalsStore } from "@/store/useModalsStore"
-import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo15() {
+  const project = trackedProjectsMap["project-15-hoobank"]
+
   const { isOpen, closeModal } = useModalsStore()
   const t = useScopedI18n("projectModal")
 
@@ -15,7 +17,7 @@ export default function ModalMoreInfo15() {
       label="15_HooBank"
       siteUrl="https://15-hoo-bank.vercel.app/"
       taskLabel={t("project15Task")}
-      stack={projectStacks.project15}
+      stack={project.stack}
       deadline="2 weeks"
       collaborators={[{ description: t("wholeSite") }]}
     />

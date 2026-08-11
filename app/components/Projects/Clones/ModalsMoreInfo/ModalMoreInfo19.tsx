@@ -1,10 +1,12 @@
 "use client"
 
 import { useModalsStore } from "@/store/useModalsStore"
+import { trackedProjectsMap } from "@/data/repos"
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
-import { projectStacks } from "@/data/projectStacks"
 
 export default function ModalMoreInfo19() {
+  const project = trackedProjectsMap["project-19-spotify-clone"]
+
   const { isOpen, closeModal } = useModalsStore()
   return (
     <ModalMoreInfo
@@ -13,7 +15,7 @@ export default function ModalMoreInfo19() {
       label="19_spotify-clone"
       siteUrl="https://github.com/Nicitaa/15_HooBank"
       taskLabel="Improve FullStack developer skill"
-      stack={projectStacks.project19}
+      stack={project.stack}
       deadline="no deadline"
       collaborators={[{ description: "Whole site" }]}
     />

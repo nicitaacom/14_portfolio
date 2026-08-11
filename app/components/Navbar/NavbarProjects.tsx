@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { repos } from "@/data/repos"
+import { publicRepos } from "@/data/repos"
 import { useSlider } from "@/hooks"
 import { useCallback, useEffect, useRef } from "react"
 import { NavbarWaves, type NavbarWavesHandle } from "./NavbarWaves"
@@ -50,7 +50,7 @@ export function NavbarProjects({
         onTouchMove={handleTouchMove}
         onScroll={updateWaveField}>
         <ul className="navbar-repo-wave-items hidden desktop:inline-flex gap-md">
-          {repos.map(repo => (
+          {publicRepos.map(repo => (
             <li key={repo.id} className="flex flex-col items-center gap-y-[2px] w-[10rem] select-none">
               <p className="machine-slot font-typewriter text-xs tracking-[0.12em] px-[8px] py-[1px] text-secondary-foreground">
                 {repo.id}

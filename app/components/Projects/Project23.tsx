@@ -1,13 +1,12 @@
 import { Project } from "../Project/Project"
-import { trackedProjectsMap } from "@/data/trackedProjects"
-import { projectStacks } from "@/data/projectStacks"
+import { trackedProjectsMap } from "@/data/repos"
 
 export default function Project23({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-23-store"]
 
   return (
     <Project
-      stack={projectStacks.project23}
+      stack={project.stack}
       stackCharacterLimit={40}
       date="09.2023 (~780h)"
       openMoreInfoModal={openModal}

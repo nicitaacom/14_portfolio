@@ -1,6 +1,5 @@
 import { Project } from "../../Project/Project"
-import { trackedProjectsMap } from "@/data/trackedProjects"
-import { projectStacks } from "@/data/projectStacks"
+import { trackedProjectsMap } from "@/data/repos"
 
 export default function Project20({ openModal }: { openModal: () => void }) {
   const project = trackedProjectsMap["project-20-flowmazon-clone"]
@@ -8,7 +7,7 @@ export default function Project20({ openModal }: { openModal: () => void }) {
   return (
     <Project
       openMoreInfoModal={openModal}
-      stack={projectStacks.project20}
+      stack={project.stack}
       stackCharacterLimit={40}
       date="09.2023 - 09.2023 (~7h)"
       siteUrl="https://20-flowmazon-clone.vercel.app/"

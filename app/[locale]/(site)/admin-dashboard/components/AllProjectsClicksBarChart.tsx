@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { trackedProjectsMap } from "@/data/trackedProjects"
+import { trackedProjectsMap } from "@/data/repos"
 import { ProjectClicksOverviewBarItem } from "./ProjectClicksOverviewBarItem"
 import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB"
 import { useScopedI18n } from "@/locales/client"
