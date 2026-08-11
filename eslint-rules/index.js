@@ -34,5 +34,8 @@ module.exports = {
     // runs on package.json through the processor below
     ...require("./no-unused-dependencies"),
   },
-  processors: require("./json-processor"),
+  processors: {
+    ...require("./json-processor"),
+    ...require("./full-line-reports"),
+  },
 }

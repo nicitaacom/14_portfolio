@@ -48,6 +48,15 @@
   "overrides": [
     {
       "files": [
+        "*.js",
+        "*.jsx",
+        "*.ts",
+        "*.tsx"
+      ],
+      "processor": "local/full-line-reports"
+    },
+    {
+      "files": [
         "package.json"
       ],
       "processor": "local/json"
