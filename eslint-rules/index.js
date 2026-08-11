@@ -28,6 +28,8 @@ module.exports = {
     ...require("./zustand-require-method"),
     ...require("./zustand-state-setter-pairing"),
     ...require("./zustand-store-export-matches-filename"),
+    // rules that only make sense against this repo's own data files and components
+    ...require("./project-specific/require-const-project"),
     // runs on package.json through the processor below
     ...require("./no-unused-dependencies"),
   },

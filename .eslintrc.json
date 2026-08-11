@@ -28,6 +28,7 @@
         ]
       }
     ],
+    "local/require-const-project": "warn",
     "local/response-variable-naming": "warn",
     "local/zustand-creator-name-matches-store": "warn",
     "local/zustand-extract-set-type": "warn",
