@@ -30,6 +30,7 @@ module.exports = {
     ...require("./zustand-store-export-matches-filename"),
     // rules that only make sense against this repo's own data files and components
     ...require("./project-specific/require-const-project"),
+    ...require("./project-specific/require-id-repos-order"),
     // runs on package.json through the processor below
     ...require("./no-unused-dependencies"),
   },

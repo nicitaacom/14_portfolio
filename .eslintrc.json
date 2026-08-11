@@ -29,6 +29,7 @@
       }
     ],
     "local/require-const-project": "warn",
+    "local/require-id-repos-order": "error",
     "local/response-variable-naming": "warn",
     "local/zustand-creator-name-matches-store": "warn",
     "local/zustand-extract-set-type": "warn",
