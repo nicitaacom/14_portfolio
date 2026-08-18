@@ -19,12 +19,12 @@
 
   /* Skill ramp, low to high (WN8 scale). Deliberately outside the themeable palette: the ramp used to
      borrow --brass and --cta, so a theme remapping those to its own metal/accent lost the orange and violet steps */
-  --skill-ramp-1: #fe0e00;
-  --skill-ramp-2: #fe7903;
-  --skill-ramp-3: #f8f403;
-  --skill-ramp-4: #60ff00;
-  --skill-ramp-5: #02c9b3;
-  --skill-ramp-6: #d042f3;
+  --skill-ramp-1: #fe0e00; /* red */
+  --skill-ramp-2: #fe7903; /* orange */
+  --skill-ramp-3: #f8f403; /* yellow */
+  --skill-ramp-4: #60ff00; /* green */
+  --skill-ramp-5: #02c9b3; /* turquoise */
+  --skill-ramp-6: #d042f3; /* purple */
   --steel: 276deg 10% 22%; /* #38323F — panel face, from the seed */
   --steel-deep: 270deg 21% 9%; /* #17131D — panel shadow side, from the seed */
   --wood: 28deg 25% 22%;
