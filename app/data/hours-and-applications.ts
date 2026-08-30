@@ -18,35 +18,35 @@ export const hours = {
 
 export const applications = {
   "08.2026": {
-    amount_applies: 8820,
-    appointments: 45,
+    amount_applies: 9213,
+    interviews: 31, // 1 no show
   },
   "07.2026": {
     amount_applies: 8820,
-    appointments: 45,
+    interviews: 29,
   },
   "06.2026": {
     amount_applies: 8200,
-    appointments: 41,
+    interviews: 26,
   },
   "05.2026": {
     amount_applies: 8040,
-    appointments: 40,
+    interviews: 26,
   },
   "04.2026": {
     amount_applies: 8000,
-    appointments: 40,
+    interviews: 26,
   },
   "03.2026": {
     amount_applies: 7600,
-    appointments: 40,
+    interviews: 26,
   },
   "02.2026": {
     amount_applies: 7500,
-    appointments: 40,
+    interviews: 26,
   },
   "01.2026": {
     amount_applies: 7400,
-    appointments: 40,
+    interviews: 26,
   },
 } as const
