@@ -27,6 +27,16 @@ set -uo pipefail
 
 msg_file="$1"
 
+# Updating the cumulative hours or application totals must say which reporting period it covers,
+# unless the commit explicitly calls out the application total. `commit-msg` is used rather than
+# `pre-commit` because Git has not collected the commit message when a pre-commit hook runs.
+hours_and_applications_changed=$(git diff --cached --name-only -- app/data/hours-and-applications.ts)
+
+if [ -n "$hours_and_applications_changed" ] && ! grep -qiE '([0-9]{4}-[0-9]{2}-[0-9]{2}[[:space:]]+until[[:space:]]+[0-9]{4}-[0-9]{2}-[0-9]{2}|am+ount[[:space:]_-]+applies)' "$msg_file"; then
+  echo "commit-msg: app/data/hours-and-applications.ts changed. Include either a reporting range such as 2026-08-01 until 2026-08-30 or 'amount applies' in the commit message." >&2
+  exit 1
+fi
+
 if grep -qiE '^Co-Authored-By:.*(claude|anthropic)' "$msg_file"; then
   echo "commit-msg: remove the Claude/Anthropic co-author trailer - never included in this repo's commits." >&2
   exit 1
