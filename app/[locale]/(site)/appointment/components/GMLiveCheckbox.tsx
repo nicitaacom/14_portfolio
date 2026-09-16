@@ -25,7 +25,7 @@ export function GMLiveCheckbox({ isGMLive }: { isGMLive: boolean }) {
     <label
       className={twMerge(
         `relative w-[36px] h-[20px] border-[3px] hover:brightness-75 transition-all duration-300
-         rounded-[12px] cursor-pointer mx-1 flex overflow-hidden`,
+         rounded-[12px] cursor-pointer mx-xs flex overflow-hidden`,
         isLoading && "opacity-50 cursor-default pointer-events-none flex justify-center items-center",
       )}>
       <input

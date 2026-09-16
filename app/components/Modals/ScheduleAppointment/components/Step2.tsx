@@ -191,7 +191,7 @@ export function Step2({ onBookingStateChange }: Step2Props) {
         <Checkbox isChecked={isSendNotification} onChange={toggleIsSendNotification} label={t("sendReminderLabel")} />
 
         {isSendNotification && (
-          <div className="flex flex-col gap-xs pl-[10px]">
+          <div className="flex flex-col gap-xs pl-sm">
             <SendNotificationTo register={register} errors={errors} setError={setError} />
             {notificationError && <p className="text-sm text-danger">{notificationError}</p>}
           </div>

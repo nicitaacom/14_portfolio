@@ -24,8 +24,8 @@ function ChartTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-[4px] border border-brass/40 bg-steel-deep px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
+    <div className="rounded-[4px] border border-brass/40 bg-steel-deep px-sm py-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+      <p className="mb-xs text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
       <p className="text-sm font-medium text-secondary">
         {payload[0].value}{" "}
         <span className="text-[10px] uppercase tracking-[0.12em] text-secondary-foreground/70">applies</span>
@@ -61,7 +61,7 @@ export function ApplicationsDeltaChart({ months }: Props) {
 
   return (
     <div className="mt-sm rounded-[2px] border border-brass/40 bg-steel-deep p-sm">
-      <p className="mb-[10px] text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">Applications delta</p>
+      <p className="mb-sm text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">Applications delta</p>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={chartData} margin={{ top: 12, right: 8, bottom: 0, left: -8 }} barSize={32}>
           <CartesianGrid strokeDasharray="2 6" stroke="#252525" vertical={false} />

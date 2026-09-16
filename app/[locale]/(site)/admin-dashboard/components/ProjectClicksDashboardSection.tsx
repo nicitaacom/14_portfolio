@@ -36,7 +36,7 @@ const EMPTY_OVERVIEW_VALUES = {
 function DashboardCard({ children, subtitle, title }: DashboardCardProps) {
   return (
     <section className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
-      <div className="mb-sm flex flex-col gap-[4px]">
+      <div className="mb-sm flex flex-col gap-xs">
         <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{title}</h2>
         <p className="max-w-[760px] text-xs text-secondary-foreground">{subtitle}</p>
       </div>
@@ -174,14 +174,14 @@ export function ProjectClicksDashboardSection() {
   return (
     <div className="flex flex-col gap-sm">
       <section className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
-        <div className="flex flex-col gap-[10px]">
-          <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-sm">
+          <div className="flex flex-col gap-xs">
             <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{t("projectOverviewTitle")}</h2>
             <p className="max-w-[760px] text-xs text-secondary-foreground">{t("projectOverviewSubtitle")}</p>
           </div>
 
           <Button
-            className="inline-flex w-fit items-center justify-center gap-[8px] rounded-[2px] border border-brass/40 bg-steel px-sm py-xs text-secondary hover:bg-steel transition"
+            className="inline-flex w-fit items-center justify-center gap-sm rounded-[2px] border border-brass/40 bg-steel px-sm py-xs text-secondary hover:bg-steel transition"
             onClick={handleRefetch}
             requestAction
             requestPending={isOverviewSkeleton || isTimelineSkeleton}>
@@ -191,12 +191,12 @@ export function ProjectClicksDashboardSection() {
         </div>
 
         {overviewErrorMessage ? (
-          <p className="relative mt-[8px] text-xs text-danger">
+          <p className="relative mt-sm text-xs text-danger">
             {t("comparisonLoadError", { message: overviewErrorMessage })}
           </p>
         ) : null}
         {timelineErrorMessage ? (
-          <p className="relative mt-[4px] text-xs text-danger">
+          <p className="relative mt-xs text-xs text-danger">
             {t("timelineLoadError", { message: timelineErrorMessage })}
           </p>
         ) : null}
@@ -244,7 +244,7 @@ export function ProjectClicksDashboardSection() {
 
       <div className="flex flex-col gap-sm">
         <DashboardCard subtitle={t("selectedTimelineSubtitle")} title={t("selectedTimelineTitle")}>
-          <div className="mb-sm flex flex-col gap-[4px] tablet:flex-row tablet:items-center tablet:justify-between">
+          <div className="mb-sm flex flex-col gap-xs tablet:flex-row tablet:items-center tablet:justify-between">
             <ProjectClicksPicker projects={trackedProjects} />
             <TimelineModeSwitcher timelineMode={timelineMode} onChange={setTimelineMode} />
           </div>
@@ -264,7 +264,7 @@ export function ProjectClicksDashboardSection() {
           {isOverviewSkeleton ? (
             <AllProjectsClicksBarChartSkeleton />
           ) : !orderedOverview.length ? (
-            <p className="py-10 text-center text-sm text-info">{t("noClickDataFound")}</p>
+            <p className="py-xl text-center text-sm text-info">{t("noClickDataFound")}</p>
           ) : (
             <AllProjectsClicksBarChart overview={orderedOverview} selectedProjectSlug={selectedProjectSlug} />
           )}

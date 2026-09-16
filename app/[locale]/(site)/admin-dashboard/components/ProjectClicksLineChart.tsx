@@ -40,8 +40,8 @@ function CustomTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-[4px] border border-brass/40 bg-steel-deep px-[10px] py-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-      <p className="mb-[2px] text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
+    <div className="rounded-[4px] border border-brass/40 bg-steel-deep px-sm py-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+      <p className="mb-xs text-[10px] uppercase tracking-[0.14em] text-secondary-foreground/70">{label}</p>
       <p className="text-sm font-medium text-secondary">
         {numberFormatter.format(payload[0].value)}{" "}
         <span className="text-[10px] uppercase tracking-[0.12em] text-secondary-foreground/70">clicks</span>
@@ -110,7 +110,7 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
 
   if (!timeline.length) {
     return (
-      <p className="py-10 text-center text-sm text-secondary-foreground">{t("noProjectClickData")}</p>
+      <p className="py-xl text-center text-sm text-secondary-foreground">{t("noProjectClickData")}</p>
     )
   }
 
@@ -122,26 +122,26 @@ export function ProjectClicksLineChart({ projectName, timeline, timelineMode }: 
           <p className="text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">
             {timelineMode === "monthly" ? t("last30Days") : t("last12Months")}
           </p>
-          <div className="mt-[8px] flex flex-wrap items-end gap-sm">
+          <div className="mt-sm flex flex-wrap items-end gap-sm">
             <p className="truncate text-base text-secondary">{projectName}</p>
             <p className="text-[28px] leading-none text-secondary">{numberFormatter.format(totalClicks)}</p>
-            <p className="pb-[3px] text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("totalClicks")}</p>
+            <p className="pb-xs text-[10px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("totalClicks")}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-xs">
-          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-[10px]">
+          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-sm">
             <p className="text-[9px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("average")}</p>
-            <p className="mt-[4px] text-sm text-secondary">{formatMetricValue(averageClicks)}</p>
+            <p className="mt-xs text-sm text-secondary">{formatMetricValue(averageClicks)}</p>
           </div>
-          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-[10px]">
+          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-sm">
             <p className="text-[9px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("peak")}</p>
-            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
+            <p className="mt-xs text-sm text-secondary">{numberFormatter.format(peakPoint?.total_clicks ?? 0)}</p>
             <p className="text-[9px] uppercase tracking-[0.16em] text-secondary-foreground/70">{peakPoint?.bucket_label ?? "-"}</p>
           </div>
-          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-[10px]">
+          <div className="rounded-[2px] border border-brass/40 bg-steel-deep px-sm py-sm">
             <p className="text-[9px] uppercase tracking-[0.18em] text-secondary-foreground/70">{t("latest")}</p>
-            <p className="mt-[4px] text-sm text-secondary">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
+            <p className="mt-xs text-sm text-secondary">{numberFormatter.format(latestPoint?.total_clicks ?? 0)}</p>
             <p className="text-[9px] uppercase tracking-[0.16em] text-secondary-foreground/70">{latestPoint?.bucket_label ?? "-"}</p>
           </div>
         </div>

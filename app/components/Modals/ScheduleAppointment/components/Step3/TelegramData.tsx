@@ -12,8 +12,8 @@ export function TelegramData() {
   return (
     <div className="w-full rounded-[12px] border border-brass/40 px-sm py-xs">
       <div className="flex items-start gap-xs">
-        <FaTelegramPlane className="mt-[2px] text-cta" size={16} />
-        <div className="flex flex-col gap-[4px]">
+        <FaTelegramPlane className="mt-xs text-cta" size={16} />
+        <div className="flex flex-col gap-xs">
           <p className="text-sm text-secondary">{commonT("telegram")}</p>
           <p className="text-sm leading-relaxed text-secondary-foreground">{t("reachMeOnTelegram")}</p>
           <Link className="w-fit text-sm text-cta" href="https://t.me/nicitaacom" target="_blank">

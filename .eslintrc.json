@@ -48,6 +48,16 @@
   "overrides": [
     {
       "files": [
+        "app/**/admin-dashboard/**/*.tsx",
+        "app/**/admin-dashboard/**/*.ts",
+        "app/**/admin-dashboard.tsx"
+      ],
+      "rules": {
+        "local/require-px-sm-xs-etc": "warn"
+      }
+    },
+    {
+      "files": [
         "*.js",
         "*.jsx",
         "*.ts",

@@ -11,6 +11,6 @@ export function StatusBadge({ label, tone }: { label: string; tone: "green" | "r
           : "border-secondary-foreground/30 bg-secondary-foreground/10 text-secondary"
 
   return (
-    <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-[2px] text-xs ${toneClassName}`}>{label}</span>
+    <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-xs text-xs ${toneClassName}`}>{label}</span>
   )
 }

@@ -13,16 +13,16 @@ export function BookedAppointmentsSection({ bookings }: { bookings: TBookingRow[
 
   return (
     <DashboardCard title={t("bookedAppointments")} subtitle={t("bookedAppointmentsSubtitle")}>
-      <div className="mb-[4px] grid grid-cols-3 gap-[4px]">
+      <div className="mb-xs grid grid-cols-3 gap-xs">
         <OverviewStat label={t("upcoming")} value={upcomingBookings.length} />
         <OverviewStat label={t("past")} value={pastBookings.length} />
         <OverviewStat label={t("total")} value={bookings.length} />
       </div>
 
-      <div className="mb-[4px] flex gap-[4px]">
+      <div className="mb-xs flex gap-xs">
         <button
           type="button"
-          className={`rounded-[2px] border px-[10px] py-[6px] text-xs transition ${
+          className={`rounded-[2px] border px-sm py-sm text-xs transition ${
             bookingsView === "upcoming"
               ? "border-brass/40 bg-steel text-secondary"
               : "border-brass/40 bg-steel-deep text-secondary-foreground"
@@ -32,7 +32,7 @@ export function BookedAppointmentsSection({ bookings }: { bookings: TBookingRow[
         </button>
         <button
           type="button"
-          className={`rounded-[2px] border px-[10px] py-[6px] text-xs transition ${
+          className={`rounded-[2px] border px-sm py-sm text-xs transition ${
             bookingsView === "past"
               ? "border-brass/40 bg-steel text-secondary"
               : "border-brass/40 bg-steel-deep text-secondary-foreground"
@@ -49,7 +49,7 @@ export function BookedAppointmentsSection({ bookings }: { bookings: TBookingRow[
         {bookingsView === "past" && pastBookings.length === 0 && (
           <p className="py-lg text-center text-sm text-secondary-foreground">{t("noPastBookings")}</p>
         )}
-        <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-xs">
           {bookingsView === "upcoming"
             ? upcomingBookings.map(booking => <BookingItem key={booking.id} booking={booking} />)
             : pastBookings.map(booking => <BookingItem key={booking.id} booking={booking} />)}

@@ -13,8 +13,8 @@ export function CronScheduleItem({ job }: { job: TCronScheduleRow }) {
 
   return (
     <article className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm">
-      <div className="flex flex-col gap-[4px]">
-        <div className="flex flex-col gap-[4px] tablet:flex-row tablet:items-start tablet:justify-between">
+      <div className="flex flex-col gap-xs">
+        <div className="flex flex-col gap-xs tablet:flex-row tablet:items-start tablet:justify-between">
           <div className="min-w-0 flex items-center gap-xs">
             <p className="truncate whitespace-nowrap text-sm text-secondary" title={job.job_name}>
               {job.job_name}
@@ -22,8 +22,8 @@ export function CronScheduleItem({ job }: { job: TCronScheduleRow }) {
             <StatusBadge label={job.is_active ? t("active") : t("paused")} tone={job.is_active ? "green" : "gray"} />
           </div>
 
-          <div className="admin-dashboard-scrollbar -mx-[2px] overflow-x-auto">
-            <div className="flex min-w-max gap-[4px] px-[4px]">
+          <div className="admin-dashboard-scrollbar -mx-xs overflow-x-auto">
+            <div className="flex min-w-max gap-xs px-xs">
               <MetaPill className="text-secondary">{job.schedule}</MetaPill>
               {hasRuns ? (
                 <>

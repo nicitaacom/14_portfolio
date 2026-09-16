@@ -69,7 +69,7 @@ export function LanguageDropdown() {
 
       <div
         className={twMerge(
-          "site-picker-menu machine-face absolute left-0 top-[calc(100%+10px)] z-[120] min-w-full rounded-[6px] p-[6px] transition-all duration-200",
+          "site-picker-menu machine-face absolute left-0 top-[calc(100%+10px)] z-[120] min-w-full rounded-[6px] p-sm transition-all duration-200",
           isOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-[-8px] opacity-0 pointer-events-none",
         )}>
         <div className="flex flex-col gap-xs">

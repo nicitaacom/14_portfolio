@@ -18,8 +18,8 @@ export function Step3() {
     <div className="appointment-details-panel flex w-full flex-col items-center gap-sm p-sm">
       <div className="w-full rounded-[12px] border border-cta/40 px-sm py-sm">
         <p className="text-sm font-bold text-secondary">{t("appointmentBooked")}</p>
-        <p className="mt-[2px] text-sm text-secondary-foreground">{formatedDateTimeFn().trim()}</p>
-        <p className="mt-[2px] text-xs text-secondary-foreground capitalize">
+        <p className="mt-xs text-sm text-secondary-foreground">{formatedDateTimeFn().trim()}</p>
+        <p className="mt-xs text-xs text-secondary-foreground capitalize">
           {commonT("channel")}: {channel?.replace("-", " ")}
         </p>
       </div>

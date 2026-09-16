@@ -4,7 +4,7 @@ export function OverviewStat({ label, value }: { label: string; value: number | 
   return (
     <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
-      <p className="mt-[2px] text-lg text-secondary">{value}</p>
+      <p className="mt-xs text-lg text-secondary">{value}</p>
     </div>
   )
 }

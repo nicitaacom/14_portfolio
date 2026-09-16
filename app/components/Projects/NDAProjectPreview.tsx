@@ -192,7 +192,7 @@ export function NDAProjectPreview() {
       </svg>
 
       <div
-        className="pointer-events-none absolute z-30 bg-gradient-to-t from-[#09070d] via-[#09070d]/95 to-transparent px-lg pb-lg pt-[90px] text-center"
+        className="pointer-events-none absolute z-30 bg-gradient-to-t from-[#09070d] via-[#09070d]/95 to-transparent px-lg pb-lg pt-xl text-center"
         style={{ right: 0, bottom: 0, left: 0 }}>
         <div className="mx-auto max-w-[720px]">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-cta">{t("level")}</p>

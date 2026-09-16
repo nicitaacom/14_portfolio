@@ -22,7 +22,7 @@ function MetricBlock({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
-      <p className="mt-[2px] text-lg text-secondary">{value}</p>
+      <p className="mt-xs text-lg text-secondary">{value}</p>
     </div>
   )
 }
@@ -36,27 +36,27 @@ export function JobSearchMonthCard({ month }: { month: TJobSearchMonth }) {
 
   return (
     <article className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
-      <div className="mb-sm flex items-center justify-between gap-[4px]">
+      <div className="mb-sm flex items-center justify-between gap-xs">
         <h3 className="text-sm uppercase tracking-[0.18em] text-secondary">{formatMonthLabel(month.month)}</h3>
-        <div className="flex items-center gap-[4px]">
+        <div className="flex items-center gap-xs">
           {month.conversionRate !== null && (
-            <span className="inline-flex shrink-0 rounded-[2px] border border-brass/40 bg-steel px-sm py-[2px] text-xs text-secondary-foreground">
+            <span className="inline-flex shrink-0 rounded-[2px] border border-brass/40 bg-steel px-sm py-xs text-xs text-secondary-foreground">
               {month.conversionRate}%
             </span>
           )}
-          <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-[2px] text-xs ${toneClassName}`}>
+          <span className={`inline-flex shrink-0 rounded-[2px] border px-sm py-xs text-xs ${toneClassName}`}>
             {toneLabel}
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-[4px]">
+      <div className="grid grid-cols-2 gap-xs">
         <MetricBlock label={t("appointments")} value={month.appointments} />
         <div className={`rounded-[2px] border px-sm py-xs ${toneClassName}`}>
           <p className="text-xs uppercase tracking-[0.15em]">{t("amountApplies")}</p>
-          <p className="mt-[2px] flex items-start gap-[6px]">
+          <p className="mt-xs flex items-start gap-sm">
             <span className="text-lg">{month.amountApplies}</span>
-            <span className="mt-[4px] text-xs opacity-70">+{month.applications}</span>
+            <span className="mt-xs text-xs opacity-70">+{month.applications}</span>
           </p>
         </div>
       </div>

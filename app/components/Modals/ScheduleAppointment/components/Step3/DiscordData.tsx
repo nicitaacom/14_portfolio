@@ -12,8 +12,8 @@ export function DiscordData() {
   return (
     <div className="w-full rounded-[12px] border border-brass/40 px-sm py-xs">
       <div className="flex items-start gap-xs">
-        <FaDiscord className="mt-[2px] text-cta" size={16} />
-        <div className="flex flex-col gap-[4px]">
+        <FaDiscord className="mt-xs text-cta" size={16} />
+        <div className="flex flex-col gap-xs">
           <p className="text-sm text-secondary">{commonT("discord")}</p>
           <p className="text-sm leading-relaxed text-secondary-foreground">{t("reachMeOnDiscord")}</p>
           <Link className="w-fit text-sm text-cta" href="https://discord.com/users/780002958380498955" target="_blank">

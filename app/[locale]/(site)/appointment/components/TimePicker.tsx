@@ -141,7 +141,7 @@ export function TimePicker() {
                 type="button"
                 className={twMerge(
                   "appointment-picker-option flex w-full items-center justify-between rounded-[11px] px-md py-sm text-left text-sm font-medium transition-all duration-200",
-                  time.time !== convertedTimePicker[0].time && "mt-[2px]",
+                  time.time !== convertedTimePicker[0].time && "mt-xs",
                   isTimeDisabled
                     ? "cursor-not-allowed bg-steel-deep text-secondary/30"
                     : isActive
@@ -154,7 +154,7 @@ export function TimePicker() {
                 key={time.time}>
                 <span>{time.time}</span>
                 {isBooked ? (
-                  <span className="rounded-[4px] border border-danger/30 bg-danger/10 px-[6px] py-[2px] text-xs text-danger/70">
+                  <span className="rounded-[4px] border border-danger/30 bg-danger/10 px-sm py-xs text-xs text-danger/70">
                     {t("slotBooked")}
                   </span>
                 ) : (

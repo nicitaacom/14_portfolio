@@ -585,7 +585,7 @@ export function NexgemProjectPreview() {
       </svg>
 
       <div
-        className="pointer-events-none absolute z-30 bg-gradient-to-t from-[#07070c] via-[#07070c]/95 to-transparent px-lg pb-lg pt-[90px] text-center"
+        className="pointer-events-none absolute z-30 bg-gradient-to-t from-[#07070c] via-[#07070c]/95 to-transparent px-lg pb-lg pt-xl text-center"
         style={{ right: 0, bottom: 0, left: 0 }}>
         <div className="mx-auto max-w-[720px]">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-cta">{t("badge")}</p>
@@ -629,7 +629,7 @@ export function NexgemProjectPreview() {
 
       {IS_DEV && nowPlaying && (
         <p
-          className="pointer-events-none absolute z-40 rounded-md bg-black/85 px-sm py-[5px] font-mono text-[11px] leading-none text-cta ring-1 ring-cta/30"
+          className="pointer-events-none absolute z-40 rounded-md bg-black/85 px-sm py-sm font-mono text-[11px] leading-none text-cta ring-1 ring-cta/30"
           style={{ right: 8, bottom: 8 }}>
           {nowPlaying}
         </p>

@@ -47,12 +47,12 @@ export function ScheduleAppointmentModalHeader() {
         <div className="flex flex-wrap items-center gap-xs">
           <h1 className="text-lg font-bold text-secondary">{headerText}</h1>
           {channelBadge && (
-            <div className="appointment-channel-badge flex shrink-0 items-center gap-[6px] whitespace-nowrap rounded-full border border-brass/40 px-xs py-[3px] text-xs text-secondary-foreground">
+            <div className="appointment-channel-badge flex shrink-0 items-center gap-sm whitespace-nowrap rounded-full border border-brass/40 px-xs py-xs text-xs text-secondary-foreground">
               {channelBadge}
             </div>
           )}
         </div>
-        <p className="mt-[2px] text-sm text-secondary-foreground">{helperText}</p>
+        <p className="mt-xs text-sm text-secondary-foreground">{helperText}</p>
       </div>
     </div>
   )

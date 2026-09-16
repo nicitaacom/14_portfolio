@@ -53,7 +53,7 @@ export function Project({
       <HalloweenFrameOrnaments variant="project" />
       <HalloweenProjectSkull />
       <NewYearProjectOrnament />
-      <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-[7px]">
+      <div className="project-wood-body relative flex h-full min-h-0 flex-col gap-sm">
         <div className="project-header shrink-0">
           <span className="project-paper-tab truncate">{projectName}</span>
           <div className="flex gap-x-sm">
@@ -84,11 +84,11 @@ export function Project({
           </div>
         </div>
         {preview ? (
-          <div className="min-h-0 flex-1 px-[10px]">
+          <div className="min-h-0 flex-1 px-sm">
             <div className={previewClassName}>{preview}</div>
           </div>
         ) : youTubeEmbedPreview ? (
-          <div className="min-h-0 flex-1 px-[10px]">
+          <div className="min-h-0 flex-1 px-sm">
             <div className={previewClassName}>
               <iframe
                 className="h-full w-full"
@@ -104,7 +104,7 @@ export function Project({
             </div>
           </div>
         ) : (
-          <div className="min-h-0 flex-1 px-[10px]">
+          <div className="min-h-0 flex-1 px-sm">
             <div className={previewClassName}>
               <iframe
                 className="h-full w-full"
@@ -117,7 +117,7 @@ export function Project({
             </div>
           </div>
         )}
-        <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md pb-[10px] tablet:h-[80px] tablet:flex-row">
+        <div className="project-info-board relative flex shrink-0 flex-col items-center justify-between px-md py-md pb-sm tablet:h-[80px] tablet:flex-row">
           <div className="flex w-full flex-col">
             <p className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm">
               {t("stack")}: <span>{limitProjectStack(stack, stackCharacterLimit)}</span>

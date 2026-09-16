@@ -59,13 +59,13 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
   }
 
   return (
-    <div className="appointment-bookings-board workbench-board mx-auto w-full max-w-[680px] p-[6px] laptop:sticky laptop:top-[6rem] laptop:max-w-none">
+    <div className="appointment-bookings-board workbench-board mx-auto w-full max-w-[680px] p-sm laptop:sticky laptop:top-[6rem] laptop:max-w-none">
       <div className="machine-panel p-sm">
         <div className="appointment-bookings-heading mb-xs">
           <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-secondary">
             {t("scheduledAppointments")}
           </p>
-          <p className="mt-[4px] max-w-[22rem] text-sm leading-relaxed text-secondary-foreground/75">
+          <p className="mt-xs max-w-[22rem] text-sm leading-relaxed text-secondary-foreground/75">
             {t("scheduledAppointmentsSubtitle")}
           </p>
         </div>
@@ -114,7 +114,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                     })}
                   </p>
                 )}
-                <p className="flex flex-row items-center gap-[6px] text-sm leading-relaxed text-secondary-foreground">
+                <p className="flex flex-row items-center gap-sm text-sm leading-relaxed text-secondary-foreground">
                   {commonT("channel")}: {booked_appointment.channel}
                   {booked_appointment.channel === "google-meets" ? (
                     <SiGooglemeet className="text-[#00ac47]" />
@@ -130,7 +130,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                   <>
                     <Button
                       title={t("saveChanges")}
-                      className="h-[34px] w-[34px] border-success !p-[0px]"
+                      className="h-[34px] w-[34px] border-success !p-xs"
                       isDisabled={isLoading || !draftBookingDate || !draftBookingTime}
                       requestAction="compact"
                       requestPending={isLoading}
@@ -139,7 +139,7 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                     </Button>
                     <Button
                       title={t("cancelEdit")}
-                      className="h-[34px] w-[34px] border-secondary-foreground !p-[0px]"
+                      className="h-[34px] w-[34px] border-secondary-foreground !p-xs"
                       isDisabled={isLoading}
                       onClick={stopEditing}>
                       <MdOutlineCancel size={16} />
@@ -149,14 +149,14 @@ export function BookedAppointments({ booked_appointments }: { booked_appointment
                   <>
                     <Button
                       title={t("editAppointment")}
-                      className="h-[34px] w-[34px] border-cta !p-[0px]"
+                      className="h-[34px] w-[34px] border-cta !p-xs"
                       isDisabled={isLoading}
                       onClick={() => startEditing(booked_appointment)}>
                       <FiEdit3 className="text-cta" size={16} />
                     </Button>
                     <Button
                       title={t("deleteAppointment")}
-                      className="h-[34px] w-[34px] border-danger !p-[0px]"
+                      className="h-[34px] w-[34px] border-danger !p-xs"
                       isDisabled={isLoading}
                       requestAction="compact"
                       requestPending={isLoading}

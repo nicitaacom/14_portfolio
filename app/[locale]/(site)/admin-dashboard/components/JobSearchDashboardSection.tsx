@@ -22,7 +22,7 @@ function SummaryStat({ label, value, valueClassName }: { label: string; value: s
   return (
     <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
-      <p className={`mt-[2px] text-lg ${valueClassName ?? "text-secondary"}`}>{value}</p>
+      <p className={`mt-xs text-lg ${valueClassName ?? "text-secondary"}`}>{value}</p>
     </div>
   )
 }
@@ -61,7 +61,7 @@ export function JobSearchDashboardSection() {
   if (jobSearchStatsError) {
     return (
       <section className="rounded-[2px] border border-danger/40 bg-danger/10 p-sm">
-        <h2 className="mb-[4px] text-sm uppercase tracking-[0.18em] text-danger">{t("jobSearchTitle")}</h2>
+        <h2 className="mb-xs text-sm uppercase tracking-[0.18em] text-danger">{t("jobSearchTitle")}</h2>
         <p className="font-mono text-xs text-danger">{jobSearchStatsError}</p>
       </section>
     )
@@ -69,7 +69,7 @@ export function JobSearchDashboardSection() {
 
   return (
     <section className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
-      <div className="mb-sm flex flex-col gap-[4px]">
+      <div className="mb-sm flex flex-col gap-xs">
         <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{t("jobSearchTitle")}</h2>
         <p className="text-xs text-secondary-foreground">
           {t("jobSearchSubtitle")}{" "}
@@ -83,7 +83,7 @@ export function JobSearchDashboardSection() {
         </p>
       </div>
 
-      <div className="mb-sm grid grid-cols-2 gap-[4px] laptop:grid-cols-3">
+      <div className="mb-sm grid grid-cols-2 gap-xs laptop:grid-cols-3">
         <SummaryStat label={t("totalAppointments")} value={totals.totalAppointments} />
         <SummaryStat label={t("totalAmountApplies")} value={totals.totalAmountApplies} />
         <SummaryStat label={t("monthsTracked")} value={jobSearchStats.length} />
@@ -95,7 +95,7 @@ export function JobSearchDashboardSection() {
       <ApplicationsDeltaChart months={jobSearchStats} />
 
       {sortedMonths.length ? (
-        <div className="grid grid-cols-1 gap-[4px] tablet:grid-cols-2 laptop:grid-cols-3">
+        <div className="grid grid-cols-1 gap-xs tablet:grid-cols-2 laptop:grid-cols-3">
           {sortedMonths.map(month => (
             <JobSearchMonthCard key={month.month} month={month} />
           ))}

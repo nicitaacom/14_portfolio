@@ -41,7 +41,7 @@ export function DropdownContent({ closeDropdown, isShowDropdown, projects }: Dro
   return (
     <div
       className={twMerge(
-        "absolute left-0 top-[calc(100%+8px)] w-full rounded-[2px] border border-brass/40 bg-steel p-[6px] shadow-[0_16px_44px_rgba(0,0,0,0.22)]",
+        "absolute left-0 top-[calc(100%+8px)] w-full rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]",
         isShowDropdown
           ? "visible translate-y-[0px] opacity-100 transition-all duration-200"
           : "invisible translate-y-[-12px] opacity-0 transition-all duration-200",
@@ -56,7 +56,7 @@ export function DropdownContent({ closeDropdown, isShowDropdown, projects }: Dro
         onClick={event => event.stopPropagation()}
       />
 
-      <div className="max-h-[240px] overflow-y-scroll hide-scrollbar pt-[6px]">
+      <div className="max-h-[240px] overflow-y-scroll hide-scrollbar pt-sm">
         {!filteredProjects.length ? (
           <p className="px-sm py-sm text-sm text-secondary-foreground">{t("noProjectsFound")}</p>
         ) : null}
@@ -66,15 +66,15 @@ export function DropdownContent({ closeDropdown, isShowDropdown, projects }: Dro
           return (
             <li
               className={twMerge(
-                "flex items-center justify-between gap-xs rounded-[2px] px-sm py-[10px] text-sm duration-150",
-                index > 0 && "mt-[2px]",
+                "flex items-center justify-between gap-xs rounded-[2px] px-sm py-sm text-sm duration-150",
+                index > 0 && "mt-xs",
                 isActive ? "bg-steel" : "hover:bg-steel",
               )}
               key={project.slug}
               onMouseOver={() => setHoveredSlug(project.slug)}
               onClick={() => changeSelectedProject(project.slug)}>
               <span className="truncate text-secondary">{project.name}</span>
-              <span className="shrink-0 rounded-full border border-brass/40 bg-steel px-[8px] py-[3px] text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">
+              <span className="shrink-0 rounded-full border border-brass/40 bg-steel px-sm py-xs text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">
                 {project.group === "work" ? t("work") : t("projects")}
               </span>
             </li>

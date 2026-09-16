@@ -33,7 +33,7 @@ export function Checkbox({
         disabled && "opacity-50 cursor-default pointer-events-none",
         className,
       )}>
-      <div className="relative mt-[2px] inline-flex h-[22px] w-[22px] items-center justify-center">
+      <div className="relative mt-xs inline-flex h-[22px] w-[22px] items-center justify-center">
         <input
           className="peer sr-only"
           type="checkbox"

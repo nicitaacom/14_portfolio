@@ -95,7 +95,7 @@ export function ModalContainer({
           transition={{ duration: 0.25 }}
           {...modalBgHandler}>
           <motion.div
-            className={`site-modal modal-frame relative z-[100] w-full overflow-visible rounded-[5px] bg-wood p-[9px] shadow-[0_12px_12px_rgb(0_0_0/0.75)] ${className}`}
+            className={`site-modal modal-frame relative z-[100] w-full overflow-visible rounded-[5px] bg-wood p-sm shadow-[0_12px_12px_rgb(0_0_0/0.75)] ${className}`}
             initial={{ scale: 0.75, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
@@ -128,7 +128,7 @@ export function ModalContainer({
                 !showNewYearCloseBell &&
                 (titleHref ? (
                   <a
-                    className="modal-title-label absolute left-1/2 top-[-2px] z-20 flex max-w-[60%] -translate-x-1/2 items-center gap-x-xs rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-[3px] font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)] transition-colors duration-300 hover:text-cta"
+                    className="modal-title-label absolute left-1/2 top-[-2px] z-20 flex max-w-[60%] -translate-x-1/2 items-center gap-x-xs rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-xs font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)] transition-colors duration-300 hover:text-cta"
                     href={titleHref}
                     target="_blank"
                     rel="noopener noreferrer">
@@ -136,7 +136,7 @@ export function ModalContainer({
                     <FiExternalLink className="shrink-0 opacity-60" size={12} />
                   </a>
                 ) : (
-                  <div className="modal-title-label absolute left-1/2 top-[-2px] z-20 max-w-[60%] -translate-x-1/2 rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-[3px] font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)]">
+                  <div className="modal-title-label absolute left-1/2 top-[-2px] z-20 max-w-[60%] -translate-x-1/2 rotate-[-1deg] truncate border border-brass/50 bg-[linear-gradient(100deg,hsl(var(--paper)),hsl(var(--paper)/0.8))] px-md py-xs font-typewriter text-xs uppercase tracking-[0.14em] text-steel-deep shadow-[0_4px_5px_rgb(0_0_0/0.45),inset_0_1px_0_rgb(255_255_255/0.62)]">
                     {title}
                   </div>
                 ))}

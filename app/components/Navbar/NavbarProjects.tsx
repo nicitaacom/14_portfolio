@@ -39,7 +39,7 @@ export function NavbarProjects({
   }, [wrapperRef, setScrollRef, updateWaveField])
 
   return (
-    <div className="navbar-repo-wavefield relative isolate hidden desktop:flex flex-1 min-w-0 overflow-hidden pb-[6px]">
+    <div className="navbar-repo-wavefield relative isolate hidden desktop:flex flex-1 min-w-0 overflow-hidden pb-sm">
       <NavbarWaves ref={navbarWavesRef} />
       <div
         className="navbar-repo-scroll-mask relative z-[1] w-full overflow-x-hidden cursor-grab py-xs"
@@ -52,7 +52,7 @@ export function NavbarProjects({
         <ul className="navbar-repo-wave-items hidden desktop:inline-flex gap-md">
           {publicRepos.map(repo => (
             <li key={repo.id} className="flex flex-col items-center gap-y-[2px] w-[10rem] select-none">
-              <p className="machine-slot font-typewriter text-xs tracking-[0.12em] px-[8px] py-[1px] text-secondary-foreground">
+              <p className="machine-slot font-typewriter text-xs tracking-[0.12em] px-sm py-xs text-secondary-foreground">
                 {repo.id}
               </p>
               <Link

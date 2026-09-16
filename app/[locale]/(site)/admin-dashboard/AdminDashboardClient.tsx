@@ -49,17 +49,17 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
 
   return (
     <div className="admin-rack min-h-[calc(100vh-72px)] px-sm py-sm tablet:px-md tablet:py-md">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-[4px]">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-xs">
         <section className="machine-panel px-sm py-sm tablet:px-md tablet:py-md">
-          <div className="flex flex-col gap-[4px] laptop:flex-row laptop:items-end laptop:justify-between">
-            <div className="flex flex-col gap-[4px]">
+          <div className="flex flex-col gap-xs laptop:flex-row laptop:items-end laptop:justify-between">
+            <div className="flex flex-col gap-xs">
               <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground">{t("panel")}</p>
               <h1 className="text-lg text-secondary">{t("headerTitle")}</h1>
               <p className="max-w-[720px] text-xs tablet:text-sm">
                 {t("headerSubtitle", { userId })}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-[4px] laptop:grid-cols-4">
+            <div className="grid grid-cols-2 gap-xs laptop:grid-cols-4">
               <OverviewStat label={t("cronJobs")} value={cronSchedules.length} />
               <OverviewStat label={t("activeJobs")} value={activeCronJobs} />
               <OverviewStat label={t("failedLastRun")} value={failedCronJobs} />
@@ -69,10 +69,10 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
         </section>
 
         <section className="machine-panel mt-sm p-sm">
-          <div className="flex flex-wrap gap-[4px]">
+          <div className="flex flex-wrap gap-xs">
             <button
               type="button"
-              className={`plaque px-[10px] py-[8px] text-sm ${
+              className={`plaque px-sm py-sm text-sm ${
                 activeTab === "utm"
                   ? "border-brass/40 bg-steel text-secondary"
                   : "border-brass/40 bg-steel-deep text-secondary-foreground"
@@ -82,7 +82,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
             </button>
             <button
               type="button"
-              className={`plaque px-[10px] py-[8px] text-sm ${
+              className={`plaque px-sm py-sm text-sm ${
                 activeTab === "projectClick"
                   ? "border-brass/40 bg-steel text-secondary"
                   : "border-brass/40 bg-steel-deep text-secondary-foreground"
@@ -92,7 +92,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
             </button>
             <button
               type="button"
-              className={`plaque px-[10px] py-[8px] text-sm ${
+              className={`plaque px-sm py-sm text-sm ${
                 activeTab === "jobSearch"
                   ? "border-brass/40 bg-steel text-secondary"
                   : "border-brass/40 bg-steel-deep text-secondary-foreground"
@@ -109,7 +109,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId }: AdminD
           {activeTab === "jobSearch" && <JobSearchDashboardSection />}
         </div>
 
-        <div className="mt-sm grid gap-[4px] desktop:grid-cols-[1.2fr_0.8fr]">
+        <div className="mt-sm grid gap-xs desktop:grid-cols-[1.2fr_0.8fr]">
           <CronSchedulesSection cronSchedules={cronSchedules} />
           <BookedAppointmentsSection bookings={bookings} />
         </div>

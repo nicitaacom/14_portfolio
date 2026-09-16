@@ -64,9 +64,9 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
 
   return (
     <article className="rounded-[2px] border border-brass/40 bg-steel px-sm py-sm">
-      <div className="flex flex-col gap-[4px]">
-        <div className="admin-dashboard-scrollbar overflow-x-auto pb-[4px]">
-          <div className="flex min-w-max items-center gap-[4px]">
+      <div className="flex flex-col gap-xs">
+        <div className="admin-dashboard-scrollbar overflow-x-auto pb-xs">
+          <div className="flex min-w-max items-center gap-xs">
             <BookingControlChip className="w-[152px] justify-between">
               {isEditing ? (
                 <Input
@@ -143,7 +143,7 @@ export function BookingItem({ booking }: { booking: TBookingRow }) {
 
         <div className="h-px w-full bg-steel"></div>
 
-        <div className="flex flex-col gap-[4px] pt-[4px]">
+        <div className="flex flex-col gap-xs pt-xs">
           <p className="truncate whitespace-nowrap text-xs" title={formatDateTime(booking.created_at)}>
             {t("created")} {formatDateTime(booking.created_at)}
           </p>

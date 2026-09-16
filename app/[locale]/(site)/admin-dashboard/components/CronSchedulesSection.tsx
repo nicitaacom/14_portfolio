@@ -17,7 +17,7 @@ export function CronSchedulesSection({ cronSchedules }: { cronSchedules: TCronSc
           <p className="text-sm text-secondary-foreground">{t("noCronSchedulesYet")}</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-xs">
           {cronSchedules.map(job => (
             <CronScheduleItem key={job.id} job={job} />
           ))}

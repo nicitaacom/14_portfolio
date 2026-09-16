@@ -74,7 +74,7 @@ export function DropdownContent({
             type="button"
             className={twMerge(
               "appointment-picker-option flex w-full items-center justify-between gap-xs rounded-[9px] px-sm py-xs text-left text-sm font-medium transition-all duration-200",
-              index > 0 && "mt-[2px]",
+              index > 0 && "mt-xs",
               isHover
                 ? hover === timezone && "bg-steel text-secondary-foreground"
                 : selectedTimezone === timezone && "bg-cta/15 text-cta",
@@ -85,7 +85,7 @@ export function DropdownContent({
             <span className="truncate text-secondary">{timezone}</span>
             <span
               className={twMerge(
-                "shrink-0 rounded-[7px] border px-[8px] py-[3px] text-[10px] font-bold uppercase tracking-[0.08em] transition-all duration-200",
+                "shrink-0 rounded-[7px] border px-sm py-xs text-[10px] font-bold uppercase tracking-[0.08em] transition-all duration-200",
                 selectedTimezone === timezone
                   ? "border-cta/60 bg-cta/20 text-cta"
                   : "border-brass/40 bg-steel text-secondary-foreground/70 hover:border-cta/40",

@@ -24,7 +24,7 @@ export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: All
     totalClicks && selectedProject ? Math.round((selectedProject.total_clicks / totalClicks) * 100) : 0
 
   if (!overview.length) {
-    return <p className="py-10 text-center text-sm text-secondary-foreground">{t("noWindowClickData")}</p>
+    return <p className="py-xl text-center text-sm text-secondary-foreground">{t("noWindowClickData")}</p>
   }
 
   return (

@@ -16,7 +16,7 @@ export const TimelineModeSwitcher = memo(function TimelineModeSwitcher({ timelin
   const t = useScopedI18n("admin")
 
   return (
-    <div className="grid h-[40px] grid-cols-2 rounded-[2px] border border-brass/40 bg-steel p-[3px] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+    <div className="grid h-[40px] grid-cols-2 rounded-[2px] border border-brass/40 bg-steel p-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
       {TIMELINE_OPTIONS.map(option => (
         <button
           className={twMerge(

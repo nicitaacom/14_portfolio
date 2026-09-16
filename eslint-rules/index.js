@@ -10,6 +10,7 @@
 module.exports = {
   rules: {
     "no-untranslated-ui": require("./no-untranslated-ui"),
+    "require-px-sm-xs-etc": require("./require-px-sm-xs-etc"),
     ...require("./envs-order"),
     // same here - the rule id is "no-unused-defined-envs", see the header of unused-declared-envs.js
     ...require("./unused-declared-envs"),

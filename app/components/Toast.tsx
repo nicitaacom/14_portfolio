@@ -21,7 +21,7 @@ export function Toast() {
         // 100%-2% - its like paddings 1% for right and 1% for left
         `site-toast site-toast-${status} fixed w-full max-w-[calc(100%-2%)] laptop:max-w-[30vw]
          left-[1%] laptop:left-auto right-[1%] bottom-[2%] border-[1px]
-         bg-foreground flex gap-x-[4px] rounded-lg px-[4px] py-[2px] z-[7777]`,
+         bg-foreground flex gap-x-[4px] rounded-lg px-xs py-xs z-[7777]`,
         status === "success" && "border-success",
         status === "error" && "border-danger",
         status === "warning" && "border-warning",
