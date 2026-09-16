@@ -20,7 +20,6 @@
 CREATE TABLE IF NOT EXISTS public.project_link_clicks (
   id BIGSERIAL PRIMARY KEY,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  clicked_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
   project_slug TEXT NOT NULL,
   project_name TEXT NOT NULL,
@@ -30,24 +29,22 @@ CREATE TABLE IF NOT EXISTS public.project_link_clicks (
   destination_url TEXT NOT NULL,
   page_path TEXT NOT NULL DEFAULT '/',
   user_cookie_id VARCHAR(255) NOT NULL,
-  user_timezone TEXT NOT NULL,
-  user_local_date DATE NOT NULL,
 
   CONSTRAINT project_link_clicks_link_type_check
     CHECK (link_type IN ('demo', 'github', 'figma', 'youtube'))
 );
 
-CREATE INDEX IF NOT EXISTS idx_project_link_clicks_clicked_at
-  ON public.project_link_clicks (clicked_at DESC);
+CREATE INDEX IF NOT EXISTS idx_project_link_clicks_created_at
+  ON public.project_link_clicks (created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_project_link_clicks_project_slug_clicked_at
-  ON public.project_link_clicks (project_slug, clicked_at DESC);
+CREATE INDEX IF NOT EXISTS idx_project_link_clicks_project_slug_created_at
+  ON public.project_link_clicks (project_slug, created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_project_link_clicks_project_group_clicked_at
-  ON public.project_link_clicks (project_group, clicked_at DESC);
+CREATE INDEX IF NOT EXISTS idx_project_link_clicks_project_group_created_at
+  ON public.project_link_clicks (project_group, created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_project_link_clicks_link_type_clicked_at
-  ON public.project_link_clicks (link_type, clicked_at DESC);
+CREATE INDEX IF NOT EXISTS idx_project_link_clicks_link_type_created_at
+  ON public.project_link_clicks (link_type, created_at DESC);
 
 DROP INDEX IF EXISTS idx_project_link_clicks_unique_daily_project_user;
 
@@ -96,7 +93,7 @@ AS $$
   WITH filtered AS (
     SELECT *
     FROM public.project_link_clicks
-    WHERE clicked_at >= CASE
+    WHERE created_at >= CASE
       WHEN p_window = 'yearly' THEN now() - interval '12 months'
       ELSE now() - interval '30 days'
     END
@@ -159,13 +156,13 @@ AS $$
   aggregated AS (
     SELECT
       CASE
-        WHEN p_window = 'yearly' THEN date_trunc('month', clicked_at)
-        ELSE date_trunc('day', clicked_at)
+        WHEN p_window = 'yearly' THEN date_trunc('month', created_at)
+        ELSE date_trunc('day', created_at)
       END AS bucket_start,
       count(*)::BIGINT AS total_clicks
     FROM public.project_link_clicks
     WHERE project_slug = p_project_slug
-      AND clicked_at >= (SELECT start_at FROM config)
+      AND created_at >= (SELECT start_at FROM config)
     GROUP BY 1
   )
   SELECT

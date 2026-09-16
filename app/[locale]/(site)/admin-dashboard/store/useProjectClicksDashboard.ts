@@ -3,6 +3,7 @@ import { create } from "zustand"
 import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB"
 import type { TProjectClicksTimelineDB } from "../types/TProjectClicksTimelineDB"
 import type { TProjectClicksTimelineMode } from "../types/TProjectClicksTimelineMode"
+import type { TAnalyticsPeriod } from "../types/TAnalyticsPeriod"
 
 interface ProjectClicksDashboardStore {
   overview: TProjectClicksOverviewDB[]
@@ -10,6 +11,15 @@ interface ProjectClicksDashboardStore {
 
   timeline: TProjectClicksTimelineDB[]
   setTimeline: (timeline: TProjectClicksTimelineDB[]) => void
+
+  period: TAnalyticsPeriod | null
+  setPeriod: (period: TAnalyticsPeriod | null) => void
+
+  setDashboardData: (data: {
+    overview: TProjectClicksOverviewDB[]
+    timeline: TProjectClicksTimelineDB[]
+    period: TAnalyticsPeriod | null
+  }) => void
 
   selectedProjectSlug: string
   setSelectedProjectSlug: (selectedProjectSlug: string) => void
@@ -36,11 +46,20 @@ export const useProjectClicksDashboard = create<ProjectClicksDashboardStore>()(s
   timeline: [],
   setTimeline: timeline => set({ timeline }),
 
+  period: null,
+  setPeriod: period => set({ period }),
+
+  setDashboardData: data => set(data),
+
   selectedProjectSlug: DEFAULT_PROJECT_SLUG,
-  setSelectedProjectSlug: selectedProjectSlug => set({ selectedProjectSlug }),
+  setSelectedProjectSlug: selectedProjectSlug => set(state => state.selectedProjectSlug === selectedProjectSlug
+    ? state
+    : { selectedProjectSlug, overviewErrorMessage: "", timelineErrorMessage: "" }),
 
   timelineMode: "monthly",
-  setTimelineMode: timelineMode => set({ timelineMode }),
+  setTimelineMode: timelineMode => set(state => state.timelineMode === timelineMode
+    ? state
+    : { timelineMode, period: null, overviewErrorMessage: "", timelineErrorMessage: "" }),
 
   currentState: "idle",
   setCurrentState: currentState => set({ currentState }),

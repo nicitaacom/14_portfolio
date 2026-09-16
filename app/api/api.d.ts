@@ -54,6 +54,13 @@ declare module API {
 
   type ProjectClicksTimelineMode = "monthly" | "yearly"
 
+  type AnalyticsPeriod = {
+    start: string
+    end: string
+    bucketUnit: "day" | "month"
+    timezone: "UTC"
+  }
+
   type ProjectClicksOverviewRow = {
     project_slug: string
     project_name: string
@@ -74,6 +81,7 @@ declare module API {
   type AdminProjectClicksResponse = {
     overview: ProjectClicksOverviewRow[]
     timeline: ProjectClicksTimelineRow[]
+    period: AnalyticsPeriod
   }
 
   type TrackProjectLinkClickRequest = {

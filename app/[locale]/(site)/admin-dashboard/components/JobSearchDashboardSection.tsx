@@ -1,110 +1,70 @@
 "use client"
 
-import { useMemo } from "react"
 import { jobSearchStats, jobSearchStatsError } from "../data/jobSearchStats"
 import { ApplicationsDeltaChart } from "./ApplicationsDeltaChart"
-import { JobSearchMonthCard } from "./JobSearchMonthCard"
-import { getApplicationsStatusTone } from "../utils/getApplicationsStatusTone"
-import { getAppointmentsStatusTone } from "../utils/getAppointmentsStatusTone"
-import type { TApplicationsTone } from "../types/TApplicationsTone"
-import { useScopedI18n } from "@/locales/client"
+import { useCurrentLocale, useScopedI18n } from "@/locales/client"
+import { adminUi } from "./AdminUI"
 
-const avgToneClassMap: Record<TApplicationsTone, string> = {
-  danger: "text-danger",
-  warning: "text-warning",
-  success: "text-success",
-}
-
-const AVATAR_DOC_URL =
-  "https://docs.google.com/document/d/1KnNw5OJ6iL7-ZSGpE74MYBMUUARHin3KnETWWKDuywc/edit?tab=t.0"
-
-function SummaryStat({ label, value, valueClassName }: { label: string; value: string | number; valueClassName?: string }) {
-  return (
-    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
-      <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
-      <p className={`mt-xs text-lg ${valueClassName ?? "text-secondary"}`}>{value}</p>
-    </div>
-  )
-}
+const AVATAR_DOC_URL = "https://docs.google.com/document/d/1KnNw5OJ6iL7-ZSGpE74MYBMUUARHin3KnETWWKDuywc/edit?tab=t.0"
 
 export function JobSearchDashboardSection() {
-  const t = useScopedI18n("admin")
-
-  const sortedMonths = useMemo(
-    () => [...jobSearchStats].sort((a, b) => b.month.localeCompare(a.month)),
-    [],
-  )
-
-  const totals = useMemo(() => {
-    // amountApplies and appointments are cumulative — the last entry (by month) holds the true totals
-    const lastEntry = [...jobSearchStats].sort((a, b) => b.month.localeCompare(a.month))[0]
-    const totalAmountApplies = lastEntry?.amountApplies ?? 0
-    const totalAppointments = lastEntry?.appointments ?? 0
-    // skip first entry for averages — it has no previous month so its delta equals the full cumulative total
-    const deltaMonths = jobSearchStats.length > 1 ? jobSearchStats.slice(1) : []
-    const deltaSum = deltaMonths.reduce((acc, month) => acc + month.applications, 0)
-    const avgApplications = deltaMonths.length > 0 ? Math.round(deltaSum / deltaMonths.length) : 0
-    const avgTone = getApplicationsStatusTone(avgApplications)
-    // appointments delta per month: current - previous
-    const sorted = [...jobSearchStats].sort((a, b) => a.month.localeCompare(b.month))
-    const apptDeltas = sorted.slice(1).map((m, i) => m.appointments - sorted[i].appointments)
-    const avgAppointments = apptDeltas.length > 0 ? Math.round(apptDeltas.reduce((a, b) => a + b, 0) / apptDeltas.length) : 0
-    const avgAppointmentsTone = getAppointmentsStatusTone(avgAppointments)
-    // avg conversion: mean of per-month conversionRate values (skip nulls)
-    const conversionRates = jobSearchStats.map(m => m.conversionRate).filter((r): r is number => r !== null)
-    const avgConversionRate = conversionRates.length > 0
-      ? Math.round(conversionRates.reduce((a, b) => a + b, 0) / conversionRates.length * 100) / 100
-      : null
-    return { totalAmountApplies, totalAppointments, avgApplications, avgTone, avgAppointments, avgAppointmentsTone, avgConversionRate }
-  }, [])
-
-  if (jobSearchStatsError) {
-    return (
-      <section className="rounded-[2px] border border-danger/40 bg-danger/10 p-sm">
-        <h2 className="mb-xs text-sm uppercase tracking-[0.18em] text-danger">{t("jobSearchTitle")}</h2>
-        <p className="font-mono text-xs text-danger">{jobSearchStatsError}</p>
-      </section>
-    )
-  }
+  const t = useScopedI18n("adminConsole")
+  const locale = useCurrentLocale()
+  const number = new Intl.NumberFormat(locale === "ua" ? "uk" : locale, { maximumFractionDigits: 1 })
+  const percentage = new Intl.NumberFormat(locale === "ua" ? "uk" : locale, { maximumFractionDigits: 2 })
+  const date = new Intl.DateTimeFormat(locale === "ua" ? "uk" : locale, { month: "short", year: "numeric", timeZone: "UTC" })
+  const monthLabel = (month: string) => date.format(new Date(month + "-01T00:00:00Z"))
+  const latest = jobSearchStats.at(-1)
+  const measured = jobSearchStats.filter(month => month.applicationsAdded !== null)
+  const rates = measured.flatMap(month => month.conversionRate === null ? [] : [month.conversionRate])
+  const average = (values: number[]) => values.length ? number.format(values.reduce((sum, value) => sum + value, 0) / values.length) : "—"
 
   return (
-    <section className="rounded-[2px] border border-brass/40 bg-steel p-sm shadow-[0_16px_44px_rgba(0,0,0,0.22)]">
-      <div className="mb-sm flex flex-col gap-xs">
-        <h2 className="text-sm uppercase tracking-[0.18em] text-secondary">{t("jobSearchTitle")}</h2>
-        <p className="text-xs text-secondary-foreground">
-          {t("jobSearchSubtitle")}{" "}
-          <a
-            className="text-cta hover:underline"
-            href={AVATAR_DOC_URL}
-            rel="noopener noreferrer"
-            target="_blank">
-            {t("avatarDocLink")}
-          </a>
-        </p>
+    <div className={adminUi.stack}>
+      <div className={adminUi.toolbar}>
+        <p className={adminUi.muted}>{t("jobSearchSubtitle")}</p>
+        <a className={adminUi.button} href={AVATAR_DOC_URL} rel="noopener noreferrer" target="_blank">{t("avatarDocLink")}</a>
       </div>
 
-      <div className="mb-sm grid grid-cols-2 gap-xs laptop:grid-cols-3">
-        <SummaryStat label={t("totalAppointments")} value={totals.totalAppointments} />
-        <SummaryStat label={t("totalAmountApplies")} value={totals.totalAmountApplies} />
-        <SummaryStat label={t("monthsTracked")} value={jobSearchStats.length} />
-        <SummaryStat label={t("avgApplications")} value={totals.avgApplications} valueClassName={avgToneClassMap[totals.avgTone]} />
-        <SummaryStat label={t("avgAppointments")} value={totals.avgAppointments} valueClassName={avgToneClassMap[totals.avgAppointmentsTone]} />
-        <SummaryStat label={t("avgConversionRate")} value={totals.avgConversionRate !== null ? `${totals.avgConversionRate}%` : "—"} />
-      </div>
-
-      <ApplicationsDeltaChart months={jobSearchStats} />
-
-      {sortedMonths.length ? (
-        <div className="grid grid-cols-1 gap-xs tablet:grid-cols-2 laptop:grid-cols-3">
-          {sortedMonths.map(month => (
-            <JobSearchMonthCard key={month.month} month={month} />
-          ))}
-        </div>
+      {jobSearchStatsError ? <p className={adminUi.error} role="alert">{t("jobSearchInvalidData")}</p> : !latest ? (
+        <p className={adminUi.empty}>{t("noJobSearchData")}</p>
       ) : (
-        <p className="py-lg text-center text-sm text-secondary-foreground">{t("noJobSearchData")}</p>
+        <>
+          <p className={adminUi.eyebrow}>{t("jobSearchDataAsOf", { date: monthLabel(latest.month) })}</p>
+          <dl className={`${adminUi.metrics} laptop:grid-cols-3`}>
+            {[["totalApplications", number.format(latest.totalApplications)], ["totalInterviews", number.format(latest.totalInterviews)], ["monthsTracked", jobSearchStats.length], ["avgApplications", average(measured.map(month => month.applicationsAdded!))], ["avgInterviews", average(measured.map(month => month.interviewsAdded!))], ["avgConversionRate", rates.length ? percentage.format(rates.reduce((sum, rate) => sum + rate, 0) / rates.length) + "%" : "—"]].map(([label, value]) => <div key={String(label)}><dt className="font-typewriter text-[10px] uppercase tracking-[1px] text-[var(--3d-dot-c-a8b1b9)]">{t(label as "totalApplications")}</dt><dd className="mt-xs text-[25px] leading-tight text-[var(--3d-dot-c-eff3f6)] tablet:text-[31px]">{value}</dd></div>)}
+          </dl>
+          <ApplicationsDeltaChart months={jobSearchStats} />
+          <section className={adminUi.panel}>
+            <header className={adminUi.panelHeader}>
+              <h3 className={adminUi.heading}>{t("jobSearchHistory")}</h3>
+            </header>
+            <p className={adminUi.muted}>{t("baselineDescription")}</p>
+            <div className="max-w-full overflow-x-auto" tabIndex={0} role="region" aria-label={t("jobSearchHistory")}>
+              <table className="w-full border-collapse text-left text-[12px] [&_td]:border-b [&_td]:border-[var(--3d-dot-c-343f48)] [&_td]:p-sm [&_td]:text-[var(--3d-dot-c-d2dde6)] [&_th]:border-b [&_th]:border-[var(--3d-dot-c-4a555e)] [&_th]:p-sm [&_th]:text-[10px] [&_th]:font-normal [&_th]:text-[var(--3d-dot-c-9eadb9)]">
+                <thead><tr>
+                  <th scope="col">{t("month")}</th>
+                  <th scope="col">{t("monthlyApplications")}</th>
+                  <th scope="col">{t("monthlyInterviews")}</th>
+                  <th scope="col">{t("conversionRate")}</th>
+                  <th scope="col">{t("cumulativeApplications")}</th>
+                  <th scope="col">{t("cumulativeInterviews")}</th>
+                </tr></thead>
+                <tbody>{[...jobSearchStats].reverse().map(month => (
+                  <tr key={month.month}>
+                    <th scope="row">{monthLabel(month.month)}{month.applicationsAdded === null && <small className={adminUi.muted}> · {t("baseline")}</small>}</th>
+                    <td>{month.applicationsAdded === null ? "—" : number.format(month.applicationsAdded)}</td>
+                    <td>{month.interviewsAdded === null ? "—" : number.format(month.interviewsAdded)}</td>
+                    <td>{month.conversionRate === null ? "—" : percentage.format(month.conversionRate) + "%"}</td>
+                    <td>{number.format(month.totalApplications)}</td>
+                    <td>{number.format(month.totalInterviews)}</td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          </section>
+        </>
       )}
-
-
-    </section>
+    </div>
   )
 }

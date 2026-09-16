@@ -7,6 +7,7 @@ import { parseAdminUserIdArr } from "@/libs/adminAuth"
 import { AdminDashboardClient } from "../[locale]/(site)/admin-dashboard/AdminDashboardClient"
 import { TLocale } from "@/locales/config"
 import { localizePath } from "@/locales/helpers"
+import { getIsGMLive } from "@/libs/getIsGMLive"
 
 export const dynamic = "force-dynamic"
 
@@ -21,13 +22,14 @@ export async function AdminDashboardPageView({ locale }: { locale: TLocale }) {
 
   if (!user?.id || !adminUserIds.includes(user.id)) redirect(localizePath("/", locale))
 
-  const [{ data: cronSchedules, error: cronError }, { data: bookings, error: bookingsError }] = await Promise.all([
+  const [{ data: cronSchedules, error: cronError }, { data: bookings, error: bookingsError }, isGMLive] = await Promise.all([
     supabaseAdmin.rpc("get_cron_schedules"),
     supabaseAdmin
       .from("bookings")
       .select("*")
       .order("booking_date", { ascending: true })
       .order("booking_time_MSK", { ascending: true }),
+    getIsGMLive(),
   ])
 
   if (cronError) {
@@ -38,5 +40,14 @@ export async function AdminDashboardPageView({ locale }: { locale: TLocale }) {
     console.error("Failed to load bookings for admin dashboard:", bookingsError)
   }
 
-  return <AdminDashboardClient bookings={bookings ?? []} cronSchedules={cronSchedules ?? []} userId={user.id} />
+  return (
+    <AdminDashboardClient
+      bookings={bookings ?? []}
+      cronSchedules={cronSchedules ?? []}
+      userId={user.id}
+      bookingsLoadError={Boolean(bookingsError)}
+      cronSchedulesLoadError={Boolean(cronError)}
+      isGMLive={isGMLive}
+    />
+  )
 }

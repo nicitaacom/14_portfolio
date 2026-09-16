@@ -20,7 +20,7 @@ export const TimelineModeSwitcher = memo(function TimelineModeSwitcher({ timelin
       {TIMELINE_OPTIONS.map(option => (
         <button
           className={twMerge(
-            "rounded-[2px] px-sm text-xs uppercase tracking-[0.18em] transition-colors",
+            "rounded-[2px] px-xs text-xs uppercase tracking-[0.18em] transition-colors",
             timelineMode === option
               ? "bg-steel text-secondary shadow-[0_8px_18px_rgba(0,0,0,0.3)]"
               : "text-secondary-foreground hover:text-secondary",

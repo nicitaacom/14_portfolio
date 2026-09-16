@@ -2,7 +2,7 @@
 
 export function OverviewStat({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="rounded-[2px] border border-brass/40 bg-steel px-sm py-xs">
+    <div className="rounded-[2px] border border-brass/40 bg-steel px-xs py-xs">
       <p className="text-xs uppercase tracking-[0.15em]">{label}</p>
       <p className="mt-xs text-lg text-secondary">{value}</p>
     </div>

@@ -26,7 +26,7 @@ export const ProjectClicksOverviewBarItem = memo(function ProjectClicksOverviewB
   const animatedBarWidth = item.total_clicks ? Math.max(barWidthPercent, 2) : 0
 
   return (
-    <div className={twMerge("flex items-center gap-sm py-sm", isSelected && "opacity-100", !isSelected && "opacity-70 hover:opacity-90 transition-opacity")}>
+    <div className={twMerge("flex items-center gap-xs py-xs", isSelected && "opacity-100", !isSelected && "opacity-70 hover:opacity-90 transition-opacity")}>
       <span className="w-[16px] shrink-0 text-right text-xs text-secondary-foreground">{rank}</span>
 
       <span className={twMerge("w-[120px] shrink-0 truncate text-xs", isSelected ? "text-secondary" : "text-secondary-foreground")}>
@@ -37,7 +37,7 @@ export const ProjectClicksOverviewBarItem = memo(function ProjectClicksOverviewB
         <div className="relative h-[2px] overflow-hidden rounded-full bg-steel">
           <motion.div
             animate={{ width: `${animatedBarWidth}%` }}
-            className={twMerge("h-full rounded-full", isSelected ? "bg-[#888]" : "bg-[#555]")}
+            className={twMerge("h-full rounded-full", isSelected ? "bg-[var(--3d-dot-c-888)]" : "bg-[var(--3d-dot-c-555)]")}
             initial={{ width: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           />
@@ -48,7 +48,7 @@ export const ProjectClicksOverviewBarItem = memo(function ProjectClicksOverviewB
         <span className={twMerge("text-xs", isSelected ? "text-secondary" : "text-secondary-foreground")}>
           {item.total_clicks}
         </span>
-        <span className="ml-sm text-xs text-secondary-foreground opacity-50">{sharePercent}%</span>
+        <span className="ml-xs text-xs text-secondary-foreground opacity-50">{sharePercent}%</span>
       </div>
     </div>
   )

@@ -97,6 +97,9 @@ export async function POST(request: Request) {
   }
 
   if (error) {
+    // The key is a reservation made before the insert. Release it when the database
+    // rejects the row so a corrected request can be recorded immediately.
+    await redis.del(dailyProjectClickDedupKey).catch(() => undefined)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 

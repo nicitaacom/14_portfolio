@@ -24,12 +24,12 @@ export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: All
     totalClicks && selectedProject ? Math.round((selectedProject.total_clicks / totalClicks) * 100) : 0
 
   if (!overview.length) {
-    return <p className="py-xl text-center text-sm text-secondary-foreground">{t("noWindowClickData")}</p>
+    return <p className="py-lg text-center text-sm text-secondary-foreground">{t("noWindowClickData")}</p>
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-sm">
-      <div className="flex gap-sm text-xs text-secondary-foreground">
+    <div className="flex min-w-0 flex-col gap-xs">
+      <div className="flex gap-xs text-xs text-secondary-foreground">
         <span>{t("windowTotal")} <span className="text-secondary">{totalClicks}</span></span>
         <span className="opacity-30">·</span>
         <span>{t("activeProjects")} <span className="text-secondary">{activeProjects}</span></span>
@@ -37,7 +37,7 @@ export function AllProjectsClicksBarChart({ overview, selectedProjectSlug }: All
         <span>{t("selectedShare")} <span className="text-secondary">{selectedProjectShare}%</span></span>
       </div>
 
-      <div className="flex flex-col divide-y divide-[#2a2a2a]">
+      <div className="flex flex-col divide-y divide-[var(--3d-dot-c-2a2a2a)]">
         {overview.map((item, index) => (
           <ProjectClicksOverviewBarItem
             barWidthPercent={(item.total_clicks / maxClicks) * 100}

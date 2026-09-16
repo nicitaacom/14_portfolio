@@ -12,6 +12,28 @@ export class ProjectClicksSDK {
     return responseData && typeof responseData.error === "string" ? responseData.error : fallbackMessage
   }
 
+  async selectProjectClicksDashboard(
+    projectSlug: string,
+    timelineMode: TProjectClicksTimelineMode,
+    signal?: AbortSignal,
+  ): Promise<API.AdminProjectClicksResponse> {
+    const searchParams = new URLSearchParams({ scope: "all", projectSlug, timelineMode })
+    const response = await fetch(`${ADMIN_PROJECT_CLICKS_API_URL}?${searchParams.toString()}`, {
+      method: "GET",
+      cache: "no-store",
+      signal,
+    })
+    const responseData = await this.getResponseDataFn<API.AdminProjectClicksResponse>(response)
+    if (!response.ok) {
+      throw new Error(this.getErrorMessageFn(responseData, "Failed to load project clicks"))
+    }
+    if (!responseData || !("overview" in responseData) || !("timeline" in responseData) || !("period" in responseData)
+      || !Array.isArray(responseData.overview) || !Array.isArray(responseData.timeline) || !responseData.period) {
+      throw new Error("Invalid project clicks response")
+    }
+    return responseData
+  }
+
   async selectProjectClicksOverview(timelineMode: TProjectClicksTimelineMode): Promise<API.ProjectClicksOverviewRow[]> {
     const searchParams = new URLSearchParams({
       scope: "overview",
@@ -28,7 +50,10 @@ export class ProjectClicksSDK {
       throw new Error(this.getErrorMessageFn(responseData, "Failed to fetch project clicks overview"))
     }
 
-    return responseData && "overview" in responseData ? (responseData.overview ?? []) : []
+    if (!responseData || !("overview" in responseData) || !Array.isArray(responseData.overview)) {
+      throw new Error("Invalid project clicks overview response")
+    }
+    return responseData.overview
   }
 
   async selectProjectClicksTimeline(
@@ -51,7 +76,10 @@ export class ProjectClicksSDK {
       throw new Error(this.getErrorMessageFn(responseData, "Failed to fetch project clicks timeline"))
     }
 
-    return responseData && "timeline" in responseData ? (responseData.timeline ?? []) : []
+    if (!responseData || !("timeline" in responseData) || !Array.isArray(responseData.timeline)) {
+      throw new Error("Invalid project clicks timeline response")
+    }
+    return responseData.timeline
   }
 
   async trackProjectClick(payload: API.TrackProjectLinkClickRequest): Promise<API.TrackProjectLinkClickResponse> {

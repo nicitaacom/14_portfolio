@@ -1,123 +1,61 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { ProjectClicksSDK } from "@/classes/ProjectClicksSDK/ProjectClicksSDK"
-import type { TProjectClicksOverviewDB } from "../types/TProjectClicksOverviewDB"
-import type { TProjectClicksTimelineDB } from "../types/TProjectClicksTimelineDB"
 import { useProjectClicksDashboard } from "../store/useProjectClicksDashboard"
 
 const projectClicksSDK = new ProjectClicksSDK()
-
-const mapProjectClicksOverviewFn = (row: API.ProjectClicksOverviewRow): TProjectClicksOverviewDB => ({
-  project_slug: row.project_slug ?? "",
-  project_name: row.project_name ?? "Unnamed project",
-  project_group: row.project_group ?? "projects",
-  total_clicks: Number(row.total_clicks ?? 0),
-  demo_clicks: Number(row.demo_clicks ?? 0),
-  github_clicks: Number(row.github_clicks ?? 0),
-  figma_clicks: Number(row.figma_clicks ?? 0),
-  youtube_clicks: Number(row.youtube_clicks ?? 0),
-})
-
-const mapProjectClicksTimelineFn = (row: API.ProjectClicksTimelineRow): TProjectClicksTimelineDB => ({
-  bucket_key: row.bucket_key ?? "",
-  bucket_label: row.bucket_label ?? "",
-  total_clicks: Number(row.total_clicks ?? 0),
-})
 
 export const useSetProjectClicksDashboard = () => {
   const {
     selectedProjectSlug,
     timelineMode,
-    setOverview,
-    setTimeline,
+    setDashboardData,
     setCurrentState,
     setOverviewErrorMessage,
     setTimelineErrorMessage,
   } = useProjectClicksDashboard()
-  const [isOverviewSkeleton, setIsOverviewSkeleton] = useState(false)
-  const [isTimelineSkeleton, setIsTimelineSkeleton] = useState(false)
-  const overviewRequestIdRef = useRef(0)
-  const timelineRequestIdRef = useRef(0)
-
-  const fetchOverviewFn = useCallback(async (): Promise<TProjectClicksOverviewDB[]> => {
-    const requestId = overviewRequestIdRef.current + 1
-    overviewRequestIdRef.current = requestId
-
-    setCurrentState("fetching")
-    setOverviewErrorMessage("")
-    setIsOverviewSkeleton(true)
-
-    try {
-      const response = await projectClicksSDK.selectProjectClicksOverview(timelineMode)
-      const mappedOverview = response.map(mapProjectClicksOverviewFn)
-
-      if (overviewRequestIdRef.current === requestId) {
-        setOverview(mappedOverview)
-        setCurrentState("up to date")
-      }
-
-      return mappedOverview
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error)
-      if (overviewRequestIdRef.current === requestId) {
-        setOverview([])
-        setOverviewErrorMessage(errorMessage)
-        setCurrentState("up to date")
-      }
-
-      return []
-    } finally {
-      if (overviewRequestIdRef.current === requestId) {
-        setIsOverviewSkeleton(false)
-      }
-    }
-  }, [setCurrentState, setOverview, setOverviewErrorMessage, timelineMode])
-
-  const fetchTimelineFn = useCallback(async (): Promise<TProjectClicksTimelineDB[]> => {
-    const requestId = timelineRequestIdRef.current + 1
-    timelineRequestIdRef.current = requestId
-
-    setCurrentState("fetching")
-    setTimelineErrorMessage("")
-    setIsTimelineSkeleton(true)
-
-    try {
-      const response = await projectClicksSDK.selectProjectClicksTimeline(selectedProjectSlug, timelineMode)
-      const mappedTimeline = response.map(mapProjectClicksTimelineFn)
-
-      if (timelineRequestIdRef.current === requestId) {
-        setTimeline(mappedTimeline)
-        setCurrentState("up to date")
-      }
-
-      return mappedTimeline
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error)
-
-      if (timelineRequestIdRef.current === requestId) {
-        setTimeline([])
-        setTimelineErrorMessage(errorMessage)
-        setCurrentState("up to date")
-      }
-
-      return []
-    } finally {
-      if (timelineRequestIdRef.current === requestId) {
-        setIsTimelineSkeleton(false)
-      }
-    }
-  }, [selectedProjectSlug, setCurrentState, setTimeline, setTimelineErrorMessage, timelineMode])
-
-  useEffect(() => {
-    fetchOverviewFn()
-  }, [fetchOverviewFn])
-
-  useEffect(() => {
-    fetchTimelineFn()
-  }, [fetchTimelineFn])
+  const [isLoading, setIsLoading] = useState(true)
+  const [settledRequestKey, setSettledRequestKey] = useState<string | null>(null)
+  const requestIdRef = useRef(0)
+  const controllerRef = useRef<AbortController | null>(null)
 
   const refetch = useCallback(async () => {
-    await Promise.all([fetchOverviewFn(), fetchTimelineFn()])
-  }, [fetchOverviewFn, fetchTimelineFn])
+    const requestId = ++requestIdRef.current
+    controllerRef.current?.abort()
+    const controller = new AbortController()
+    controllerRef.current = controller
+    setCurrentState("fetching")
+    setOverviewErrorMessage("")
+    setTimelineErrorMessage("")
+    setIsLoading(true)
 
-  return { refetch, isOverviewSkeleton, isTimelineSkeleton }
+    try {
+      const response = await projectClicksSDK.selectProjectClicksDashboard(selectedProjectSlug, timelineMode, controller.signal)
+      if (requestId !== requestIdRef.current) return
+      setDashboardData(response)
+      setCurrentState("up to date")
+    } catch (error) {
+      if (requestId !== requestIdRef.current || controller.signal.aborted) return
+      const message = error instanceof Error ? error.message : "Failed to load project clicks"
+      setDashboardData({ overview: [], timeline: [], period: null })
+      setOverviewErrorMessage(message)
+      setTimelineErrorMessage(message)
+      setCurrentState("idle")
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setSettledRequestKey(`${selectedProjectSlug}:${timelineMode}`)
+        setIsLoading(false)
+      }
+    }
+  }, [selectedProjectSlug, timelineMode, setDashboardData, setCurrentState, setOverviewErrorMessage, setTimelineErrorMessage])
+
+  useEffect(() => {
+    void refetch()
+    return () => {
+      requestIdRef.current += 1
+      controllerRef.current?.abort()
+    }
+  }, [refetch])
+
+  const pending = isLoading || settledRequestKey !== `${selectedProjectSlug}:${timelineMode}`
+  return { refetch, isOverviewSkeleton: pending, isTimelineSkeleton: pending }
 }
