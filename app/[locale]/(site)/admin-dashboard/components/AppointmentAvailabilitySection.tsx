@@ -34,24 +34,60 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
   active,
   date,
   disabled,
+  eligibility,
+  occupancy,
   onToggle,
   startsAt,
-  status,
   time,
 }: {
   active: boolean
   date: string
   disabled: boolean
+  eligibility: AdminSlot["eligibility"]
+  occupancy: AdminSlot["occupancy"]
   onToggle: (startsAt: string) => void
   startsAt: string
-  status: string
   time: string
 }) {
+  const t = useScopedI18n("adminConsole")
   const handleClick = useCallback(() => onToggle(startsAt), [onToggle, startsAt])
+  const occupancyText = t(occupancy)
+  const eligibilityText = eligibility === "eligible" ? "" : eligibility === "too_soon" ? t("tooSoon") : t("past")
+  const cardStyle = occupancy === "blocked"
+    ? "!border-rose-300/75 !bg-[repeating-linear-gradient(135deg,rgba(127,29,29,.62)_0,rgba(127,29,29,.62)_8px,rgba(69,10,10,.68)_8px,rgba(69,10,10,.68)_16px)] shadow-[inset_0_0_18px_rgba(244,63,94,.28)]"
+    : occupancy === "booked"
+      ? "!border-amber-300/75 !bg-[linear-gradient(135deg,rgba(120,53,15,.72),rgba(69,26,3,.72))] shadow-[inset_0_0_16px_rgba(251,191,36,.2)]"
+      : eligibility === "past"
+        ? "!border-slate-400/70 !bg-[linear-gradient(135deg,rgba(51,65,85,.62),rgba(30,41,59,.72))]"
+        : eligibility === "too_soon"
+          ? "!border-sky-300/80 !bg-[linear-gradient(135deg,rgba(7,89,133,.68),rgba(12,50,77,.76))] shadow-[inset_0_0_16px_rgba(56,189,248,.2)]"
+          : "!border-emerald-300/75 !bg-[linear-gradient(135deg,rgba(6,78,59,.7),rgba(6,46,39,.78))] shadow-[inset_0_0_16px_rgba(52,211,153,.2)]"
+  const badgeStyle = occupancy === "blocked"
+    ? "border-rose-200/60 bg-rose-950/70 text-rose-100"
+    : occupancy === "booked"
+      ? "border-amber-200/60 bg-amber-950/70 text-amber-100"
+      : "border-emerald-200/50 bg-emerald-950/65 text-emerald-100"
 
-  return <button type="button" aria-pressed={active} disabled={disabled} onClick={handleClick} className={`${adminUi.button} min-h-[56px] flex-col !items-start !justify-center !px-sm text-left aria-[pressed=true]:border-[var(--3d-dot-c-e0e7eb)] aria-[pressed=true]:bg-[linear-gradient(var(--3d-dot-c-40474c),var(--3d-dot-c-2a3035))]`}>
-    <span className="font-typewriter text-[12px] text-[var(--3d-dot-c-f0f3f5)]">{time}<small className="ml-xs text-[9px]">{date}</small></span>
-    <span className="text-[10px] text-[var(--3d-dot-c-aab4bb)]">{status}</span>
+  return <button
+    type="button"
+    aria-label={`${time}${date ? ` ${date}` : ""}: ${occupancyText}${eligibilityText ? `, ${eligibilityText}` : ""}`}
+    aria-pressed={active}
+    data-occupancy={occupancy}
+    data-eligibility={eligibility}
+    disabled={disabled}
+    onClick={handleClick}
+    className={`${adminUi.button} ${cardStyle} min-h-[56px] flex-col !items-start !justify-center !px-sm !opacity-100 text-left transition-[filter,transform] hover:brightness-125 hover:saturate-150 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-white/80 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:hover:saturate-100`}>
+    <span className={`font-typewriter text-[12px] ${eligibility === "past" ? "text-slate-300" : "text-white"}`}>{time}<small className="ml-xs text-[9px]">{date}</small></span>
+    <span className="mt-xs flex flex-wrap items-center gap-xs">
+      <span className={`inline-flex items-center gap-[4px] rounded border px-[5px] py-[2px] text-[9px] font-bold uppercase tracking-[.08em] ${badgeStyle}`}>
+        <span aria-hidden="true">{occupancy === "free" ? "✓" : occupancy === "blocked" ? "×" : "●"}</span>
+        {occupancyText}
+      </span>
+      {eligibility !== "eligible" && <span className={`inline-flex items-center gap-[4px] rounded border px-[5px] py-[2px] text-[9px] font-semibold uppercase tracking-[.06em] ${eligibility === "past" ? "border-slate-400/50 bg-slate-900/65 text-slate-300" : "border-sky-200/60 bg-sky-950/65 text-sky-100"}`}>
+        <span aria-hidden="true">{eligibility === "past" ? "↶" : "◷"}</span>
+        {eligibilityText}
+      </span>}
+    </span>
   </button>
 })
 
@@ -217,12 +253,6 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
     }
   }
 
-  function statusText(slot: AdminSlot) {
-    const occupancy = slot.occupancy === "free" ? t("free") : slot.occupancy === "booked" ? t("booked") : t("blocked")
-    const eligibility = slot.eligibility === "eligible" ? "" : slot.eligibility === "too_soon" ? t("tooSoon") : t("past")
-    return eligibility ? `${occupancy} · ${eligibility}` : occupancy
-  }
-
   const zoneChoices = [...new Set(["Europe/Moscow", localTimezone])]
 
   return <div className="h-full min-h-0 overflow-y-auto pr-xs pb-md" aria-busy={loading || mutating}>
@@ -267,7 +297,7 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
           {slots.map(slot => {
             const display = slotDisplays.get(slot.startsAt)
             if (!display) return null
-            return <AvailabilitySlotButton key={slot.startsAt} active={selectedSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || slot.eligibility === "past" || slot.occupancy === "booked"} onToggle={toggleSlot} startsAt={slot.startsAt} status={statusText(slot)} time={display.time} />
+            return <AvailabilitySlotButton key={slot.startsAt} active={selectedSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || slot.eligibility === "past" || slot.occupancy === "booked"} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} />
           })}
         </div>
         {loading && <p className={`${adminUi.muted} mt-sm`} role="status">{t("refreshing")}</p>}
