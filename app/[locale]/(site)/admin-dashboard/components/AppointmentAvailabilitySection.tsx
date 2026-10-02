@@ -54,19 +54,15 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
   const occupancyText = t(occupancy)
   const eligibilityText = eligibility === "eligible" ? "" : eligibility === "too_soon" ? t("tooSoon") : t("past")
   const cardStyle = occupancy === "blocked"
-    ? "!border-rose-300/75 !bg-[repeating-linear-gradient(135deg,rgba(127,29,29,.62)_0,rgba(127,29,29,.62)_8px,rgba(69,10,10,.68)_8px,rgba(69,10,10,.68)_16px)] shadow-[inset_0_0_18px_rgba(244,63,94,.28)]"
+    ? "!border-[#666666] !bg-[radial-gradient(circle_at_2px_2px,_#383838_0.7px,_#202020_1.7px,_transparent_2.2px),linear-gradient(145deg,_#303030,_#1d1d1d)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_2px_5px_#090909,inset_0_-1px_0_#555555]"
     : occupancy === "booked"
-      ? "!border-amber-300/75 !bg-[linear-gradient(135deg,rgba(120,53,15,.72),rgba(69,26,3,.72))] shadow-[inset_0_0_16px_rgba(251,191,36,.2)]"
-      : eligibility === "past"
-        ? "!border-slate-400/70 !bg-[linear-gradient(135deg,rgba(51,65,85,.62),rgba(30,41,59,.72))]"
-        : eligibility === "too_soon"
-          ? "!border-sky-300/80 !bg-[linear-gradient(135deg,rgba(7,89,133,.68),rgba(12,50,77,.76))] shadow-[inset_0_0_16px_rgba(56,189,248,.2)]"
-          : "!border-emerald-300/75 !bg-[linear-gradient(135deg,rgba(6,78,59,.7),rgba(6,46,39,.78))] shadow-[inset_0_0_16px_rgba(52,211,153,.2)]"
+      ? "!border-[#858585] !bg-[radial-gradient(circle_at_2px_2px,_#a0a0a0_0.6px,_#555555_1.5px,_transparent_2.1px),linear-gradient(145deg,_#585858,_#353535)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_1px_0_#b0b0b0,inset_0_-2px_4px_#222222,0_2px_3px_#111111]"
+      : "!border-[#9a9a9a] !bg-[radial-gradient(circle_at_2px_2px,_#aaaaaa_0.7px,_#555555_1.8px,_transparent_2.3px),linear-gradient(145deg,_#656565,_#414141)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_1px_0_#c0c0c0,inset_0_-2px_4px_#292929,0_2px_3px_#111111]"
   const badgeStyle = occupancy === "blocked"
-    ? "border-rose-200/60 bg-rose-950/70 text-rose-100"
+    ? "border-[#777777] bg-[#202020] text-[#dedede] shadow-[inset_0_1px_1px_#080808,inset_0_-1px_0_#555555]"
     : occupancy === "booked"
-      ? "border-amber-200/60 bg-amber-950/70 text-amber-100"
-      : "border-emerald-200/50 bg-emerald-950/65 text-emerald-100"
+      ? "border-[#aaaaaa] bg-[linear-gradient(180deg,#777777,#4b4b4b)] text-[#f0f0f0] shadow-[inset_0_1px_0_#c7c7c7,inset_0_-1px_0_#333333]"
+      : "border-[#b5b5b5] bg-[linear-gradient(180deg,#858585,#5a5a5a)] text-[#ffffff] shadow-[inset_0_1px_0_#d0d0d0,inset_0_-1px_0_#3a3a3a]"
 
   return <button
     type="button"
@@ -76,14 +72,14 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
     data-eligibility={eligibility}
     disabled={disabled}
     onClick={handleClick}
-    className={`${adminUi.button} ${cardStyle} min-h-[56px] flex-col !items-start !justify-center !px-sm !opacity-100 text-left transition-[filter,transform] hover:brightness-125 hover:saturate-150 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-white/80 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:hover:saturate-100`}>
-    <span className={`font-typewriter text-[12px] ${eligibility === "past" ? "text-slate-300" : "text-white"}`}>{time}<small className="ml-xs text-[9px]">{date}</small></span>
+    className={`${adminUi.button} ${cardStyle} min-h-[56px] flex-col !items-start !justify-center !px-sm !opacity-100 text-left transition-[filter,transform] hover:brightness-110 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-[#eeeeee] disabled:cursor-not-allowed disabled:hover:brightness-100`}>
+    <span className="font-typewriter text-[12px] text-[#f0f0f0]">{time}<small className="ml-xs text-[9px] text-[#c0c0c0]">{date}</small></span>
     <span className="mt-xs flex flex-wrap items-center gap-xs">
-      <span className={`inline-flex items-center gap-[4px] rounded border px-[5px] py-[2px] text-[9px] font-bold uppercase tracking-[.08em] ${badgeStyle}`}>
-        <span aria-hidden="true">{occupancy === "free" ? "✓" : occupancy === "blocked" ? "×" : "●"}</span>
+      <span className={`inline-flex items-center gap-xs rounded-[2px] border px-xs py-0 font-mono text-[9px] font-bold uppercase tracking-[1px] tablet:text-[10px] ${badgeStyle}`}>
+        <span aria-hidden="true">{occupancy === "free" ? "○" : occupancy === "blocked" ? "×" : "●"}</span>
         {occupancyText}
       </span>
-      {eligibility !== "eligible" && <span className={`inline-flex items-center gap-[4px] rounded border px-[5px] py-[2px] text-[9px] font-semibold uppercase tracking-[.06em] ${eligibility === "past" ? "border-slate-400/50 bg-slate-900/65 text-slate-300" : "border-sky-200/60 bg-sky-950/65 text-sky-100"}`}>
+      {eligibility !== "eligible" && <span className="inline-flex items-center gap-xs rounded-[2px] border border-[#777777] bg-[#292929] px-xs py-0 font-mono text-[9px] uppercase tracking-[1px] text-[#c8c8c8] shadow-[inset_0_1px_2px_#111111] tablet:text-[10px]">
         <span aria-hidden="true">{eligibility === "past" ? "↶" : "◷"}</span>
         {eligibilityText}
       </span>}
