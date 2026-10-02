@@ -261,13 +261,11 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
           <div><h2 className={adminUi.heading}>{t("availability")}</h2><p className={`${adminUi.muted} mt-xs text-[11px]`}>{t("availabilityDescription")}</p></div>
           <RefreshButton pending={loading || mutating} onClick={refresh} />
         </header>
-        <div className="grid gap-sm laptop:grid-cols-[minmax(0,1fr)_auto] laptop:items-end">
-          <div className="grid grid-cols-2 gap-xs min-[520px]:grid-cols-4">
-            <button type="button" className={adminUi.button} disabled={mutating} onClick={() => chooseTodayOrTomorrow(0)}>{t("today")}</button>
-            <button type="button" className={adminUi.button} disabled={mutating} onClick={() => chooseTodayOrTomorrow(1)}>{t("tomorrow")}</button>
-            <label className={`${adminUi.field} col-span-2`}><span>{t("bookingDate")}</span><input className={adminUi.input} type="date" value={date} onChange={event => changeDate(event.target.value)} /></label>
-          </div>
-          <div className={`${adminUi.segmented} !gap-0`} role="group" aria-label={t("adminTimeZone")}>
+        <div className="grid grid-cols-2 items-end gap-xs rounded-[4px] border border-[#4c4c4c] bg-[radial-gradient(circle_at_2px_2px,_#343434_0.4px,_#222222_1.1px,_transparent_1.5px),linear-gradient(145deg,_#252525,_#1e1e1e)] bg-[length:8px_8px,_100%_100%] p-xs shadow-[inset_0_1px_0_#55555555,inset_0_-1px_0_#111111] min-[520px]:flex min-[520px]:flex-wrap">
+          <button type="button" className={`${adminUi.button} min-h-[42px] min-[520px]:w-[104px]`} disabled={mutating} onClick={() => chooseTodayOrTomorrow(0)}>{t("today")}</button>
+          <button type="button" className={`${adminUi.button} min-h-[42px] min-[520px]:w-[104px]`} disabled={mutating} onClick={() => chooseTodayOrTomorrow(1)}>{t("tomorrow")}</button>
+          <label className={`${adminUi.field} col-span-2 min-w-0 min-[520px]:w-[280px]`}><span>{t("bookingDate")}</span><input className={adminUi.input} type="date" value={date} onChange={event => changeDate(event.target.value)} /></label>
+          <div className={`${adminUi.segmented} col-span-2 !gap-0 w-fit`} role="group" aria-label={t("adminTimeZone")}>
             {zoneChoices.map((zone, index) => <button key={`${zone}-${index}`} type="button" aria-pressed={timezone === zone} onClick={() => { setSelected([]); setTimezone(zone) }}><span className="block">{index === 0 ? "MSK" : "Local"}</span><small className="block px-xs text-[9px]">{zone}</small></button>)}
           </div>
         </div>
