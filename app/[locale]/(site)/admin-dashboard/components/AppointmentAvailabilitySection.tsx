@@ -39,6 +39,7 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
   onToggle,
   startsAt,
   time,
+  waiting,
 }: {
   active: boolean
   date: string
@@ -48,21 +49,22 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
   onToggle: (startsAt: string) => void
   startsAt: string
   time: string
+  waiting: boolean
 }) {
   const t = useScopedI18n("adminConsole")
   const handleClick = useCallback(() => onToggle(startsAt), [onToggle, startsAt])
   const occupancyText = t(occupancy)
   const eligibilityText = eligibility === "eligible" ? "" : eligibility === "too_soon" ? t("tooSoon") : t("past")
   const cardStyle = occupancy === "blocked"
-    ? "!border-[#666666] !bg-[radial-gradient(circle_at_2px_2px,_#383838_0.7px,_#202020_1.7px,_transparent_2.2px),linear-gradient(145deg,_#303030,_#1d1d1d)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_2px_5px_#090909,inset_0_-1px_0_#555555]"
+    ? "!border-[#555555] !bg-[radial-gradient(circle_at_2px_2px,_#333333_0.5px,_#1f1f1f_1.3px,_transparent_1.8px),linear-gradient(145deg,_#292929,_#1d1d1d)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_2px_5px_#111111,inset_0_-1px_0_#414141]"
     : occupancy === "booked"
-      ? "!border-[#858585] !bg-[radial-gradient(circle_at_2px_2px,_#a0a0a0_0.6px,_#555555_1.5px,_transparent_2.1px),linear-gradient(145deg,_#585858,_#353535)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_1px_0_#b0b0b0,inset_0_-2px_4px_#222222,0_2px_3px_#111111]"
-      : "!border-[#9a9a9a] !bg-[radial-gradient(circle_at_2px_2px,_#aaaaaa_0.7px,_#555555_1.8px,_transparent_2.3px),linear-gradient(145deg,_#656565,_#414141)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_1px_0_#c0c0c0,inset_0_-2px_4px_#292929,0_2px_3px_#111111]"
+      ? "!border-[#686868] !bg-[radial-gradient(circle_at_2px_2px,_#666666_0.5px,_#393939_1.3px,_transparent_1.8px),linear-gradient(145deg,_#424242,_#2d2d2d)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_1px_0_#777777,inset_0_-2px_4px_#222222,0_2px_3px_#111111]"
+      : "!border-[#777777] !bg-[radial-gradient(circle_at_2px_2px,_#747474_0.5px,_#414141_1.3px,_transparent_1.8px),linear-gradient(145deg,_#484848,_#333333)] bg-[length:8px_8px,_100%_100%] shadow-[inset_0_1px_0_#858585,inset_0_-2px_4px_#292929,0_2px_3px_#111111]"
   const badgeStyle = occupancy === "blocked"
-    ? "border-[#777777] bg-[#202020] text-[#dedede] shadow-[inset_0_1px_1px_#080808,inset_0_-1px_0_#555555]"
+    ? "border-[#606060] bg-[#202020] text-[#d0d0d0] shadow-[inset_0_1px_1px_#111111,inset_0_-1px_0_#444444]"
     : occupancy === "booked"
-      ? "border-[#aaaaaa] bg-[linear-gradient(180deg,#777777,#4b4b4b)] text-[#f0f0f0] shadow-[inset_0_1px_0_#c7c7c7,inset_0_-1px_0_#333333]"
-      : "border-[#b5b5b5] bg-[linear-gradient(180deg,#858585,#5a5a5a)] text-[#ffffff] shadow-[inset_0_1px_0_#d0d0d0,inset_0_-1px_0_#3a3a3a]"
+      ? "border-[#666666] bg-[linear-gradient(180deg,#4b4b4b,#353535)] text-[#dddddd] shadow-[inset_0_1px_0_#777777,inset_0_-1px_0_#292929]"
+      : "border-[#777777] bg-[linear-gradient(180deg,#565656,#3e3e3e)] text-[#e5e5e5] shadow-[inset_0_1px_0_#858585,inset_0_-1px_0_#303030]"
 
   return <button
     type="button"
@@ -72,7 +74,8 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
     data-eligibility={eligibility}
     disabled={disabled}
     onClick={handleClick}
-    className={`${adminUi.button} ${cardStyle} min-h-[56px] flex-col !items-start !justify-center !px-sm !opacity-100 text-left transition-[filter,transform] hover:brightness-110 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-[#eeeeee] disabled:cursor-not-allowed disabled:hover:brightness-100`}>
+    style={{ cursor: disabled ? waiting ? "wait" : "not-allowed" : undefined }}
+    className={`${adminUi.button} ${cardStyle} min-h-[56px] flex-col !items-start !justify-center !px-sm !opacity-100 text-left transition-[filter,transform] hover:brightness-110 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-[#eeeeee] disabled:hover:brightness-100`}>
     <span className="font-typewriter text-[12px] text-[#f0f0f0]">{time}<small className="ml-xs text-[9px] text-[#c0c0c0]">{date}</small></span>
     <span className="mt-xs flex flex-wrap items-center gap-xs">
       <span className={`inline-flex items-center gap-xs rounded-[2px] border px-xs py-0 font-mono text-[9px] font-bold uppercase tracking-[1px] tablet:text-[10px] ${badgeStyle}`}>
@@ -293,7 +296,7 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
           {slots.map(slot => {
             const display = slotDisplays.get(slot.startsAt)
             if (!display) return null
-            return <AvailabilitySlotButton key={slot.startsAt} active={selectedSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || slot.eligibility === "past" || slot.occupancy === "booked"} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} />
+            return <AvailabilitySlotButton key={slot.startsAt} active={selectedSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || slot.eligibility === "past" || slot.occupancy === "booked"} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} waiting={mutating} />
           })}
         </div>
         {loading && <p className={`${adminUi.muted} mt-sm`} role="status">{t("refreshing")}</p>}
