@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import { DEFAULT_APPOINTMENT_TIME_MSK } from "@/(site)/functions/getNextAvailableTimeMSK"
+import type { AppointmentSlot } from "@/libs/appointmentSlots"
 
 export type Step = "step-1" | "step-2" | "step-3"
 export type Channel = "telegram" | "discord" | "google-meets" | null
@@ -24,8 +24,29 @@ interface AppointmentStore {
   selectedDate: Value
   setSelectedDate: (value: Value) => void
 
-  selectedTime: string
-  setSelectedTime: (time: string) => void
+  selectedSlotStart: string | null
+  setSelectedSlotStart: (startsAt: string | null) => void
+
+  availabilitySlots: AppointmentSlot[]
+  availabilityLoading: boolean
+  availabilityError: boolean
+  availabilityDate: string | null
+  availabilityTimezone: string | null
+  availabilityServerNow: number | null
+  availabilityReceivedAt: number | null
+  availabilityRequestId: number
+  selectionInvalid: boolean
+  setSelectionInvalid: (invalid: boolean) => void
+
+  availabilityNoticeCode: API.SlotFailureCode | null
+  setAvailabilityNoticeCode: (code: API.SlotFailureCode | null) => void
+
+  beginAvailabilityRequest: (date: string, timezone: string) => number
+  finishAvailabilityRequest: (requestId: number, date: string, timezone: string, serverNow: number, slots: AppointmentSlot[]) => boolean
+  failAvailabilityRequest: (requestId: number) => void
+
+  confirmedBooking: { id: string; startsAt: string; bookingDate: string; timeMSK: string } | null
+  setConfirmedBooking: (booking: AppointmentStore["confirmedBooking"]) => void
 
   selectedTimezone: string
   setSelectedTimezone: (timezone: string) => void
@@ -65,8 +86,40 @@ export const useAppointmentStore = create<AppointmentStore>()((set, get) => ({
   selectedDate: null,
   setSelectedDate: (value: Value) => set(() => ({ selectedDate: value })),
 
-  selectedTime: DEFAULT_APPOINTMENT_TIME_MSK,
-  setSelectedTime: (time: string) => set(() => ({ selectedTime: time })),
+  selectedSlotStart: null,
+  setSelectedSlotStart: (startsAt: string | null) => set(() => ({ selectedSlotStart: startsAt })),
+
+  availabilitySlots: [],
+  availabilityLoading: false,
+  availabilityError: false,
+  availabilityDate: null,
+  availabilityTimezone: null,
+  availabilityServerNow: null,
+  availabilityReceivedAt: null,
+  availabilityRequestId: 0,
+  selectionInvalid: false,
+  setSelectionInvalid: invalid => set(() => ({ selectionInvalid: invalid })),
+
+  availabilityNoticeCode: null,
+  setAvailabilityNoticeCode: code => set(() => ({ availabilityNoticeCode: code })),
+
+  beginAvailabilityRequest: (date, timezone) => {
+    const requestId = get().availabilityRequestId + 1
+    set(() => ({ availabilityRequestId: requestId, availabilityDate: date, availabilityTimezone: timezone, availabilityLoading: true, availabilityError: false }))
+    return requestId
+  },
+  finishAvailabilityRequest: (requestId, date, timezone, serverNow, slots) => {
+    if (get().availabilityRequestId !== requestId) return false
+    set(() => ({ availabilityDate: date, availabilityTimezone: timezone, availabilityLoading: false, availabilityError: false, availabilityServerNow: serverNow, availabilityReceivedAt: Date.now(), availabilitySlots: slots }))
+    return true
+  },
+  failAvailabilityRequest: requestId => {
+    if (get().availabilityRequestId !== requestId) return
+    set(() => ({ availabilityLoading: false, availabilityError: true, availabilitySlots: [], availabilityServerNow: null, availabilityReceivedAt: null }))
+  },
+
+  confirmedBooking: null,
+  setConfirmedBooking: booking => set(() => ({ confirmedBooking: booking })),
 
   selectedTimezone: DEFAULT_APPOINTMENT_TIMEZONE,
   setSelectedTimezone: (timezone: string) => set(() => ({ selectedTimezone: timezone })),

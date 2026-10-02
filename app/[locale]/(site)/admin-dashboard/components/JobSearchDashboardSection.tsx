@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { jobSearchStats, jobSearchStatsError } from "../data/jobSearchStats"
 import { ApplicationsDeltaChart } from "./ApplicationsDeltaChart"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
@@ -7,7 +8,7 @@ import { adminUi } from "./AdminUI"
 
 const AVATAR_DOC_URL = "https://docs.google.com/document/d/1KnNw5OJ6iL7-ZSGpE74MYBMUUARHin3KnETWWKDuywc/edit?tab=t.0"
 
-export function JobSearchDashboardSection() {
+export const JobSearchDashboardSection = memo(function JobSearchDashboardSection() {
   const t = useScopedI18n("adminConsole")
   const locale = useCurrentLocale()
   const number = new Intl.NumberFormat(locale === "ua" ? "uk" : locale, { maximumFractionDigits: 1 })
@@ -67,4 +68,4 @@ export function JobSearchDashboardSection() {
       )}
     </div>
   )
-}
+})

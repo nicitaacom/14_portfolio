@@ -15,8 +15,7 @@ declare module API {
 
   type InsertBookingRequest = {
     bookingId: string
-    selectedDate: string | null | [string | null, string | null]
-    atMSK: string
+    startsAt: string
     channel: "telegram" | "discord" | "google-meets"
     contactType: "telegram" | "discord" | "email" | "linkedin"
     contact: string
@@ -28,7 +27,21 @@ declare module API {
   type InsertBookingResponse = {
     ok: boolean
     error?: string
+    code?: SlotFailureCode
+    serverNow?: string
+    minimumNoticeMinutes?: number
+    booking?: { id: string; startsAt: string; bookingDate: string; timeMSK: string }
   }
+
+  type SlotFailureCode =
+    | "SLOT_IN_PAST"
+    | "SLOT_TOO_SOON"
+    | "SLOT_BLOCKED"
+    | "SLOT_BOOKED"
+    | "SLOT_UNAVAILABLE"
+    | "INVALID_SLOT"
+    | "SELECTION_REFRESH_REQUIRED"
+    | "AVAILABILITY_UNAVAILABLE"
 
   type SendTelegramMessageRequest = {
     message: string

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { memo, useCallback, useMemo, useState, type Dispatch, type SetStateAction } from "react"
 import { twMerge } from "tailwind-merge"
 import type { TTrackedProject } from "@/interfaces/TTrackedProject"
 import { Input } from "@/components/Input"
@@ -12,6 +12,44 @@ interface DropdownContentProps {
   isShowDropdown: boolean
   projects: TTrackedProject[]
 }
+
+const DropdownProjectOption = memo(function DropdownProjectOption({
+  groupLabel,
+  index,
+  isActive,
+  onClose,
+  onHover,
+  onSelect,
+  project,
+}: {
+  groupLabel: string
+  index: number
+  isActive: boolean
+  onClose: () => void
+  onHover: Dispatch<SetStateAction<string | null>>
+  onSelect: (projectSlug: string) => void
+  project: TTrackedProject
+}) {
+  const handleMouseOver = useCallback(() => onHover(project.slug), [onHover, project.slug])
+  const handleClick = useCallback(() => {
+    onSelect(project.slug)
+    onClose()
+  }, [onClose, onSelect, project.slug])
+
+  return <li
+    aria-selected={isActive}
+    className={twMerge(
+      "flex items-center justify-between gap-xs rounded-[2px] px-xs py-xs text-sm duration-150",
+      index > 0 && "mt-xs",
+      isActive ? "bg-steel" : "hover:bg-steel",
+    )}
+    onMouseOver={handleMouseOver}
+    onClick={handleClick}
+    role="option">
+    <span className="truncate text-secondary">{project.name}</span>
+    <span className="shrink-0 rounded-full border border-brass/40 bg-steel px-xs py-xs text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">{groupLabel}</span>
+  </li>
+})
 
 export function DropdownContent({ closeDropdown, isShowDropdown, projects }: DropdownContentProps) {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null)
@@ -32,11 +70,6 @@ export function DropdownContent({ closeDropdown, isShowDropdown, projects }: Dro
       )
       .sort((a, b) => a.name.toLowerCase().indexOf(normalizedValue) - b.name.toLowerCase().indexOf(normalizedValue))
   }, [projects, searchInput])
-
-  function changeSelectedProject(projectSlug: string) {
-    setSelectedProjectSlug(projectSlug)
-    closeDropdown()
-  }
 
   return (
     <div
@@ -64,20 +97,15 @@ export function DropdownContent({ closeDropdown, isShowDropdown, projects }: Dro
           const isActive = hoveredSlug ? hoveredSlug === project.slug : selectedProjectSlug === project.slug
 
           return (
-            <li
-              className={twMerge(
-                "flex items-center justify-between gap-xs rounded-[2px] px-xs py-xs text-sm duration-150",
-                index > 0 && "mt-xs",
-                isActive ? "bg-steel" : "hover:bg-steel",
-              )}
+            <DropdownProjectOption
+              groupLabel={t(project.group === "work" ? "work" : "projects")}
+              index={index}
+              isActive={isActive}
               key={project.slug}
-              onMouseOver={() => setHoveredSlug(project.slug)}
-              onClick={() => changeSelectedProject(project.slug)}>
-              <span className="truncate text-secondary">{project.name}</span>
-              <span className="shrink-0 rounded-full border border-brass/40 bg-steel px-xs py-xs text-[10px] uppercase tracking-[0.18em] text-secondary-foreground">
-                {project.group === "work" ? t("work") : t("projects")}
-              </span>
-            </li>
+              onClose={closeDropdown}
+              onHover={setHoveredSlug}
+              onSelect={setSelectedProjectSlug}
+              project={project} />
           )
         })}
       </div>

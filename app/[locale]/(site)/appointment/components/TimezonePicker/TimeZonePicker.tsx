@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
 
 import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
@@ -12,12 +12,12 @@ export function TimeZonePicker() {
   const dropdownContainerRef = useRef<HTMLDivElement>(null)
   const [isShowDropdown, setIsShowDropdown] = useState(false)
 
-  function closeDropdown() {
+  const closeDropdown = useCallback(() => {
     setIsShowDropdown(false)
-  }
-  function toggleDropdown() {
-    setIsShowDropdown(!isShowDropdown)
-  }
+  }, [])
+  const toggleDropdown = useCallback(() => {
+    setIsShowDropdown(previous => !previous)
+  }, [])
 
   useCloseOnClickOutside(dropdownContainerRef, closeDropdown)
   useCloseOnEsc(closeDropdown)

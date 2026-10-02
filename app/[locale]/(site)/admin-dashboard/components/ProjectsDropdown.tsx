@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useRef, useState } from "react"
+import { memo, useCallback, useId, useRef, useState, type Dispatch, type SetStateAction } from "react"
 import { BiSolidDownArrow } from "react-icons/bi"
 import { twMerge } from "tailwind-merge"
 import type { TTrackedProject } from "@/interfaces/TTrackedProject"
@@ -14,6 +14,41 @@ interface ProjectsDropdownProps {
   onSelect: (projectSlug: string) => void
 }
 
+function useProjectsDropdownHandlers(onSelect: (projectSlug: string) => void, setIsOpen: Dispatch<SetStateAction<boolean>>) {
+  const selectProject = useCallback((projectSlug: string) => {
+    playAdminButtonSound(3)
+    onSelect(projectSlug)
+    setIsOpen(false)
+  }, [onSelect, setIsOpen])
+
+  return { selectProject }
+}
+
+const ProjectDropdownOption = memo(function ProjectDropdownOption({
+  onSelect,
+  project,
+  selected,
+}: {
+  onSelect: (projectSlug: string) => void
+  project: TTrackedProject
+  selected: boolean
+}) {
+  const handleClick = useCallback(() => onSelect(project.slug), [onSelect, project.slug])
+
+  return <button
+    aria-selected={selected}
+    className={twMerge(
+      "flex min-h-[38px] w-full items-center justify-between gap-sm rounded-[4px] border border-transparent px-sm py-xs text-left text-[12px] text-[var(--3d-dot-c-dce2e7)] transition-colors duration-200 hover:border-[var(--3d-dot-c-515a63)] hover:bg-[var(--3d-dot-c-2a3136)]",
+      selected && "border-[var(--3d-dot-c-515a63)] bg-[var(--3d-dot-c-171c20)] text-[var(--3d-dot-c-f2f4f5)]",
+    )}
+    onClick={handleClick}
+    role="option"
+    type="button">
+    <span className="truncate">{project.name}</span>
+    {selected ? <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--3d-dot-c-f3f5f6)] shadow-[0_0_7px_var(--3d-dot-c-ecf4ff60)]" /> : null}
+  </button>
+})
+
 export function ProjectsDropdown({ projects, selectedProjectSlug, onSelect }: ProjectsDropdownProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
@@ -23,11 +58,7 @@ export function ProjectsDropdown({ projects, selectedProjectSlug, onSelect }: Pr
   useCloseOnClickOutside(containerRef, () => setIsOpen(false))
   useCloseOnEsc(() => setIsOpen(false))
 
-  function selectProject(projectSlug: string) {
-    playAdminButtonSound(3)
-    onSelect(projectSlug)
-    setIsOpen(false)
-  }
+  const { selectProject } = useProjectsDropdownHandlers(onSelect, setIsOpen)
 
   return <div className="relative w-full" ref={containerRef}>
     <button
@@ -50,22 +81,7 @@ export function ProjectsDropdown({ projects, selectedProjectSlug, onSelect }: Pr
       id={menuId}
       role="listbox">
       <div className="flex flex-col gap-xs">
-        {projects.map(project => {
-          const selected = project.slug === selectedProjectSlug
-          return <button
-            aria-selected={selected}
-            className={twMerge(
-              "flex min-h-[38px] w-full items-center justify-between gap-sm rounded-[4px] border border-transparent px-sm py-xs text-left text-[12px] text-[var(--3d-dot-c-dce2e7)] transition-colors duration-200 hover:border-[var(--3d-dot-c-515a63)] hover:bg-[var(--3d-dot-c-2a3136)]",
-              selected && "border-[var(--3d-dot-c-515a63)] bg-[var(--3d-dot-c-171c20)] text-[var(--3d-dot-c-f2f4f5)]",
-            )}
-            key={project.slug}
-            onClick={() => selectProject(project.slug)}
-            role="option"
-            type="button">
-            <span className="truncate">{project.name}</span>
-            {selected ? <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--3d-dot-c-f3f5f6)] shadow-[0_0_7px_var(--3d-dot-c-ecf4ff60)]" /> : null}
-          </button>
-        })}
+        {projects.map(project => <ProjectDropdownOption key={project.slug} onSelect={selectProject} project={project} selected={project.slug === selectedProjectSlug} />)}
       </div>
     </div>
   </div>

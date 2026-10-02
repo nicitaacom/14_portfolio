@@ -1,6 +1,7 @@
 "use client"
 
 import { NdaAchievementSections, NdaAchievements } from "@/data/ndaProject"
+import { memo, useCallback } from "react"
 import { Button } from "@/components/Button"
 import { useScopedI18n } from "@/locales/client"
 import { FiArrowUpRight, FiLock } from "react-icons/fi"
@@ -35,8 +36,75 @@ function formatDescription(description: string) {
   )
 }
 
+function useNDAProofHandlers() {
+  const openProof = useCallback((proofLink: string) => {
+    window.open(proofLink.startsWith("http") ? proofLink : `https://${proofLink}`, "_blank", "noopener,noreferrer")
+  }, [])
+
+  return { openProof }
+}
+
+const NDAAchievementCard = memo(function NDAAchievementCard({
+  description,
+  proofAriaLabel,
+  proofLabel,
+  proofLink,
+  onOpenProof,
+}: {
+  description: string
+  proofAriaLabel: string
+  proofLabel: string
+  proofLink?: string
+  onOpenProof: (proofLink: string) => void
+}) {
+  const handleOpenProof = useCallback(() => {
+    if (proofLink) onOpenProof(proofLink)
+  }, [onOpenProof, proofLink])
+
+  return <article className="group flex items-start gap-sm rounded-md border border-secondary-foreground/10 bg-primary/35 p-sm transition-colors duration-200 hover:border-secondary-foreground/20">
+    <p className="min-w-0 flex-1 text-sm leading-relaxed text-secondary-foreground/75">{formatDescription(description)}</p>
+    {proofLink && <div className="flex shrink-0 justify-end">
+      <Button
+        aria-label={proofAriaLabel}
+        className="proof-control group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
+        onClick={handleOpenProof}
+        type="button">
+        <span className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111]">{proofLabel}</span>
+        <FiArrowUpRight size={13} aria-hidden="true" className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111] group-hover/proof:translate-x-[2px] group-hover/proof:-translate-y-[2px]" />
+      </Button>
+    </div>}
+  </article>
+})
+
+const NDAContributionSection = memo(function NDAContributionSection({
+  achievements,
+  onOpenProof,
+  title,
+}: {
+  achievements: NdaAchievements
+  onOpenProof: (proofLink: string) => void
+  title?: string
+}) {
+  const t = useScopedI18n("ndaProject.details")
+
+  return <section className="flex flex-col gap-y-sm">
+    {title && <h2 className="text-sm font-bold tracking-wide text-secondary">{title}</h2>}
+    <div className="grid grid-cols-1 gap-sm">
+      {Object.entries(achievements).map(([description, proofLink]) => <NDAAchievementCard
+        key={description}
+        description={description}
+        proofAriaLabel={t("proofAriaLabel", { description: formatDescription(description) })}
+        proofLabel={t("proof")}
+        proofLink={proofLink}
+        onOpenProof={onOpenProof}
+      />)}
+    </div>
+  </section>
+})
+
 export function NDAContributionDetails({ achievements, achievementSections }: NDAContributionDetailsProps) {
   const t = useScopedI18n("ndaProject.details")
+  const { openProof } = useNDAProofHandlers()
   const sections = achievementSections ? Object.entries(achievementSections) : [["", achievements] as const]
   const achievementCount = sections.reduce(
     (total, [, sectionAchievements]) => total + Object.keys(sectionAchievements).length,
@@ -68,50 +136,12 @@ export function NDAContributionDetails({ achievements, achievementSections }: ND
       </div>
 
       <div className="flex flex-col gap-y-lg">
-        {sections.map(([sectionTitle, sectionAchievements]) => (
-          <section key={sectionTitle || "achievements"} className="flex flex-col gap-y-sm">
-            {sectionTitle && (
-              <h2 className="text-sm font-bold tracking-wide text-secondary">
-                {sectionTitles[sectionTitle as keyof typeof sectionTitles]}
-              </h2>
-            )}
-            <div className="grid grid-cols-1 gap-sm">
-              {Object.entries(sectionAchievements).map(([description, proofLink]) => (
-                <article
-                  key={description}
-                  className="group flex items-start gap-sm rounded-md border border-secondary-foreground/10 bg-primary/35 p-sm transition-colors duration-200 hover:border-secondary-foreground/20">
-                  <p className="min-w-0 flex-1 text-sm leading-relaxed text-secondary-foreground/75">
-                    {formatDescription(description)}
-                  </p>
-                  {proofLink && (
-                    <div className="flex shrink-0 justify-end">
-                      <Button
-                        aria-label={t("proofAriaLabel", { description: formatDescription(description) })}
-                        className="proof-control group/proof mt-0 h-7 min-w-[92px] !gap-x-[2px] rounded-md border-cta/45 bg-cta/[0.08] !px-xs !py-0 text-xs font-semibold text-cta shadow-[0_0_0_1px_hsl(var(--cta)/0.04)] hover:border-cta hover:bg-cta/80 hover:shadow-[0_0_12px_hsl(var(--cta)/0.3)]"
-                        onClick={() =>
-                          window.open(
-                            proofLink.startsWith("http") ? proofLink : `https://${proofLink}`,
-                            "_blank",
-                            "noopener,noreferrer",
-                          )
-                        }
-                        type="button">
-                        <span className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111]">
-                          {t("proof")}
-                        </span>
-                        <FiArrowUpRight
-                          size={13}
-                          aria-hidden="true"
-                          className="proof-label text-cta transition-colors duration-300 group-hover/proof:text-[#111] group-hover/proof:translate-x-[2px] group-hover/proof:-translate-y-[2px]"
-                        />
-                      </Button>
-                    </div>
-                  )}
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
+        {sections.map(([sectionTitle, sectionAchievements]) => <NDAContributionSection
+          key={sectionTitle || "achievements"}
+          achievements={sectionAchievements}
+          onOpenProof={openProof}
+          title={sectionTitle ? sectionTitles[sectionTitle as keyof typeof sectionTitles] : undefined}
+        />)}
       </div>
     </div>
   )

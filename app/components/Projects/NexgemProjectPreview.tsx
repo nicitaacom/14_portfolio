@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState, type ReactNode } from "react"
+import { memo, useCallback, useEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from "react"
 import { FiCode, FiShield, FiVolume2 } from "react-icons/fi"
 import { useScopedI18n } from "@/locales/client"
 
@@ -36,10 +36,44 @@ interface NexgemPulse {
   kind: NexgemPulseKind
 }
 
+interface NexgemPulseRingState {
+  run: number
+  kind: NexgemPulseKind
+  ms: number
+}
+
 interface NexgemStep {
   src: string
   group: NexgemHoverGroup
   pulses: NexgemPulse[]
+}
+
+interface NexgemPulseRingProps {
+  ring: NexgemPulseRingState
+  onAnimationEnd: (run: number) => void
+}
+
+const NexgemPulseRing = memo(function NexgemPulseRing({ ring, onAnimationEnd }: NexgemPulseRingProps) {
+  const handleAnimationEnd = useCallback(() => onAnimationEnd(ring.run), [onAnimationEnd, ring.run])
+
+  return <rect
+    className={ring.kind === "in" ? "nexgem-pulse-in" : "nexgem-pulse-out"}
+    style={{ animationDuration: `${ring.ms}ms` }}
+    onAnimationEnd={handleAnimationEnd}
+    x="-4"
+    y="-4"
+    width="120"
+    height="88"
+    rx="16"
+  />
+})
+
+function useNexgemRingHandlers(setRings: Dispatch<SetStateAction<NexgemPulseRingState[]>>) {
+  const removeFinishedRing = useCallback((run: number) => {
+    setRings(current => current.filter(other => other.run !== run))
+  }, [setRings])
+
+  return { removeFinishedRing }
 }
 
 /**
@@ -189,7 +223,8 @@ export function NexgemProjectPreview() {
   // More than one at a time on purpose: these takes overlap, so a call can open while the answer before it
   // is still ringing, and each gets its own. Every entry is keyed on its run, and mounting is what starts
   // the animation — re-adding a class to a ring already on screen would not
-  const [rings, setRings] = useState<{ run: number; kind: NexgemPulseKind; ms: number }[]>([])
+  const [rings, setRings] = useState<NexgemPulseRingState[]>([])
+  const { removeFinishedRing } = useNexgemRingHandlers(setRings)
   const [nowPlaying, setNowPlaying] = useState<string | null>(null)
   // The prompt runs in two beats: ask for the click the browser needs, then point at what to do with it
   const [isSoundOn, setIsSoundOn] = useState(false)
@@ -494,19 +529,7 @@ export function NexgemProjectPreview() {
           <NexgemNode x={244} y={90} pulseDelay="-1.2s" onEnter={handleCentreEnter}>
             {/* One ring per sound: `req` contracts into the hub, `resp` swells away from it. Each clears
                 itself once it has finished travelling, so overlapping sounds simply overlap on screen */}
-            {rings.map(ring => (
-              <rect
-                key={ring.run}
-                className={ring.kind === "in" ? "nexgem-pulse-in" : "nexgem-pulse-out"}
-                style={{ animationDuration: `${ring.ms}ms` }}
-                onAnimationEnd={() => setRings(current => current.filter(other => other.run !== ring.run))}
-                x="-4"
-                y="-4"
-                width="120"
-                height="88"
-                rx="16"
-              />
-            ))}
+            {rings.map(ring => <NexgemPulseRing key={ring.run} ring={ring} onAnimationEnd={removeFinishedRing} />)}
             <path
               d="M43 40L66 26M43 40L66 54"
               stroke="#F2EEF8"

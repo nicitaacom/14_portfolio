@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
@@ -14,6 +14,9 @@ import { AppointmentFormData } from "../../../../[locale]/(site)/appointment/com
 import { formatedDateTimeFn } from "../../../../[locale]/(site)/functions/formatedDateTimeFn"
 import useToast from "@/store/useToast"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
+import { useModalsStore } from "@/store/useModalsStore"
+import { calendarDateToDateKey, formatInstantInZone } from "@/libs/appointmentSlots"
+import { refreshAppointmentAvailability } from "@/[locale]/(site)/appointment/hooks/appointmentAvailabilityClient"
 import { Checkbox } from "./Checkbox"
 import { ContactMethod } from "./ContactMethod"
 import { SendNotificationTo } from "./SendNotificationTo"
@@ -48,6 +51,7 @@ export function Step2({ onBookingStateChange }: Step2Props) {
   const toastT = useScopedI18n("toast")
   const [isLoading, setIsLoading] = useState(false)
   const [showUpError, setShowUpError] = useState(false)
+  const { closeModal } = useModalsStore()
 
   const {
     channel,
@@ -62,6 +66,14 @@ export function Step2({ onBookingStateChange }: Step2Props) {
     setInputNotificationTo,
     toggleIsShowUpOnACall,
     toggleIsSendNotification,
+    selectedSlotStart,
+    selectedTimezone,
+    selectedDate,
+    selectionInvalid,
+    setSelectionInvalid,
+    setSelectedSlotStart,
+    setAvailabilityNoticeCode,
+    setStep,
   } = useAppointmentStore()
 
   const {
@@ -69,7 +81,11 @@ export function Step2({ onBookingStateChange }: Step2Props) {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<AppointmentFormData>()
+    getValues,
+  } = useForm<AppointmentFormData>({ defaultValues: {
+    contact: useAppointmentStore.getState().contact,
+    inputNotificationTo: useAppointmentStore.getState().inputNotificationTo,
+  } })
 
   const contactError = typeof errors.contact?.message === "string" ? errors.contact.message : null
   const notificationError =
@@ -92,6 +108,23 @@ export function Step2({ onBookingStateChange }: Step2Props) {
     ) : (
       <FaTelegramPlane className="text-cta" size={16} />
     )
+
+  useEffect(() => {
+    if (!selectionInvalid || isLoading) return
+    const state = useAppointmentStore.getState()
+    state.setContact(getValues("contact") ?? state.contact)
+    state.setInputNotificationTo(getValues("inputNotificationTo") ?? state.inputNotificationTo)
+    closeModal("Appointment")
+    setStep("step-1")
+    setSelectionInvalid(false)
+    const day = selectedDate instanceof Date
+      ? calendarDateToDateKey(selectedDate)
+      : selectedSlotStart ? formatInstantInZone(selectedSlotStart, selectedTimezone)?.date : null
+    if (day) refreshAppointmentAvailability(day, selectedTimezone, true).catch(() => {
+      setSelectedSlotStart(null)
+      setAvailabilityNoticeCode("AVAILABILITY_UNAVAILABLE")
+    })
+  }, [selectionInvalid, isLoading, getValues, closeModal, setStep, setSelectionInvalid, selectedDate, selectedSlotStart, selectedTimezone, setSelectedSlotStart, setAvailabilityNoticeCode])
 
   const onSubmit = async (data: AppointmentFormData) => {
     if (!isShowUpOnACall) {
@@ -132,13 +165,30 @@ export function Step2({ onBookingStateChange }: Step2Props) {
     try {
       setIsLoading(true)
       onBookingStateChange(true)
-      const stepBefore = useAppointmentStore.getState().step
-      await bookACallFn({
+      const bookACallFnResp = await bookACallFn({
         chooseChannelFirst: t("chooseChannelFirst"),
         dailyLimitReached: () => t("dailyLimitReached", { message: pageT("dailyLimit", { count: 2 }) }),
         errorTitle: toastT("defaultErrorTitle"),
       })
-      if (useAppointmentStore.getState().step !== stepBefore) {
+      if (!bookACallFnResp.ok && bookACallFnResp.code) {
+        closeModal("Appointment")
+        setStep("step-1")
+        setSelectionInvalid(false)
+        const day = selectedDate instanceof Date
+          ? calendarDateToDateKey(selectedDate)
+          : selectedSlotStart ? formatInstantInZone(selectedSlotStart, selectedTimezone)?.date : null
+        if (day) {
+          try { await refreshAppointmentAvailability(day, selectedTimezone, true) }
+          catch {
+            setSelectedSlotStart(null)
+            setAvailabilityNoticeCode("AVAILABILITY_UNAVAILABLE")
+          }
+        }
+        setAvailabilityNoticeCode(bookACallFnResp.code)
+      } else if (!bookACallFnResp.ok) {
+        toast.show("error", toastT("defaultErrorTitle"), bookACallFnResp.error, 15000)
+      }
+      if (bookACallFnResp.ok) {
         router.refresh()
       }
     } catch (error) {

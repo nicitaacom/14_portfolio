@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import type { TTrackedProject } from "@/interfaces/TTrackedProject"
 import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
@@ -24,13 +24,11 @@ export function ProjectClicksPicker({ projects }: ProjectClicksPickerProps) {
     [projects, selectedProjectSlug, t],
   )
 
-  function closeDropdown() {
+  const closeDropdown = useCallback(() => {
     setIsShowDropdown(false)
-  }
+  }, [])
 
-  function toggleDropdown() {
-    setIsShowDropdown(!isShowDropdown)
-  }
+  const toggleDropdown = useCallback(() => setIsShowDropdown(previous => !previous), [])
 
   useCloseOnClickOutside(dropdownContainerRef, closeDropdown)
   useCloseOnEsc(closeDropdown)

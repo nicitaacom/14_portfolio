@@ -3,8 +3,41 @@
 import Link from "next/link"
 import { publicRepos } from "@/data/repos"
 import { useSlider } from "@/hooks"
-import { useCallback, useEffect, useRef } from "react"
+import { memo, useCallback, useEffect, useRef } from "react"
 import { NavbarWaves, type NavbarWavesHandle } from "./NavbarWaves"
+
+const NavbarProjectItem = memo(function NavbarProjectItem({
+  onLinkClick,
+  repo,
+}: {
+  onLinkClick: (event: React.MouseEvent<HTMLAnchorElement>) => void
+  repo: (typeof publicRepos)[number]
+}) {
+  return <li className="flex flex-col items-center gap-y-[2px] w-[10rem] select-none">
+    <p className="machine-slot font-typewriter text-xs tracking-[0.12em] px-sm py-xs text-secondary-foreground">
+      {repo.id}
+    </p>
+    <Link
+      className="navbar-engraved text-sm transition-all duration-200 ease-in hover:text-secondary hover:[text-shadow:0_0_6px_hsl(var(--cta)/0.6)] whitespace-nowrap cursor-pointer select-none"
+      draggable={false}
+      href={repo.url}
+      onClick={onLinkClick}
+      target="_blank">
+      {repo.description}
+    </Link>
+  </li>
+})
+
+function useNavbarProjectHandlers(hasMovedRef: { current: boolean }) {
+  const preventLinkAfterDrag = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!hasMovedRef.current) return
+
+    event.preventDefault()
+    hasMovedRef.current = false
+  }, [hasMovedRef])
+
+  return { preventLinkAfterDrag }
+}
 
 export function NavbarProjects({
   progress,
@@ -15,13 +48,7 @@ export function NavbarProjects({
 }) {
   const { handleMouseDown, handleMouseMove, handleTouchDown, handleTouchMove, hasMovedRef, wrapperRef } = useSlider()
   const navbarWavesRef = useRef<NavbarWavesHandle>(null)
-
-  function preventLinkAfterDrag(event: React.MouseEvent<HTMLAnchorElement>) {
-    if (!hasMovedRef.current) return
-
-    event.preventDefault()
-    hasMovedRef.current = false
-  }
+  const { preventLinkAfterDrag } = useNavbarProjectHandlers(hasMovedRef)
 
   const updateWaveField = useCallback(() => {
     const scrollContainer = wrapperRef.current
@@ -50,21 +77,7 @@ export function NavbarProjects({
         onTouchMove={handleTouchMove}
         onScroll={updateWaveField}>
         <ul className="navbar-repo-wave-items hidden desktop:inline-flex gap-md">
-          {publicRepos.map(repo => (
-            <li key={repo.id} className="flex flex-col items-center gap-y-[2px] w-[10rem] select-none">
-              <p className="machine-slot font-typewriter text-xs tracking-[0.12em] px-sm py-xs text-secondary-foreground">
-                {repo.id}
-              </p>
-              <Link
-                className="navbar-engraved text-sm transition-all duration-200 ease-in hover:text-secondary hover:[text-shadow:0_0_6px_hsl(var(--cta)/0.6)] whitespace-nowrap cursor-pointer select-none"
-                draggable={false}
-                href={repo.url}
-                onClick={preventLinkAfterDrag}
-                target="_blank">
-                {repo.description}
-              </Link>
-            </li>
-          ))}
+          {publicRepos.map(repo => <NavbarProjectItem key={repo.id} onLinkClick={preventLinkAfterDrag} repo={repo} />)}
         </ul>
       </div>
       <div className="hazard-rail absolute bottom-0 left-0 z-[2] h-[6px] w-full" aria-hidden="true">

@@ -2,18 +2,15 @@
 
 import { createClient } from "@supabase/supabase-js"
 import moment from "moment-timezone"
-import type { Value } from "@/store/useAppointmentStore"
+import { parseAppointmentInstant } from "@/libs/appointmentSlots"
 
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 const EDGE_FUNCTION_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/sendTgNtfcnAppointment`
 
-type TScheduleDate = Value | string
-
-function validateInputs(message: string, selectedDate: TScheduleDate, at: string, bookingId: string): string | null {
+function validateInputs(message: string, startsAt: string, bookingId: string): string | null {
   if (!message) return "Message is required"
-  if (!selectedDate) return "You need to select a date"
-  if (!at) return "Time is required"
+  if (!parseAppointmentInstant(startsAt)) return "Choose a valid appointment time"
   if (!bookingId) return "Booking id is required"
   if (!process.env.TELEGRAM_CHAT_ID) return "Missing TELEGRAM_CHAT_ID env"
   return null
@@ -21,18 +18,13 @@ function validateInputs(message: string, selectedDate: TScheduleDate, at: string
 
 export async function scheduleTgNtfctnAction(
   message: string,
-  selectedDate: TScheduleDate,
-  appointmentAtMSK: string,
+  startsAt: string,
   bookingId: string,
-): Promise<void | string> {
-  const validationError = validateInputs(message, selectedDate, appointmentAtMSK, bookingId)
+) {
+  const validationError = validateInputs(message, startsAt, bookingId)
   if (validationError) return validationError
 
-  const date = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate
-  if (!date) return "Missing date for scheduling"
-
-  const bookingDate = moment(date).format("YYYY-MM-DD")
-  const baseTime = moment.tz(`${bookingDate} ${appointmentAtMSK}`, "Europe/Moscow").seconds(0).milliseconds(0)
+  const baseTime = moment.tz(startsAt, "Europe/Moscow")
   if (baseTime.isBefore(moment())) return "Scheduling time is in the past"
 
   const scheduledFor = baseTime.clone().subtract(10, "minutes")

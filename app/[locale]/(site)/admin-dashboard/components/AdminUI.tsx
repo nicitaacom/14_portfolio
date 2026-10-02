@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from "react"
+import { memo, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react"
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
@@ -32,23 +32,23 @@ export const adminUi = {
   count: "rounded border border-[var(--3d-dot-c-3c4650)] px-xs py-xs text-[10px] text-[var(--3d-dot-c-8e9ba6)]",
 }
 
-export function Metric({ label, value, detail }: { label: string; value: ReactNode; detail?: ReactNode }) {
+export const Metric = memo(function Metric({ label, value, detail }: { label: string; value: ReactNode; detail?: ReactNode }) {
   return <div className="!px-xs !py-xs"><PanelRelief /><div className="relative"><dt className="font-typewriter text-[9px] uppercase tracking-[.8px] text-[var(--3d-dot-c-a8b1b9)]">{label}</dt><dd className="mt-0 [overflow-wrap:anywhere] text-[22px] font-normal leading-tight tracking-[-.7px] text-[var(--3d-dot-c-eff3f6)] tablet:text-[25px]">{value}</dd>{detail ? <small className="mt-0 block text-[9px] leading-tight text-[var(--3d-dot-c-98a3ab)]">{detail}</small> : null}</div></div>
-}
+})
 
-export function PanelRelief() {
+export const PanelRelief = memo(function PanelRelief() {
   return <div className="pointer-events-none absolute inset-0 box-border p-xs opacity-[0.24] tablet:p-sm" aria-hidden="true"><DotReliefBackground scale={0.62} /></div>
-}
+})
 
-export function RefreshButton({ pending, onClick }: { pending: boolean; onClick: () => void }) {
+export const RefreshButton = memo(function RefreshButton({ pending, onClick }: { pending: boolean; onClick: () => void }) {
   const t = useScopedI18n("adminConsole")
   return <button className={`${adminUi.button} !inline-flex !shrink-0 !px-sm !py-xs whitespace-nowrap`} type="button" disabled={pending} onClick={onClick}>
     <FiRefreshCw size={14} className={pending ? "animate-spin" : ""} aria-hidden="true" />
     {pending ? t("refreshing") : t("refresh")}
   </button>
-}
+})
 
-export function PeriodLabel({ period }: { period: DisplayPeriod | null }) {
+export const PeriodLabel = memo(function PeriodLabel({ period }: { period: DisplayPeriod | null }) {
   const t = useScopedI18n("adminConsole")
   const locale = useCurrentLocale()
   const intlLocale = locale === "ua" ? "uk" : locale
@@ -59,20 +59,20 @@ export function PeriodLabel({ period }: { period: DisplayPeriod | null }) {
     <span>{date.format(new Date(period.start))} — {date.format(new Date(period.end))} <span className={adminUi.badge}>{t("utc")}</span></span>
     <span className={adminUi.muted}>{t("updated", { time: time.format(new Date(period.end)) })}</span>
   </div>
-}
+})
 
-export function LoadError({ stale = false }: { stale?: boolean }) {
+export const LoadError = memo(function LoadError({ stale = false }: { stale?: boolean }) {
   const t = useScopedI18n("adminConsole")
   return <div className={adminUi.error} role="alert">{t("loadFailed")}{stale && <span> {t("staleData")}</span>}</div>
-}
+})
 
-export function AnalyticsSkeleton() {
+export const AnalyticsSkeleton = memo(function AnalyticsSkeleton() {
   const t = useScopedI18n("adminConsole")
   return <div className={adminUi.stack} role="status" aria-label={t("refreshing")}>
     <div className={adminUi.metrics} aria-hidden="true">{[0, 1, 2, 3].map(index => <div className={`${adminUi.skeleton} min-h-32`} key={index} />)}</div>
     <div className={`${adminUi.skeleton} min-h-[330px]`} aria-hidden="true" />
   </div>
-}
+})
 
 /** Gives Recharts a measured, mechanical entrance without overriding its own path animation. */
 export function ChartMotion({ children, motionKey }: { children: ReactNode; motionKey: string }) {
@@ -100,7 +100,7 @@ export function ChartMotion({ children, motionKey }: { children: ReactNode; moti
   ><div className="pointer-events-none absolute inset-0 z-0 opacity-[0.2]" aria-hidden="true"><DotReliefBackground scale={0.58} /></div><div className="relative z-10">{children}</div></motion.div>
 }
 
-export function ActivityChart({ data, unit, monthly = false }: {
+export const ActivityChart = memo(function ActivityChart({ data, unit, monthly = false }: {
   data: { date: string; value: number }[]; unit: string; monthly?: boolean
 }) {
   const locale = useCurrentLocale()
@@ -131,9 +131,9 @@ export function ActivityChart({ data, unit, monthly = false }: {
       </AreaChart>
     </ResponsiveContainer>
   </ChartMotion>
-}
+})
 
-export function Breakdown({ title, items, total }: { title: string; items: { name: string; count: number }[]; total: number }) {
+export const Breakdown = memo(function Breakdown({ title, items, total }: { title: string; items: { name: string; count: number }[]; total: number }) {
   const t = useScopedI18n("adminConsole")
   const locale = useCurrentLocale()
   const [expanded, setExpanded] = useState(false)
@@ -148,4 +148,4 @@ export function Breakdown({ title, items, total }: { title: string; items: { nam
     </div>)}</div> : <p className={adminUi.empty}>{t("noActivity")}</p>}
     {items.length > 5 && <button type="button" className="mt-sm min-h-10 text-[11px] text-[var(--3d-dot-c-c5d1db)] underline underline-offset-4" onClick={() => setExpanded(!expanded)} aria-expanded={expanded}>{expanded ? t("showLess") : t("showAll", { count: items.length })}</button>}
   </section>
-}
+})

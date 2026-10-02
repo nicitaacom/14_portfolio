@@ -2,10 +2,8 @@ import { nanoid } from "nanoid"
 
 import { RateLimitSDK } from "@/classes/RateLimitSDK/RateLimitSDK"
 import { TelegramSDK } from "@/classes/TelegramSDK/TelegramSDK"
+import { formatInstantInZone } from "@/libs/appointmentSlots"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
-import { formatedDateTimeFn } from "./formatedDateTimeFn"
-import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
-import useToast from "@/store/useToast"
 
 interface BookACallMessages {
   chooseChannelFirst: string
@@ -13,58 +11,44 @@ interface BookACallMessages {
   errorTitle: string
 }
 
-export async function bookACallFn(messages: BookACallMessages) {
+export type BookACallResult =
+  | { ok: true }
+  | { ok: false; code?: API.SlotFailureCode; error: string }
+
+export async function bookACallFn(messages: BookACallMessages): Promise<BookACallResult> {
+  const state = useAppointmentStore.getState()
   const {
-    contactMethod,
-    contact,
-    isSendNotification,
-    sendNotificationTo,
-    inputNotificationTo,
-    channel,
-    selectedDate,
-    selectedTime,
-    selectedTimezone,
-    setNextStep,
-    appointmentNote,
-  } = useAppointmentStore.getState()
-
-  const toast = useToast.getState()
-
-  const atMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
+    contactMethod, contact, isSendNotification, sendNotificationTo, inputNotificationTo, channel,
+    selectedSlotStart, setNextStep, appointmentNote, setConfirmedBooking,
+  } = state
 
   if (!channel) {
-    toast.show("error", messages.errorTitle, messages.chooseChannelFirst, 8000)
-    return
+    return { ok: false, error: messages.chooseChannelFirst }
   }
+  if (!selectedSlotStart) return { ok: false, code: "SLOT_UNAVAILABLE", error: "Choose an available time." }
 
-  let message = formatedDateTimeFn(true)
+  const attemptedStartsAt = selectedSlotStart
+  const moscowDisplay = formatInstantInZone(attemptedStartsAt, "Europe/Moscow")
+  const selectedDisplay = formatInstantInZone(attemptedStartsAt, state.selectedTimezone)
+  if (!moscowDisplay || !selectedDisplay) return { ok: false, code: "INVALID_SLOT", error: "Choose a valid appointment time." }
+  let message = `${moscowDisplay.date} at ${moscowDisplay.time} Europe/Moscow\n`
   message += `Contact: ${contactMethod}: ${contact}\n`
-  if (isSendNotification && inputNotificationTo.length > 3) {
-    message += `Send notifiaction to ${sendNotificationTo}: ${inputNotificationTo}\n`
-  }
-  if (appointmentNote.length > 3) {
-    message += `Appointment note: ${appointmentNote}\n`
-  }
+  if (isSendNotification && inputNotificationTo.length > 3) message += `Send notification to ${sendNotificationTo}: ${inputNotificationTo}\n`
+  if (appointmentNote.length > 3) message += `Appointment note: ${appointmentNote}\n`
   message += `Where: ${channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : channel}\n`
 
   try {
     const rateLimitSDK = new RateLimitSDK()
     const getRemainingResp = await rateLimitSDK.getRemaining("bookACall")
-
     if (getRemainingResp.remaining <= 0) {
-      toast.show("error", messages.errorTitle, messages.dailyLimitReached(), 15000)
-      return
+      const error = messages.dailyLimitReached()
+      return { ok: false, error }
     }
 
     const bookingId = nanoid()
-    const serializedSelectedDate = Array.isArray(selectedDate)
-      ? ([selectedDate[0]?.toISOString() ?? null, selectedDate[1]?.toISOString() ?? null] as [string | null, string | null])
-      : selectedDate?.toISOString() ?? null
-
     const payload: API.InsertBookingRequest = {
       bookingId,
-      selectedDate: serializedSelectedDate,
-      atMSK,
+      startsAt: attemptedStartsAt,
       channel,
       contactType: contactMethod,
       contact,
@@ -72,27 +56,29 @@ export async function bookACallFn(messages: BookACallMessages) {
       sendNotificationTo,
       inputNotificationTo,
     }
-
     const response = await fetch("/api/insert/booking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      cache: "no-store",
       body: JSON.stringify(payload),
     })
-
-    const responseData = (await response.json()) as API.InsertBookingResponse
-
-    if (!response.ok || !responseData.ok) {
-      throw new Error(responseData.error ?? "Failed to insert booking")
+    const result = await response.json() as API.InsertBookingResponse
+    if (!response.ok || !result.ok || !result.booking) {
+      return { ok: false, code: result.code, error: result.error ?? "The appointment could not be booked." }
     }
 
-    const telegramSDK = new TelegramSDK()
-    const sendMessageResponse = await telegramSDK.sendMessage(`Booked call: ${message} \n`)
-    if (sendMessageResponse) console.error("Error sending telegram message:", sendMessageResponse)
-
+    setConfirmedBooking(result.booking)
+    try {
+      const telegramSDK = new TelegramSDK()
+      const sendMessageResponse = await telegramSDK.sendMessage(`Booked call: ${message} \n`)
+      if (sendMessageResponse) console.error("Error sending Telegram booking message:", sendMessageResponse)
+    } catch (error) {
+      console.error("Telegram booking message failed after the booking was saved:", error)
+    }
     setNextStep()
+    return { ok: true }
   } catch (error) {
-    if (error instanceof Error) {
-      toast.show("error", messages.errorTitle, error.message, 15000)
-    }
+    const message = error instanceof Error ? error.message : "The appointment could not be booked."
+    return { ok: false, code: "AVAILABILITY_UNAVAILABLE", error: message }
   }
 }

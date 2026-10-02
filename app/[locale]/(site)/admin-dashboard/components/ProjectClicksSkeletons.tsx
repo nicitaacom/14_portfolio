@@ -1,21 +1,15 @@
-function SummarySkeletonCard() {
-  return (
-    <div className="rounded-[2px] border border-brass/40 bg-steel px-xs py-xs">
-      <div className="flex items-center gap-xs">
-        <div className="h-[8px] w-[8px] animate-pulse rounded-full bg-[var(--3d-dot-c-4a4a4a)]" />
-        <div className="h-[10px] w-[88px] animate-pulse rounded bg-steel" />
-      </div>
-      <div className="mt-xs h-[24px] w-[132px] animate-pulse rounded bg-steel" />
-      <div className="mt-xs h-[10px] w-[110px] animate-pulse rounded bg-steel" />
-    </div>
-  )
-}
-
 export function ProjectClicksSummarySkeletonRow() {
   return (
     <div className="grid grid-cols-1 gap-xs tablet:grid-cols-2 laptop:grid-cols-4">
       {Array.from({ length: 4 }).map((_, index) => (
-        <SummarySkeletonCard key={index} />
+        <div className="rounded-[2px] border border-brass/40 bg-steel px-xs py-xs" key={index}>
+          <div className="flex items-center gap-xs">
+            <div className="h-[8px] w-[8px] animate-pulse rounded-full bg-[var(--3d-dot-c-4a4a4a)]" />
+            <div className="h-[10px] w-[88px] animate-pulse rounded bg-steel" />
+          </div>
+          <div className="mt-xs h-[24px] w-[132px] animate-pulse rounded bg-steel" />
+          <div className="mt-xs h-[10px] w-[110px] animate-pulse rounded bg-steel" />
+        </div>
       ))}
     </div>
   )

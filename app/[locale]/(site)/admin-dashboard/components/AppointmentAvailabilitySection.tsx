@@ -1,0 +1,287 @@
+"use client"
+
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import moment from "moment-timezone"
+
+import { formatInstantInZone, type AppointmentSlot } from "@/libs/appointmentSlots"
+import { useScopedI18n } from "@/locales/client"
+import { adminUi, RefreshButton } from "./AdminUI"
+
+type AdminSlot = Pick<AppointmentSlot, "startsAt" | "bookingDate" | "timeMSK"> & {
+  occupancy: "free" | "booked" | "blocked"
+  eligibility: "eligible" | "too_soon" | "past"
+}
+
+function useAppointmentAvailabilityHandlers({
+  byInstant,
+  mutatingRef,
+  setSelected,
+}: {
+  byInstant: Map<string, AdminSlot>
+  mutatingRef: { current: boolean }
+  setSelected: (action: string[] | ((previous: string[]) => string[])) => void
+}) {
+  const toggleSlot = useCallback((startsAt: string) => {
+    const slot = byInstant.get(startsAt)
+    if (!slot || slot.eligibility === "past" || slot.occupancy === "booked" || mutatingRef.current) return
+    setSelected(previous => previous.includes(startsAt) ? previous.filter(item => item !== startsAt) : [...previous, startsAt])
+  }, [byInstant, mutatingRef, setSelected])
+
+  return { toggleSlot }
+}
+
+const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
+  active,
+  date,
+  disabled,
+  onToggle,
+  startsAt,
+  status,
+  time,
+}: {
+  active: boolean
+  date: string
+  disabled: boolean
+  onToggle: (startsAt: string) => void
+  startsAt: string
+  status: string
+  time: string
+}) {
+  const handleClick = useCallback(() => onToggle(startsAt), [onToggle, startsAt])
+
+  return <button type="button" aria-pressed={active} disabled={disabled} onClick={handleClick} className={`${adminUi.button} min-h-[56px] flex-col !items-start !justify-center !px-sm text-left aria-[pressed=true]:border-[var(--3d-dot-c-e0e7eb)] aria-[pressed=true]:bg-[linear-gradient(var(--3d-dot-c-40474c),var(--3d-dot-c-2a3035))]`}>
+    <span className="font-typewriter text-[12px] text-[var(--3d-dot-c-f0f3f5)]">{time}<small className="ml-xs text-[9px]">{date}</small></span>
+    <span className="text-[10px] text-[var(--3d-dot-c-aab4bb)]">{status}</span>
+  </button>
+})
+
+interface AdminAvailabilityResponse {
+  ok: boolean
+  date?: string
+  timezone?: string
+  serverNow?: string
+  slots?: AdminSlot[]
+  error?: string
+  code?: string
+}
+
+export const AppointmentAvailabilitySection = memo(function AppointmentAvailabilitySection() {
+  const t = useScopedI18n("adminConsole")
+  const [date, setDate] = useState("")
+  const [timezone, setTimezone] = useState("Europe/Moscow")
+  const [localTimezone, setLocalTimezone] = useState("Europe/Berlin")
+  const [slots, setSlots] = useState<AdminSlot[]>([])
+  const [selected, setSelected] = useState<string[]>([])
+  const [rangeStart, setRangeStart] = useState("")
+  const [rangeEnd, setRangeEnd] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [mutating, setMutating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [resultMessage, setResultMessage] = useState("")
+  const requestId = useRef(0)
+  const abortController = useRef<AbortController | null>(null)
+  const lastFocusRefresh = useRef(0)
+  const mutatingRef = useRef(mutating)
+  mutatingRef.current = mutating
+
+  const refresh = useCallback(async () => {
+    if (!date) return
+    abortController.current?.abort()
+    const controller = new AbortController()
+    abortController.current = controller
+    const currentRequest = ++requestId.current
+    setLoading(true)
+    setError(null)
+    try {
+      const query = new URLSearchParams({ date, timezone })
+      const response = await fetch(`/api/admin/appointment-slots?${query.toString()}`, { cache: "no-store", signal: controller.signal })
+      const payload = await response.json() as AdminAvailabilityResponse
+      if (!response.ok || !payload.ok || !payload.slots) throw new Error(payload.error ?? t("availabilityLoadFailed"))
+      if (currentRequest !== requestId.current) return
+      setSlots(payload.slots)
+    } catch (reason) {
+      if (!controller.signal.aborted && currentRequest === requestId.current) {
+        setSlots([])
+        setError(reason instanceof Error ? reason.message : t("availabilityLoadFailed"))
+      }
+    } finally {
+      if (currentRequest === requestId.current) setLoading(false)
+    }
+  }, [date, timezone, t])
+
+  useEffect(() => {
+    const guessed = moment.tz.guess()
+    setLocalTimezone(guessed)
+    setDate(moment().tz("Europe/Moscow").format("YYYY-MM-DD"))
+  }, [])
+
+  useEffect(() => { refresh() }, [refresh])
+
+  useEffect(() => {
+    const onFocus = () => {
+      if (document.visibilityState !== "visible" || Date.now() - lastFocusRefresh.current < 5000) return
+      lastFocusRefresh.current = Date.now()
+      refresh()
+    }
+    window.addEventListener("focus", onFocus)
+    document.addEventListener("visibilitychange", onFocus)
+    return () => {
+      window.removeEventListener("focus", onFocus)
+      document.removeEventListener("visibilitychange", onFocus)
+      abortController.current?.abort()
+    }
+  }, [refresh])
+
+  useEffect(() => { setSelected([]) }, [date, timezone])
+
+  const byInstant = useMemo(() => new Map(slots.map(slot => [slot.startsAt, slot])), [slots])
+  const selectedSet = useMemo(() => new Set(selected), [selected])
+  const selectedSlots = useMemo(() => selected.map(startsAt => byInstant.get(startsAt)).filter((slot): slot is AdminSlot => Boolean(slot)), [byInstant, selected])
+  const blockable = useMemo(() => selectedSlots.filter(slot => slot.occupancy === "free" && slot.eligibility !== "past"), [selectedSlots])
+  const unblockable = useMemo(() => selectedSlots.filter(slot => slot.occupancy === "blocked" && slot.eligibility !== "past"), [selectedSlots])
+  const slotStartInstants = useMemo(() => new Set(slots.map(slot => slot.startsAt)), [slots])
+  const slotDisplays = useMemo(() => new Map(slots.map(slot => [slot.startsAt, formatInstantInZone(slot.startsAt, timezone)])), [slots, timezone])
+  const rangeCandidates = useMemo(() => {
+    const values = new Map<string, string>()
+    for (const slot of slots) {
+      const label = formatInstantInZone(slot.startsAt, timezone)
+      if (label) values.set(slot.startsAt, `${label.date} · ${label.time}`)
+      const endInstant = new Date(Date.parse(slot.startsAt) + 30 * 60 * 1000).toISOString()
+      const endLabel = formatInstantInZone(endInstant, timezone)
+      if (endLabel) values.set(endInstant, `${endLabel.date} · ${endLabel.time}`)
+    }
+    return [...values].sort(([left], [right]) => Date.parse(left) - Date.parse(right))
+  }, [slots, timezone])
+  const rangePreview = useMemo(() => {
+    const start = Date.parse(rangeStart)
+    const end = Date.parse(rangeEnd)
+    const inRange = Number.isFinite(start) && Number.isFinite(end) && start < end
+      ? slots.filter(slot => Date.parse(slot.startsAt) >= start && Date.parse(slot.startsAt) < end)
+      : []
+    return {
+      free: inRange.filter(slot => slot.occupancy === "free" && slot.eligibility !== "past").length,
+      bookedSlots: inRange.filter(slot => slot.occupancy === "booked").map(slot => {
+        const display = formatInstantInZone(slot.startsAt, timezone)
+        return display ? `${display.date} ${display.time}` : slot.timeMSK
+      }),
+      past: inRange.filter(slot => slot.eligibility === "past").length,
+    }
+  }, [slots, rangeStart, rangeEnd, timezone])
+
+  function changeDate(nextDate: string) {
+    setSelected([])
+    setDate(nextDate)
+  }
+
+  function chooseTodayOrTomorrow(offset: number) {
+    changeDate(moment().tz(timezone).add(offset, "day").format("YYYY-MM-DD"))
+  }
+
+  const { toggleSlot } = useAppointmentAvailabilityHandlers({ byInstant, mutatingRef, setSelected })
+
+  function selectRange() {
+    const start = Date.parse(rangeStart)
+    const end = Date.parse(rangeEnd)
+    if (!Number.isFinite(start) || !Number.isFinite(end) || start >= end) return
+    setSelected(slots.filter(slot => Date.parse(slot.startsAt) >= start && Date.parse(slot.startsAt) < end && slot.eligibility !== "past" && slot.occupancy !== "booked").map(slot => slot.startsAt))
+  }
+
+  async function mutate(blocked: boolean) {
+    const startsAt = (blocked ? blockable : unblockable).map(slot => slot.startsAt)
+    if (!startsAt.length || mutating) return
+    setMutating(true)
+    setError(null)
+    setResultMessage("")
+    try {
+      const response = await fetch("/api/admin/appointment-slots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ startsAt, blocked }),
+      })
+      const result = await response.json() as { ok: boolean; changed?: number; unchanged?: number; error?: string; code?: string }
+      if (!response.ok || !result.ok) {
+        if (response.status === 409) setError(t("availabilityConflict"))
+        else setError(result.error ?? t("actionFailed"))
+        await refresh()
+        return
+      }
+      setResultMessage(blocked ? t("blockSuccess", { count: result.changed ?? 0 }) : t("unblockSuccess", { count: result.changed ?? 0 }))
+      setSelected([])
+      await refresh()
+    } catch {
+      setError(t("actionFailed"))
+      await refresh()
+    } finally {
+      setMutating(false)
+    }
+  }
+
+  function statusText(slot: AdminSlot) {
+    const occupancy = slot.occupancy === "free" ? t("free") : slot.occupancy === "booked" ? t("booked") : t("blocked")
+    const eligibility = slot.eligibility === "eligible" ? "" : slot.eligibility === "too_soon" ? t("tooSoon") : t("past")
+    return eligibility ? `${occupancy} · ${eligibility}` : occupancy
+  }
+
+  const zoneChoices = [...new Set(["Europe/Moscow", localTimezone])]
+
+  return <div className="h-full min-h-0 overflow-y-auto pr-xs pb-md" aria-busy={loading || mutating}>
+    <div className={adminUi.stack}>
+      <section className={adminUi.panel}>
+        <header className={adminUi.panelHeader}>
+          <div><h2 className={adminUi.heading}>{t("availability")}</h2><p className={`${adminUi.muted} mt-xs text-[11px]`}>{t("availabilityDescription")}</p></div>
+          <RefreshButton pending={loading || mutating} onClick={refresh} />
+        </header>
+        <div className="grid gap-sm laptop:grid-cols-[minmax(0,1fr)_auto] laptop:items-end">
+          <div className="grid grid-cols-2 gap-xs min-[520px]:grid-cols-4">
+            <button type="button" className={adminUi.button} disabled={mutating} onClick={() => chooseTodayOrTomorrow(0)}>{t("today")}</button>
+            <button type="button" className={adminUi.button} disabled={mutating} onClick={() => chooseTodayOrTomorrow(1)}>{t("tomorrow")}</button>
+            <label className={`${adminUi.field} col-span-2`}><span>{t("bookingDate")}</span><input className={adminUi.input} type="date" value={date} onChange={event => changeDate(event.target.value)} /></label>
+          </div>
+          <div className={`${adminUi.segmented} !gap-0`} role="group" aria-label={t("adminTimeZone")}>
+            {zoneChoices.map((zone, index) => <button key={`${zone}-${index}`} type="button" aria-pressed={timezone === zone} onClick={() => { setSelected([]); setTimezone(zone) }}><span className="block">{index === 0 ? "MSK" : "Local"}</span><small className="block px-xs text-[9px]">{zone}</small></button>)}
+          </div>
+        </div>
+      </section>
+
+      <section className={adminUi.panel}>
+        <h3 className={adminUi.eyebrow}>{t("selectRange")}</h3>
+        <div className="mt-sm grid gap-sm min-[680px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] min-[680px]:items-end">
+          <label className={adminUi.field}><span>{t("rangeStartLabel")}</span><select className={adminUi.input} value={rangeStart} onChange={event => setRangeStart(event.target.value)}><option value="">—</option>{rangeCandidates.filter(([instant]) => slotStartInstants.has(instant)).map(([instant, label]) => <option key={instant} value={instant}>{label}</option>)}</select></label>
+          <label className={adminUi.field}><span>{t("rangeEndLabel")}</span><select className={adminUi.input} value={rangeEnd} onChange={event => setRangeEnd(event.target.value)}><option value="">—</option>{rangeCandidates.map(([instant, label]) => <option key={instant} value={instant}>{label}</option>)}</select></label>
+          <button type="button" className={adminUi.button} disabled={mutating || !rangeStart || !rangeEnd || Date.parse(rangeStart) >= Date.parse(rangeEnd)} onClick={selectRange}>{t("selectRange")}</button>
+        </div>
+        <p className={`${adminUi.muted} mt-xs text-[11px]`}>{t("rangeEndExcluded")}</p>
+        {rangeStart && rangeEnd && <div className={`${adminUi.muted} mt-xs text-[11px]`} aria-live="polite"><p>{t("rangePreview", { free: rangePreview.free, booked: rangePreview.bookedSlots.length })}{rangePreview.past > 0 ? ` ${t("excludedPast", { count: rangePreview.past })}` : ""}</p>{rangePreview.bookedSlots.length > 0 && <p>{t("booked")}: {rangePreview.bookedSlots.join(", ")}</p>}</div>}
+      </section>
+
+      <section className={adminUi.panel}>
+        <div className={adminUi.toolbar}>
+          <p className={adminUi.heading}>{t("selectedSlots", { count: selectedSlots.length })}</p>
+          <div className="flex flex-wrap gap-xs">
+            <button type="button" className={adminUi.button} disabled={mutating || !slots.length} onClick={() => { setSelected(slots.filter(slot => slot.eligibility !== "past" && slot.occupancy !== "booked").map(slot => slot.startsAt)) }}>{t("selectWholeDay")}</button>
+            <button type="button" className={adminUi.button} disabled={mutating || selected.length === 0} onClick={() => setSelected([])}>{t("clearSelection")}</button>
+          </div>
+        </div>
+        <div className="mt-sm grid grid-cols-2 gap-xs min-[520px]:grid-cols-3 min-[760px]:grid-cols-4 min-[1080px]:grid-cols-5">
+          {slots.map(slot => {
+            const display = slotDisplays.get(slot.startsAt)
+            if (!display) return null
+            return <AvailabilitySlotButton key={slot.startsAt} active={selectedSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || slot.eligibility === "past" || slot.occupancy === "booked"} onToggle={toggleSlot} startsAt={slot.startsAt} status={statusText(slot)} time={display.time} />
+          })}
+        </div>
+        {loading && <p className={`${adminUi.muted} mt-sm`} role="status">{t("refreshing")}</p>}
+        {!loading && !error && !slots.length && <p className={adminUi.empty}>{t("noAvailabilitySlots")}</p>}
+        {error && <p className={`${adminUi.error} mt-sm`} role="alert">{error} <button type="button" className="ml-xs underline" onClick={refresh}>{t("refreshAvailability")}</button></p>}
+        {resultMessage && <p className="mt-sm text-[12px] text-[var(--3d-dot-c-d9e2e7)]" role="status" aria-live="polite">{resultMessage}</p>}
+        <div className="mt-sm flex flex-wrap items-center gap-sm border-t border-[var(--3d-dot-c-3c454d)] pt-sm">
+          <span className="text-[11px] text-[var(--3d-dot-c-a1a7ae)]" aria-live="polite">{t("free")} · {t("blocked")} · {t("booked")} · {t("tooSoon")} · {t("past")}</span>
+          <div className="ml-auto flex flex-wrap gap-xs">
+            <button type="button" className={adminUi.button} disabled={mutating || blockable.length === 0} onClick={() => { mutate(true) }}>{mutating ? t("pending") : `${t("blockSelected")} (${blockable.length})`}</button>
+            <button type="button" className={adminUi.button} disabled={mutating || unblockable.length === 0} onClick={() => { mutate(false) }}>{mutating ? t("pending") : `${t("unblockSelected")} (${unblockable.length})`}</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+})

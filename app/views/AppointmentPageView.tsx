@@ -1,4 +1,4 @@
-import moment from "moment"
+import moment from "moment-timezone"
 import { cookies } from "next/headers"
 
 import { getIsGMLive } from "@/libs/getIsGMLive"
@@ -9,14 +9,20 @@ import { ScheduleAppointmentModal } from "@/components/Modals/ScheduleAppointmen
 import { ToastWrapper } from "../[locale]/(site)/appointment/components/ToastWrapper"
 import { BookedAppointments } from "../[locale]/(site)/appointment/components/BookedAppointments"
 import { IsGMLive } from "../[locale]/(site)/appointment/components/IsGMLive"
+import { getStoredBookingInstant } from "@/libs/appointmentSlots"
 
 export async function AppointmentPageView() {
   const getIsGMLiveResp = await getIsGMLive()
-  const today = moment().format("YYYY-MM-DD")
+  const nowMs = Date.now()
+  const todayMoscow = moment.tz(nowMs, "Europe/Moscow").format("YYYY-MM-DD")
   const userCookieId = (await cookies()).get("user_cookie_id")?.value
   const { data: bookedAppointments } = userCookieId
-    ? await supabaseAdmin.from("bookings").select().gte("booking_date", today).eq("user_cookie_id", userCookieId)
+    ? await supabaseAdmin.from("bookings").select().gte("booking_date", todayMoscow).eq("user_cookie_id", userCookieId)
     : { data: [] }
+  const futureBookings = (bookedAppointments ?? []).filter(booking => {
+    const startsAt = getStoredBookingInstant(booking.booking_date, booking.booking_time_MSK)
+    return startsAt !== null && Date.parse(startsAt) >= nowMs
+  })
 
   return (
     <div className="appointment-rack flex w-full justify-center overflow-x-hidden px-sm tablet:px-md">
@@ -30,7 +36,7 @@ export async function AppointmentPageView() {
             <ScheduleAppointment />
           </div>
           <div className="min-w-0">
-            <BookedAppointments booked_appointments={bookedAppointments ?? []} />
+            <BookedAppointments booked_appointments={futureBookings} />
           </div>
         </div>
         <ScheduleAppointmentModal />

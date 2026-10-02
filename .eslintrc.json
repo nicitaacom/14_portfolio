@@ -28,6 +28,8 @@
         ]
       }
     ],
+    "local/prefer-memo-row-component": "warn",
+    "local/temp-debug-memo-render-log": "off",
     "local/require-const-project": "warn",
     "local/require-id-repos-order": "error",
     "local/response-variable-naming": "warn",

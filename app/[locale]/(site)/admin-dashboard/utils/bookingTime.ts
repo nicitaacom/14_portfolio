@@ -6,12 +6,20 @@ export function getBookingTimestamp(booking: Pick<TBookingRow, "booking_date" | 
 }
 
 export function splitBookingsByTime(bookings: TBookingRow[], now: number) {
-  const upcomingBookings = bookings
-    .filter(booking => getBookingTimestamp(booking) >= now)
-    .sort((a, b) => getBookingTimestamp(a) - getBookingTimestamp(b))
-  const pastBookings = bookings
-    .filter(booking => getBookingTimestamp(booking) < now)
-    .sort((a, b) => getBookingTimestamp(b) - getBookingTimestamp(a))
+  const upcoming: { booking: TBookingRow; timestamp: number }[] = []
+  const past: { booking: TBookingRow; timestamp: number }[] = []
+  for (const booking of bookings) {
+    const timestamp = getBookingTimestamp(booking)
+    if (!Number.isFinite(timestamp)) continue
+    if (timestamp >= now) upcoming.push({ booking, timestamp })
+    else past.push({ booking, timestamp })
+  }
 
-  return { upcomingBookings, pastBookings }
+  upcoming.sort((a, b) => a.timestamp - b.timestamp)
+  past.sort((a, b) => b.timestamp - a.timestamp)
+
+  return {
+    upcomingBookings: upcoming.map(({ booking }) => booking),
+    pastBookings: past.map(({ booking }) => booking),
+  }
 }

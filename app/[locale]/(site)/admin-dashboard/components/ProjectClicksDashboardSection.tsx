@@ -1,5 +1,6 @@
 "use client"
 
+import { memo, useCallback, useMemo } from "react"
 import { trackedProjects } from "@/data/repos"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { useSetProjectClicksDashboard } from "../hooks/useSetProjectClicksDashboard"
@@ -9,35 +10,77 @@ import { ActivityChart, adminUi, AnalyticsSkeleton, LoadError, Metric, PeriodLab
 import { FullDotReliefSvg } from "./FullDotReliefSvg"
 import { ProjectsDropdown } from "./ProjectsDropdown"
 
-export function ProjectClicksDashboardSection() {
+type ProjectRankingRow = (typeof trackedProjects)[number] & { total: number }
+
+function useProjectClicksDashboardHandlers(setSelectedProjectSlug: (projectSlug: string) => void) {
+  const selectRankedProject = useCallback((projectSlug: string) => {
+    playAdminButtonSound(3)
+    setSelectedProjectSlug(projectSlug)
+  }, [setSelectedProjectSlug])
+
+  return { selectRankedProject }
+}
+
+const ProjectRankingItem = memo(function ProjectRankingItem({
+  index,
+  isSelected,
+  maxClicks,
+  number,
+  onSelect,
+  percent,
+  project,
+  total,
+}: {
+  index: number
+  isSelected: boolean
+  maxClicks: number
+  number: Intl.NumberFormat
+  onSelect: (projectSlug: string) => void
+  percent: (value: number) => string
+  project: ProjectRankingRow
+  total: number
+}) {
+  const handleClick = useCallback(() => onSelect(project.slug), [onSelect, project.slug])
+
+  return <button type="button" className="w-full rounded-[5px] border border-transparent p-sm text-left hover:bg-[var(--3d-dot-c-2a3136)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--3d-dot-c-e8edf1)] aria-[pressed=true]:border-[var(--3d-dot-c-47515a)] aria-[pressed=true]:bg-[var(--3d-dot-c-171c20)] aria-[pressed=true]:shadow-[inset_0_1px_2px_var(--3d-dot-c-0008)]" aria-pressed={isSelected} onClick={handleClick}>
+    <div className="flex items-start gap-xs text-[12px]"><span className="min-w-4 font-typewriter text-[11px] leading-5 text-[var(--3d-dot-c-818d97)]">{String(index + 1).padStart(2, "0")}</span><span className="min-w-0 flex-1 [overflow-wrap:anywhere] text-[var(--3d-dot-c-c3cdd5)]">{project.name}</span><span className="text-[var(--3d-dot-c-d6e0e7)]">{number.format(project.total)}</span><span className="min-w-9 text-right text-[11px] text-[var(--3d-dot-c-8c9aa5)]">{percent(total ? project.total / total * 100 : 0)}</span></div>
+    <span className="ml-md mt-xs block h-0.5 overflow-hidden rounded bg-[var(--3d-dot-c-121719)]" aria-hidden="true"><span className="block h-full rounded bg-[var(--3d-dot-c-99a8b3)] aria-[pressed=true]:bg-[var(--3d-dot-c-dce6ee)]" style={{ width: `${maxClicks ? project.total / maxClicks * 100 : 0}%` }} /></span>
+  </button>
+})
+
+export const ProjectClicksDashboardSection = memo(function ProjectClicksDashboardSection() {
   const t = useScopedI18n("adminConsole")
   const locale = useCurrentLocale()
   const { refetch, isOverviewSkeleton } = useSetProjectClicksDashboard()
+  const refreshProjectClicks = useCallback(() => { void refetch() }, [refetch])
   const { overview, timeline, selectedProjectSlug, setSelectedProjectSlug, timelineMode, setTimelineMode, overviewErrorMessage, period } = useProjectClicksDashboard()
   const intlLocale = locale === "ua" ? "uk" : locale
-  const number = new Intl.NumberFormat(intlLocale)
-  const decimal = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 2 })
-  const percent = (value: number) => value > 0 && value < .01 ? `<${decimal.format(.01)}%` : `${decimal.format(value)}%`
-  const knownRows = trackedProjects.map(project => ({
+  const number = useMemo(() => new Intl.NumberFormat(intlLocale), [intlLocale])
+  const decimal = useMemo(() => new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 2 }), [intlLocale])
+  const percent = useCallback((value: number) => value > 0 && value < .01 ? `<${decimal.format(.01)}%` : `${decimal.format(value)}%`, [decimal])
+  const overviewBySlug = useMemo(() => new Map(overview.map(row => [row.project_slug, row])), [overview])
+  const knownRows = useMemo(() => trackedProjects.map(project => ({
     ...project,
-    total: overview.find(row => row.project_slug === project.slug)?.total_clicks ?? 0,
-  })).sort((a, b) => b.total - a.total || a.name.localeCompare(b.name))
-  const total = knownRows.reduce((sum, row) => sum + row.total, 0)
+    total: overviewBySlug.get(project.slug)?.total_clicks ?? 0,
+  })).sort((a, b) => b.total - a.total || a.name.localeCompare(b.name)), [overviewBySlug])
+  const total = useMemo(() => knownRows.reduce((sum, row) => sum + row.total, 0), [knownRows])
   const selected = trackedProjects.find(project => project.slug === selectedProjectSlug) ?? trackedProjects[0]
-  const selectedRow = overview.find(row => row.project_slug === selected?.slug)
+  const selectedRow = selected ? overviewBySlug.get(selected.slug) : undefined
   const selectedTotal = selectedRow?.total_clicks ?? 0
-  const destinations = [
+  const destinations = useMemo(() => [
     { key: "demo_clicks", name: t("demo") },
     { key: "github_clicks", name: t("github") },
     { key: "figma_clicks", name: t("figma") },
     { key: "youtube_clicks", name: t("youtube") },
-  ] as const
-  const destinationTotals = destinations.map(item => ({ ...item, total: overview.reduce((sum, row) => sum + row[item.key], 0) })).sort((a, b) => b.total - a.total)
-  const leaders = knownRows.filter(row => row.total === knownRows[0]?.total && row.total > 0)
-  const destinationLeaders = destinationTotals.filter(row => row.total === destinationTotals[0]?.total && row.total > 0)
-  const peak = timeline.reduce<typeof timeline[number] | undefined>((best, row) => !best || row.total_clicks > best.total_clicks ? row : best, undefined)
-  const date = new Intl.DateTimeFormat(intlLocale, { month: "short", ...(timelineMode === "yearly" ? { year: "numeric" as const } : { day: "numeric" as const }), timeZone: "UTC" })
+  ] as const, [t])
+  const destinationTotals = useMemo(() => destinations.map(item => ({ ...item, total: overview.reduce((sum, row) => sum + row[item.key], 0) })).sort((a, b) => b.total - a.total), [destinations, overview])
+  const leaders = useMemo(() => knownRows.filter(row => row.total === knownRows[0]?.total && row.total > 0), [knownRows])
+  const destinationLeaders = useMemo(() => destinationTotals.filter(row => row.total === destinationTotals[0]?.total && row.total > 0), [destinationTotals])
+  const peak = useMemo(() => timeline.reduce<typeof timeline[number] | undefined>((best, row) => !best || row.total_clicks > best.total_clicks ? row : best, undefined), [timeline])
+  const date = useMemo(() => new Intl.DateTimeFormat(intlLocale, { month: "short", ...(timelineMode === "yearly" ? { year: "numeric" as const } : { day: "numeric" as const }), timeZone: "UTC" }), [intlLocale, timelineMode])
+  const chartData = useMemo(() => timeline.map(row => ({ date: row.bucket_key, value: row.total_clicks })), [timeline])
   const peakDate = peak && peak.total_clicks > 0 ? date.format(new Date(peak.bucket_key.length === 7 ? `${peak.bucket_key}-01T00:00:00Z` : `${peak.bucket_key}T00:00:00Z`)) : "—"
+  const { selectRankedProject } = useProjectClicksDashboardHandlers(setSelectedProjectSlug)
 
   return <div className={`${adminUi.stack} h-full`}>
     <div>
@@ -46,11 +89,11 @@ export function ProjectClicksDashboardSection() {
           <button type="button" aria-pressed={timelineMode === "monthly"} onClick={() => { playAdminButtonSound(1); setTimelineMode("monthly") }}>{t("last30Days")}</button>
           <button type="button" aria-pressed={timelineMode === "yearly"} onClick={() => { playAdminButtonSound(1); setTimelineMode("yearly") }}>{t("last12Months")}</button>
         </div></div>
-        <RefreshButton pending={isOverviewSkeleton} onClick={() => { void refetch() }} />
+        <RefreshButton pending={isOverviewSkeleton} onClick={refreshProjectClicks} />
       </div>
       <PeriodLabel period={period} />
     </div>
-    {overviewErrorMessage && <LoadError />}
+    {overviewErrorMessage && !isOverviewSkeleton && <LoadError />}
     {isOverviewSkeleton && !period ? <AnalyticsSkeleton /> : !overviewErrorMessage && <div className="relative isolate min-h-0 flex-1 overflow-hidden">
       <div className="pointer-events-none absolute inset-0 z-0 bg-[var(--3d-dot-c-202528)]" aria-hidden="true"><FullDotReliefSvg /></div>
       <div className="relative z-10 flex h-full min-w-0 flex-col gap-sm">
@@ -72,7 +115,7 @@ export function ProjectClicksDashboardSection() {
             <div><dt>{t(timelineMode === "monthly" ? "avgPerDay" : "avgPerMonth")}</dt><dd>{decimal.format(timeline.length ? selectedTotal / timeline.length : 0)}</dd></div>
             <div><dt>{t(timelineMode === "monthly" ? "busiestDay" : "busiestMonth")}</dt><dd>{peakDate}</dd>{peak && peak.total_clicks > 0 && <small>{number.format(peak.total_clicks)} {t("clicks")}</small>}</div>
           </dl>
-          {isOverviewSkeleton ? <div className={`${adminUi.skeleton} min-h-[330px]`} aria-label={t("refreshing")} /> : <ActivityChart data={timeline.map(row => ({ date: row.bucket_key, value: row.total_clicks }))} unit={t("linkClicks")} monthly={timelineMode === "yearly"} />}
+          {isOverviewSkeleton ? <div className={`${adminUi.skeleton} min-h-[330px]`} aria-label={t("refreshing")} /> : <ActivityChart data={chartData} unit={t("linkClicks")} monthly={timelineMode === "yearly"} />}
           <p className="mt-xs flex items-center gap-xs font-typewriter text-[10px] text-[var(--3d-dot-c-a0abb4)]"><i className="h-1 w-1 rounded-full bg-[var(--3d-dot-c-e1e7eb)]" aria-hidden="true" />{selected?.name} · {t("linkClicks")} · {t("utc")}</p>
           <div className="mt-xs border-t border-[var(--3d-dot-c-363e44)] pt-sm"><h3 className={adminUi.eyebrow}>{t("destinations")}</h3><div className="mt-sm flex flex-wrap gap-xs">
             {destinations.map(item => <span className="rounded border border-[var(--3d-dot-c-3e4850)] bg-[var(--3d-dot-c-1b2126)] px-sm py-xs text-[10px] text-[var(--3d-dot-c-9facb7)]" key={item.key}>{item.name}<strong className="ml-sm font-medium text-[var(--3d-dot-c-e2eaf0)]">{number.format(selectedRow?.[item.key] ?? 0)}</strong></span>)}
@@ -81,13 +124,10 @@ export function ProjectClicksDashboardSection() {
         <section className={`${adminUi.panel} laptop:h-full laptop:!overflow-y-auto`} aria-busy={isOverviewSkeleton}>
           <div className={adminUi.panelHeader}><h2 className={adminUi.heading}>{t("projectRanking")}</h2><span className={adminUi.count}>{trackedProjects.length}</span></div>
           <p className={`${adminUi.muted} text-[12px]`}>{t("rankingHelp")}</p>
-          <div className="mt-sm grid gap-xs">{knownRows.map((project, index) => <button key={project.slug} type="button" className="w-full rounded-[5px] border border-transparent p-sm text-left hover:bg-[var(--3d-dot-c-2a3136)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--3d-dot-c-e8edf1)] aria-[pressed=true]:border-[var(--3d-dot-c-47515a)] aria-[pressed=true]:bg-[var(--3d-dot-c-171c20)] aria-[pressed=true]:shadow-[inset_0_1px_2px_var(--3d-dot-c-0008)]" aria-pressed={selectedProjectSlug === project.slug} onClick={() => { playAdminButtonSound(3); setSelectedProjectSlug(project.slug) }}>
-            <div className="flex items-start gap-xs text-[12px]"><span className="min-w-4 font-typewriter text-[11px] leading-5 text-[var(--3d-dot-c-818d97)]">{String(index + 1).padStart(2, "0")}</span><span className="min-w-0 flex-1 [overflow-wrap:anywhere] text-[var(--3d-dot-c-c3cdd5)]">{project.name}</span><span className="text-[var(--3d-dot-c-d6e0e7)]">{number.format(project.total)}</span><span className="min-w-9 text-right text-[11px] text-[var(--3d-dot-c-8c9aa5)]">{percent(total ? project.total / total * 100 : 0)}</span></div>
-            <span className="ml-md mt-xs block h-0.5 overflow-hidden rounded bg-[var(--3d-dot-c-121719)]" aria-hidden="true"><span className="block h-full rounded bg-[var(--3d-dot-c-99a8b3)] aria-[pressed=true]:bg-[var(--3d-dot-c-dce6ee)]" style={{ width: `${knownRows[0]?.total ? project.total / knownRows[0].total * 100 : 0}%` }} /></span>
-          </button>)}</div>
+          <div className="mt-sm grid gap-xs">{knownRows.map((project, index) => <ProjectRankingItem key={project.slug} index={index} isSelected={selectedProjectSlug === project.slug} maxClicks={knownRows[0]?.total ?? 0} number={number} onSelect={selectRankedProject} percent={percent} project={project} total={total} />)}</div>
         </section>
       </div>
       </div>
     </div>}
   </div>
-}
+})

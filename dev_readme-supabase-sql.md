@@ -1,3 +1,323 @@
+## Appointment availability — preflight, migration, and verification
+
+Run the preflight first on the intended Supabase project. It is read-only. The migration holds a short write lock on `bookings` while it backfills the shared occupancy table and installs the database guard. It refuses duplicate booking instants instead of changing or deleting appointments. Historical off-grid rows are retained and claimed; only new or moved rows must use the current grid.
+
+The same complete migration below is the appointment schema section for a fresh setup. Keep it with this document so neither an upgrade nor a new project omits the occupancy trigger and admin RPC.
+
+### Read-only schema and data preflight
+
+```sql
+SELECT version();
+
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'bookings'
+ORDER BY ordinal_position;
+
+SELECT conname, pg_get_constraintdef(oid) AS definition
+FROM pg_constraint
+WHERE conrelid = 'public.bookings'::regclass
+ORDER BY conname;
+
+SELECT tgname, pg_get_triggerdef(oid) AS definition
+FROM pg_trigger
+WHERE tgrelid = 'public.bookings'::regclass AND NOT tgisinternal
+ORDER BY tgname;
+
+SELECT c.relrowsecurity AS rls_enabled, c.relforcerowsecurity AS rls_forced
+FROM pg_class c WHERE c.oid = 'public.bookings'::regclass;
+
+SELECT grantee, privilege_type
+FROM information_schema.role_table_grants
+WHERE table_schema = 'public' AND table_name = 'bookings'
+ORDER BY grantee, privilege_type;
+
+-- Duplicate starts must be resolved by the data owner before the migration.
+SELECT booking_date, "booking_time_MSK", array_agg(id ORDER BY id) AS booking_ids, count(*) AS row_count
+FROM public.bookings
+GROUP BY booking_date, "booking_time_MSK"
+HAVING count(*) > 1
+ORDER BY booking_date, "booking_time_MSK";
+
+-- Historical off-grid rows are reported and preserved by the migration.
+SELECT id, booking_date, "booking_time_MSK"
+FROM public.bookings
+WHERE "booking_time_MSK" < time '12:00'
+   OR "booking_time_MSK" > time '22:00'
+   OR extract(minute FROM "booking_time_MSK")::integer % 30 <> 0
+   OR extract(second FROM "booking_time_MSK") <> 0
+ORDER BY booking_date, "booking_time_MSK", id;
+
+-- Inspect the exact arbitrary-SQL function grant and identify shared consumers before revocation.
+SELECT p.oid::regprocedure AS function_name, p.prosecdef AS security_definer,
+       has_function_privilege('anon', p.oid, 'EXECUTE') AS anon_can_execute,
+       has_function_privilege('authenticated', p.oid, 'EXECUTE') AS authenticated_can_execute,
+       has_function_privilege('service_role', p.oid, 'EXECUTE') AS service_role_can_execute
+FROM pg_proc p
+WHERE p.oid = to_regprocedure('public.execute_any_sql(text)');
+
+SELECT p.oid::regprocedure AS function_name, r.rolname AS grantee, a.privilege_type
+FROM pg_proc p
+CROSS JOIN LATERAL aclexplode(COALESCE(p.proacl, acldefault('f', p.proowner))) a
+JOIN pg_roles r ON r.oid = a.grantee
+WHERE p.oid = to_regprocedure('public.execute_any_sql(text)')
+ORDER BY r.rolname;
+```
+
+If duplicate instants are returned, stop before migration and resolve them with the owner. Check every `execute_any_sql` caller across projects before revoking the authenticated grant: the function can mutate the shared database, so leaving it available defeats the admin block boundary; revoking it may affect another project's caller.
+
+### Runnable migration
+
+Run this whole block in one SQL session. It is additive and safe to rerun after a successful run. It does not remove bookings or blocks.
+
+```sql
+BEGIN;
+
+LOCK TABLE public.bookings IN SHARE ROW EXCLUSIVE MODE;
+
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS contact text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS contact_type text;
+
+DO $$
+DECLARE duplicate_ids text;
+BEGIN
+  SELECT string_agg(id, ', ' ORDER BY id) INTO duplicate_ids
+  FROM (
+    SELECT unnest(array_agg(id)) AS id
+    FROM public.bookings
+    GROUP BY booking_date, "booking_time_MSK"
+    HAVING count(*) > 1
+  ) duplicates;
+  IF duplicate_ids IS NOT NULL THEN
+    RAISE EXCEPTION 'Appointment occupancy migration stopped: duplicate booking starts exist for IDs %', duplicate_ids;
+  END IF;
+END;
+$$;
+
+CREATE TABLE IF NOT EXISTS public.appointment_slot_occupancy (
+  starts_at timestamptz PRIMARY KEY,
+  kind text NOT NULL CHECK (kind IN ('booked', 'blocked')),
+  booking_id varchar UNIQUE REFERENCES public.bookings(id) ON DELETE CASCADE,
+  blocked_by uuid,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  CONSTRAINT appointment_slot_occupancy_shape_check CHECK (
+    (kind = 'booked' AND booking_id IS NOT NULL AND blocked_by IS NULL)
+    OR (kind = 'blocked' AND booking_id IS NULL AND blocked_by IS NOT NULL)
+  )
+);
+
+-- Serialize the reconciliation/backfill with concurrent admin block mutations.
+LOCK TABLE public.appointment_slot_occupancy IN ACCESS EXCLUSIVE MODE;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid = 'public.appointment_slot_occupancy'::regclass AND conname = 'appointment_slot_occupancy_booking_id_key') THEN
+    ALTER TABLE public.appointment_slot_occupancy ADD CONSTRAINT appointment_slot_occupancy_booking_id_key UNIQUE (booking_id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid = 'public.appointment_slot_occupancy'::regclass AND conname = 'appointment_slot_occupancy_booking_id_fkey') THEN
+    ALTER TABLE public.appointment_slot_occupancy ADD CONSTRAINT appointment_slot_occupancy_booking_id_fkey FOREIGN KEY (booking_id) REFERENCES public.bookings(id) ON DELETE CASCADE;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid = 'public.appointment_slot_occupancy'::regclass AND conname = 'appointment_slot_occupancy_shape_check') THEN
+    ALTER TABLE public.appointment_slot_occupancy ADD CONSTRAINT appointment_slot_occupancy_shape_check CHECK (
+      (kind = 'booked' AND booking_id IS NOT NULL AND blocked_by IS NULL)
+      OR (kind = 'blocked' AND booking_id IS NULL AND blocked_by IS NOT NULL)
+    );
+  END IF;
+END;
+$$;
+
+DO $$
+DECLARE conflicting_ids text;
+BEGIN
+  SELECT string_agg(b.id, ', ' ORDER BY b.id) INTO conflicting_ids
+  FROM public.bookings b
+  JOIN public.appointment_slot_occupancy o
+    ON o.starts_at = ((b.booking_date + b."booking_time_MSK") AT TIME ZONE 'Europe/Moscow')
+  WHERE o.kind <> 'booked' OR o.booking_id IS DISTINCT FROM b.id;
+  IF conflicting_ids IS NOT NULL THEN
+    RAISE EXCEPTION 'Appointment occupancy migration stopped: existing blocks or claims conflict with booking IDs %', conflicting_ids;
+  END IF;
+END;
+$$;
+
+-- Preserve every historical booking, including validly stored off-grid times.
+INSERT INTO public.appointment_slot_occupancy (starts_at, kind, booking_id, blocked_by)
+SELECT (booking_date + "booking_time_MSK") AT TIME ZONE 'Europe/Moscow', 'booked', id, NULL
+FROM public.bookings
+ON CONFLICT (starts_at) DO NOTHING;
+
+CREATE OR REPLACE FUNCTION public.guard_appointment_booking_slot()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+  v_starts_at timestamptz;
+  v_hour integer;
+  v_minute integer;
+BEGIN
+  IF TG_OP = 'UPDATE'
+     AND OLD.booking_date IS NOT DISTINCT FROM NEW.booking_date
+     AND OLD."booking_time_MSK" IS NOT DISTINCT FROM NEW."booking_time_MSK" THEN
+    RETURN NEW;
+  END IF;
+
+  v_hour := extract(hour FROM NEW."booking_time_MSK")::integer;
+  v_minute := extract(minute FROM NEW."booking_time_MSK")::integer;
+  IF v_hour < 12 OR v_hour > 22 OR (v_hour = 22 AND v_minute > 0) OR v_minute % 30 <> 0
+     OR extract(second FROM NEW."booking_time_MSK") <> 0 THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_INVALID';
+  END IF;
+
+  v_starts_at := (NEW.booking_date + NEW."booking_time_MSK") AT TIME ZONE 'Europe/Moscow';
+  IF v_starts_at < clock_timestamp() + interval '30 minutes' THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_TOO_SOON';
+  END IF;
+
+  IF TG_OP = 'UPDATE' THEN
+    DELETE FROM public.appointment_slot_occupancy
+    WHERE kind = 'booked' AND booking_id = OLD.id;
+  END IF;
+
+  BEGIN
+    INSERT INTO public.appointment_slot_occupancy (starts_at, kind, booking_id, blocked_by)
+    VALUES (v_starts_at, 'booked', NEW.id, NULL);
+  EXCEPTION WHEN unique_violation THEN
+    IF EXISTS (SELECT 1 FROM public.appointment_slot_occupancy WHERE starts_at = v_starts_at) THEN
+      RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_OCCUPIED';
+    END IF;
+    RAISE;
+  END;
+
+  -- clock_timestamp() advances while a unique-key wait is in progress.
+  IF v_starts_at < clock_timestamp() + interval '30 minutes' THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_TOO_SOON';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS bookings_guard_appointment_slot ON public.bookings;
+CREATE TRIGGER bookings_guard_appointment_slot
+AFTER INSERT OR UPDATE OF booking_date, "booking_time_MSK" ON public.bookings
+FOR EACH ROW EXECUTE FUNCTION public.guard_appointment_booking_slot();
+
+CREATE OR REPLACE FUNCTION public.set_appointment_blocks(
+  p_starts_at timestamptz[],
+  p_blocked boolean,
+  p_actor_id uuid
+)
+RETURNS TABLE(changed integer, unchanged integer)
+LANGUAGE plpgsql
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+  v_start timestamptz;
+  v_local timestamp without time zone;
+  v_hour integer;
+  v_minute integer;
+  v_kind text;
+BEGIN
+  IF p_starts_at IS NULL OR cardinality(p_starts_at) < 1 OR cardinality(p_starts_at) > 64
+     OR p_blocked IS NULL OR p_actor_id IS NULL THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_INVALID';
+  END IF;
+
+  changed := 0;
+  unchanged := 0;
+  FOR v_start IN SELECT DISTINCT slot FROM unnest(p_starts_at) AS input(slot) ORDER BY slot
+  LOOP
+    v_local := v_start AT TIME ZONE 'Europe/Moscow';
+    v_hour := extract(hour FROM v_local)::integer;
+    v_minute := extract(minute FROM v_local)::integer;
+    IF v_start IS NULL OR v_hour < 12 OR v_hour > 22 OR (v_hour = 22 AND v_minute > 0) OR v_minute % 30 <> 0
+       OR extract(second FROM v_local) <> 0 THEN
+      RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_INVALID';
+    END IF;
+    IF v_start <= clock_timestamp() THEN
+      RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_PAST';
+    END IF;
+
+    IF p_blocked THEN
+      BEGIN
+        INSERT INTO public.appointment_slot_occupancy (starts_at, kind, booking_id, blocked_by)
+        VALUES (v_start, 'blocked', NULL, p_actor_id);
+        changed := changed + 1;
+      EXCEPTION WHEN unique_violation THEN
+        SELECT kind INTO v_kind FROM public.appointment_slot_occupancy WHERE starts_at = v_start;
+        IF v_kind = 'blocked' THEN
+          unchanged := unchanged + 1;
+        ELSE
+          RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'APPT_SLOT_BOOKED';
+        END IF;
+      END;
+    ELSE
+      DELETE FROM public.appointment_slot_occupancy
+      WHERE starts_at = v_start AND kind = 'blocked';
+      IF FOUND THEN changed := changed + 1; ELSE unchanged := unchanged + 1; END IF;
+    END IF;
+  END LOOP;
+  RETURN NEXT;
+END;
+$$;
+
+ALTER TABLE public.appointment_slot_occupancy ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.appointment_slot_occupancy FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, DELETE ON TABLE public.appointment_slot_occupancy TO service_role;
+REVOKE EXECUTE ON FUNCTION public.set_appointment_blocks(timestamptz[], boolean, uuid) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.set_appointment_blocks(timestamptz[], boolean, uuid) TO service_role;
+
+-- This exact function can execute arbitrary SQL. Revoke its exposed authenticated path after
+-- checking the preflight consumer inventory; keep only the existing service-role application path.
+DO $$
+BEGIN
+  IF to_regprocedure('public.execute_any_sql(text)') IS NOT NULL THEN
+    EXECUTE 'REVOKE EXECUTE ON FUNCTION public.execute_any_sql(text) FROM PUBLIC, anon, authenticated';
+    EXECUTE 'GRANT EXECUTE ON FUNCTION public.execute_any_sql(text) TO service_role';
+  END IF;
+END;
+$$;
+
+COMMIT;
+```
+
+### Post-migration verification
+
+```sql
+-- Each booking has exactly one matching booked occupancy record.
+SELECT b.id, b.booking_date, b."booking_time_MSK"
+FROM public.bookings b
+LEFT JOIN public.appointment_slot_occupancy o
+  ON o.booking_id = b.id
+ AND o.starts_at = ((b.booking_date + b."booking_time_MSK") AT TIME ZONE 'Europe/Moscow')
+ AND o.kind = 'booked'
+WHERE o.booking_id IS NULL;
+
+-- No orphan booked claims, and admin blocks remain distinguishable.
+SELECT o.*
+FROM public.appointment_slot_occupancy o
+LEFT JOIN public.bookings b ON b.id = o.booking_id
+WHERE (o.kind = 'booked' AND b.id IS NULL)
+   OR (o.kind = 'blocked' AND o.booking_id IS NOT NULL);
+
+SELECT kind, count(*) FROM public.appointment_slot_occupancy GROUP BY kind ORDER BY kind;
+
+SELECT tgname, pg_get_triggerdef(oid)
+FROM pg_trigger
+WHERE tgrelid = 'public.bookings'::regclass AND tgname = 'bookings_guard_appointment_slot';
+
+SELECT grantee, privilege_type
+FROM information_schema.role_table_grants
+WHERE table_schema = 'public' AND table_name = 'appointment_slot_occupancy'
+ORDER BY grantee, privilege_type;
+
+SELECT has_function_privilege('anon', 'public.set_appointment_blocks(timestamptz[],boolean,uuid)', 'EXECUTE') AS anon_can_block,
+       has_function_privilege('authenticated', 'public.set_appointment_blocks(timestamptz[],boolean,uuid)', 'EXECUTE') AS authenticated_can_block,
+       has_function_privilege('service_role', 'public.set_appointment_blocks(timestamptz[],boolean,uuid)', 'EXECUTE') AS service_role_can_block;
+```
+
+The rollback for an application defect is an application rollback while keeping this occupancy table, existing block rows, and booking trigger installed. Keep admin blocking disabled in the reverted app if its endpoint is incompatible. Do not drop the table or trigger while the old booking writer is active. If a later database correction is necessary, issue a forward migration after resolving the preflight evidence.
+
 ## Shared UTM table
 
 ```sql

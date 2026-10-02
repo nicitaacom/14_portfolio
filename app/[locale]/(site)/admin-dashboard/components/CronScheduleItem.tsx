@@ -1,11 +1,12 @@
 "use client"
 
+import { memo } from "react"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import type { TCronScheduleRow } from "../types/TCronScheduleRow"
 import { formatDateTime } from "../utils/adminFormatters"
 import { adminUi } from "./AdminUI"
 
-export function CronScheduleItem({ job }: { job: TCronScheduleRow }) {
+export const CronScheduleItem = memo(function CronScheduleItem({ job }: { job: TCronScheduleRow }) {
   const t = useScopedI18n("adminConsole")
   const locale = useCurrentLocale()
   const hasRuns = job.total_runs > 0 || !!job.last_run_at || !!job.last_run_status
@@ -31,4 +32,4 @@ export function CronScheduleItem({ job }: { job: TCronScheduleRow }) {
       </details>
     </article>
   )
-}
+})

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { memo, useCallback, useRef, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { BiSolidDownArrow } from "react-icons/bi"
 import { TbWorld } from "react-icons/tb"
@@ -12,6 +12,63 @@ import { NEXT_LOCALE_COOKIE_NAME, getLocalizedPathname } from "@/locales/helpers
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 import { useCloseOnClickOutside } from "@/hooks/useOnClickOutside"
+
+const LanguageOption = memo(function LanguageOption({
+  isCurrent,
+  label,
+  locale,
+  onSelect,
+}: {
+  isCurrent: boolean
+  label: string
+  locale: TLocale
+  onSelect: (locale: TLocale) => void
+}) {
+  const handleClick = useCallback(() => onSelect(locale), [locale, onSelect])
+
+  return <button
+    className={twMerge(
+      "site-picker-option machine-slot flex h-[38px] items-center justify-between gap-sm whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-200 hover:border-cta/60 hover:brightness-125",
+      isCurrent && "border-cta/70 brightness-125",
+    )}
+    onClick={handleClick}
+    type="button">
+    <span>{label}</span>
+    {isCurrent ? <span className="h-[8px] w-[8px] shrink-0 rounded-full bg-cta" /> : null}
+  </button>
+})
+
+function useLanguageDropdownHandlers({
+  locale,
+  pathname,
+  router,
+  searchParams,
+  setIsOpen,
+}: {
+  locale: TLocale
+  pathname: string | null
+  router: ReturnType<typeof useRouter>
+  searchParams: { toString: () => string } | null
+  setIsOpen: (open: boolean) => void
+}) {
+  const changeLanguage = useCallback((nextLocale: TLocale) => {
+    if (nextLocale === locale) {
+      setIsOpen(false)
+      return
+    }
+
+    document.cookie = `${NEXT_LOCALE_COOKIE_NAME}=${nextLocale}; path=/; samesite=lax`
+
+    const nextSearch = searchParams?.toString()
+    const nextUrl = getLocalizedPathname(pathname || "/", nextLocale, nextSearch ? `?${nextSearch}` : "")
+
+    router.replace(nextUrl)
+    router.refresh()
+    setIsOpen(false)
+  }, [locale, pathname, router, searchParams, setIsOpen])
+
+  return { changeLanguage }
+}
 
 export function LanguageDropdown() {
   const router = useRouter()
@@ -28,21 +85,7 @@ export function LanguageDropdown() {
   useCloseOnClickOutside(dropdownContainerRef, () => setIsOpen(false))
   useCloseOnEsc(() => setIsOpen(false))
 
-  function changeLanguage(nextLocale: TLocale) {
-    if (nextLocale === locale) {
-      setIsOpen(false)
-      return
-    }
-
-    document.cookie = `${NEXT_LOCALE_COOKIE_NAME}=${nextLocale}; path=/; samesite=lax`
-
-    const nextSearch = searchParams?.toString()
-    const nextUrl = getLocalizedPathname(pathname || "/", nextLocale, nextSearch ? `?${nextSearch}` : "")
-
-    router.replace(nextUrl)
-    router.refresh()
-    setIsOpen(false)
-  }
+  const { changeLanguage } = useLanguageDropdownHandlers({ locale, pathname, router, searchParams, setIsOpen })
 
   return (
     <div className="relative" ref={dropdownContainerRef}>
@@ -73,19 +116,13 @@ export function LanguageDropdown() {
           isOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-[-8px] opacity-0 pointer-events-none",
         )}>
         <div className="flex flex-col gap-xs">
-          {languages.map(language => (
-            <button
-              key={language.code}
-              className={twMerge(
-                "site-picker-option machine-slot flex h-[38px] items-center justify-between gap-sm whitespace-nowrap rounded-[10px] border border-transparent px-sm text-sm text-secondary transition-colors duration-200 hover:border-cta/60 hover:brightness-125",
-                language.code === locale && "border-cta/70 brightness-125",
-              )}
-              onClick={() => changeLanguage(language.code)}
-              type="button">
-              <span>{t(language.code)}</span>
-              {language.code === locale ? <span className="h-[8px] w-[8px] shrink-0 rounded-full bg-cta" /> : null}
-            </button>
-          ))}
+          {languages.map(language => <LanguageOption
+            key={language.code}
+            isCurrent={language.code === locale}
+            label={t(language.code)}
+            locale={language.code}
+            onSelect={changeLanguage}
+          />)}
         </div>
       </div>
     </div>

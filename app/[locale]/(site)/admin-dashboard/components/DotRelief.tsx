@@ -1,6 +1,6 @@
-import { useId } from "react"
+import { memo, useId } from "react"
 
-function ReliefDots({ gradientId }: { gradientId: string }) {
+const ReliefDots = memo(function ReliefDots({ gradientId }: { gradientId: string }) {
   return <>{Array.from({ length: 34 * 35 }, (_, index) => {
     const col = index % 35
     const row = Math.floor(index / 35)
@@ -15,26 +15,26 @@ function ReliefDots({ gradientId }: { gradientId: string }) {
       <circle cx={attribute(x)} cy={attribute(y)} r={attribute(r)} fill={`url(#${gradientId})`} />
     </g>
   })}</>
-}
+})
 
-function ReliefGradient({ id }: { id: string }) {
+const ReliefGradient = memo(function ReliefGradient({ id }: { id: string }) {
   return <radialGradient id={id} cx="30%" cy="22%" r="78%">
     <stop offset="0" stopColor="var(--3d-dot-c-c2c7ca)" /><stop offset="0.24" stopColor="var(--3d-dot-c-72797d)" />
     <stop offset="0.62" stopColor="var(--3d-dot-c-383d41)" /><stop offset="1" stopColor="var(--3d-dot-c-141719)" />
   </radialGradient>
-}
+})
 
 /** A lit surface of small metal studs; changing relief creates a wave in the plate. */
-export function DotRelief({ className = "block w-full" }: { className?: string }) {
+export const DotRelief = memo(function DotRelief({ className = "block w-full" }: { className?: string }) {
   const id = useId().replaceAll(":", "")
   return <svg className={className} viewBox="0 0 300 290" aria-hidden="true" focusable="false">
     <defs><ReliefGradient id={id} /></defs>
     <ReliefDots gradientId={id} />
   </svg>
-}
+})
 
 /** Repeats the same native-size relief tile across a viewport without scaling its studs. */
-export function DotReliefBackground({ className = "h-full w-full", scale = 1.2 }: { className?: string; scale?: number }) {
+export const DotReliefBackground = memo(function DotReliefBackground({ className = "h-full w-full", scale = 1.2 }: { className?: string; scale?: number }) {
   const id = useId().replaceAll(":", "")
   const dotsId = `${id}-dots`
   const patternId = `${id}-pattern`
@@ -46,4 +46,4 @@ export function DotReliefBackground({ className = "h-full w-full", scale = 1.2 }
     </defs>
     <rect width="100%" height="100%" fill={`url(#${patternId})`} />
   </svg>
-}
+})

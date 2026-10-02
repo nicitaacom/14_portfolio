@@ -1,6 +1,6 @@
 "use client"
 
-import { useTransition } from "react"
+import { memo, useCallback, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { useScopedI18n } from "@/locales/client"
 import type { TBookingRow } from "../types/TBookingRow"
@@ -8,12 +8,13 @@ import { useBookingsView } from "../hooks/useBookingsView"
 import { BookingItem } from "./BookingItem"
 import { adminUi, RefreshButton } from "./AdminUI"
 
-export function BookedAppointmentsSection({ bookings, loadError = false }: { bookings: TBookingRow[]; loadError?: boolean }) {
+export const BookedAppointmentsSection = memo(function BookedAppointmentsSection({ bookings, loadError = false }: { bookings: TBookingRow[]; loadError?: boolean }) {
   const t = useScopedI18n("adminConsole")
   const router = useRouter()
   const [refreshing, startRefresh] = useTransition()
   const { bookingsView, setBookingsView, upcomingBookings, pastBookings } = useBookingsView(bookings)
   const visible = bookingsView === "upcoming" ? upcomingBookings : pastBookings
+  const refreshBookings = useCallback(() => startRefresh(() => router.refresh()), [router, startRefresh])
 
   return (
     <div className={adminUi.stack}>
@@ -22,7 +23,7 @@ export function BookedAppointmentsSection({ bookings, loadError = false }: { boo
           <button className="px-sm" type="button" aria-pressed={bookingsView === "upcoming"} onClick={() => setBookingsView("upcoming")}>{t("upcoming")}</button>
           <button className="px-sm" type="button" aria-pressed={bookingsView === "past"} onClick={() => setBookingsView("past")}>{t("past")}</button>
         </div>
-        <RefreshButton pending={refreshing} onClick={() => startRefresh(() => router.refresh())} />
+        <RefreshButton pending={refreshing} onClick={refreshBookings} />
       </div>
       {loadError ? (
         <p className={adminUi.error} role="alert">{t("bookingsLoadFailed")}</p>
@@ -40,4 +41,4 @@ export function BookedAppointmentsSection({ bookings, loadError = false }: { boo
       )}
     </div>
   )
-}
+})

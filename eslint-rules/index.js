@@ -29,6 +29,8 @@ module.exports = {
     ...require("./zustand-require-method"),
     ...require("./zustand-state-setter-pairing"),
     ...require("./zustand-store-export-matches-filename"),
+    ...require("./prefer-memo-row-component"),
+    ...require("./temp-debug-memo-render-log"),
     // rules that only make sense against this repo's own data files and components
     ...require("./project-specific/require-const-project"),
     ...require("./project-specific/require-id-repos-order"),

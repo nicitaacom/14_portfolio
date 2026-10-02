@@ -1,18 +1,16 @@
-import moment, { MomentInput } from "moment"
-import { convertCurrentToTargetTimezone } from "./convertCurrentToTargetTimezone"
+import moment from "moment"
+
+import { formatInstantInZone } from "@/libs/appointmentSlots"
 import { useAppointmentStore } from "@/store/useAppointmentStore"
 
-/**
- *
- * @param MSK - is Europe/Moscow
- * @returns - formated date time based on state that choosed on ScheduleAppointment.tsx
- */
-export function formatedDateTimeFn(MSK?: boolean) {
-  const { selectedDate, selectedTime, selectedTimezone } = useAppointmentStore.getState()
-  const formattedDate = moment(selectedDate as MomentInput).format("DD.MM.YYYY")
-
-  const at = MSK ? convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow") : selectedTime
-  const timezone = MSK ? "Europe/Moscow" : selectedTimezone
-
-  return `${formattedDate} at ${at} ${timezone}\n`
+/** Format the selected or confirmed full instant without combining clocks from different dates. */
+export function formatedDateTimeFn(MSK = false, startsAtOverride?: string) {
+  const state = useAppointmentStore.getState()
+  const startsAt = startsAtOverride ?? (state.step === "step-3" ? state.confirmedBooking?.startsAt : state.selectedSlotStart)
+  if (!startsAt) return ""
+  const timezone = MSK ? "Europe/Moscow" : state.selectedTimezone
+  const display = formatInstantInZone(startsAt, timezone)
+  if (!display) return ""
+  const date = moment.utc(display.date, "YYYY-MM-DD", true).format("DD.MM.YYYY")
+  return `${date} at ${display.time} ${timezone}\n`
 }

@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useRef, useState, type KeyboardEvent } from "react"
-import { useRouter } from "next/navigation"
+import { memo, useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 import { FiActivity, FiArrowUpRight, FiBriefcase, FiCalendar, FiChevronRight, FiClock, FiExternalLink, FiLock } from "react-icons/fi"
@@ -17,6 +16,7 @@ import { ProjectClicksDashboardSection } from "./components/ProjectClicksDashboa
 import { UTMStatsDashboardSection } from "./components/UTMStatsDashboardSection"
 import { BookedAppointmentsSection } from "./components/BookedAppointmentsSection"
 import { CronSchedulesSection } from "./components/CronSchedulesSection"
+import { AppointmentAvailabilitySection } from "./components/AppointmentAvailabilitySection"
 import { DotRelief, DotReliefBackground } from "./components/DotRelief"
 import { FullDotReliefSvg } from "./components/FullDotReliefSvg"
 import { adminUi } from "./components/AdminUI"
@@ -36,6 +36,7 @@ const sections = [
   { id: "project-links", title: "projectLinks", description: "projectLinksDescription", icon: FiArrowUpRight },
   { id: "job-search", title: "jobSearch", description: "jobSearchDescription", icon: FiBriefcase },
   { id: "bookings", title: "bookings", description: "bookingsDescription", icon: FiCalendar },
+  { id: "availability", title: "availability", description: "availabilityDescription", icon: FiCalendar },
   { id: "schedules", title: "schedules", description: "schedulesDescription", icon: FiClock },
 ] as const
 
@@ -43,16 +44,99 @@ type Section = typeof sections[number]["id"]
 const STORAGE_KEY = "admin-dashboard-active-tab"
 const oldSections: Record<string, Section> = { utm: "traffic", projectClick: "project-links", jobSearch: "job-search" }
 const acceptedButtonSounds = [1, 3, 4, 5, 6, 7, 8, 9]
+type DashboardSection = typeof sections[number]
 
 function playConsoleButtonSound(accepted: boolean) {
   const number = accepted ? acceptedButtonSounds[Math.floor(Math.random() * acceptedButtonSounds.length)] : 2
   playAdminButtonSound(number, accepted ? 0.32 : 0.4)
 }
 
+function useAdminDashboardHandlers({
+  activeSectionRef,
+  buttons,
+  gate,
+  gateBusy,
+  gateSeam,
+  reducedMotionRef,
+  setActiveSection,
+}: {
+  activeSectionRef: { current: Section }
+  buttons: { current: (HTMLButtonElement | null)[] }
+  gate: { current: HTMLDivElement | null }
+  gateBusy: { current: boolean }
+  gateSeam: { current: HTMLDivElement | null }
+  reducedMotionRef: { current: boolean | null }
+  setActiveSection: (section: Section) => void
+}) {
+  const activateSection = useCallback((next: Section) => {
+    if (next === activeSectionRef.current || gateBusy.current) return
+    playConsoleButtonSound(true)
+    const gateElement = gate.current
+    const seamElement = gateSeam.current
+    if (!gateElement || reducedMotionRef.current) {
+      setActiveSection(next)
+      return
+    }
+    gateBusy.current = true
+    gsap.killTweensOf([gateElement, seamElement])
+    const timeline = gsap.timeline({ onComplete: () => { gateBusy.current = false } })
+    timeline.set(gateElement, { opacity: 1, scaleY: 0, transformOrigin: "top center", filter: "brightness(0.72)" })
+      .set(seamElement, { opacity: 0, scaleX: 0, transformOrigin: "center" })
+      .to(seamElement, { opacity: 1, scaleX: 1, duration: 0.055, ease: "power4.out" })
+      .to(gateElement, { scaleY: 1, filter: "brightness(1.18)", duration: 0.22, ease: "power4.in" }, 0)
+      .to(seamElement, { opacity: 0.5, duration: 0.07, ease: "none" })
+      .to(gateElement, { filter: "brightness(0.9)", duration: 0.08, ease: "none" })
+      .call(() => setActiveSection(next))
+      .to(gateElement, { scaleY: 0, filter: "brightness(1)", duration: 0.38, delay: 0.2, ease: "power3.out" })
+      .to(seamElement, { opacity: 0, scaleX: 0.25, duration: 0.18, ease: "power2.in" }, "<")
+  }, [activeSectionRef, gate, gateBusy, gateSeam, reducedMotionRef, setActiveSection])
+
+  const navigateTabs = useCallback((event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next: number | undefined
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") next = (index + 1) % sections.length
+    if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = (index + sections.length - 1) % sections.length
+    if (event.key === "Home") next = 0
+    if (event.key === "End") next = sections.length - 1
+    if (next === undefined) return
+    event.preventDefault()
+    activateSection(sections[next].id)
+    buttons.current[next]?.focus()
+  }, [activateSection, buttons])
+
+  return { activateSection, navigateTabs }
+}
+
+const DashboardSectionTab = memo(function DashboardSectionTab({
+  buttons,
+  index,
+  label,
+  onActivate,
+  onNavigate,
+  section,
+  selected,
+}: {
+  buttons: { current: (HTMLButtonElement | null)[] }
+  index: number
+  label: string
+  onActivate: (section: Section) => void
+  onNavigate: (event: KeyboardEvent<HTMLButtonElement>, index: number) => void
+  section: DashboardSection
+  selected: boolean
+}) {
+  const setButtonRef = useCallback((node: HTMLButtonElement | null) => { buttons.current[index] = node }, [buttons, index])
+  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLButtonElement>) => onNavigate(event, index), [index, onNavigate])
+  const handleClick = useCallback(() => onActivate(section.id), [onActivate, section.id])
+
+  return <button type="button" ref={setButtonRef}
+    role="tab" id={`admin-tab-${section.id}`} aria-controls={`admin-panel-${section.id}`} aria-selected={selected}
+    tabIndex={selected ? 0 : -1} onKeyDown={handleKeyDown} onClick={handleClick} className="flex min-h-10 w-auto items-center gap-xs rounded-md border border-transparent px-sm py-xs text-left text-[11px] text-[var(--3d-dot-c-a6adb3)] hover:bg-[var(--3d-dot-c-292e32)] hover:text-[var(--3d-dot-c-eef0f2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--3d-dot-c-e8edf1)] laptop:min-h-[45px] laptop:w-full laptop:gap-sm laptop:px-sm laptop:py-sm laptop:text-[13px] aria-[selected=true]:border-[var(--3d-dot-c-363c41)] aria-[selected=true]:bg-[linear-gradient(var(--3d-dot-c-141719),var(--3d-dot-c-1a1e21))] aria-[selected=true]:text-[var(--3d-dot-c-f7f8f9)] aria-[selected=true]:shadow-[inset_0_2px_4px_var(--3d-dot-c-090b0d),0_1px_0_var(--3d-dot-c-434a50)]">
+    <section.icon size={17} aria-hidden="true" /><span>{label}</span><i className="ml-xs h-[5px] w-[5px] rounded-full bg-[var(--3d-dot-c-f3f5f6)] opacity-0 shadow-[0_0_7px_var(--3d-dot-c-ecf4ff60)] aria-[selected=true]:opacity-100 laptop:ml-auto" aria-hidden="true" />
+  </button>
+})
+
 export function AdminDashboardClient({ bookings, cronSchedules, userId, bookingsLoadError = false, cronSchedulesLoadError = false, isGMLive = false }: AdminDashboardClientProps) {
   const t = useScopedI18n("adminConsole")
   const locale = useCurrentLocale()
-  const router = useRouter()
   const [activeSection, setActiveSection] = useState<Section>("traffic")
   const [restored, setRestored] = useState(false)
   const [live, setLive] = useState(isGMLive)
@@ -61,8 +145,12 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId, bookings
   const buttons = useRef<(HTMLButtonElement | null)[]>([])
   const gate = useRef<HTMLDivElement>(null)
   const gateSeam = useRef<HTMLDivElement>(null)
-  const [gateBusy, setGateBusy] = useState(false)
+  const gateBusy = useRef(false)
   const reducedMotion = useReducedMotion()
+  const activeSectionRef = useRef(activeSection)
+  const reducedMotionRef = useRef(reducedMotion)
+  activeSectionRef.current = activeSection
+  reducedMotionRef.current = reducedMotion
 
   useEffect(() => {
     const html = document.documentElement
@@ -93,49 +181,24 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId, bookings
   const current = sections.find(section => section.id === activeSection) ?? sections[0]
   const currentIndex = sections.indexOf(current)
 
-  function activateSection(next: Section) {
-    if (next === activeSection || gateBusy) return
-    playConsoleButtonSound(true)
-    const gateElement = gate.current
-    const seamElement = gateSeam.current
-    if (!gateElement || reducedMotion) {
-      setActiveSection(next)
-      return
-    }
-    setGateBusy(true)
-    gsap.killTweensOf([gateElement, seamElement])
-    const timeline = gsap.timeline({ onComplete: () => setGateBusy(false) })
-    timeline.set(gateElement, { opacity: 1, scaleY: 0, transformOrigin: "top center", filter: "brightness(0.72)" })
-      .set(seamElement, { opacity: 0, scaleX: 0, transformOrigin: "center" })
-      .to(seamElement, { opacity: 1, scaleX: 1, duration: 0.055, ease: "power4.out" })
-      .to(gateElement, { scaleY: 1, filter: "brightness(1.18)", duration: 0.22, ease: "power4.in" }, 0)
-      .to(seamElement, { opacity: 0.5, duration: 0.07, ease: "none" })
-      .to(gateElement, { filter: "brightness(0.9)", duration: 0.08, ease: "none" })
-      .call(() => setActiveSection(next))
-      .to(gateElement, { scaleY: 0, filter: "brightness(1)", duration: 0.38, delay: 0.2, ease: "power3.out" })
-      .to(seamElement, { opacity: 0, scaleX: 0.25, duration: 0.18, ease: "power2.in" }, "<")
-  }
+  const { activateSection, navigateTabs } = useAdminDashboardHandlers({
+    activeSectionRef,
+    buttons,
+    gate,
+    gateBusy,
+    gateSeam,
+    reducedMotionRef,
+    setActiveSection,
+  })
 
-  function navigateTabs(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    let next: number | undefined
-    if (event.key === "ArrowDown" || event.key === "ArrowRight") next = (index + 1) % sections.length
-    if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = (index + sections.length - 1) % sections.length
-    if (event.key === "Home") next = 0
-    if (event.key === "End") next = sections.length - 1
-    if (next === undefined) return
-    event.preventDefault()
-    activateSection(sections[next].id)
-    buttons.current[next]?.focus()
-  }
-
-  async function toggleLive() {
+  const toggleLive = useCallback(async () => {
     if (livePending) return
     setLivePending(true)
     setLiveError(false)
-    try { await toggleIsGMAction(); setLive(previous => !previous); router.refresh() }
+    try { await toggleIsGMAction(); setLive(previous => !previous) }
     catch { playConsoleButtonSound(false); setLiveError(true) }
     finally { setLivePending(false) }
-  }
+  }, [livePending])
 
   return <div className="3d-dot relative isolate min-h-dvh overflow-hidden text-[var(--3d-dot-c-eef0f2)]">
     <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.48]" aria-hidden="true"><FullDotReliefSvg /></div>
@@ -145,11 +208,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId, bookings
       <div className="flex items-center gap-sm px-0 laptop:px-sm"><span className="grid grid-cols-3 gap-xs -rotate-[5deg]" aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <i className="h-[5px] w-[5px] rounded-full bg-[linear-gradient(135deg,var(--3d-dot-c-f1f5f7),var(--3d-dot-c-68727a-52),var(--3d-dot-c-30373c))] shadow-[1px_2px_2px_var(--3d-dot-c-090b0d)]" key={i} />)}</span><span className="text-[13px] font-medium tracking-[-.3px] laptop:text-[15px]">{t("title")}<small className="ml-sm text-[10px] tracking-[.7px] text-[var(--3d-dot-c-929aa2)] laptop:ml-0 laptop:mt-xs laptop:block">nicitaacom</small></span></div>
       <p className="mt-md hidden px-sm font-typewriter text-[10px] uppercase tracking-[1.7px] text-[var(--3d-dot-c-a1a7ae)] laptop:mt-lg laptop:mb-sm laptop:block">{t("workspace")}</p>
       <div className="mt-sm flex flex-wrap gap-xs laptop:mt-0 laptop:flex-col laptop:gap-xs" role="tablist" aria-label={t("navigation")}>
-        {sections.map((section, index) => <button type="button" key={section.id} ref={node => { buttons.current[index] = node }}
-          role="tab" id={`admin-tab-${section.id}`} aria-controls={`admin-panel-${section.id}`} aria-selected={activeSection === section.id}
-          tabIndex={activeSection === section.id ? 0 : -1} onKeyDown={event => navigateTabs(event, index)} onClick={() => activateSection(section.id)} className="flex min-h-10 w-auto items-center gap-xs rounded-md border border-transparent px-sm py-xs text-left text-[11px] text-[var(--3d-dot-c-a6adb3)] hover:bg-[var(--3d-dot-c-292e32)] hover:text-[var(--3d-dot-c-eef0f2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--3d-dot-c-e8edf1)] laptop:min-h-[45px] laptop:w-full laptop:gap-sm laptop:px-sm laptop:py-sm laptop:text-[13px] aria-[selected=true]:border-[var(--3d-dot-c-363c41)] aria-[selected=true]:bg-[linear-gradient(var(--3d-dot-c-141719),var(--3d-dot-c-1a1e21))] aria-[selected=true]:text-[var(--3d-dot-c-f7f8f9)] aria-[selected=true]:shadow-[inset_0_2px_4px_var(--3d-dot-c-090b0d),0_1px_0_var(--3d-dot-c-434a50)]">
-          <section.icon size={17} aria-hidden="true" /><span>{t(section.title)}</span><i className="ml-xs h-[5px] w-[5px] rounded-full bg-[var(--3d-dot-c-f3f5f6)] opacity-0 shadow-[0_0_7px_var(--3d-dot-c-ecf4ff60)] aria-[selected=true]:opacity-100 laptop:ml-auto" aria-hidden="true" />
-        </button>)}
+        {sections.map((section, index) => <DashboardSectionTab key={section.id} buttons={buttons} index={index} label={t(section.title)} onActivate={activateSection} onNavigate={navigateTabs} section={section} selected={activeSection === section.id} />)}
       </div>
       <div className="hidden min-h-[60px] overflow-hidden opacity-80 laptop:-mx-md laptop:-mb-xs laptop:mt-auto laptop:block"><DotRelief /></div>
       <div className="absolute right-4 top-5 grid gap-sm text-[10px] laptop:static laptop:border-t laptop:border-[var(--3d-dot-c-363b40)] laptop:px-sm laptop:pt-sm laptop:text-[11px]"><span className="hidden items-center gap-xs text-[var(--3d-dot-c-abb4bb)] laptop:flex"><FiLock size={12} aria-hidden="true" />{t("authenticated")}</span><Link className="flex items-center justify-between gap-xs text-[var(--3d-dot-c-d1d7db)] hover:text-white" href={localizePath("/", locale)}>{t("backToSite")}<FiExternalLink size={13} aria-hidden="true" /></Link></div>
@@ -175,6 +234,7 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId, bookings
             {activeSection === "project-links" && <ProjectClicksDashboardSection />}
             {activeSection === "job-search" && <JobSearchDashboardSection />}
             {activeSection === "bookings" && <BookedAppointmentsSection bookings={bookings} loadError={bookingsLoadError} />}
+            {activeSection === "availability" && <AppointmentAvailabilitySection />}
             {activeSection === "schedules" && <CronSchedulesSection cronSchedules={cronSchedules} loadError={cronSchedulesLoadError} />}
           </motion.div></AnimatePresence> : <div className={`${adminUi.skeleton} min-h-[330px]`} role="status" aria-label={t("refreshing")} />}</div>
         </div>
