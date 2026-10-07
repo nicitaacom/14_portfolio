@@ -14,6 +14,8 @@ import { NewYearModalPullClose } from "@/components/NewYear/NewYearModalPullClos
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { useCloseOnEsc } from "@/hooks/useCloseOnEsc"
 
+let openModalCount = 0
+
 interface ModalContainerProps {
   isOpen: boolean
   onClose: () => void
@@ -44,15 +46,16 @@ export function ModalContainer({
   useEffect(() => {
     setShowModal(isOpen)
 
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-      document.body.classList.add("modal-open")
-    } else {
-      document.body.style.overflow = ""
-      document.body.classList.remove("modal-open")
-    }
+    if (!isOpen) return
+
+    openModalCount += 1
+    document.body.style.overflow = "hidden"
+    document.body.classList.add("modal-open")
 
     return () => {
+      openModalCount -= 1
+      if (openModalCount > 0) return
+
       document.body.style.overflow = ""
       document.body.classList.remove("modal-open")
     }
@@ -61,11 +64,9 @@ export function ModalContainer({
   /* onClose - close modal - show navbar - show scrollbar */
   function closeModal() {
     onClose()
-    document.body.style.overflow = ""
-    document.body.classList.remove("modal-open")
   }
 
-  useCloseOnEsc(closeModal)
+  useCloseOnEsc(closeModal, isOpen)
 
   /* for e.stopPropagation when mousedown on modal and mouseup on modalBg */
   const modalBgHandler = useSwipeable({

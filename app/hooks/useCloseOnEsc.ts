@@ -1,7 +1,9 @@
 import { useEffect } from "react"
 
-export const useCloseOnEsc = (closeFn: () => void) => {
+export const useCloseOnEsc = (closeFn: () => void, isEnabled = true) => {
   useEffect(() => {
+    if (!isEnabled) return
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         closeFn()
@@ -17,6 +19,5 @@ export const useCloseOnEsc = (closeFn: () => void) => {
         document.removeEventListener("keydown", handleKeyDown)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [closeFn, isEnabled])
 }

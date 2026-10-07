@@ -230,7 +230,10 @@ Once an id is resolved, `syncDeviceIdLayers` re-points every layer at it:
 
 Then one row per deviceId per day: `utm_stats` is queried for a row with this `user_id` created today, and the
 insert is skipped if one exists. Missing UTM params default to `source: "organic"`, `medium: "direct"`.
-Finally `UTMTracker` strips the query string with `history.replaceState` so a refresh does not re-attribute.
+Finally `UTMTracker` removes only `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, and `utm_content`
+with `history.replaceState` so a refresh does not re-attribute. It reads the current URL after tracking
+finishes, preserving modal query parameters, other parameters, and the hash even if the visitor opened
+a modal while the tracking request was pending.
 
 ### Decisions made AGAINST
 

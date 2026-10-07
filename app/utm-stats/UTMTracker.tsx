@@ -5,6 +5,8 @@ import { computeFingerprint } from "./computeFingerprint"
 import { useDeviceIdStore } from "@/store/useDeviceIdStore"
 import { trackVisitAction } from "./actions/trackVisitAction"
 
+const UTM_PARAM_NAMES = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+
 export function UTMTracker() {
   useEffect(() => {
     const { deviceId, setDeviceId } = useDeviceIdStore.getState()
@@ -36,8 +38,9 @@ export function UTMTracker() {
       // Only once the visit is recorded - the utm params in the URL are the attribution, so
       // stripping them after a failed call would lose it for good. Left in place they get one more
       // chance on the next render.
-      const url = window.location.origin + window.location.pathname
-      window.history.replaceState({}, "", url)
+      const url = new URL(window.location.href)
+      for (const paramName of UTM_PARAM_NAMES) url.searchParams.delete(paramName)
+      window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`)
     }
 
     void trackVisit().catch(error => console.error("Error tracking UTM visit:", error))

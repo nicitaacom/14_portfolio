@@ -14,12 +14,11 @@ import {
   ProjectNexgem,
   ProjectRizAdminDashboard,
 } from "./Projects"
-import { useModalsStore } from "@/store/useModalsStore"
+import { openModalOnCurrentPage } from "@/utils/modalQuery"
 import { useScopedI18n } from "@/locales/client"
 
 export function ProjectsSwitcher() {
   const [projectTab, setProjectTab] = useState<"work" | "projects">("work")
-  const { openModal } = useModalsStore()
   const t = useScopedI18n("common")
   const homeT = useScopedI18n("home")
 
@@ -44,14 +43,14 @@ export function ProjectsSwitcher() {
 
       {projectTab === "work" ? (
         <>
-          <ProjectNDA openModal={() => openModal("ndaMoreInfo")} />
-          <ProjectNexgem openModal={() => openModal("nexgemMoreInfo")} />
-          <ProjectRizAdminDashboard openModal={() => openModal("rizAdminDashboard")} />
+          <ProjectNDA openModal={() => openModalOnCurrentPage("ndaMoreInfo")} />
+          <ProjectNexgem openModal={() => openModalOnCurrentPage("nexgemMoreInfo")} />
+          <ProjectRizAdminDashboard openModal={() => openModalOnCurrentPage("rizAdminDashboard")} />
         </>
       ) : projectTab === "projects" ? (
         <>
-          <Project26 openModal={() => openModal("26MoreInfo")} />
-          <Project23 openModal={() => openModal("23MoreInfo")} />
+          <Project26 openModal={() => openModalOnCurrentPage("26MoreInfo")} />
+          <Project23 openModal={() => openModalOnCurrentPage("23MoreInfo")} />
           <div className="flex flex-col items-center gap-y-sm py-md">
             <div className="grid w-full grid-cols-[1fr_auto_1fr] items-center gap-x-md">
               <div className="h-0 border-t border-secondary/60" />
@@ -64,10 +63,10 @@ export function ProjectsSwitcher() {
               {homeT("notMaintainedText")}
             </p>
           </div>
-          <Project22 openModal={() => openModal("22MoreInfo")} />
-          <Project24 openModal={() => openModal("24MoreInfo")} />
-          <Project16 openModal={() => openModal("16MoreInfo")} />
-          <Project15 openModal={() => openModal("15MoreInfo")} />
+          <Project22 openModal={() => openModalOnCurrentPage("22MoreInfo")} />
+          <Project24 openModal={() => openModalOnCurrentPage("24MoreInfo")} />
+          <Project16 openModal={() => openModalOnCurrentPage("16MoreInfo")} />
+          <Project15 openModal={() => openModalOnCurrentPage("15MoreInfo")} />
         </>
       ) : null}
     </section>

@@ -1,6 +1,7 @@
 "use client"
 
 import { memo, ReactNode, useCallback, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Button } from "../Button"
 import { ModalContainer } from "./ModalContainer"
 import { CollaborationIcon } from "../CollaborationIcon"
@@ -13,6 +14,7 @@ import { NewYearModalStillLife } from "@/components/NewYear/NewYearModalStillLif
 import { NewYearSnowParticleField } from "@/components/NewYear/NewYearSnowParticleField"
 import { useSiteTheme } from "@/hooks/useSiteTheme"
 import { resolveNewYearGreetingImage } from "@/utils/resolveNewYearGreetingImage"
+import { closeModalOnCurrentPage, ProjectModalQuery } from "@/utils/modalQuery"
 
 // section name -> (achievement description -> optional proof link)
 export type GroupedAchievements = Record<string, Record<string, string | undefined>>
@@ -32,8 +34,7 @@ function isGroupedAchievements(description: unknown): description is GroupedAchi
 }
 
 interface ModalInfoProps {
-  isOpen: boolean
-  onClose: () => void
+  modalQuery: ProjectModalQuery
   label: string
   collaborators: Collaborator[]
   taskLabel?: string
@@ -177,8 +178,7 @@ function DescriptionContent({ description }: { description: ReactNode | GroupedA
 }
 
 export function ModalMoreInfo({
-  isOpen,
-  onClose,
+  modalQuery,
   label,
   taskLabel,
   stack,
@@ -189,6 +189,9 @@ export function ModalMoreInfo({
   notice,
   contributionTitle,
 }: ModalInfoProps) {
+  const searchParams = useSearchParams()
+  const isOpen = searchParams.getAll("modal").includes(modalQuery)
+  const closeModal = useCallback(() => closeModalOnCurrentPage(modalQuery), [modalQuery])
   const t = useScopedI18n("projectModal")
   const commonT = useScopedI18n("common")
   const theme = useSiteTheme()
@@ -204,7 +207,7 @@ export function ModalMoreInfo({
     <ModalContainer
       className="project-more-info-modal flex max-h-[calc(100dvh-1rem)] max-w-[calc(100vw-1rem)] flex-col tablet:max-h-[90vh] tablet:max-w-[900px] laptop:max-w-[1180px] desktop:max-w-[1280px]"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={closeModal}
       title={badge ?? label}
       titleHref={siteUrl}>
       <NewYearModalStillLife />

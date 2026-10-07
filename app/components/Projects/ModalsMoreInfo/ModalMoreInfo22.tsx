@@ -3,19 +3,16 @@
 import { ModalMoreInfo } from "@/components/Modals/ModalMoreInfo"
 import { trackedProjectsMap } from "@/data/repos"
 import { useScopedI18n } from "@/locales/client"
-import { useModalsStore } from "@/store/useModalsStore"
 import { project22Achievements } from "@/data/project22Achievements"
 
 export default function ModalMoreInfo22() {
   const project = trackedProjectsMap["project-22-aer"]
 
-  const { isOpen, closeModal } = useModalsStore()
   const t = useScopedI18n("projectModal")
 
   return (
     <ModalMoreInfo
-      isOpen={isOpen["22MoreInfo"]}
-      onClose={() => closeModal("22MoreInfo")}
+      modalQuery="22MoreInfo"
       label="22_aer"
       siteUrl="https://22-aer-nicitaa.vercel.app/"
       taskLabel={t("project22Task")}
