@@ -18,12 +18,12 @@ export const CronSchedulesSection = memo(function CronSchedulesSection({ cronSch
   return (
     <div className={adminUi.stack}>
       <div className={adminUi.toolbar}>
-        <p className={adminUi.muted}>{t("cronSchedulesSubtitle")}</p>
+        <p className={`${adminUi.muted} min-w-0 flex-1 text-[11px] tablet:text-[12px]`}>{t("cronSchedulesSubtitle")}</p>
         <RefreshButton pending={refreshing} onClick={refreshSchedules} />
       </div>
       {loadError ? <p className={adminUi.error} role="alert">{t("schedulesLoadFailed")}</p> : (
         <>
-          <dl className={`${adminUi.metrics} laptop:grid-cols-3`}>
+          <dl className={`${adminUi.metrics} laptop:!grid-cols-3`}>
             {[["cronJobs", cronSchedules.length], ["activeJobs", activeJobs], ["failedLastRun", failedLastRun]].map(([label, value]) => <div key={String(label)}><dt className="font-typewriter text-[10px] uppercase tracking-[1px] text-[var(--3d-dot-c-a8b1b9)]">{t(label as "cronJobs")}</dt><dd className="mt-xs text-[25px] leading-tight text-[var(--3d-dot-c-eff3f6)] tablet:text-[31px]">{value}</dd></div>)}
           </dl>
           <div className={adminUi.stack} aria-busy={refreshing}>
