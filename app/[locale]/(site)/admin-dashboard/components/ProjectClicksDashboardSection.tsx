@@ -82,7 +82,7 @@ export const ProjectClicksDashboardSection = memo(function ProjectClicksDashboar
   const peakDate = peak && peak.total_clicks > 0 ? date.format(new Date(peak.bucket_key.length === 7 ? `${peak.bucket_key}-01T00:00:00Z` : `${peak.bucket_key}T00:00:00Z`)) : "—"
   const { selectRankedProject } = useProjectClicksDashboardHandlers(setSelectedProjectSlug)
 
-  return <div className={`${adminUi.stack} h-full`}>
+  return <div className={`${adminUi.stack} laptop:h-full`}>
     <div>
       <div className={adminUi.toolbar}>
         <div className="flex w-full flex-wrap items-center gap-sm tablet:w-auto"><span className={adminUi.eyebrow}>{t("period")}</span><div className={adminUi.segmented} role="group" aria-label={t("period")}>
@@ -94,17 +94,17 @@ export const ProjectClicksDashboardSection = memo(function ProjectClicksDashboar
       <PeriodLabel period={period} />
     </div>
     {overviewErrorMessage && !isOverviewSkeleton && <LoadError />}
-    {isOverviewSkeleton && !period ? <AnalyticsSkeleton /> : !overviewErrorMessage && <div className="relative isolate min-h-0 flex-1 overflow-hidden">
+    {isOverviewSkeleton && !period ? <AnalyticsSkeleton /> : !overviewErrorMessage && <div className="relative isolate laptop:min-h-0 laptop:flex-1 laptop:overflow-hidden">
       <div className="pointer-events-none absolute inset-0 z-0 bg-[var(--3d-dot-c-202528)]" aria-hidden="true"><FullDotReliefSvg /></div>
-      <div className="relative z-10 flex h-full min-w-0 flex-col gap-sm">
-      <dl className={adminUi.metrics}>
+      <div className="relative z-10 flex min-w-0 flex-col gap-sm laptop:h-full">
+      <dl className={`${adminUi.metrics} shrink-0`}>
         <Metric label={t("linkClicks")} value={number.format(total)} detail={t("allProjects")} />
         <Metric label={t("projectsWithClicks")} value={number.format(knownRows.filter(row => row.total > 0).length)} detail={`${number.format(trackedProjects.length)} · ${t("allProjects")}`} />
         <Metric label={t("topProject")} value={<span className="block text-[16px] leading-6 tracking-[-.25px]">{leaders[0]?.name ?? "—"}</span>} detail={leaders.length > 1 ? t("tiedLeaders", { count: leaders.length }) : leaders.length ? `${number.format(leaders[0].total)} ${t("clicks")}` : t("noClicks")} />
         <Metric label={t("topDestination")} value={<span className="block text-[16px] leading-6 tracking-[-.25px]">{destinationLeaders[0]?.name ?? "—"}</span>} detail={destinationLeaders.length > 1 ? t("tiedLeaders", { count: leaders.length }) : destinationLeaders.length ? `${number.format(destinationLeaders[0].total)} ${t("clicks")}` : t("noClicks")} />
       </dl>
       <div className="grid min-h-0 flex-1 items-start gap-sm laptop:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)] laptop:items-stretch">
-        <section className={`${adminUi.panel} laptop:h-full laptop:!overflow-y-auto`} aria-busy={isOverviewSkeleton}>
+        <section className={`${adminUi.panel} admin-dashboard-scroller laptop:h-full laptop:!overflow-y-auto`} aria-busy={isOverviewSkeleton}>
           <div className={adminUi.panelHeader}><h2 className={adminUi.heading}>{t("projectActivity")}</h2><span className={adminUi.badge}>{timelineMode === "monthly" ? t("last30Days") : t("last12Months")}</span></div>
           <div className="flex items-start justify-between gap-md">
             <div className={`${adminUi.field} min-w-0 max-w-[300px] flex-1`}><span>{t("selectProject")}</span><ProjectsDropdown projects={trackedProjects} selectedProjectSlug={selectedProjectSlug} onSelect={setSelectedProjectSlug} /></div>
@@ -121,7 +121,7 @@ export const ProjectClicksDashboardSection = memo(function ProjectClicksDashboar
             {destinations.map(item => <span className="rounded border border-[var(--3d-dot-c-3e4850)] bg-[var(--3d-dot-c-1b2126)] px-sm py-xs text-[10px] text-[var(--3d-dot-c-9facb7)]" key={item.key}>{item.name}<strong className="ml-sm font-medium text-[var(--3d-dot-c-e2eaf0)]">{number.format(selectedRow?.[item.key] ?? 0)}</strong></span>)}
           </div></div>
         </section>
-        <section className={`${adminUi.panel} laptop:h-full laptop:!overflow-y-auto`} aria-busy={isOverviewSkeleton}>
+        <section className={`${adminUi.panel} admin-dashboard-scroller laptop:h-full laptop:!overflow-y-auto`} aria-busy={isOverviewSkeleton}>
           <div className={adminUi.panelHeader}><h2 className={adminUi.heading}>{t("projectRanking")}</h2><span className={adminUi.count}>{trackedProjects.length}</span></div>
           <p className={`${adminUi.muted} text-[12px]`}>{t("rankingHelp")}</p>
           <div className="mt-sm grid gap-xs">{knownRows.map((project, index) => <ProjectRankingItem key={project.slug} index={index} isSelected={selectedProjectSlug === project.slug} maxClicks={knownRows[0]?.total ?? 0} number={number} onSelect={selectRankedProject} percent={percent} project={project} total={total} />)}</div>

@@ -1,5 +1,7 @@
 import { memo, useId } from "react"
 
+// DECIDED AGAINST: optimizing it in order to keep slow enteprice SAP UI
+
 const ReliefDots = memo(function ReliefDots({ gradientId }: { gradientId: string }) {
   return <>{Array.from({ length: 34 * 35 }, (_, index) => {
     const col = index % 35

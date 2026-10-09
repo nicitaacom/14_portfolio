@@ -75,14 +75,14 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
     disabled={disabled}
     onClick={handleClick}
     style={{ cursor: disabled ? waiting ? "wait" : "not-allowed" : undefined }}
-    className={`${adminUi.button} ${cardStyle} min-h-[56px] flex-col !items-start !justify-center !px-sm !opacity-100 text-left transition-[filter,transform] hover:brightness-110 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-[#eeeeee] disabled:hover:brightness-100`}>
-    <span className="font-typewriter text-[12px] text-[#f0f0f0]">{time}<small className="ml-xs text-[9px] text-[#c0c0c0]">{date}</small></span>
-    <span className="mt-xs flex flex-wrap items-center gap-xs">
-      <span className={`inline-flex items-center gap-xs rounded-[2px] border px-xs py-0 font-mono text-[9px] font-bold uppercase tracking-[1px] tablet:text-[10px] ${badgeStyle}`}>
+    className={`${adminUi.button} ${cardStyle} admin-availability-slot flex-col !items-start !justify-center !px-xs !opacity-100 text-left transition-[filter,transform] hover:brightness-110 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-[#eeeeee] disabled:hover:brightness-100`}>
+    <span className="font-typewriter text-[12px] leading-tight text-[#f0f0f0]">{time}<small className="ml-xs text-[9px] text-[#c0c0c0]">{date}</small></span>
+    <span className="admin-availability-statuses flex flex-wrap items-center">
+      <span className={`admin-availability-badge inline-flex items-center rounded-[2px] border font-mono text-[9px] font-bold uppercase leading-tight tracking-[.5px] ${badgeStyle}`}>
         <span aria-hidden="true">{occupancy === "free" ? "○" : occupancy === "blocked" ? "×" : "●"}</span>
         {occupancyText}
       </span>
-      {eligibility !== "eligible" && <span className="inline-flex items-center gap-xs rounded-[2px] border border-[#777777] bg-[#292929] px-xs py-0 font-mono text-[9px] uppercase tracking-[1px] text-[#c8c8c8] shadow-[inset_0_1px_2px_#111111] tablet:text-[10px]">
+      {eligibility !== "eligible" && <span className="admin-availability-badge inline-flex items-center rounded-[2px] border border-[#777777] bg-[#292929] font-mono text-[9px] uppercase leading-tight tracking-[.5px] text-[#c8c8c8] shadow-[inset_0_1px_2px_#111111]">
         <span aria-hidden="true">{eligibility === "past" ? "↶" : "◷"}</span>
         {eligibilityText}
       </span>}
@@ -167,7 +167,11 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
     }
   }, [refresh])
 
-  useEffect(() => { setSelected([]) }, [date, timezone])
+  useEffect(() => {
+    setSelected([])
+    setRangeStart("")
+    setRangeEnd("")
+  }, [date, timezone])
 
   const byInstant = useMemo(() => new Map(slots.map(slot => [slot.startsAt, slot])), [slots])
   const selectedSet = useMemo(() => new Set(selected), [selected])
@@ -180,13 +184,13 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
     const values = new Map<string, string>()
     for (const slot of slots) {
       const label = formatInstantInZone(slot.startsAt, timezone)
-      if (label) values.set(slot.startsAt, `${label.date} · ${label.time}`)
+      if (label) values.set(slot.startsAt, label.date === date ? label.time : `${label.date} · ${label.time}`)
       const endInstant = new Date(Date.parse(slot.startsAt) + 30 * 60 * 1000).toISOString()
       const endLabel = formatInstantInZone(endInstant, timezone)
-      if (endLabel) values.set(endInstant, `${endLabel.date} · ${endLabel.time}`)
+      if (endLabel) values.set(endInstant, endLabel.date === date ? endLabel.time : `${endLabel.date} · ${endLabel.time}`)
     }
     return [...values].sort(([left], [right]) => Date.parse(left) - Date.parse(right))
-  }, [slots, timezone])
+  }, [date, slots, timezone])
   const rangePreview = useMemo(() => {
     const start = Date.parse(rangeStart)
     const end = Date.parse(rangeEnd)
@@ -253,32 +257,35 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
   }
 
   const zoneChoices = [...new Set(["Europe/Moscow", localTimezone])]
+  const today = moment().tz(timezone).format("YYYY-MM-DD")
+  const tomorrow = moment().tz(timezone).add(1, "day").format("YYYY-MM-DD")
 
-  return <div className="h-full min-h-0 overflow-y-auto pr-xs pb-md" aria-busy={loading || mutating}>
+  return <div className="admin-availability" aria-busy={loading || mutating}>
     <div className={adminUi.stack}>
-      <section className={adminUi.panel}>
-        <header className={adminUi.panelHeader}>
-          <div><h2 className={adminUi.heading}>{t("availability")}</h2><p className={`${adminUi.muted} mt-xs text-[11px]`}>{t("availabilityDescription")}</p></div>
-          <RefreshButton pending={loading || mutating} onClick={refresh} />
-        </header>
-        <div className="grid grid-cols-2 items-end gap-xs rounded-[4px] border border-[#4c4c4c] bg-[radial-gradient(circle_at_2px_2px,_#343434_0.4px,_#222222_1.1px,_transparent_1.5px),linear-gradient(145deg,_#252525,_#1e1e1e)] bg-[length:8px_8px,_100%_100%] p-xs shadow-[inset_0_1px_0_#55555555,inset_0_-1px_0_#111111] min-[520px]:flex min-[520px]:flex-wrap">
-          <button type="button" className={`${adminUi.button} min-h-[42px] min-[520px]:w-[104px]`} disabled={mutating} onClick={() => chooseTodayOrTomorrow(0)}>{t("today")}</button>
-          <button type="button" className={`${adminUi.button} min-h-[42px] min-[520px]:w-[104px]`} disabled={mutating} onClick={() => chooseTodayOrTomorrow(1)}>{t("tomorrow")}</button>
-          <label className={`${adminUi.field} col-span-2 min-w-0 min-[520px]:w-[280px]`}><span>{t("bookingDate")}</span><input className={adminUi.input} type="date" value={date} onChange={event => changeDate(event.target.value)} /></label>
-          <div className={`${adminUi.segmented} col-span-2 !gap-0 w-fit`} role="group" aria-label={t("adminTimeZone")}>
-            {zoneChoices.map((zone, index) => <button key={`${zone}-${index}`} type="button" aria-pressed={timezone === zone} onClick={() => { setSelected([]); setTimezone(zone) }}><span className="block">{index === 0 ? "MSK" : "Local"}</span><small className="block px-xs text-[9px]">{zone}</small></button>)}
+      <section className={`${adminUi.panel} admin-availability-toolbar`} aria-label={t("availability")}>
+        <div className="flex flex-wrap items-center gap-sm">
+          <label className="flex w-full min-w-0 items-center gap-sm text-[11px] text-[var(--3d-dot-c-adb5bc)] tablet:w-auto"><span>{t("bookingDate")}</span><input className={`${adminUi.input} admin-availability-control flex-1 tablet:w-[160px] tablet:flex-none`} type="date" value={date} disabled={mutating} onChange={event => changeDate(event.target.value)} /></label>
+          <div className={`${adminUi.segmented} !gap-0`} role="group" aria-label={t("bookingDate")}>
+            <button type="button" className="admin-availability-control px-sm" aria-pressed={date === today} disabled={mutating} onClick={() => chooseTodayOrTomorrow(0)}>{t("today")}</button>
+            <button type="button" className="admin-availability-control px-sm" aria-pressed={date === tomorrow} disabled={mutating} onClick={() => chooseTodayOrTomorrow(1)}>{t("tomorrow")}</button>
           </div>
+          <div className="flex flex-wrap items-center gap-xs tablet:ml-sm tablet:border-l tablet:border-[var(--3d-dot-c-43494f)] tablet:pl-sm">
+            <div className={`${adminUi.segmented} !gap-0`} role="group" aria-label={t("adminTimeZone")}>
+              {zoneChoices.map((zone, index) => <button key={zone} className="admin-availability-control px-sm" type="button" aria-pressed={timezone === zone} title={zone} disabled={mutating} onClick={() => { setSelected([]); setTimezone(zone) }}>{index === 0 ? "MSK" : "Local"}</button>)}
+            </div>
+            <span className={`${adminUi.muted} font-typewriter text-[10px]`}>{timezone}</span>
+          </div>
+          <div className="admin-availability-refresh ml-auto"><RefreshButton pending={loading || mutating} onClick={refresh} /></div>
         </div>
       </section>
 
-      <section className={adminUi.panel}>
-        <h3 className={adminUi.eyebrow}>{t("selectRange")}</h3>
-        <div className="mt-sm grid gap-sm min-[680px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] min-[680px]:items-end">
-          <label className={adminUi.field}><span>{t("rangeStartLabel")}</span><select className={adminUi.input} value={rangeStart} onChange={event => setRangeStart(event.target.value)}><option value="">—</option>{rangeCandidates.filter(([instant]) => slotStartInstants.has(instant)).map(([instant, label]) => <option key={instant} value={instant}>{label}</option>)}</select></label>
-          <label className={adminUi.field}><span>{t("rangeEndLabel")}</span><select className={adminUi.input} value={rangeEnd} onChange={event => setRangeEnd(event.target.value)}><option value="">—</option>{rangeCandidates.map(([instant, label]) => <option key={instant} value={instant}>{label}</option>)}</select></label>
-          <button type="button" className={adminUi.button} disabled={mutating || !rangeStart || !rangeEnd || Date.parse(rangeStart) >= Date.parse(rangeEnd)} onClick={selectRange}>{t("selectRange")}</button>
+      <section className={adminUi.panel} aria-label={t("selectRange")}>
+        <div className="grid grid-cols-2 items-center gap-sm tablet:grid-cols-[minmax(0,220px)_minmax(0,220px)_auto_minmax(0,1fr)]">
+          <label className={`${adminUi.field} tablet:flex tablet:items-center tablet:gap-sm`}><span className="shrink-0">{t("blockRangeStart")}</span><select className={`${adminUi.input} admin-availability-control`} aria-label={t("rangeStartLabel")} value={rangeStart} disabled={mutating} onChange={event => setRangeStart(event.target.value)}><option value="">—</option>{rangeCandidates.filter(([instant]) => slotStartInstants.has(instant)).map(([instant, label]) => <option key={instant} value={instant}>{label}</option>)}</select></label>
+          <label className={`${adminUi.field} tablet:flex tablet:items-center tablet:gap-sm`}><span className="shrink-0">{t("blockRangeEnd")}</span><select className={`${adminUi.input} admin-availability-control`} aria-label={t("rangeEndLabel")} aria-describedby="availability-range-end-help" value={rangeEnd} disabled={mutating} onChange={event => setRangeEnd(event.target.value)}><option value="">—</option>{rangeCandidates.map(([instant, label]) => <option key={instant} value={instant}>{label}</option>)}</select></label>
+          <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || !rangeStart || !rangeEnd || Date.parse(rangeStart) >= Date.parse(rangeEnd)} onClick={selectRange}>{t("selectRange")}</button>
+          <p className={`${adminUi.muted} text-[10px]`} id="availability-range-end-help">{t("rangeEndExcluded")}</p>
         </div>
-        <p className={`${adminUi.muted} mt-xs text-[11px]`}>{t("rangeEndExcluded")}</p>
         {rangeStart && rangeEnd && <div className={`${adminUi.muted} mt-xs text-[11px]`} aria-live="polite"><p>{t("rangePreview", { free: rangePreview.free, booked: rangePreview.bookedSlots.length })}{rangePreview.past > 0 ? ` ${t("excludedPast", { count: rangePreview.past })}` : ""}</p>{rangePreview.bookedSlots.length > 0 && <p>{t("booked")}: {rangePreview.bookedSlots.join(", ")}</p>}</div>}
       </section>
 
@@ -286,11 +293,11 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
         <div className={adminUi.toolbar}>
           <p className={adminUi.heading}>{t("selectedSlots", { count: selectedSlots.length })}</p>
           <div className="flex flex-wrap gap-xs">
-            <button type="button" className={adminUi.button} disabled={mutating || !slots.length} onClick={() => { setSelected(slots.filter(slot => slot.eligibility !== "past" && slot.occupancy !== "booked").map(slot => slot.startsAt)) }}>{t("selectWholeDay")}</button>
-            <button type="button" className={adminUi.button} disabled={mutating || selected.length === 0} onClick={() => setSelected([])}>{t("clearSelection")}</button>
+            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || !slots.length} onClick={() => { setSelected(slots.filter(slot => slot.eligibility !== "past" && slot.occupancy !== "booked").map(slot => slot.startsAt)) }}>{t("selectWholeDay")}</button>
+            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || selected.length === 0} onClick={() => setSelected([])}>{t("clearSelection")}</button>
           </div>
         </div>
-        <div className="mt-sm grid grid-cols-2 gap-xs min-[520px]:grid-cols-3 min-[760px]:grid-cols-4 min-[1080px]:grid-cols-5">
+        <div className="admin-availability-slots mt-sm grid gap-xs">
           {slots.map(slot => {
             const display = slotDisplays.get(slot.startsAt)
             if (!display) return null
@@ -304,8 +311,8 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
         <div className="mt-sm flex flex-wrap items-center gap-sm border-t border-[var(--3d-dot-c-3c454d)] pt-sm">
           <span className="text-[11px] text-[var(--3d-dot-c-a1a7ae)]" aria-live="polite">{t("free")} · {t("blocked")} · {t("booked")} · {t("tooSoon")} · {t("past")}</span>
           <div className="ml-auto flex flex-wrap gap-xs">
-            <button type="button" className={adminUi.button} disabled={mutating || blockable.length === 0} onClick={() => { mutate(true) }}>{mutating ? t("pending") : `${t("blockSelected")} (${blockable.length})`}</button>
-            <button type="button" className={adminUi.button} disabled={mutating || unblockable.length === 0} onClick={() => { mutate(false) }}>{mutating ? t("pending") : `${t("unblockSelected")} (${unblockable.length})`}</button>
+            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || blockable.length === 0} onClick={() => { mutate(true) }}>{mutating ? t("pending") : `${t("blockSelected")} (${blockable.length})`}</button>
+            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || unblockable.length === 0} onClick={() => { mutate(false) }}>{mutating ? t("pending") : `${t("unblockSelected")} (${unblockable.length})`}</button>
           </div>
         </div>
       </section>

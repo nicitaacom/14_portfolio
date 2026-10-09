@@ -68,6 +68,13 @@ function useAdminDashboardHandlers({
   reducedMotionRef: { current: boolean | null }
   setActiveSection: (section: Section) => void
 }) {
+  const transitionTimeline = useRef<gsap.core.Timeline | null>(null)
+
+  useEffect(() => () => {
+    transitionTimeline.current?.kill()
+    gateBusy.current = false
+  }, [gateBusy])
+
   const activateSection = useCallback((next: Section) => {
     if (next === activeSectionRef.current || gateBusy.current) return
     playConsoleButtonSound(true)
@@ -79,8 +86,9 @@ function useAdminDashboardHandlers({
     }
     gateBusy.current = true
     gsap.killTweensOf([gateElement, seamElement])
-    const timeline = gsap.timeline({ onComplete: () => { gateBusy.current = false } })
-    timeline.set(gateElement, { opacity: 1, scaleY: 0, transformOrigin: "top center", filter: "brightness(0.72)" })
+    const timeline = gsap.timeline({ onComplete: () => { gateBusy.current = false; transitionTimeline.current = null } })
+    transitionTimeline.current = timeline
+    timeline.set(gateElement, { autoAlpha: 1, scaleY: 0, transformOrigin: "top center", filter: "brightness(0.72)", willChange: "transform" })
       .set(seamElement, { opacity: 0, scaleX: 0, transformOrigin: "center" })
       .to(seamElement, { opacity: 1, scaleX: 1, duration: 0.055, ease: "power4.out" })
       .to(gateElement, { scaleY: 1, filter: "brightness(1.18)", duration: 0.22, ease: "power4.in" }, 0)
@@ -89,6 +97,7 @@ function useAdminDashboardHandlers({
       .call(() => setActiveSection(next))
       .to(gateElement, { scaleY: 0, filter: "brightness(1)", duration: 0.38, delay: 0.2, ease: "power3.out" })
       .to(seamElement, { opacity: 0, scaleX: 0.25, duration: 0.18, ease: "power2.in" }, "<")
+      .set(gateElement, { autoAlpha: 0, clearProps: "filter,willChange" })
   }, [activeSectionRef, gate, gateBusy, gateSeam, reducedMotionRef, setActiveSection])
 
   const navigateTabs = useCallback((event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -228,8 +237,9 @@ export function AdminDashboardClient({ bookings, cronSchedules, userId, bookings
       <main className="mx-auto flex min-h-0 w-full max-w-[1580px] flex-1 flex-col overflow-hidden px-xs py-xs tablet:px-sm laptop:px-sm laptop:py-xs" id="admin-content" tabIndex={-1}>
         <div className="relative mb-sm flex min-h-[72px] shrink-0 items-center justify-between overflow-hidden"><div className="relative z-10"><p className={adminUi.eyebrow}><span className="mr-sm text-[var(--3d-dot-c-e4e8eb)]">{String(currentIndex + 1).padStart(2, "0")}</span>{t(currentIndex < 3 ? "analytics" : "operations")}</p><h1 className="my-xs !font-primary text-[25px] font-medium leading-tight tracking-[-1.2px] text-[var(--3d-dot-c-eff2f4)] tablet:text-[33px]">{t(current.title)}</h1><p className={`${adminUi.muted} max-w-[310px] text-[11px] tablet:max-w-none tablet:text-[12px]`}>{t(current.description)}</p></div><div className="absolute right-[-8px] top-[-4px] h-20 w-20 opacity-30 [mask-image:linear-gradient(90deg,transparent,black)] tablet:h-24 tablet:w-24 tablet:opacity-50"><DotRelief /></div></div>
         <div className="relative isolate min-h-0 flex-1 overflow-hidden rounded-lg" role="tabpanel" id={`admin-panel-${activeSection}`} aria-labelledby={`admin-tab-${activeSection}`} tabIndex={0}>
-          <div ref={gate} className="pointer-events-none absolute inset-0 z-30 origin-top scale-y-0 overflow-hidden border-y border-[var(--3d-dot-c-a9b7c0)] bg-[linear-gradient(90deg,var(--3d-dot-c-101416),var(--3d-dot-c-3b464d-48),var(--3d-dot-c-111518))] shadow-[0_0_30px_var(--3d-dot-c-dbe8f02b),inset_0_1px_0_var(--3d-dot-c-ffffff3b),inset_0_-10px_20px_var(--3d-dot-c-050709a8)]" aria-hidden="true"><DotReliefBackground scale={0.62} /><div ref={gateSeam} className="absolute left-0 top-1/2 h-px w-full bg-[var(--3d-dot-c-e8f6ff)] shadow-[0_0_4px_var(--3d-dot-c-ffffff),0_0_18px_var(--3d-dot-c-b8eaff)]" /></div>
-          <div className="relative z-10 h-full">{restored ? <AnimatePresence initial={false} mode="wait"><motion.div className="h-full" key={activeSection} initial={{ opacity: 0, y: 7, filter: "brightness(0.74)" }} animate={{ opacity: 1, y: 0, filter: "brightness(1)" }} exit={{ opacity: 0, y: -4, filter: "brightness(0.8)" }} transition={{ duration: 0.22, ease: "easeOut" }}>
+          <div ref={gate} className="pointer-events-none invisible absolute inset-0 z-30 origin-top scale-y-0 overflow-hidden border-y border-[var(--3d-dot-c-a9b7c0)] bg-[linear-gradient(90deg,var(--3d-dot-c-101416),var(--3d-dot-c-3b464d-48),var(--3d-dot-c-111518))] shadow-[0_0_30px_var(--3d-dot-c-dbe8f02b),inset_0_1px_0_var(--3d-dot-c-ffffff3b),inset_0_-10px_20px_var(--3d-dot-c-050709a8)]" aria-hidden="true"><DotReliefBackground scale={0.62} /><div ref={gateSeam} className="absolute left-0 top-1/2 h-px w-full bg-[var(--3d-dot-c-e8f6ff)] shadow-[0_0_4px_var(--3d-dot-c-ffffff),0_0_18px_var(--3d-dot-c-b8eaff)]" /></div>
+          {/* Keep the brightness entrance; settle at no filter so native scrolling stays smooth. */}
+          <div className="relative z-10 h-full">{restored ? <AnimatePresence initial={false} mode="wait"><motion.div className={`admin-dashboard-scroller h-full overflow-y-auto pr-xs ${activeSection === "availability" ? "pb-xs" : "pb-md"} ${activeSection === "project-links" ? "laptop:overflow-hidden laptop:pr-0 laptop:pb-0 laptop:[scrollbar-gutter:auto]" : ""}`} key={activeSection} initial={reducedMotion ? false : { opacity: 0, y: 7, filter: "brightness(0.74)" }} animate={{ opacity: 1, y: 0, filter: "brightness(1)", transitionEnd: { filter: "none" } }} exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -4, filter: "brightness(0.8)" }} transition={{ duration: reducedMotion ? 0 : 0.22, ease: "easeOut" }}>
             {activeSection === "traffic" && <UTMStatsDashboardSection />}
             {activeSection === "project-links" && <ProjectClicksDashboardSection />}
             {activeSection === "job-search" && <JobSearchDashboardSection />}

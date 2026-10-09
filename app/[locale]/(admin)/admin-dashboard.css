@@ -195,3 +195,51 @@
   background-color: var(--3d-dot-c-111315);
   color: var(--3d-dot-c-eef0f2);
 }
+
+/* Bound scrolling paints to the panel instead of the viewport's decorative layers. */
+.admin-dashboard-scroller {
+  contain: paint;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+}
+
+/* Keep the continuous SVG wall on its own layer while content scrolls above it. */
+.admin-metal-wall {
+  contain: paint;
+  transform: translateZ(0);
+}
+
+.admin-availability {
+  color-scheme: dark;
+}
+
+.admin-availability .admin-availability-control,
+.admin-availability-refresh button {
+  min-height: 42px;
+}
+
+.admin-availability-slots {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 132px), 1fr));
+}
+
+.admin-availability .admin-availability-slot {
+  min-height: 48px;
+  gap: 3px;
+  padding-block: 6px;
+}
+
+.admin-availability-statuses,
+.admin-availability-badge {
+  gap: 4px;
+}
+
+.admin-availability-badge {
+  padding-inline: 4px;
+}
+
+@media (min-width: 768px) {
+  .admin-availability .admin-availability-control,
+  .admin-availability-refresh button {
+    min-height: 34px;
+  }
+}
