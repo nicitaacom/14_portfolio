@@ -77,12 +77,12 @@ export function Footer() {
           {t("linkedIn")} <AiFillLinkedin />
         </Button>
         <Button
-          href="https://drive.google.com/file/d/1zeuqEsFIUTqRxpPs6hyzo53vfnByHs0F/view?usp=sharing"
+          href="https://drive.google.com/file/d/1yvsC635gQzri-j_w2iQ74CylLPm7j_gN/view?usp=sharing"
           target="_blank">
           {t("summaryEn")} <BsFiletypePdf />
         </Button>
         <Button
-          href="https://drive.google.com/file/d/1zqElxj4dCaDOWqE7FPAg2YZKcNx3lE4V/view?usp=sharing"
+          href="https://drive.google.com/file/d/1yr9OlOk5W92ooYXn_O_Cj2DkqCzmTD3f/view?usp=sharing"
           target="_blank">
           {t("summaryDe")} <BsFiletypePdf />
         </Button>
