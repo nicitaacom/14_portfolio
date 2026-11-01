@@ -18,7 +18,7 @@ export const hours = {
 
 export const applications = {
   "10.2026": {
-    amount_applies: 9324, // Amount applies: 1270
+    amount_applies: 9470, // Amount applies: 1416
     interviews: 32, // 1 show - 1 no show - 2 canceled
   },
   "09.2026": {
