@@ -220,6 +220,13 @@
 
 .admin-availability-slots {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 132px), 1fr));
+  touch-action: none;
+  user-select: none;
+}
+
+.admin-availability-slots[data-dragging="true"],
+.admin-availability-slots[data-dragging="true"] .admin-availability-slot {
+  cursor: crosshair;
 }
 
 .admin-availability .admin-availability-slot {

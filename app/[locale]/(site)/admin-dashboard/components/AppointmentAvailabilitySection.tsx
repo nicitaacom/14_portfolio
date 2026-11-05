@@ -1,10 +1,11 @@
 "use client"
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from "react"
 import moment from "moment-timezone"
 
 import { formatInstantInZone, type AppointmentSlot } from "@/libs/appointmentSlots"
 import { useScopedI18n } from "@/locales/client"
+import { isDragSelectableSlot, mergeDragSelection, selectableStartsInDrag } from "../utils/slotDragSelection"
 import { adminUi, RefreshButton } from "./AdminUI"
 
 type AdminSlot = Pick<AppointmentSlot, "startsAt" | "bookingDate" | "timeMSK"> & {
@@ -12,22 +13,193 @@ type AdminSlot = Pick<AppointmentSlot, "startsAt" | "bookingDate" | "timeMSK"> &
   eligibility: "eligible" | "too_soon" | "past"
 }
 
+type SetSelected = (action: string[] | ((previous: string[]) => string[])) => void
+
 function useAppointmentAvailabilityHandlers({
   byInstant,
+  ignoreClickRef,
   mutatingRef,
   setSelected,
 }: {
   byInstant: Map<string, AdminSlot>
+  ignoreClickRef: { current: boolean }
   mutatingRef: { current: boolean }
-  setSelected: (action: string[] | ((previous: string[]) => string[])) => void
+  setSelected: SetSelected
 }) {
   const toggleSlot = useCallback((startsAt: string) => {
+    if (ignoreClickRef.current) {
+      ignoreClickRef.current = false
+      return
+    }
     const slot = byInstant.get(startsAt)
-    if (!slot || slot.eligibility === "past" || slot.occupancy === "booked" || mutatingRef.current) return
+    if (!slot || !isDragSelectableSlot(slot) || mutatingRef.current) return
     setSelected(previous => previous.includes(startsAt) ? previous.filter(item => item !== startsAt) : [...previous, startsAt])
-  }, [byInstant, mutatingRef, setSelected])
+  }, [byInstant, ignoreClickRef, mutatingRef, setSelected])
 
   return { toggleSlot }
+}
+
+const DRAG_THRESHOLD_PX = 5
+
+type SlotGesture = {
+  pointerId: number
+  anchorIndex: number
+  endIndex: number
+  active: boolean
+  startX: number
+  startY: number
+}
+
+function useSlotDragSelection({
+  mutatingRef,
+  resetKey,
+  setSelected,
+  slots,
+}: {
+  mutatingRef: { current: boolean }
+  resetKey: string
+  setSelected: SetSelected
+  slots: AdminSlot[]
+}) {
+  const gridRef = useRef<HTMLDivElement>(null)
+  const slotsRef = useRef(slots)
+  const gestureRef = useRef<SlotGesture | null>(null)
+  const ignoreClickRef = useRef(false)
+  const [dragging, setDragging] = useState(false)
+  const [dragPreview, setDragPreview] = useState<string[]>([])
+  slotsRef.current = slots
+
+  const slotIndexFromPoint = useCallback((clientX: number, clientY: number) => {
+    const grid = gridRef.current
+    if (!grid) return null
+    const node = document.elementFromPoint(clientX, clientY)
+    const hit = node instanceof Element ? node.closest("[data-starts-at]") : null
+    const buttons = hit instanceof HTMLElement && grid.contains(hit)
+      ? [hit]
+      : [...grid.querySelectorAll<HTMLElement>("[data-starts-at]")]
+    for (const button of buttons) {
+      if (button !== hit) {
+        const rect = button.getBoundingClientRect()
+        const inside = clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom
+        if (!inside) continue
+      }
+      const index = slotsRef.current.findIndex(slot => slot.startsAt === button.dataset.startsAt)
+      if (index >= 0) return index
+    }
+    return null
+  }, [])
+
+  const releaseCapture = useCallback((pointerId: number) => {
+    if (gridRef.current?.hasPointerCapture(pointerId)) gridRef.current.releasePointerCapture(pointerId)
+  }, [])
+
+  const clearDragPreview = useCallback(() => {
+    setDragging(false)
+    setDragPreview(current => current.length === 0 ? current : [])
+  }, [])
+
+  useEffect(() => {
+    const gesture = gestureRef.current
+    if (!gesture) return
+    releaseCapture(gesture.pointerId)
+    gestureRef.current = null
+    if (gesture.active) ignoreClickRef.current = true
+    clearDragPreview()
+  }, [clearDragPreview, releaseCapture, resetKey, slots])
+
+  useEffect(() => {
+    function onMove(event: PointerEvent) {
+      const gesture = gestureRef.current
+      if (!gesture || event.pointerId !== gesture.pointerId || mutatingRef.current) return
+      let changed = false
+      if (!gesture.active) {
+        const dx = event.clientX - gesture.startX
+        const dy = event.clientY - gesture.startY
+        if (dx * dx + dy * dy < DRAG_THRESHOLD_PX * DRAG_THRESHOLD_PX) return
+        gesture.active = true
+        changed = true
+        setDragging(true)
+        gridRef.current?.setPointerCapture(event.pointerId)
+      }
+      const index = slotIndexFromPoint(event.clientX, event.clientY)
+      if (index != null && index !== gesture.endIndex) {
+        gesture.endIndex = index
+        changed = true
+      }
+      if (changed) setDragPreview(selectableStartsInDrag(slotsRef.current, gesture.anchorIndex, gesture.endIndex))
+      if (gesture.active) event.preventDefault()
+    }
+
+    function onPointerUp(event: PointerEvent) {
+      const gesture = gestureRef.current
+      if (!gesture || event.pointerId !== gesture.pointerId) {
+        if (ignoreClickRef.current) window.setTimeout(() => { ignoreClickRef.current = false }, 0)
+        return
+      }
+      const { active, anchorIndex, endIndex, pointerId } = gesture
+      gestureRef.current = null
+      releaseCapture(pointerId)
+      clearDragPreview()
+      if (!active || mutatingRef.current) return
+      // The release still clicks the slot under the pointer, which would toggle that one start back off.
+      ignoreClickRef.current = true
+      window.setTimeout(() => { ignoreClickRef.current = false }, 0)
+      const dragged = selectableStartsInDrag(slotsRef.current, anchorIndex, endIndex)
+      setSelected(previous => mergeDragSelection(previous, dragged))
+    }
+
+    function onCancel(event: PointerEvent) {
+      const gesture = gestureRef.current
+      if (!gesture || event.pointerId !== gesture.pointerId) return
+      if (gesture.active) ignoreClickRef.current = true
+      gestureRef.current = null
+      releaseCapture(gesture.pointerId)
+      clearDragPreview()
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      const gesture = gestureRef.current
+      if (event.key !== "Escape" || !gesture) return
+      event.preventDefault()
+      ignoreClickRef.current = true
+      gestureRef.current = null
+      releaseCapture(gesture.pointerId)
+      clearDragPreview()
+    }
+
+    window.addEventListener("pointermove", onMove)
+    window.addEventListener("pointerup", onPointerUp)
+    window.addEventListener("pointercancel", onCancel)
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("pointerup", onPointerUp)
+      window.removeEventListener("pointercancel", onCancel)
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [clearDragPreview, mutatingRef, releaseCapture, setSelected, slotIndexFromPoint])
+
+  const onPointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0 || mutatingRef.current || gestureRef.current) return
+    const index = slotIndexFromPoint(event.clientX, event.clientY)
+    if (index == null || !isDragSelectableSlot(slotsRef.current[index])) return
+    gestureRef.current = {
+      pointerId: event.pointerId,
+      anchorIndex: index,
+      endIndex: index,
+      active: false,
+      startX: event.clientX,
+      startY: event.clientY,
+    }
+  }, [mutatingRef, slotIndexFromPoint])
+
+  const onClickCapture = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
+    if (!ignoreClickRef.current) return
+    event.preventDefault()
+    event.stopPropagation()
+  }, [])
+
+  return { dragging, dragPreview, gridRef, ignoreClickRef, onClickCapture, onPointerDown }
 }
 
 const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
@@ -70,6 +242,7 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
     type="button"
     aria-label={`${time}${date ? ` ${date}` : ""}: ${occupancyText}${eligibilityText ? `, ${eligibilityText}` : ""}`}
     aria-pressed={active}
+    data-starts-at={startsAt}
     data-occupancy={occupancy}
     data-eligibility={eligibility}
     disabled={disabled}
@@ -173,9 +346,17 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
     setRangeEnd("")
   }, [date, timezone])
 
+  const { dragging, dragPreview, gridRef, ignoreClickRef, onClickCapture, onPointerDown } = useSlotDragSelection({
+    mutatingRef,
+    resetKey: `${date}|${timezone}`,
+    setSelected,
+    slots,
+  })
+
   const byInstant = useMemo(() => new Map(slots.map(slot => [slot.startsAt, slot])), [slots])
-  const selectedSet = useMemo(() => new Set(selected), [selected])
-  const selectedSlots = useMemo(() => selected.map(startsAt => byInstant.get(startsAt)).filter((slot): slot is AdminSlot => Boolean(slot)), [byInstant, selected])
+  const visualSelected = useMemo(() => dragPreview.length === 0 ? selected : mergeDragSelection(selected, dragPreview), [dragPreview, selected])
+  const visualSet = useMemo(() => new Set(visualSelected), [visualSelected])
+  const selectedSlots = useMemo(() => visualSelected.map(startsAt => byInstant.get(startsAt)).filter((slot): slot is AdminSlot => Boolean(slot)), [byInstant, visualSelected])
   const blockable = useMemo(() => selectedSlots.filter(slot => slot.occupancy === "free" && slot.eligibility !== "past"), [selectedSlots])
   const unblockable = useMemo(() => selectedSlots.filter(slot => slot.occupancy === "blocked" && slot.eligibility !== "past"), [selectedSlots])
   const slotStartInstants = useMemo(() => new Set(slots.map(slot => slot.startsAt)), [slots])
@@ -216,13 +397,13 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
     changeDate(moment().tz(timezone).add(offset, "day").format("YYYY-MM-DD"))
   }
 
-  const { toggleSlot } = useAppointmentAvailabilityHandlers({ byInstant, mutatingRef, setSelected })
+  const { toggleSlot } = useAppointmentAvailabilityHandlers({ byInstant, ignoreClickRef, mutatingRef, setSelected })
 
   function selectRange() {
     const start = Date.parse(rangeStart)
     const end = Date.parse(rangeEnd)
     if (!Number.isFinite(start) || !Number.isFinite(end) || start >= end) return
-    setSelected(slots.filter(slot => Date.parse(slot.startsAt) >= start && Date.parse(slot.startsAt) < end && slot.eligibility !== "past" && slot.occupancy !== "booked").map(slot => slot.startsAt))
+    setSelected(slots.filter(slot => Date.parse(slot.startsAt) >= start && Date.parse(slot.startsAt) < end && isDragSelectableSlot(slot)).map(slot => slot.startsAt))
   }
 
   async function mutate(blocked: boolean) {
@@ -293,15 +474,15 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
         <div className={adminUi.toolbar}>
           <p className={adminUi.heading}>{t("selectedSlots", { count: selectedSlots.length })}</p>
           <div className="flex flex-wrap gap-xs">
-            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || !slots.length} onClick={() => { setSelected(slots.filter(slot => slot.eligibility !== "past" && slot.occupancy !== "booked").map(slot => slot.startsAt)) }}>{t("selectWholeDay")}</button>
-            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || selected.length === 0} onClick={() => setSelected([])}>{t("clearSelection")}</button>
+            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || !slots.length} onClick={() => { setSelected(slots.filter(slot => isDragSelectableSlot(slot)).map(slot => slot.startsAt)) }}>{t("selectWholeDay")}</button>
+            <button type="button" className={`${adminUi.button} admin-availability-control`} disabled={mutating || visualSelected.length === 0} onClick={() => setSelected([])}>{t("clearSelection")}</button>
           </div>
         </div>
-        <div className="admin-availability-slots mt-sm grid gap-xs">
+        <div ref={gridRef} className="admin-availability-slots mt-sm grid gap-xs" data-dragging={dragging ? "true" : undefined} onPointerDown={onPointerDown} onClickCapture={onClickCapture}>
           {slots.map(slot => {
             const display = slotDisplays.get(slot.startsAt)
             if (!display) return null
-            return <AvailabilitySlotButton key={slot.startsAt} active={selectedSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || slot.eligibility === "past" || slot.occupancy === "booked"} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} waiting={mutating} />
+            return <AvailabilitySlotButton key={slot.startsAt} active={visualSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || !isDragSelectableSlot(slot)} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} waiting={mutating} />
           })}
         </div>
         {loading && <p className={`${adminUi.muted} mt-sm`} role="status">{t("refreshing")}</p>}
