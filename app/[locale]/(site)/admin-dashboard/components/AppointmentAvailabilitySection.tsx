@@ -212,6 +212,7 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
   startsAt,
   time,
   waiting,
+  zone,
 }: {
   active: boolean
   date: string
@@ -222,6 +223,7 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
   startsAt: string
   time: string
   waiting: boolean
+  zone: string
 }) {
   const t = useScopedI18n("adminConsole")
   const handleClick = useCallback(() => onToggle(startsAt), [onToggle, startsAt])
@@ -240,7 +242,7 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
 
   return <button
     type="button"
-    aria-label={`${time}${date ? ` ${date}` : ""}: ${occupancyText}${eligibilityText ? `, ${eligibilityText}` : ""}`}
+    aria-label={`${time} ${zone}${date ? ` ${date}` : ""}: ${occupancyText}${eligibilityText ? `, ${eligibilityText}` : ""}`}
     aria-pressed={active}
     data-starts-at={startsAt}
     data-occupancy={occupancy}
@@ -249,7 +251,7 @@ const AvailabilitySlotButton = memo(function AvailabilitySlotButton({
     onClick={handleClick}
     style={{ cursor: disabled ? waiting ? "wait" : "not-allowed" : undefined }}
     className={`${adminUi.button} ${cardStyle} admin-availability-slot flex-col !items-start !justify-center !px-xs !opacity-100 text-left transition-[filter,transform] hover:brightness-110 active:scale-[.99] aria-[pressed=true]:outline aria-[pressed=true]:outline-2 aria-[pressed=true]:outline-offset-2 aria-[pressed=true]:outline-[#eeeeee] disabled:hover:brightness-100`}>
-    <span className="font-typewriter text-[12px] leading-tight text-[#f0f0f0]">{time}<small className="ml-xs text-[9px] text-[#c0c0c0]">{date}</small></span>
+    <span className="font-typewriter text-[12px] leading-tight text-[#f0f0f0]">{time}<small className="ml-xs text-[9px] text-[#c0c0c0]">{zone}{date ? ` ${date}` : ""}</small></span>
     <span className="admin-availability-statuses flex flex-wrap items-center">
       <span className={`admin-availability-badge inline-flex items-center rounded-[2px] border font-mono text-[9px] font-bold uppercase leading-tight tracking-[.5px] ${badgeStyle}`}>
         <span aria-hidden="true">{occupancy === "free" ? "○" : occupancy === "blocked" ? "×" : "●"}</span>
@@ -438,6 +440,7 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
   }
 
   const zoneChoices = [...new Set(["Europe/Moscow", localTimezone])]
+  const zoneLabel = timezone === "Europe/Moscow" ? "MSK" : moment.tz(timezone).format("z")
   const today = moment().tz(timezone).format("YYYY-MM-DD")
   const tomorrow = moment().tz(timezone).add(1, "day").format("YYYY-MM-DD")
 
@@ -482,7 +485,7 @@ export const AppointmentAvailabilitySection = memo(function AppointmentAvailabil
           {slots.map(slot => {
             const display = slotDisplays.get(slot.startsAt)
             if (!display) return null
-            return <AvailabilitySlotButton key={slot.startsAt} active={visualSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || !isDragSelectableSlot(slot)} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} waiting={mutating} />
+            return <AvailabilitySlotButton key={slot.startsAt} active={visualSet.has(slot.startsAt)} date={display.date !== date ? display.date : ""} disabled={mutating || !isDragSelectableSlot(slot)} eligibility={slot.eligibility} occupancy={slot.occupancy} onToggle={toggleSlot} startsAt={slot.startsAt} time={display.time} waiting={mutating} zone={zoneLabel} />
           })}
         </div>
         {loading && <p className={`${adminUi.muted} mt-sm`} role="status">{t("refreshing")}</p>}
